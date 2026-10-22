@@ -1,0 +1,3955 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>منصة الأستاذ عمر | Omer Gasim – الرياضيات والعلوم الرياضية</title>
+  
+  <!-- خطوط ومكتبات التصميم -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- محرك المعادلات الرياضية KaTeX -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
+  <!-- محرك PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- مكتبة التشفير Crypto-JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <style>
+    :root {
+      /* لوحة ألوان شعار الأستاذ عمر (Omer Gasim) */
+      --navy-dark: #0A1424;
+      --navy-main: #0F1E36;
+      --navy-card: #162642;
+      --gold-orange: #F59E0B;
+      --gold-deep: #EA580C;
+      --gold-gradient: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
+      --navy-gradient: linear-gradient(135deg, #0A1424 0%, #162642 100%);
+      --gold-light: #FFFBEB;
+      --gold-subtle: #FEF3C7;
+      --bg-light: #F8FAFC;
+      --text-dark: #0F1E36;
+      --text-muted: #64748B;
+      --white: #FFFFFF;
+      --danger: #EF4444;
+      --success: #10B981;
+      --border-color: #E2E8F0;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 22px;
+      --shadow-sm: 0 2px 10px rgba(15, 30, 54, 0.06);
+      --shadow-md: 0 8px 24px rgba(15, 30, 54, 0.12);
+      --shadow-lg: 0 16px 40px rgba(10, 20, 36, 0.2);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Kufi Arabic', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+      -webkit-user-select: none;
+      overflow-x: hidden;
+    }
+
+    /* درع الحماية */
+    #securityPrivacyShield {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 20, 36, 0.98);
+      z-index: 99999;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      text-align: center;
+      padding: 24px;
+    }
+
+    #confettiCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3000;
+    }
+
+    /* رأس الصفحة المتجاوب والتصميم الاحترافي للشعار */
+    header.app-header {
+      background: var(--navy-gradient);
+      color: var(--white);
+      padding: 10px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--shadow-md);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 2px solid var(--gold-orange);
+    }
+
+    .brand-container {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+    }
+
+    .brand-logo-img {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      object-fit: contain;
+      background: #FFFFFF;
+      padding: 3px;
+      border: 2px solid var(--gold-orange);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+      transition: var(--transition);
+    }
+
+    .brand-logo-img:hover {
+      transform: scale(1.06);
+      box-shadow: 0 6px 20px rgba(234, 88, 12, 0.4);
+    }
+
+    .brand-logo-fallback {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: var(--gold-orange);
+      background: rgba(245, 158, 11, 0.12);
+      border: 1.5px solid var(--gold-orange);
+    }
+
+    .brand-text h1 {
+      font-size: 1.22rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: -0.3px;
+    }
+
+    .brand-text span {
+      font-size: 0.72rem;
+      color: var(--gold-orange);
+      display: block;
+      font-weight: 600;
+    }
+
+    /* تصميم واجهة الشعار في شاشة الدخول */
+    .login-logo-container {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      padding: 6px;
+      border: 3px solid var(--gold-orange);
+      box-shadow: 0 10px 30px rgba(245, 158, 11, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .login-logo-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .main-wrapper {
+      flex: 1;
+      max-width: 1320px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 22px 16px;
+    }
+
+    /* بطاقات بتنسيق حديث */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      padding: 24px;
+      margin-bottom: 20px;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold-orange);
+    }
+
+    /* الأزرار العصرية */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+      outline: none;
+    }
+
+    .btn-gold {
+      background: var(--gold-gradient);
+      color: var(--navy-dark);
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(234, 88, 12, 0.4);
+      color: var(--navy-dark);
+    }
+
+    .btn-navy {
+      background: var(--navy-gradient);
+      color: var(--white);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-navy:hover {
+      background: var(--navy-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-purple {
+      background: linear-gradient(135deg, #8B5CF6, #6D28D9);
+      color: var(--white);
+    }
+
+    .btn-purple:hover {
+      background: #5B21B6;
+      transform: translateY(-2px);
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: var(--white);
+      font-size: 0.92rem;
+      padding: 11px 20px;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+    }
+
+    .btn-whatsapp:hover {
+      background: #1EBE5D;
+      transform: translateY(-2px);
+    }
+
+    .btn-danger { background: var(--danger); color: var(--white); }
+    .btn-secondary { background: #F1F5F9; color: var(--text-dark); border: 1px solid #CBD5E1; }
+    .btn-secondary:hover { background: #E2E8F0; }
+    .btn-disabled { background: #E2E8F0; color: #94A3B8; cursor: not-allowed; }
+
+    /* الشارات والعلامات */
+    .badge {
+      padding: 5px 12px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge-trial { background: #FEF3C7; color: #B45309; border: 1px solid #FCD34D; }
+    .badge-active { background: #ECFDF5; color: var(--success); border: 1px solid #6EE7B7; }
+    .badge-expired { background: #FEF2F2; color: var(--danger); border: 1px solid #FCA5A5; }
+    .badge-curriculum { background: var(--gold-subtle); color: var(--navy-dark); border: 1px solid var(--gold-orange); }
+    .badge-tag { background: #F8FAFC; color: var(--text-dark); border: 1px solid #CBD5E1; }
+    .badge-podcast { background: #F5F3FF; color: #7C3AED; border: 1px solid #DDD6FE; }
+    .badge-ppt { background: #FFF7ED; color: #C2410C; border: 1px solid #FFEDD5; }
+    .badge-word { background: #EFF6FF; color: #1D4ED8; border: 1px solid #DBEAFE; }
+    .badge-article { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
+
+    .grid-dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .nav-tabs-wrapper {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: thin;
+    }
+
+    .nav-tabs-wrapper::-webkit-scrollbar {
+      height: 4px;
+    }
+    .nav-tabs-wrapper::-webkit-scrollbar-thumb {
+      background: var(--gold-orange);
+      border-radius: 4px;
+    }
+
+    .search-box-wrapper {
+      position: relative;
+      margin-bottom: 18px;
+    }
+
+    .search-box-wrapper input {
+      width: 100%;
+      padding: 14px 44px 14px 16px;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--white);
+      font-size: 0.92rem;
+      outline: none;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .search-box-wrapper input:focus {
+      border-color: var(--gold-orange);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+
+    .search-box-wrapper i {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gold-orange);
+      font-size: 1.1rem;
+    }
+
+    .plans-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin: 24px 0;
+    }
+
+    .plan-card {
+      border: 2px solid rgba(245, 158, 11, 0.25);
+      border-radius: var(--radius-lg);
+      padding: 28px 20px;
+      text-align: center;
+      background: var(--white);
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .plan-card.featured {
+      border-color: var(--gold-orange);
+      background: linear-gradient(180deg, var(--white) 0%, var(--gold-light) 100%);
+      box-shadow: var(--shadow-md);
+      transform: scale(1.02);
+    }
+
+    .plan-badge-top {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--navy-dark);
+      color: var(--gold-orange);
+      padding: 4px 16px;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 800;
+      border: 1px solid var(--gold-orange);
+      white-space: nowrap;
+    }
+
+    .plan-price {
+      font-size: 2.2rem;
+      font-weight: 900;
+      color: var(--navy-dark);
+      margin: 14px 0;
+    }
+
+    .plan-price span {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    /* مشغلات الوسائط الذكية */
+    .player-modal-content {
+      position: relative;
+      background: var(--navy-dark);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      color: #FFF;
+      width: 100%;
+      height: 100%;
+    }
+
+    .player-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--navy-dark);
+      padding: 12px 18px;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+      font-size: 0.85rem;
+      z-index: 100;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .player-toolbar-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .player-viewport {
+      position: relative;
+      width: 100%;
+      min-height: 480px;
+      height: 72vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      background: #0B1424;
+      overflow-y: auto;
+      transition: all 0.3s ease;
+    }
+
+    .player-viewport.rotated-fullscreen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 999999;
+      background: #000;
+    }
+
+    .floating-reset-orientation-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(10, 20, 36, 0.92);
+      color: var(--gold-orange);
+      border: 1px solid var(--gold-orange);
+      padding: 10px 18px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      z-index: 10000;
+      backdrop-filter: blur(4px);
+      box-shadow: var(--shadow-lg);
+      display: none;
+    }
+
+    .player-viewport.rotated-fullscreen .floating-reset-orientation-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* مشغل البودكاست التعليمي */
+    .podcast-player-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+      background: radial-gradient(circle at center, #162642 0%, #0A1424 100%);
+      width: 100%;
+      height: 100%;
+      text-align: center;
+    }
+
+    .podcast-cover-art {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: var(--gold-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      color: var(--navy-dark);
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.4);
+      margin-bottom: 24px;
+      animation: pulseGlow 3s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(1); box-shadow: 0 0 25px rgba(245, 158, 11, 0.3); }
+      100% { transform: scale(1.05); box-shadow: 0 0 45px rgba(234, 88, 12, 0.6); }
+    }
+
+    .audio-controls-panel {
+      width: 100%;
+      max-width: 520px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(10px);
+    }
+
+    .audio-progress-slider {
+      width: 100%;
+      accent-color: var(--gold-orange);
+      height: 6px;
+      cursor: pointer;
+      margin: 12px 0 6px;
+    }
+
+    /* قارئ الدروس والشروحات المباشرة */
+    .article-reading-container {
+      width: 100%;
+      height: 100%;
+      background: #FFFFFF;
+      color: var(--text-dark);
+      padding: 36px 30px;
+      overflow-y: auto;
+      text-align: right;
+    }
+
+    .article-reading-container h1, .article-reading-container h2, .article-reading-container h3 {
+      color: var(--navy-dark);
+      margin-bottom: 12px;
+    }
+
+    .article-reading-container p {
+      font-size: 1.05rem;
+      line-height: 2.2;
+      margin-bottom: 16px;
+      color: #334155;
+    }
+
+    .math-theorem-box {
+      background: var(--gold-light);
+      border-right: 5px solid var(--gold-orange);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin: 18px 0;
+      font-size: 0.98rem;
+    }
+
+    .pdf-canvas-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px;
+      background: #1E293B;
+      gap: 16px;
+    }
+
+    .pdf-canvas-container canvas {
+      max-width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      border-radius: 4px;
+      background: #FFFFFF;
+    }
+
+    .pdf-controls-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 8px 16px;
+      background: var(--navy-dark);
+      border-bottom: 1px solid rgba(245, 158, 11, 0.2);
+      color: #FFF;
+      font-size: 0.85rem;
+      width: 100%;
+    }
+
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      outline: none;
+    }
+
+    .floating-watermark {
+      position: fixed;
+      top: 30%;
+      left: 30%;
+      color: rgba(255, 255, 255, 0.25);
+      font-size: 1.15rem;
+      font-weight: 800;
+      pointer-events: none;
+      user-select: none;
+      transform: rotate(-15deg);
+      z-index: 50;
+      animation: dynamicFloat 14s infinite alternate ease-in-out;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.9);
+    }
+
+    @keyframes dynamicFloat {
+      0% { top: 20%; left: 20%; }
+      50% { top: 60%; left: 45%; }
+      100% { top: 30%; left: 65%; }
+    }
+
+    .document-viewer-frame {
+      width: 100%;
+      height: 100%;
+      min-height: 70vh;
+      border: none;
+      background: #F8FAFC;
+    }
+
+    /* الكويزات */
+    .quiz-gamified-box {
+      max-width: 780px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .quiz-progress-bar {
+      height: 10px;
+      background: #E2E8F0;
+      border-radius: 50px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    .quiz-progress-fill {
+      height: 100%;
+      background: var(--gold-gradient);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .quiz-card-question {
+      background: #FFF;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      box-shadow: var(--shadow-sm);
+      animation: cardSlideIn 0.3s ease;
+    }
+
+    @keyframes cardSlideIn {
+      from { transform: translateX(30px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .interactive-option {
+      background: var(--bg-light);
+      border: 2px solid #E2E8F0;
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      font-size: 0.98rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: var(--transition);
+    }
+
+    .interactive-option:hover {
+      background: var(--gold-light);
+      border-color: var(--gold-orange);
+      transform: translateX(-4px);
+    }
+
+    .interactive-option.correct {
+      background: #ECFDF5 !important;
+      border-color: var(--success) !important;
+      color: #065F46;
+    }
+
+    .interactive-option.wrong {
+      background: #FEF2F2 !important;
+      border-color: var(--danger) !important;
+      color: #991B1B;
+    }
+
+    .option-letter {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--gold-subtle);
+      color: var(--navy-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    /* الأدوات العائمة */
+    .floating-tools-container {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 1500;
+    }
+
+    .floating-tool-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      box-shadow: var(--shadow-lg);
+      cursor: pointer;
+      border: 2px solid var(--white);
+      transition: var(--transition);
+    }
+
+    .floating-tool-btn.ai { background: var(--gold-gradient); color: var(--navy-dark); }
+    .floating-tool-btn.calc { background: linear-gradient(135deg, #10B981, #047857); }
+    .floating-tool-btn.formula { background: var(--navy-gradient); border-color: var(--gold-orange); }
+    .floating-tool-btn.timer { background: linear-gradient(135deg, #EC4899, #BE185D); }
+
+    .floating-tool-btn:hover { transform: scale(1.1); }
+
+    /* مؤقت التركيز الرياضي */
+    .timer-widget {
+      position: fixed;
+      bottom: 95px;
+      left: 24px;
+      width: 310px;
+      background: var(--navy-dark);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      box-shadow: var(--shadow-lg);
+      border: 2px solid #EC4899;
+      z-index: 1500;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: #FFF;
+    }
+
+    .timer-widget.active { display: flex; }
+
+    .timer-display {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #F472B6;
+      font-family: monospace;
+    }
+
+    /* نافذة المساعد الذكي */
+    .ai-chat-window {
+      position: fixed;
+      bottom: 95px;
+      left: 24px;
+      width: 390px;
+      max-width: calc(100vw - 48px);
+      height: 520px;
+      background: #FFF;
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-lg);
+      border: 2px solid var(--gold-orange);
+      z-index: 1500;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: modalFadeIn 0.3s ease;
+    }
+
+    .ai-chat-window.active { display: flex; }
+
+    .ai-chat-header {
+      background: var(--navy-gradient);
+      color: var(--white);
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border-bottom: 2px solid var(--gold-orange);
+    }
+
+    .ai-chat-body {
+      flex: 1;
+      padding: 14px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--gold-light);
+      font-size: 0.86rem;
+    }
+
+    .ai-msg {
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      max-width: 88%;
+      line-height: 1.6;
+    }
+
+    .ai-msg.bot {
+      background: var(--white);
+      color: var(--navy-dark);
+      align-self: flex-start;
+      border: 1px solid var(--border-color);
+      border-top-right-radius: 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .ai-msg.user {
+      background: var(--navy-dark);
+      color: #FFF;
+      align-self: flex-end;
+      border-top-left-radius: 0;
+    }
+
+    .ai-chat-footer {
+      padding: 12px;
+      display: flex;
+      gap: 8px;
+      background: #FFF;
+      border-top: 1px solid #E2E8F0;
+    }
+
+    /* الآلة الحاسبة العلمية */
+    .calculator-widget {
+      position: fixed;
+      bottom: 95px;
+      left: 80px;
+      width: 320px;
+      background: var(--navy-dark);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-lg);
+      border: 2px solid var(--gold-orange);
+      z-index: 1500;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      color: #FFF;
+    }
+
+    .calculator-widget.active { display: flex; }
+    .calc-screen {
+      background: #0B1424;
+      color: var(--gold-orange);
+      font-size: 1.3rem;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      text-align: left;
+      font-family: monospace;
+      min-height: 48px;
+      word-break: break-all;
+      border: 1px solid #1E293B;
+    }
+    .calc-keys {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+    .calc-btn {
+      padding: 10px 4px;
+      border-radius: var(--radius-sm);
+      background: #1E293B;
+      color: #FFF;
+      border: none;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .calc-btn:hover { background: var(--gold-orange); color: var(--navy-dark); }
+    .calc-btn.op { background: #0F1E36; color: var(--gold-orange); }
+    .calc-btn.equal { background: var(--gold-gradient); color: var(--navy-dark); grid-column: span 2; }
+    .calc-btn.clear { background: var(--danger); color: #FFF; }
+
+    /* =========================================================================
+       تصميم الشهادة الملكية المعتمدة A4 مع الختم الرسمي للشعار
+       ========================================================================= */
+    .certificate-card {
+      background: #FFFFFF;
+      border: 12px double var(--navy-dark);
+      padding: 38px 32px;
+      text-align: center;
+      border-radius: 4px;
+      position: relative;
+      box-shadow: var(--shadow-lg);
+      color: var(--navy-dark);
+      width: 100%;
+      margin: 0 auto;
+      background-image: radial-gradient(circle at center, #FFFFFF 60%, #FFFDF8 100%);
+    }
+
+    .cert-logo-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 95px;
+      height: 95px;
+      background: #FFFFFF;
+      border-radius: 50%;
+      border: 3px double var(--gold-orange);
+      box-shadow: 0 4px 18px rgba(10, 20, 36, 0.15), 0 0 0 5px rgba(245, 158, 11, 0.18);
+      padding: 8px;
+      margin: 0 auto 12px;
+    }
+
+    .cert-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid #E2E8F0;
+      border-radius: var(--radius-md);
+      background: var(--white);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: right;
+    }
+
+    th, td {
+      padding: 14px 18px;
+      border-bottom: 1px solid #F1F5F9;
+      font-size: 0.88rem;
+    }
+
+    th {
+      background-color: var(--gold-light);
+      color: var(--navy-dark);
+      font-weight: 800;
+    }
+
+    tr:hover { background-color: #F8FAFC; }
+
+    .form-group {
+      margin-bottom: 16px;
+      text-align: right;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--navy-dark);
+    }
+
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1.5px solid #CBD5E1;
+      border-radius: var(--radius-sm);
+      outline: none;
+      font-size: 0.92rem;
+      transition: var(--transition);
+      background: #FFF;
+    }
+
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--gold-orange);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.2);
+    }
+
+    .input-with-paste {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* عداد التجربة */
+    .countdown-widget {
+      background: #FFFBEB;
+      border: 1.5px solid var(--gold-orange);
+      padding: 14px 20px;
+      border-radius: var(--radius-md);
+      color: #92400E;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 20, 36, 0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 16px;
+      backdrop-filter: blur(6px);
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      border: 2px solid var(--gold-orange);
+      max-width: 740px;
+      width: 100%;
+      padding: 28px;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      animation: modalFadeIn 0.28s ease;
+      max-height: 92vh;
+      overflow-y: auto;
+    }
+
+    @keyframes modalFadeIn {
+      from { transform: translateY(20px) scale(0.97); opacity: 0; }
+      to { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    .security-toast {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--danger);
+      color: #FFF;
+      padding: 12px 26px;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-lg);
+      z-index: 9999;
+      animation: toastBounce 0.4s ease;
+    }
+
+    @keyframes toastBounce {
+      0% { top: -50px; }
+      70% { top: 25px; }
+      100% { top: 20px; }
+    }
+
+    footer.app-footer {
+      background: var(--navy-gradient);
+      color: var(--white);
+      padding: 22px 24px;
+      margin-top: auto;
+      text-align: center;
+      border-top: 3px solid var(--gold-orange);
+    }
+
+    .footer-content {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 0.88rem;
+    }
+
+    .engineer-tag {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--gold-orange);
+      padding: 6px 16px;
+      border-radius: 50px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold-orange);
+      font-weight: 700;
+      transition: var(--transition);
+    }
+
+    .engineer-tag:hover {
+      background: var(--gold-gradient);
+      color: var(--navy-dark);
+      transform: scale(1.04);
+    }
+
+    @page { size: A4 landscape; margin: 0; }
+
+    @media print {
+      body, html {
+        background: #FFF !important;
+        width: 297mm;
+        height: 210mm;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body * { visibility: hidden !important; }
+      #printableCert, #printableCert * { visibility: visible !important; }
+      #printableCert {
+        position: fixed !important;
+        left: 10mm !important;
+        top: 10mm !important;
+        width: 277mm !important;
+        height: 190mm !important;
+        padding: 24mm 20mm !important;
+        border: 8px double #0A1424 !important;
+        box-shadow: none !important;
+        background: #FFFFFF !important;
+        page-break-inside: avoid !important;
+      }
+      .cert-logo-badge {
+        box-shadow: none !important;
+        border: 3px double #EA580C !important;
+      }
+      .modal-overlay, .modal-card { padding: 0 !important; background: transparent !important; }
+    }
+
+    /* تحسينات التجاوب مع الجوال */
+    @media (max-width: 768px) {
+      .main-wrapper { padding: 14px 10px; }
+      header.app-header { padding: 10px 14px; }
+      .brand-text h1 { font-size: 1.05rem; }
+      .brand-text span { font-size: 0.65rem; }
+      .brand-logo-img, .brand-logo-fallback { width: 42px; height: 42px; }
+      .footer-content { justify-content: center; text-align: center; }
+      th, td { padding: 10px 8px; font-size: 0.78rem; }
+      .plan-card.featured { transform: scale(1); }
+      .ai-chat-window, .calculator-widget, .timer-widget { left: 8px; right: 8px; width: auto; bottom: 85px; }
+      .floating-tools-container { bottom: 16px; left: 16px; gap: 8px; }
+      .floating-tool-btn { width: 44px; height: 44px; font-size: 17px; }
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+
+  <!-- درع الحماية الأمني -->
+  <div id="securityPrivacyShield">
+    <i class="fa-solid fa-shield-halved fa-beat" style="font-size:64px; color:var(--gold-orange); margin-bottom:16px;"></i>
+    <h2 style="font-size:1.4rem; font-weight:800;">تم تفعيل درع الحماية لمنصة الأستاذ عمر</h2>
+    <p style="margin-top:8px; color:var(--gold-subtle); font-size:0.92rem; max-width:500px;">
+      محتوى الرياضيات، البودكاست التعليمي، وملفات المنهج الإماراتي والسوداني مشفرة ومحمية من النسخ والتحميل غير المصرح به.
+    </p>
+    <button class="btn btn-gold" style="margin-top:20px;" onclick="document.getElementById('securityPrivacyShield').style.display='none'">
+      متابعة التعلم بأمان
+    </button>
+  </div>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <div class="security-toast" id="securityToast">
+    <i class="fa-solid fa-shield-halved"></i>
+    <span id="securityToastText">تنبيه أمني: محتويات منصة الأستاذ عمر محمية بحقوق الطبع والتشفير.</span>
+  </div>
+
+  <header class="app-header">
+    <div class="brand-container" onclick="App.navigateHome()">
+      <div id="brandLogoContainer">
+        <!-- يتم تحميل الشعار تلقائياً عبر الإعدادات -->
+      </div>
+      <div class="brand-text">
+        <h1>منصة الأستاذ عمر</h1>
+        <span>Omer Gasim – الرياضيات (المنهاج الإماراتي والسوداني)</span>
+      </div>
+    </div>
+    <div id="navActions"></div>
+  </header>
+
+  <main class="main-wrapper" id="appContainer"></main>
+
+  <!-- صندوق الأدوات العائمة للطلاب -->
+  <div class="floating-tools-container">
+    <div class="floating-tool-btn timer" onclick="App.toggleTimer()" title="مؤقت التركيز الرياضي (Pomodoro)">
+      <i class="fa-solid fa-stopwatch"></i>
+    </div>
+    <div class="floating-tool-btn formula" onclick="App.openFormulaSheetModal()" title="بنك القوانين والمتطابقات الرياضية">
+      <i class="fa-solid fa-square-root-variable"></i>
+    </div>
+    <div class="floating-tool-btn calc" onclick="App.toggleCalculator()" title="الآلة الحاسبة العلمية">
+      <i class="fa-solid fa-calculator"></i>
+    </div>
+    <div class="floating-tool-btn ai" onclick="App.toggleAiChat()" title="المساعد الذكي للأستاذ عمر">
+      <i class="fa-solid fa-brain"></i>
+    </div>
+  </div>
+
+  <!-- مؤقت التركيز والمذاكرة Pomodoro -->
+  <div class="timer-widget" id="timerWidget">
+    <div style="display:flex; justify-content:space-between; width:100%; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px;">
+      <span style="font-weight:700; font-size:0.85rem; color:#F472B6;"><i class="fa-solid fa-stopwatch"></i> جلسة تركيز الرياضيات</span>
+      <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.toggleTimer()"></i>
+    </div>
+    <div class="timer-display" id="timerDisplay">25:00</div>
+    <div style="display:flex; gap:8px; width:100%;">
+      <button class="btn btn-gold" id="timerStartBtn" style="flex:1; padding:6px;" onclick="PomodoroTimer.toggle()">
+        <i class="fa-solid fa-play"></i> بدء
+      </button>
+      <button class="btn btn-secondary" style="padding:6px 12px;" onclick="PomodoroTimer.reset()">
+        <i class="fa-solid fa-rotate-left"></i> إعادة
+      </button>
+    </div>
+  </div>
+
+  <!-- الآلة الحاسبة العلمية المدمجة -->
+  <div class="calculator-widget" id="calcWidget">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E293B; padding-bottom:6px;">
+      <span style="font-weight:700; font-size:0.85rem; color:var(--gold-orange);"><i class="fa-solid fa-calculator"></i> حاسبة الأستاذ عمر العلمية</span>
+      <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.toggleCalculator()"></i>
+    </div>
+    <div class="calc-screen" id="calcDisplay">0</div>
+    <div class="calc-keys">
+      <button class="calc-btn op" onclick="App.calcInput('sin(')">sin</button>
+      <button class="calc-btn op" onclick="App.calcInput('cos(')">cos</button>
+      <button class="calc-btn op" onclick="App.calcInput('tan(')">tan</button>
+      <button class="calc-btn clear" onclick="App.calcClear()">C</button>
+
+      <button class="calc-btn op" onclick="App.calcInput('Math.sqrt(')">√</button>
+      <button class="calc-btn op" onclick="App.calcInput('**2')">x²</button>
+      <button class="calc-btn op" onclick="App.calcInput('Math.PI')">π</button>
+      <button class="calc-btn op" onclick="App.calcInput('/')">÷</button>
+
+      <button class="calc-btn" onclick="App.calcInput('7')">7</button>
+      <button class="calc-btn" onclick="App.calcInput('8')">8</button>
+      <button class="calc-btn" onclick="App.calcInput('9')">9</button>
+      <button class="calc-btn op" onclick="App.calcInput('*')">×</button>
+
+      <button class="calc-btn" onclick="App.calcInput('4')">4</button>
+      <button class="calc-btn" onclick="App.calcInput('5')">5</button>
+      <button class="calc-btn" onclick="App.calcInput('6')">6</button>
+      <button class="calc-btn op" onclick="App.calcInput('-')">-</button>
+
+      <button class="calc-btn" onclick="App.calcInput('1')">1</button>
+      <button class="calc-btn" onclick="App.calcInput('2')">2</button>
+      <button class="calc-btn" onclick="App.calcInput('3')">3</button>
+      <button class="calc-btn op" onclick="App.calcInput('+')">+</button>
+
+      <button class="calc-btn" onclick="App.calcInput('0')">0</button>
+      <button class="calc-btn" onclick="App.calcInput('.')">.</button>
+      <button class="calc-btn equal" onclick="App.calcEquals()">=</button>
+    </div>
+  </div>
+
+  <!-- نافذة المساعد الذكي AI للرياضيات -->
+  <div class="ai-chat-window" id="aiChatWindow">
+    <div class="ai-chat-header">
+      <span><i class="fa-solid fa-microchip"></i> المساعد الرياضي الذكي (أستاذ عمر)</span>
+      <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.toggleAiChat()"></i>
+    </div>
+    <div class="ai-chat-body" id="aiChatBody">
+      <div class="ai-msg bot">
+        مرحباً بك في منصة <strong>الأستاذ عمر (Omer Gasim)</strong>! أنا رفيقك الذكي لمادة الرياضيات لكافة المراحل في المنهاج الإماراتي والسوداني. اسألني عن القوانين، التكامل، التفاضل، الهندسة أو الجبر.
+      </div>
+    </div>
+    <div class="ai-chat-footer">
+      <input type="text" id="aiInput" placeholder="اكتب مسألتك أو المعادلة الرياضية..." onkeydown="if(event.key==='Enter') App.sendAiMessage()">
+      <button class="btn btn-gold" style="padding:8px 14px;" onclick="App.sendAiMessage()">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- المشغل الداخلي الذكي -->
+  <div class="modal-overlay" id="mediaPlayerModal">
+    <div class="modal-card" style="max-width: 980px; padding: 0; background: #0A1424; border-color: var(--gold-orange);">
+      <div class="player-modal-content">
+        <div class="player-toolbar">
+          <span id="playerMediaTitle" style="font-weight: 700; color: var(--gold-orange);"></span>
+          <div class="player-toolbar-controls">
+            <button class="btn btn-secondary" id="rotateToggleBtn" style="padding:5px 12px; font-size:0.78rem;" onclick="App.toggleDeviceRotation()" title="تدوير أو الوضع الطبيعي">
+              <i class="fa-solid fa-rotate"></i> <span id="rotateBtnText">تدوير عرضي</span>
+            </button>
+            <button class="btn btn-secondary" id="fullscreenToggleBtn" style="padding:5px 10px; font-size:0.78rem;" onclick="App.toggleNativeFullscreen()" title="ملء الشاشة">
+              <i class="fa-solid fa-expand"></i>
+            </button>
+            <button class="btn btn-danger" style="padding:5px 12px; font-size:0.78rem;" onclick="App.closeMediaPlayer()">
+              <i class="fa-solid fa-xmark"></i> إغلاق
+            </button>
+          </div>
+        </div>
+
+        <div id="pdfControlsBar" class="pdf-controls-bar" style="display:none;">
+          <button class="btn btn-secondary" style="padding:4px 10px;" onclick="PDFViewerEngine.prevPage()"><i class="fa-solid fa-chevron-right"></i> السابق</button>
+          <span>الصفحة: <strong id="pdfPageNum">1</strong> / <strong id="pdfPageCount">--</strong></span>
+          <button class="btn btn-secondary" style="padding:4px 10px;" onclick="PDFViewerEngine.nextPage()">التالي <i class="fa-solid fa-chevron-left"></i></button>
+          <button class="btn btn-secondary" style="padding:4px 10px;" onclick="PDFViewerEngine.zoomIn()"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+          <button class="btn btn-secondary" style="padding:4px 10px;" onclick="PDFViewerEngine.zoomOut()"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+        </div>
+
+        <div class="player-viewport" id="playerViewport">
+          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
+            <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة بنك القوانين والمتطابقات الرياضية -->
+  <div class="modal-overlay" id="formulaSheetModal">
+    <div class="modal-card" style="max-width: 820px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:2px solid var(--gold-subtle); padding-bottom:10px;">
+        <h3 style="color:var(--navy-dark); font-weight:800;"><i class="fa-solid fa-square-root-variable" style="color:var(--gold-orange);"></i> بنك القوانين الرياضية – منصة الأستاذ عمر</h3>
+        <i class="fa-solid fa-xmark" style="cursor:pointer; font-size:20px;" onclick="App.closeFormulaSheetModal()"></i>
+      </div>
+
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:14px; font-size:0.88rem;">
+        <div class="card" style="margin:0; background:var(--gold-light); border-color:var(--gold-orange);">
+          <h4 style="color:var(--navy-dark); margin-bottom:8px;"><i class="fa-solid fa-calculator"></i> قواعد التفاضل والتكامل</h4>
+          <p>• مشتقة الضرب: \( (u \cdot v)' = u'v + uv' \)</p>
+          <p>• مشتقة القسمة: \( (\frac{u}{v})' = \frac{u'v - uv'}{v^2} \)</p>
+          <p>• تكامل القوة: \( \int x^n dx = \frac{x^{n+1}}{n+1} + C \)</p>
+          <p>• تكامل الدالة الأسية: \( \int e^{kx} dx = \frac{1}{k}e^{kx} + C \)</p>
+        </div>
+
+        <div class="card" style="margin:0; background:var(--gold-light); border-color:var(--gold-deep);">
+          <h4 style="color:var(--navy-dark); margin-bottom:8px;"><i class="fa-solid fa-shapes"></i> المتطابقات والقوانين الأساسية</h4>
+          <p>• المتطابقة الأساسية: \( \sin^2\theta + \cos^2\theta = 1 \)</p>
+          <p>• ضعف الزاوية: \( \sin(2\theta) = 2\sin\theta\cos\theta \)</p>
+          <p>• القانون العام: \( x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a} \)</p>
+          <p>• مساحة الدائرة والمحيط: \( A = \pi r^2 , C = 2\pi r \)</p>
+        </div>
+      </div>
+
+      <button class="btn btn-navy" style="width:100%; margin-top:16px;" onclick="App.closeFormulaSheetModal()">إغلاق اللوحة</button>
+    </div>
+  </div>
+
+  <!-- نافذة تعديل المحتوى (Edit Content Modal) -->
+  <div class="modal-overlay" id="editContentModal">
+    <div class="modal-card">
+      <h3 style="color: var(--navy-dark); margin-bottom: 16px;">
+        <i class="fa-solid fa-pen-to-square"></i> تعديل المادة التعليمية
+      </h3>
+      <form onsubmit="App.handleSaveEditContent(event)">
+        <input type="hidden" id="editContentId">
+        <input type="hidden" id="editContentType">
+        
+        <div class="form-group">
+          <label>المنهاج والصف المستهدف</label>
+          <select id="editContentTarget" required></select>
+        </div>
+
+        <div class="form-group">
+          <label>العنوان</label>
+          <input type="text" id="editContentTitle" required>
+        </div>
+
+        <div class="form-group">
+          <label>الوحدة / الفصل / الموضوع</label>
+          <input type="text" id="editContentUnit" required>
+        </div>
+
+        <div class="form-group" id="editUrlGroup">
+          <label>رابط الملف أو الفيديو / الصوت / العرض التقديمي</label>
+          <div class="input-with-paste">
+            <input type="text" id="editContentUrl">
+            <button type="button" class="btn btn-gold" style="padding:10px 14px;" onclick="App.pasteToInput('editContentUrl')">
+              <i class="fa-solid fa-paste"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group" id="editTextGroup">
+          <label>نصوص الشرح المباشر / المحتوى الكتابي / الملاحظات</label>
+          <textarea id="editContentText" rows="6"></textarea>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:16px;">
+          <button type="submit" class="btn btn-gold" style="flex:1;">حفظ التعديلات سحابياً</button>
+          <button type="button" class="btn btn-secondary" onclick="App.closeEditModal()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة تخصيص شعار وإعدادات المنصة (Admin Settings Modal) -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal-card" style="max-width: 520px;">
+      <h3 style="color: var(--navy-dark); margin-bottom: 16px;">
+        <i class="fa-solid fa-sliders"></i> إعدادات المنصة والشعار
+      </h3>
+      <form onsubmit="App.handleSaveSettings(event)">
+        <div class="form-group">
+          <label>رابط صورة الشعار (Logo URL)</label>
+          <div class="input-with-paste">
+            <input type="text" id="settingLogoUrl" placeholder="https://example.com/logo.png">
+            <button type="button" class="btn btn-gold" style="padding:10px 14px;" onclick="App.pasteToInput('settingLogoUrl')">
+              <i class="fa-solid fa-paste"></i>
+            </button>
+          </div>
+          <small style="color:var(--text-muted); font-size:0.75rem;">سيظهر هذا الشعار في رأس المنصة وعلى شهادات الطلاب المعتمدة كختم رسمي.</small>
+        </div>
+
+        <div class="form-group">
+          <label>رقم واتساب للتواصل والاشتراكات (مع رمز الدولة)</label>
+          <input type="text" id="settingWhatsAppPhone" placeholder="971524583192">
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:16px;">
+          <button type="submit" class="btn btn-gold" style="flex:1;">حفظ الإعدادات</button>
+          <button type="button" class="btn btn-secondary" onclick="App.closeSettingsModal()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- نافذة الشهادة المعتمدة A4 مع الختم الرسمي للشعار -->
+  <div class="modal-overlay" id="certificateModal">
+    <div class="modal-card" style="max-width: 820px;">
+      <div id="printableCert" class="certificate-card">
+        <div id="certLogoContainer"></div>
+        <h2 style="font-weight: 900; font-size: 1.6rem; color: var(--navy-dark); margin-bottom: 2px;">شهادة إتمام وتفوق معتمدة</h2>
+        <span style="font-size: 0.95rem; color: var(--gold-deep); font-weight: 800; display: block; margin-bottom: 18px;">منصة الأستاذ عمر (Omer Gasim) للرياضيات الحديثة</span>
+        
+        <p style="font-size: 0.98rem; margin-bottom: 6px;">تشهد إدارة المنصة بأن الطالبـ(ـة) المتميز(ة):</p>
+        <h3 id="certStudentName" style="font-size: 1.55rem; color: var(--navy-dark); font-weight: 900; border-bottom: 2px dashed var(--gold-orange); display: inline-block; padding: 0 28px 6px; margin-bottom: 14px;"></h3>
+        
+        <p style="font-size: 0.95rem; line-height: 2; margin-bottom: 22px; max-width: 680px; margin-left: auto; margin-right: auto;">
+          قد اجتاز بنجاح واقتدار متطلبات دراسة مقرر <strong id="certGradeText" style="color:var(--gold-deep);"></strong>، بعد إتمام كافة الدروس التطبيقية، البودكاست التعليمي، والاختبارات التفاعلية بنجاح وتفوق تحت إشراف الأستاذ عمر قاسم.
+        </p>
+
+        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 24px; border-top: 2px solid var(--gold-subtle); padding-top: 16px;">
+          <div style="text-align: right; font-size: 0.82rem; color: var(--text-muted);">
+            <span>الرقم الأكاديمي: <strong id="certSerial" style="color:var(--navy-dark);"></strong></span><br>
+            <span>حالة الاعتماد: <strong style="color:var(--success);">معتمد رسمياً ومحمي بنظام التحقق ✓</strong></span>
+          </div>
+          <div style="text-align: center;">
+            <span style="font-size: 0.85rem; font-weight: 800; display: block; color: var(--navy-dark);">التوجيه الأكاديمي والتدريس</span>
+            <strong style="font-size: 1.2rem; color: var(--gold-deep);">الأستاذ عمر قاسم</strong>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 18px;">
+        <button class="btn btn-navy" style="flex: 1;" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> طباعة الشهادة على ورقة A4
+        </button>
+        <button class="btn btn-secondary" onclick="App.closeCertificateModal()">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة تأكيد الإجراءات -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal-card" style="max-width: 440px; text-align: center;">
+      <div style="font-size: 48px; color: var(--gold-orange); margin-bottom: 14px;">
+        <i class="fa-solid fa-circle-question"></i>
+      </div>
+      <h3 id="confirmTitle" style="color: var(--navy-dark); margin-bottom: 8px;">تأكيد الإجراء</h3>
+      <p id="confirmMessage" style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 22px;"></p>
+      <div style="display: flex; gap: 10px;">
+        <button class="btn btn-gold" id="confirmOkBtn" style="flex: 1;">تأكيد</button>
+        <button class="btn btn-secondary" onclick="App.closeConfirmModal()" style="flex: 1;">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة المطور -->
+  <div class="modal-overlay" id="engineerModal" onclick="App.closeEngineerModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+      <div style="text-align: center; margin-bottom: 20px;">
+        <div style="background: var(--gold-subtle); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 2px solid var(--gold-orange);">
+          <i class="fa-solid fa-laptop-code" style="font-size: 30px; color: var(--navy-dark);"></i>
+        </div>
+        <h3 style="color: var(--navy-dark); font-weight: 800; font-size: 1.25rem;">المهندس حسين نقد</h3>
+        <span style="color: var(--gold-deep); font-size: 0.85rem; font-weight: 700;">مهندس برمجيات ونظم سحابية تعليمية متقدمة</span>
+      </div>
+
+      <div style="background: var(--gold-light); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 18px; font-size: 0.88rem; line-height: 1.7; color: var(--text-dark);">
+        متخصص في بناء وتأمين المنصات التعليمية الرقمية الذكية، محركات عرض الـ PDF، وتشفير نظم الاختبارات وحمايتها.
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 12px; font-size: 0.88rem; margin-bottom: 20px;">
+        <a href="tel:0524583192" style="display: flex; align-items: center; gap: 10px; color: var(--text-dark); text-decoration: none; padding: 10px; border-radius: var(--radius-sm); background: var(--bg-light);">
+          <i class="fa-solid fa-phone" style="color: var(--success); font-size: 1.1rem;"></i>
+          <strong>الهاتف:</strong> 0524583192
+        </a>
+        <a href="mailto:srk87srk@gmail.com" style="display: flex; align-items: center; gap: 10px; color: var(--text-dark); text-decoration: none; padding: 10px; border-radius: var(--radius-sm); background: var(--bg-light);">
+          <i class="fa-solid fa-envelope" style="color: var(--navy-dark); font-size: 1.1rem;"></i>
+          <strong>البريد:</strong> srk87srk@gmail.com
+        </a>
+        <a href="https://wa.me/971524583192" target="_blank" class="btn btn-whatsapp" style="padding: 10px; font-size: 0.85rem;">
+          <i class="fa-brands fa-whatsapp"></i> تواصل عبر واتساب مباشرة
+        </a>
+      </div>
+
+      <button class="btn btn-navy" style="width: 100%;" onclick="App.closeEngineerModal()">إغلاق</button>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <div>
+        <span>جميع الحقوق محفوظة © 2026 – منصة الأستاذ عمر (Omer Gasim)</span>
+      </div>
+      <div>
+        <span style="margin-left: 8px;">تصميم وتطوير:</span>
+        <button class="engineer-tag" onclick="App.openEngineerModal()">
+          <i class="fa-solid fa-code"></i> المهندس حسين نقد
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /**
+     * =========================================================================
+     * 1. رابط الشعار الرسمي الافتراضي والمناهج المعتمدة
+     * =========================================================================
+     */
+    const OFFICIAL_LOGO_URL = "https://videotourl.com/images/1792673507558-0d8ff32e-d7a0-49bd-a008-2ea9fbcbf1b4.jpg";
+
+    const CURRICULUM_DEFINITIONS = [
+      { id: 'UAE_10_ADV', name: 'الصف العاشر متقدم', system: 'إماراتي', full: 'الصف العاشر متقدم – المنهاج الإماراتي' },
+      { id: 'UAE_11_ADV', name: 'الصف الحادي عشر متقدم', system: 'إماراتي', full: 'الصف الحادي عشر متقدم – المنهاج الإماراتي' },
+      { id: 'UAE_12_ADV', name: 'الصف الثاني عشر متقدم', system: 'إماراتي', full: 'الصف الثاني عشر متقدم – المنهاج الإماراتي' },
+      { id: 'SUD_05', name: 'الصف الخامس', system: 'سوداني', full: 'الصف الخامس – المنهاج السوداني' },
+      { id: 'SUD_06', name: 'الصف السادس', system: 'سوداني', full: 'الصف السادس – المنهاج السوداني' },
+      { id: 'SUD_07', name: 'الصف السابع', system: 'سوداني', full: 'الصف السابع – المنهاج السوداني' },
+      { id: 'SUD_08', name: 'الصف الثامن', system: 'سوداني', full: 'الصف الثامن – المنهاج السوداني' },
+      { id: 'SUD_12', name: 'الصف الثالث ثانوي (الشهادة)', system: 'سوداني', full: 'الصف الثالث ثانوي (الشهادة السودانية)' }
+    ];
+
+    /**
+     * =========================================================================
+     * 2. محرك تشغيل الـ PDF
+     * =========================================================================
+     */
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const PDFViewerEngine = {
+      pdfDoc: null,
+      pageNum: 1,
+      scale: 1.3,
+      canvasContainer: null,
+
+      async loadPDF(url, containerEl) {
+        this.canvasContainer = containerEl;
+        this.canvasContainer.innerHTML = `
+          <div style="color:#FFF; padding:40px; text-align:center;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size:32px; color:var(--gold-orange); margin-bottom:12px;"></i>
+            <p>جاري معالجة وتهيئة ملف الـ PDF بدقة عالية...</p>
+          </div>
+        `;
+
+        try {
+          const loadingTask = pdfjsLib.getDocument({
+            url: url,
+            cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+            cMapPacked: true,
+            enableXfa: true
+          });
+
+          this.pdfDoc = await loadingTask.promise;
+          document.getElementById('pdfPageCount').innerText = this.pdfDoc.numPages;
+          this.pageNum = 1;
+          document.getElementById('pdfControlsBar').style.display = 'flex';
+          this.renderPage(this.pageNum);
+        } catch (error) {
+          console.warn("PDF.js fallback:", error);
+          const gViewer = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
+          this.canvasContainer.innerHTML = `
+            <iframe class="document-viewer-frame" src="${gViewer}"></iframe>
+            <div style="background:#0A1424; padding:10px; width:100%; text-align:center;">
+              <a href="${url}" target="_blank" class="btn btn-gold" style="font-size:0.8rem;">
+                <i class="fa-solid fa-arrow-up-right-from-square"></i> فتح الملف في نافذة خارجية
+              </a>
+            </div>
+          `;
+          document.getElementById('pdfControlsBar').style.display = 'none';
+        }
+      },
+
+      async renderPage(num) {
+        if (!this.pdfDoc) return;
+        this.canvasContainer.innerHTML = '';
+        const page = await this.pdfDoc.getPage(num);
+        const viewport = page.getViewport({ scale: this.scale });
+
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        this.canvasContainer.appendChild(canvas);
+        document.getElementById('pdfPageNum').innerText = num;
+
+        const renderContext = {
+          canvasContext: ctx,
+          viewport: viewport
+        };
+        await page.render(renderContext).promise;
+      },
+
+      prevPage() {
+        if (this.pageNum <= 1) return;
+        this.pageNum--;
+        this.renderPage(this.pageNum);
+      },
+
+      nextPage() {
+        if (!this.pdfDoc || this.pageNum >= this.pdfDoc.numPages) return;
+        this.pageNum++;
+        this.renderPage(this.pageNum);
+      },
+
+      zoomIn() {
+        this.scale += 0.2;
+        this.renderPage(this.pageNum);
+      },
+
+      zoomOut() {
+        if (this.scale <= 0.8) return;
+        this.scale -= 0.2;
+        this.renderPage(this.pageNum);
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 3. مؤقت التركيز (Pomodoro Timer)
+     * =========================================================================
+     */
+    const PomodoroTimer = {
+      timeLeft: 25 * 60,
+      timerId: null,
+      isRunning: false,
+
+      toggle() {
+        if (this.isRunning) {
+          this.pause();
+        } else {
+          this.start();
+        }
+      },
+
+      start() {
+        this.isRunning = true;
+        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-pause"></i> إيقاف مؤقت';
+        this.timerId = setInterval(() => {
+          if (this.timeLeft > 0) {
+            this.timeLeft--;
+            this.updateDisplay();
+          } else {
+            this.pause();
+            AudioFX.celebrate();
+            alert("⏰ انتهت جلسة التركيز! استرح لمدة 5 دقائق.");
+            this.reset();
+          }
+        }, 1000);
+      },
+
+      pause() {
+        this.isRunning = false;
+        clearInterval(this.timerId);
+        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-play"></i> استئناف';
+      },
+
+      reset() {
+        this.pause();
+        this.timeLeft = 25 * 60;
+        this.updateDisplay();
+        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-play"></i> بدء';
+      },
+
+      updateDisplay() {
+        const m = Math.floor(this.timeLeft / 60).toString().padStart(2, '0');
+        const s = (this.timeLeft % 60).toString().padStart(2, '0');
+        const el = document.getElementById("timerDisplay");
+        if (el) el.innerText = `${m}:${s}`;
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 4. أمان التشفير والتحقق
+     * =========================================================================
+     */
+    const CryptoSecurity = {
+      SALT_KEY: "OMER_GASIM_MATH_PLATFORM_SECURE_2026",
+
+      hashPassword(plainPassword, customSalt = "") {
+        const salt = customSalt || this.SALT_KEY;
+        const key = CryptoJS.PBKDF2(plainPassword, salt, {
+          keySize: 256 / 32,
+          iterations: 1000
+        });
+        return key.toString(CryptoJS.enc.Hex);
+      },
+
+      createSessionToken(user) {
+        const payload = {
+          uid: user.uid,
+          role: user.role,
+          username: user.username,
+          target: user.target,
+          expiresAt: Date.now() + (8 * 60 * 60 * 1000),
+          fingerprint: navigator.userAgent.substring(0, 30)
+        };
+        return CryptoJS.AES.encrypt(JSON.stringify(payload), this.SALT_KEY).toString();
+      },
+
+      validateSessionToken(token) {
+        try {
+          const bytes = CryptoJS.AES.decrypt(token, this.SALT_KEY);
+          const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+          if (decrypted && decrypted.expiresAt > Date.now()) {
+            return decrypted;
+          }
+        } catch (e) {
+          return null;
+        }
+        return null;
+      },
+
+      checkBruteForce() {
+        const attempts = parseInt(localStorage.getItem("omer_login_attempts") || "0");
+        const lockUntil = parseInt(localStorage.getItem("omer_lock_until") || "0");
+        if (Date.now() < lockUntil) {
+          const remainingSec = Math.ceil((lockUntil - Date.now()) / 1000);
+          return { locked: true, remainingSec };
+        }
+        return { locked: false, attempts };
+      },
+
+      recordFailedAttempt() {
+        let attempts = parseInt(localStorage.getItem("omer_login_attempts") || "0") + 1;
+        localStorage.setItem("omer_login_attempts", attempts.toString());
+        if (attempts >= 5) {
+          localStorage.setItem("omer_lock_until", (Date.now() + 60000).toString());
+          localStorage.setItem("omer_login_attempts", "0");
+        }
+      },
+
+      resetFailedAttempts() {
+        localStorage.removeItem("omer_login_attempts");
+        localStorage.removeItem("omer_lock_until");
+      }
+    };
+
+    const AntiTamperGuard = {
+      init() {
+        document.addEventListener('contextmenu', e => {
+          e.preventDefault();
+          App.recordSecurityViolation("محاولة نسخ أو تنزيل");
+          App.showSecurityAlert("محتويات منصة الأستاذ عمر للرياضيات محمية ومشفرة.");
+        });
+
+        document.addEventListener('keydown', e => {
+          if (
+            e.key === 'F12' ||
+            (e.ctrlKey && e.shiftKey && ['I','i','J','j','C','c'].includes(e.key)) ||
+            (e.ctrlKey && ['U','u','S','s'].includes(e.key))
+          ) {
+            e.preventDefault();
+            document.getElementById('securityPrivacyShield').style.display = 'flex';
+            App.recordSecurityViolation(`محاولة فتح أدوات التفتيش (${e.key})`);
+          }
+        });
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 5. المؤثرات الصوتية و Confetti
+     * =========================================================================
+     */
+    const AudioFX = {
+      ctx: null,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+      },
+      playTone(freq, type, duration) {
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = type;
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start();
+          osc.stop(this.ctx.currentTime + duration);
+        } catch(e){}
+      },
+      correct() {
+        this.playTone(523.25, 'sine', 0.12);
+        setTimeout(() => this.playTone(659.25, 'sine', 0.25), 100);
+      },
+      wrong() {
+        this.playTone(220, 'sawtooth', 0.25);
+      },
+      celebrate() {
+        this.playTone(523.25, 'triangle', 0.2);
+        setTimeout(() => this.playTone(659.25, 'triangle', 0.2), 150);
+        setTimeout(() => this.playTone(783.99, 'triangle', 0.35), 300);
+      }
+    };
+
+    const ConfettiFX = {
+      particles: [],
+      animId: null,
+      fire() {
+        const canvas = document.getElementById('confettiCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        this.particles = [];
+
+        const colors = ['#F59E0B', '#EA580C', '#0F1E36', '#10B981', '#3B82F6', '#8B5CF6'];
+        for (let i = 0; i < 120; i++) {
+          this.particles.push({
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            r: Math.random() * 6 + 4,
+            d: Math.random() * 120,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            tilt: Math.floor(Math.random() * 10) - 10,
+            tiltAngleInc: Math.random() * 0.07 + 0.05,
+            tiltAngle: 0,
+            vx: (Math.random() - 0.5) * 16,
+            vy: (Math.random() - 0.5) * 16 - 4,
+            gravity: 0.25,
+            opacity: 1
+          });
+        }
+
+        if (this.animId) cancelAnimationFrame(this.animId);
+        const render = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          let alive = false;
+          this.particles.forEach(p => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.vy += p.gravity;
+            p.tiltAngle += p.tiltAngleInc;
+            p.tilt = Math.sin(p.tiltAngle) * 15;
+            p.opacity -= 0.008;
+
+            if (p.opacity > 0) {
+              alive = true;
+              ctx.beginPath();
+              ctx.lineWidth = p.r;
+              ctx.strokeStyle = p.color;
+              ctx.globalAlpha = p.opacity;
+              ctx.moveTo(p.x + p.tilt + p.r / 4, p.y);
+              ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r / 4);
+              ctx.stroke();
+            }
+          });
+          ctx.globalAlpha = 1;
+          if (alive) {
+            this.animId = requestAnimationFrame(render);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          }
+        };
+        render();
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 6. حالة التطبيق وقاعدة البيانات (State & Store)
+     * =========================================================================
+     */
+    const State = {
+      currentUser: null,
+      currentRoute: "LOGIN",
+      activeContentTab: "VIDEOS",
+      adminTargetFilter: "ALL",
+      adminContentTab: "LIST",
+      studentSearchQuery: "",
+      adminSearchQuery: "",
+      
+      // تدفق تسجيل الدخول والتحقق بخطوتين
+      loginStage: "CREDENTIALS",
+      pendingAdminAuth: false,
+
+      activeQuiz: null,
+      activeQuestionIndex: 0,
+      quizScore: 0,
+      isQuestionAnswered: false,
+      isRotatedLandscape: false,
+
+      settings: {
+        adminPhoneWhatsApp: "971524583192",
+        logoUrl: localStorage.getItem("omer_logo_url") || OFFICIAL_LOGO_URL
+      },
+
+      students: [],
+      materials: [],
+      quizzes: [],
+      activityLogs: []
+    };
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCg-8KgfmhbWMtQ-DxUHpMJr5_tgExYL_0",
+      authDomain: "og-math.firebaseapp.com",
+      databaseURL: "https://og-math-default-rtdb.firebaseio.com",
+      projectId: "og-math",
+      storageBucket: "og-math.firebasestorage.app",
+      messagingSenderId: "952026665544",
+      appId: "1:952026665544:web:69910602763e336e243e7d"
+    };
+
+    let db;
+    try {
+      firebase.initializeApp(firebaseConfig);
+      db = firebase.firestore();
+    } catch (e) {
+      console.warn("Firestore running in localized mode.");
+    }
+
+    const DataStore = {
+      async syncAll() {
+        const adminHashedPass = CryptoSecurity.hashPassword("Omar2026");
+        localStorage.setItem("omer_admin_hash", adminHashedPass);
+
+        if (db) {
+          db.collection("omer_students").onSnapshot(snapshot => {
+            State.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            localStorage.setItem("omer_students", JSON.stringify(State.students));
+            UI.render();
+          }, () => {
+            State.students = JSON.parse(localStorage.getItem("omer_students") || "[]");
+          });
+
+          db.collection("omer_materials").onSnapshot(snapshot => {
+            State.materials = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            localStorage.setItem("omer_materials", JSON.stringify(State.materials));
+            UI.render();
+          }, () => {
+            State.materials = JSON.parse(localStorage.getItem("omer_materials") || "[]");
+          });
+
+          db.collection("omer_quizzes").onSnapshot(snapshot => {
+            State.quizzes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            localStorage.setItem("omer_quizzes", JSON.stringify(State.quizzes));
+            UI.render();
+          }, () => {
+            State.quizzes = JSON.parse(localStorage.getItem("omer_quizzes") || "[]");
+          });
+
+          db.collection("omer_logs").onSnapshot(snapshot => {
+            State.activityLogs = snapshot.docs.map(doc => doc.data());
+            localStorage.setItem("omer_logs", JSON.stringify(State.activityLogs));
+            UI.render();
+          }, () => {
+            State.activityLogs = JSON.parse(localStorage.getItem("omer_logs") || "[]");
+          });
+        } else {
+          State.students = JSON.parse(localStorage.getItem("omer_students") || "[]");
+          State.materials = JSON.parse(localStorage.getItem("omer_materials") || "[]");
+          State.quizzes = JSON.parse(localStorage.getItem("omer_quizzes") || "[]");
+          State.activityLogs = JSON.parse(localStorage.getItem("omer_logs") || "[]");
+        }
+
+        const savedToken = localStorage.getItem("omer_session_token");
+        if (savedToken) {
+          const validated = CryptoSecurity.validateSessionToken(savedToken);
+          if (validated) {
+            if (validated.role === "ADMIN") {
+              State.currentUser = { uid: "admin_omer", name: "الأستاذ عمر (المشرف)", username: "Admin", role: "ADMIN" };
+              State.currentRoute = "ADMIN_DASHBOARD";
+            } else {
+              const student = State.students.find(s => s.uid === validated.uid);
+              if (student) {
+                State.currentUser = { ...student, role: "STUDENT" };
+                State.currentRoute = "STUDENT_DASHBOARD";
+              }
+            }
+          } else {
+            localStorage.removeItem("omer_session_token");
+          }
+        }
+      },
+
+      save(key, data) {
+        if (key === "students") {
+          localStorage.setItem("omer_students", JSON.stringify(data));
+          if (db) data.forEach(st => db.collection("omer_students").doc(st.uid).set(st, { merge: true }).catch(err => console.error(err)));
+        } else if (key === "materials") {
+          localStorage.setItem("omer_materials", JSON.stringify(data));
+          if (db) data.forEach(m => db.collection("omer_materials").doc(m.id).set(m, { merge: true }).catch(err => console.error(err)));
+        } else if (key === "quizzes") {
+          localStorage.setItem("omer_quizzes", JSON.stringify(data));
+          if (db) data.forEach(q => db.collection("omer_quizzes").doc(q.id).set(q, { merge: true }).catch(err => console.error(err)));
+        } else if (key === "logs") {
+          localStorage.setItem("omer_logs", JSON.stringify(data));
+          if (db && data.length > 0) db.collection("omer_logs").add(data[0]).catch(err => console.error(err));
+        }
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 7. واجهات المستخدم والقوالب UI
+     * =========================================================================
+     */
+    const UI = {
+      renderLogoHtml(className = 'brand-logo-img', fallbackClass = 'brand-logo-fallback') {
+        const logo = State.settings.logoUrl || OFFICIAL_LOGO_URL;
+        return `<img src="${logo}" class="${className}" alt="Omer Gasim Logo" onerror="this.outerHTML='${UI.getFallbackLogo(fallbackClass)}'">`;
+      },
+
+      getFallbackLogo(fallbackClass) {
+        return `<div class="${fallbackClass}"><i class="fa-solid fa-shapes"></i></div>`;
+      },
+
+      getTargetLabel(target) {
+        const item = CURRICULUM_DEFINITIONS.find(c => c.id === target);
+        return item ? item.full : 'المنهاج المخصص';
+      },
+
+      getMediaTypeBadge(item) {
+        switch (item.type) {
+          case 'VIDEOS':
+            return `<span class="badge badge-curriculum"><i class="fa-solid fa-circle-play"></i> فيديو مسجل</span>`;
+          case 'PODCASTS':
+            return `<span class="badge badge-podcast"><i class="fa-solid fa-podcast"></i> بودكاست صوتي</span>`;
+          case 'ARTICLES':
+            return `<span class="badge badge-article"><i class="fa-solid fa-file-lines"></i> شرح كتابي مباشر</span>`;
+          case 'POWERPOINTS':
+            return `<span class="badge badge-ppt"><i class="fa-solid fa-file-powerpoint"></i> عرض تقديمي PPT</span>`;
+          case 'WORD_DOCS':
+            return `<span class="badge badge-word"><i class="fa-solid fa-file-word"></i> مستند Word</span>`;
+          case 'WORKSHEETS':
+            return `<span class="badge badge-curriculum"><i class="fa-solid fa-file-pdf"></i> مذكرة PDF</span>`;
+          case 'EXAMS':
+            return `<span class="badge badge-tag"><i class="fa-solid fa-file-shield"></i> نموذج امتحاني</span>`;
+          case 'REVISIONS':
+            return `<span class="badge badge-trial"><i class="fa-solid fa-star"></i> مراجعة نهائية</span>`;
+          default:
+            return `<span class="badge badge-tag">${item.format || 'مادة تعليمية'}</span>`;
+        }
+      },
+
+      render() {
+        const root = document.getElementById("appContainer");
+        const nav = document.getElementById("navActions");
+        const brandBox = document.getElementById("brandLogoContainer");
+
+        if (brandBox) {
+          brandBox.innerHTML = UI.renderLogoHtml('brand-logo-img', 'brand-logo-fallback');
+        }
+
+        if (State.currentUser) {
+          nav.innerHTML = `
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:0.86rem; font-weight:700; color:var(--gold-orange);">
+                <i class="fa-solid fa-user-graduate"></i> ${State.currentUser.name}
+              </span>
+              <button class="btn btn-gold" style="padding:6px 12px; font-size:0.75rem;" onclick="App.logout()">
+                <i class="fa-solid fa-power-off"></i> خروج
+              </button>
+            </div>
+          `;
+        } else {
+          nav.innerHTML = ``;
+        }
+
+        switch (State.currentRoute) {
+          case "LOGIN":
+            root.innerHTML = UI.templates.login();
+            break;
+          case "STUDENT_DASHBOARD":
+            root.innerHTML = UI.templates.studentDashboard();
+            break;
+          case "INTERACTIVE_QUIZ":
+            root.innerHTML = UI.templates.interactiveQuiz();
+            break;
+          case "SUBSCRIBE_PAGE":
+            root.innerHTML = UI.templates.subscribePage();
+            break;
+          case "ADMIN_DASHBOARD":
+            root.innerHTML = UI.templates.adminDashboard();
+            UI.initTrafficChart();
+            break;
+          case "ADMIN_STUDENTS":
+            root.innerHTML = UI.templates.adminStudents();
+            break;
+          case "ADMIN_CREATE_STUDENT":
+            root.innerHTML = UI.templates.adminCreateStudent();
+            break;
+          case "ADMIN_CONTENT_MANAGER":
+            root.innerHTML = UI.templates.adminContentManager();
+            break;
+          case "ADMIN_QUIZ_CREATOR":
+            root.innerHTML = UI.templates.adminQuizCreator();
+            break;
+          case "ADMIN_ACTIVITY":
+            root.innerHTML = UI.templates.adminActivity();
+            break;
+          default:
+            root.innerHTML = UI.templates.login();
+        }
+
+        if (window.renderMathInElement) {
+          renderMathInElement(document.body, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '\\(', right: '\\)', display: false }
+            ]
+          });
+        }
+      },
+
+      templates: {
+        login() {
+          const bruteStatus = CryptoSecurity.checkBruteForce();
+          if (bruteStatus.locked) {
+            return `
+              <div style="max-width: 440px; margin: 40px auto;">
+                <div class="card" style="padding: 34px 26px; text-align: center; border-color: var(--danger);">
+                  <i class="fa-solid fa-ban" style="font-size: 52px; color: var(--danger); margin-bottom: 14px;"></i>
+                  <h3 style="color: var(--navy-dark); margin-bottom: 8px;">تم تعليق الدخول مؤقتاً</h3>
+                  <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+                    انتظر <strong>${bruteStatus.remainingSec}</strong> ثانية للمحاولة مجدداً.
+                  </p>
+                  <button class="btn btn-secondary" onclick="UI.render()">تحديث</button>
+                </div>
+              </div>
+            `;
+          }
+
+          if (State.loginStage === "2FA") {
+            return `
+              <div style="max-width: 440px; margin: 40px auto;">
+                <div class="card" style="padding: 34px 26px; text-align: center; border-color: var(--gold-orange);">
+                  <div style="width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 18px; background: var(--gold-subtle); border: 2px solid var(--gold-orange);">
+                    <i class="fa-solid fa-key" style="font-size: 32px; color: var(--gold-deep);"></i>
+                  </div>
+                  <h2 style="color: var(--navy-dark); font-weight: 900; margin-bottom: 6px;">التحقق الأمني الثنائي (2FA)</h2>
+                  <p style="font-size: 0.84rem; color: var(--text-muted); margin-bottom: 20px;">
+                    تم التحقق من كلمة المرور. يرجى إدخال رمز التحقق الأمني المكون من 4 أرقام للمشرف.
+                  </p>
+
+                  <form onsubmit="App.handle2FASubmit(event)">
+                    <div class="form-group" style="margin-bottom: 20px;">
+                      <label style="text-align:center;">رمز التحقق الأمني (PIN)</label>
+                      <input type="password" id="twoFactorCode" maxlength="6" style="text-align:center; font-size:1.6rem; letter-spacing:8px; font-weight:800;" placeholder="••••" required autofocus>
+                    </div>
+                    <button type="submit" class="btn btn-gold" style="width: 100%; padding: 12px; font-size:0.95rem;">
+                      <i class="fa-solid fa-lock-open"></i> تأكيد الدخول إلى لوحة التحكم
+                    </button>
+                    <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="App.cancel2FA()">
+                      إلغاء والعودة
+                    </button>
+                  </form>
+                </div>
+              </div>
+            `;
+          }
+
+          return `
+            <div style="max-width: 440px; margin: 30px auto;">
+              <div class="card" style="padding: 34px 26px; text-align: center; border-top: 4px solid var(--gold-orange);">
+                
+                <!-- عرض الشعار الاحترافي في شاشة الدخول -->
+                <div class="login-logo-container">
+                  <img src="${State.settings.logoUrl || OFFICIAL_LOGO_URL}" alt="شعار الأستاذ عمر قاسم" onerror="this.outerHTML='<i class=\\'fa-solid fa-shapes\\' style=\\'font-size:36px; color:var(--gold-orange);\\'></i>'">
+                </div>
+
+                <h2 style="color: var(--navy-dark); font-weight: 900; margin-bottom: 4px;">منصة الأستاذ عمر</h2>
+                <p style="font-size:0.84rem; color:var(--text-muted); margin-bottom:14px;">مادة الرياضيات – المنهاج الإماراتي والمنهاج السوداني</p>
+                
+                <div style="display:inline-flex; align-items:center; gap:6px; background:#ECFDF5; color:#047857; padding:4px 14px; border-radius:50px; font-size:0.75rem; font-weight:700; margin-bottom:20px;">
+                  <i class="fa-solid fa-shield-halved"></i> نظام مشفر وعزل كامل للطلاب
+                </div>
+
+                <form onsubmit="App.handleLogin(event)">
+                  <div class="form-group">
+                    <label>اسم المستخدم (Username)</label>
+                    <input type="text" id="loginUsername" required placeholder="أدخل اسم المستخدم" autocomplete="username">
+                  </div>
+                  <div class="form-group" style="margin-bottom: 22px;">
+                    <label>كلمة المرور</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" autocomplete="current-password">
+                  </div>
+                  <button type="submit" class="btn btn-gold" style="width: 100%; padding: 12px; font-size:0.95rem;">
+                    <i class="fa-solid fa-right-to-bracket"></i> تسجيل الدخول
+                  </button>
+                </form>
+
+                <div style="margin-top: 22px; border-top: 1px solid var(--border-color); padding-top: 18px;">
+                  <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">
+                    طالب جديد وتريد الانضمام وتفعيل اشتراكك؟
+                  </p>
+                  <a href="https://wa.me/${State.settings.adminPhoneWhatsApp}?text=${encodeURIComponent('السلام عليكم أستاذ عمر، أود طلب الاشتراك وتفعيل حساب في منصة الرياضيات.')}" target="_blank" class="btn btn-whatsapp" style="width: 100%; font-size: 0.88rem;">
+                    <i class="fa-brands fa-whatsapp"></i> طلب اشتراك وتفعيل حساب فوري عبر واتساب
+                  </a>
+                </div>
+              </div>
+            </div>
+          `;
+        },
+
+        studentDashboard() {
+          const user = State.currentUser;
+          const now = Date.now();
+          const trialExpired = user.status === "TRIAL" && user.trialEndTimestamp && now > user.trialEndTimestamp;
+          const isExpired = user.status === "EXPIRED" || trialExpired;
+
+          if (isExpired) {
+            return `
+              <div class="card" style="text-align: center; padding: 46px 20px; max-width: 600px; margin: 30px auto; border-color: var(--danger);">
+                <i class="fa-solid fa-lock" style="font-size: 56px; color: var(--danger); margin-bottom: 18px;"></i>
+                <h2 style="color: var(--navy-dark); font-weight: 800;">🔒 انتهت الفترة التجريبية (3 أيام)</h2>
+                <p style="color: var(--text-muted); font-size: 0.92rem; margin: 14px 0 24px;">
+                  لقد انتهت فترة الـ 3 أيام التجريبية المجانية. للاستمرار في مشاهدة دروس الرياضيات والبودكاست والمذكرات، يرجى تفعيل اشتراكك مع الأستاذ عمر.
+                </p>
+                <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
+                  <button class="btn btn-whatsapp" onclick="App.sendWhatsAppOrder('EXP_RENEW')">
+                    <i class="fa-brands fa-whatsapp"></i> تفعيل الاشتراك الآن عبر واتساب
+                  </button>
+                </div>
+              </div>
+            `;
+          }
+
+          const isTrial = user.status === "TRIAL";
+          let daysLeft = 3;
+          if (isTrial && user.trialEndTimestamp) {
+            daysLeft = Math.max(1, Math.ceil((user.trialEndTimestamp - now) / (1000 * 60 * 60 * 24)));
+          }
+
+          const userTarget = user.target;
+          const q = State.studentSearchQuery.toLowerCase().trim();
+          
+          const filteredMaterials = State.materials.filter(item => {
+            const matchTarget = item.target === userTarget;
+            const matchStudentPermission = !item.assignedStudentUids || item.assignedStudentUids.length === 0 || item.assignedStudentUids.includes(user.uid);
+            const matchTab = item.type === State.activeContentTab;
+            const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
+            return matchTarget && matchStudentPermission && matchTab && matchSearch;
+          });
+
+          const filteredQuizzes = State.quizzes.filter(item => {
+            const matchTarget = item.target === userTarget;
+            const matchSearch = !q || item.title.toLowerCase().includes(q);
+            return matchTarget && matchSearch;
+          });
+
+          return `
+            ${isTrial ? `
+              <div class="countdown-widget">
+                <div>
+                  <i class="fa-solid fa-hourglass-half"></i> فترة تجريبية مجانية: متبقي <strong>${daysLeft} أيام</strong> للاشتراك الدائم.
+                </div>
+                <button class="btn btn-whatsapp" style="padding:6px 14px; font-size:0.8rem;" onclick="App.sendWhatsAppOrder('TRIAL_CONVERT')">
+                  <i class="fa-brands fa-whatsapp"></i> تثبيت وتفعيل الاشتراك الدائم
+                </button>
+              </div>
+            ` : ''}
+
+            <div class="card" style="border-right: 6px solid var(--gold-orange);">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                <div>
+                  <h2 style="color: var(--navy-dark); font-weight: 800;">أهلاً بك في منصة الأستاذ عمر 📐</h2>
+                  <p style="color: var(--text-muted); font-size: 0.88rem;">
+                    الطالب: <strong>${user.name}</strong> | <span class="badge badge-curriculum">${UI.getTargetLabel(user.target)}</span>
+                  </p>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                  ${user.certificateApproved ? `
+                    <button class="btn btn-gold" style="padding:6px 14px; font-size:0.8rem;" onclick="App.generateCertificate()">
+                      <i class="fa-solid fa-award"></i> طباعة شهادة التميز المعتمدة A4 ✓
+                    </button>
+                  ` : `
+                    <button class="btn btn-disabled" style="padding:6px 14px; font-size:0.8rem;" onclick="alert('الشهادة تمنح وتعتمد بعد إكمال المنهج وتقييمات الأستاذ عمر.')">
+                      <i class="fa-solid fa-lock"></i> الشهادة (بانتظار اعتماد الأستاذ عمر)
+                    </button>
+                  `}
+                  <span class="badge ${isTrial ? 'badge-trial' : 'badge-active'}">
+                    ${isTrial ? '🟡 تجربة 3 أيام' : '🟢 اشتراك معتمد'}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- شريط البحث الذكي -->
+            <div class="search-box-wrapper">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" placeholder="🔍 ابحث في دروسك ومذكراتك الرياضية..." value="${State.studentSearchQuery}" oninput="App.handleStudentSearch(this.value)">
+            </div>
+
+            <!-- أزرار الأقسام المتطورة -->
+            <div class="nav-tabs-wrapper">
+              <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')">
+                <i class="fa-solid fa-circle-play"></i> الفيديوهات المرئية
+              </button>
+              <button class="btn ${State.activeContentTab === 'PODCASTS' ? 'btn-purple' : 'btn-secondary'}" onclick="App.setContentTab('PODCASTS')">
+                <i class="fa-solid fa-podcast"></i> البودكاست الصوتي 🎙️
+              </button>
+              <button class="btn ${State.activeContentTab === 'ARTICLES' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('ARTICLES')">
+                <i class="fa-solid fa-book-open"></i> شروحات كتابية مباشرة 📝
+              </button>
+              <button class="btn ${State.activeContentTab === 'POWERPOINTS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('POWERPOINTS')">
+                <i class="fa-solid fa-file-powerpoint"></i> عروض الباوربوينت PPT
+              </button>
+              <button class="btn ${State.activeContentTab === 'WORD_DOCS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('WORD_DOCS')">
+                <i class="fa-solid fa-file-word"></i> ملفات Word
+              </button>
+              <button class="btn ${State.activeContentTab === 'WORKSHEETS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('WORKSHEETS')">
+                <i class="fa-solid fa-file-pdf"></i> مذكرات وأوراق عمل PDF
+              </button>
+              <button class="btn ${State.activeContentTab === 'QUIZZES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('QUIZZES')">
+                <i class="fa-solid fa-bolt"></i> الكويزات التفاعلية
+              </button>
+              <button class="btn ${State.activeContentTab === 'EXAMS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('EXAMS')">
+                <i class="fa-solid fa-file-shield"></i> الاختبارات الشاملة
+              </button>
+              <button class="btn ${State.activeContentTab === 'REVISIONS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('REVISIONS')">
+                <i class="fa-solid fa-star"></i> مراجعات الامتحانات
+              </button>
+            </div>
+
+            <div class="card">
+              ${State.activeContentTab === 'QUIZZES' ? `
+                <h3 style="color: var(--navy-dark); margin-bottom: 16px;"><i class="fa-solid fa-bolt" style="color:var(--gold-orange);"></i> كويزات وتحديات الرياضيات المخصصة لصفك</h3>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                  ${filteredQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:30px;"><i class="fa-solid fa-trophy" style="font-size:32px; display:block; margin-bottom:8px; color:var(--gold-orange);"></i>لا توجد كويزات متاحة لصفك حالياً.</p>' : filteredQuizzes.map(qz => `
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:16px; background:var(--gold-light); border:1.5px solid var(--gold-subtle); border-radius:var(--radius-md); flex-wrap:wrap; gap:10px;">
+                      <div>
+                        <strong style="font-size:0.98rem; display:block; color:var(--navy-dark);">
+                          <i class="fa-solid fa-calculator" style="color:var(--gold-deep);"></i> ${qz.title}
+                        </strong>
+                        <span style="font-size:0.8rem; color:var(--text-muted);">
+                          ${qz.questions ? qz.questions.length : 0} أسئلة • تصحيح وتفسير رياضي فوري
+                        </span>
+                      </div>
+                      <button class="btn btn-gold" style="padding:8px 16px; font-size:0.84rem;" onclick="App.startInteractiveQuiz('${qz.id}')">
+                        <i class="fa-solid fa-play"></i> ابدأ التحدي الآن
+                      </button>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 16px;">
+                  <h3 style="color: var(--navy-dark);">
+                    <i class="fa-solid ${UI.getTabIcon(State.activeContentTab)}"></i> ${UI.getTabTitle(State.activeContentTab)}
+                  </h3>
+                  <span style="font-size:0.8rem; color:var(--text-muted);">عدد المواد المتاحة: ${filteredMaterials.length}</span>
+                </div>
+                
+                ${filteredMaterials.length === 0 ? `
+                  <p style="color:var(--text-muted); text-align:center; padding:40px;">
+                    <i class="fa-solid fa-folder-open" style="font-size:36px; display:block; margin-bottom:10px; color:var(--gold-orange);"></i>
+                    لم يقم الأستاذ عمر برفع محتويات في هذا القسم لمنهجك بعد.
+                  </p>
+                ` : `
+                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:16px;">
+                    ${filteredMaterials.map(item => `
+                      <div class="card" style="margin:0; border-top: 4px solid var(--gold-orange); display:flex; flex-direction:column; justify-content:space-between;">
+                        <div>
+                          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            ${UI.getMediaTypeBadge(item)}
+                            <span style="font-size:0.75rem; color:var(--text-muted);">${item.unit || 'عام'}</span>
+                          </div>
+                          <h4 style="font-size:0.98rem; margin-bottom:8px; color:var(--navy-dark);">${item.title}</h4>
+                          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                            ${item.sampleContent ? item.sampleContent.substring(0, 80) + '...' : 'مادة دراسية تفاعلية مخصصة من الأستاذ عمر.'}
+                          </p>
+                        </div>
+                        
+                        <div>
+                          ${item.type === 'VIDEOS' ? `
+                            <button class="btn btn-gold" style="width:100%; font-size:0.82rem;" onclick="App.openVideoPlayer('${item.id}')">
+                              <i class="fa-solid fa-circle-play"></i> مشاهدة الفيديو
+                            </button>
+                          ` : item.type === 'PODCASTS' ? `
+                            <button class="btn btn-purple" style="width:100%; font-size:0.82rem;" onclick="App.openPodcastPlayer('${item.id}')">
+                              <i class="fa-solid fa-headphones"></i> استماع للبودكاست 🎙️
+                            </button>
+                          ` : item.type === 'ARTICLES' ? `
+                            <button class="btn btn-navy" style="width:100%; font-size:0.82rem;" onclick="App.openArticleViewer('${item.id}')">
+                              <i class="fa-solid fa-book-open-reader"></i> قراءة الدرس المباشر 📝
+                            </button>
+                          ` : item.type === 'POWERPOINTS' ? `
+                            <button class="btn btn-navy" style="width:100%; font-size:0.82rem; background:#C2410C; border-color:#EA580C;" onclick="App.openOfficeViewer('${item.id}', 'ppt')">
+                              <i class="fa-solid fa-file-powerpoint"></i> عرض الشرائح PPT
+                            </button>
+                          ` : item.type === 'WORD_DOCS' ? `
+                            <button class="btn btn-navy" style="width:100%; font-size:0.82rem; background:#1D4ED8; border-color:#2563EB;" onclick="App.openOfficeViewer('${item.id}', 'doc')">
+                              <i class="fa-solid fa-file-word"></i> استعراض مستند Word
+                            </button>
+                          ` : `
+                            <button class="btn btn-gold" style="width:100%; font-size:0.82rem;" onclick="App.openDocumentViewer('${item.id}')">
+                              <i class="fa-solid fa-book-open-reader"></i> فتح المذكرة
+                            </button>
+                          `}
+                        </div>
+                      </div>
+                    `).join('')}
+                  </div>
+                `}
+              `}
+            </div>
+          `;
+        },
+
+        interactiveQuiz() {
+          const quiz = State.activeQuiz;
+          const q = quiz.questions[State.activeQuestionIndex];
+          const totalQ = quiz.questions.length;
+          const progressPercent = ((State.activeQuestionIndex) / totalQ) * 100;
+
+          return `
+            <div class="quiz-gamified-box">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <span style="font-weight:800; color:var(--navy-dark); font-size:1.05rem;">
+                  <i class="fa-solid fa-square-root-variable" style="color:var(--gold-orange);"></i> ${quiz.title}
+                </span>
+                <span class="badge badge-curriculum">السؤال ${State.activeQuestionIndex + 1} من ${totalQ}</span>
+              </div>
+
+              <div class="quiz-progress-bar">
+                <div class="quiz-progress-fill" style="width: ${progressPercent}%;"></div>
+              </div>
+
+              <div class="quiz-card-question">
+                <h3 style="font-size:1.15rem; color:var(--navy-dark); margin-bottom:22px; font-weight:800;">
+                  ${State.activeQuestionIndex + 1}. ${q.text}
+                </h3>
+
+                <div class="interactive-option" id="opt_1" onclick="App.chooseOption(1)">
+                  <span>${q.option1}</span>
+                  <div class="option-letter">أ</div>
+                </div>
+
+                <div class="interactive-option" id="opt_2" onclick="App.chooseOption(2)">
+                  <span>${q.option2}</span>
+                  <div class="option-letter">ب</div>
+                </div>
+
+                <div class="interactive-option" id="opt_3" onclick="App.chooseOption(3)">
+                  <span>${q.option3}</span>
+                  <div class="option-letter">ج</div>
+                </div>
+
+                <div id="aiExplanationBox" style="display:none; margin-top:18px; padding:14px; background:var(--gold-light); border-right:4px solid var(--gold-orange); border-radius:var(--radius-sm); font-size:0.88rem;">
+                  <strong><i class="fa-solid fa-microchip" style="color:var(--gold-deep);"></i> خطوات الحل الرياضية النموذجية:</strong>
+                  <p id="aiExplanationText" style="margin-top:6px; color:var(--navy-dark); line-height:1.7;"></p>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; margin-top:24px; border-top:1px solid #E2E8F0; padding-top:16px;">
+                  <button class="btn btn-secondary" onclick="App.setRoute('STUDENT_DASHBOARD')">
+                    خروج من الكويز
+                  </button>
+                  <button class="btn btn-gold" id="nextQuestionBtn" style="display:none;" onclick="App.nextQuizQuestion()">
+                    السؤال التالي <i class="fa-solid fa-arrow-left"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        },
+
+        subscribePage() {
+          return `
+            <div style="max-width: 800px; margin: 0 auto;">
+              <div style="text-align: center; margin-bottom: 26px;">
+                <h2 style="color: var(--navy-dark); font-weight: 900;">باقات الاشتراك – منصة الأستاذ عمر</h2>
+                <p style="color: var(--text-muted); font-size: 0.92rem;">محتوى متكامل للمنهاج الإماراتي والسوداني مع متابعة مباشرة</p>
+              </div>
+
+              <div class="plans-container">
+                <div class="plan-card">
+                  <h3 style="color: var(--navy-dark); font-weight: 700;">🥉 الباقة الشهرية</h3>
+                  <div class="plan-price">120 <span>درهم / ما يعادلها</span></div>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px;">وصول كامل للمقرر، البودكاست التعليمي، والكويزات المباشرة لمدة شهر.</p>
+                  <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('MONTHLY')">
+                    <i class="fa-brands fa-whatsapp"></i> تفعيل الاشتراك الشهري
+                  </button>
+                </div>
+
+                <div class="plan-card featured">
+                  <div class="plan-badge-top">🥇 الأكثر طلباً وتوفيراً</div>
+                  <h3 style="color: var(--navy-dark); font-weight: 800;">باقة الفصل الدراسي (3 أشهر)</h3>
+                  <div class="plan-price">300 <span><del style="color:red; font-size:0.85rem;">360</del> درهم</span></div>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px;">تغطية شاملة لكل دروس المنهاج + المراجعات النهائية ونماذج الامتحانات مع الأستاذ عمر.</p>
+                  <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('SEMESTER')">
+                    <i class="fa-brands fa-whatsapp"></i> تفعيل باقة الـ 3 أشهر
+                  </button>
+                </div>
+              </div>
+
+              <div style="text-align: center; margin-top: 14px;">
+                <button class="btn btn-navy" style="padding: 8px 18px; font-size: 0.84rem;" onclick="App.setRoute('STUDENT_DASHBOARD')">
+                  العودة للوحة الحساب
+                </button>
+              </div>
+            </div>
+          `;
+        },
+
+        adminDashboard() {
+          const total = State.students.length;
+          const active = State.students.filter(s => s.status === 'ACTIVE').length;
+          const trial = State.students.filter(s => s.status === 'TRIAL').length;
+          const expired = State.students.filter(s => s.status === 'EXPIRED').length;
+          const securityAlerts = State.activityLogs.filter(l => l.action.includes('محاولة') || l.action.includes('تنبيه')).length;
+
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h2 style="color: var(--navy-dark); font-weight: 900;">لوحة إدارة منصة الأستاذ عمر (Omer Gasim) 📐</h2>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">إدارة المناهج الإماراتية والسودانية وتخصيص المقررات للطلاب</p>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button class="btn btn-gold" onclick="App.openSettingsModal()">
+                  <i class="fa-solid fa-gear"></i> الشعار والإعدادات
+                </button>
+                <button class="btn btn-navy" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')">
+                  <i class="fa-solid fa-folder-plus"></i> إدارة المواد التعليمية
+                </button>
+                <button class="btn btn-gold" onclick="App.setRoute('ADMIN_QUIZ_CREATOR')">
+                  <i class="fa-solid fa-bolt"></i> منشئ الكويزات
+                </button>
+                <button class="btn btn-navy" onclick="App.setRoute('ADMIN_STUDENTS')">
+                  <i class="fa-solid fa-users"></i> سجل الطلاب (${total})
+                </button>
+                <button class="btn btn-gold" onclick="App.setRoute('ADMIN_CREATE_STUDENT')">
+                  <i class="fa-solid fa-user-plus"></i> إضافة طالب
+                </button>
+                <button class="btn ${securityAlerts > 0 ? 'btn-danger' : 'btn-secondary'}" onclick="App.setRoute('ADMIN_ACTIVITY')">
+                  <i class="fa-solid fa-shield-halved"></i> الأمان (${securityAlerts})
+                </button>
+              </div>
+            </div>
+
+            <div class="grid-dashboard">
+              <div class="card" style="margin:0; border-right: 4px solid var(--navy-dark);">
+                <span style="font-size:0.78rem; color:var(--text-muted);">إجمالي الطلاب</span>
+                <h3 style="font-size:1.6rem; color:var(--navy-dark);">${total}</h3>
+              </div>
+              <div class="card" style="margin:0; border-right: 4px solid var(--success);">
+                <span style="font-size:0.78rem; color:var(--text-muted);">الاشتراكات النشطة</span>
+                <h3 style="font-size:1.6rem; color:var(--success);">${active}</h3>
+              </div>
+              <div class="card" style="margin:0; border-right: 4px solid var(--gold-orange);">
+                <span style="font-size:0.78rem; color:var(--text-muted);">الفترة التجريبية (3 أيام)</span>
+                <h3 style="font-size:1.6rem; color:var(--gold-deep);">${trial}</h3>
+              </div>
+              <div class="card" style="margin:0; border-right: 4px solid var(--danger);">
+                <span style="font-size:0.78rem; color:var(--text-muted);">اشتراكات منتهية</span>
+                <h3 style="font-size:1.6rem; color:var(--danger);">${expired}</h3>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 style="color: var(--navy-dark); font-size: 0.98rem; margin-bottom: 14px;">📈 معدل تفاعل الطلاب وحل المسائل في المناهج المختلفة</h3>
+              <canvas id="trafficChart" style="max-height: 220px; width: 100%;"></canvas>
+            </div>
+          `;
+        },
+
+        adminQuizCreator() {
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <h2 style="color: var(--navy-dark); font-weight: 800;">منشئ كويزات الرياضيات – الأستاذ عمر</h2>
+              <button class="btn btn-gold" style="padding:6px 14px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
+                <i class="fa-solid fa-arrow-right"></i> العودة للرئيسية
+              </button>
+            </div>
+
+            <div class="card">
+              <h3 style="color: var(--navy-dark); margin-bottom: 14px;">
+                <i class="fa-solid fa-plus-circle"></i> إضافة سؤال كويز تفاعلي مع التفسير
+              </h3>
+
+              <form onsubmit="App.handleCreateQuizQuestion(event)">
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label>المنهاج والصف المستهدف</label>
+                    <select id="quizTarget" required>
+                      ${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>عنوان الكويز / الدرس</label>
+                    <input type="text" id="quizTitle" required placeholder="مثال: كويز المصفوفات والتفاضل">
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>نص المسألة الرياضية</label>
+                  <textarea id="questionText" rows="2" required placeholder="اكتب المسألة أو التكامل أو المعادلة الرياضية..."></textarea>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label>الخيار الأول (أ)</label>
+                    <input type="text" id="opt1" required placeholder="الخيار الأول">
+                  </div>
+                  <div class="form-group">
+                    <label>الخيار الثاني (ب)</label>
+                    <input type="text" id="opt2" required placeholder="الخيار الثاني">
+                  </div>
+                  <div class="form-group">
+                    <label>الخيار الثالث (ج)</label>
+                    <input type="text" id="opt3" required placeholder="الخيار الثالث">
+                  </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                  <div class="form-group">
+                    <label style="color:var(--success);">الإجابة الصحيحة</label>
+                    <select id="correctOptionSelect">
+                      <option value="1">الخيار الأول (أ)</option>
+                      <option value="2">الخيار الثاني (ب)</option>
+                      <option value="3">الخيار الثالث (ج)</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>خطوات الحل الرياضية النموذجية</label>
+                    <input type="text" id="explanationText" placeholder="مثال: بتطبيق قاعدة السلسلة ومشتقة الدالة...">
+                  </div>
+                </div>
+
+                <button type="submit" class="btn btn-gold" style="width:100%; margin-top:10px;">
+                  <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر السؤال سحابياً
+                </button>
+              </form>
+            </div>
+          `;
+        },
+
+        adminContentManager() {
+          const q = State.adminSearchQuery.toLowerCase().trim();
+          const filtered = State.materials.filter(item => {
+            const matchTarget = State.adminTargetFilter === 'ALL' || item.target === State.adminTargetFilter;
+            const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
+            return matchTarget && matchSearch;
+          });
+
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h2 style="color: var(--navy-dark); font-weight: 800;">إدارة محتوى ومقررات الرياضيات (الأستاذ عمر)</h2>
+                <div style="margin-top:6px; display:flex; gap:6px;">
+                  <button class="btn ${State.adminContentTab === 'LIST' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminContentTab('LIST')">
+                    <i class="fa-solid fa-list-check"></i> المواد المنشورة (${State.materials.length})
+                  </button>
+                  <button class="btn ${State.adminContentTab === 'ADD' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminContentTab('ADD')">
+                    <i class="fa-solid fa-plus-circle"></i> إضافة درس / مادة جديدة
+                  </button>
+                </div>
+              </div>
+              <button class="btn btn-navy" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
+                <i class="fa-solid fa-arrow-right"></i> الرئيسية
+              </button>
+            </div>
+
+            ${State.adminContentTab === 'ADD' ? `
+              <div class="card">
+                <h3 style="color: var(--navy-dark); margin-bottom: 14px;"><i class="fa-solid fa-plus-circle"></i> إضافة مادة تعليمية جديدة للمنهاج</h3>
+                <form onsubmit="App.handleCreateContent(event)">
+                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                    <div class="form-group">
+                      <label>القسم / نوع المحتوى</label>
+                      <select id="contentType" required onchange="App.toggleContentFields()">
+                        <option value="VIDEOS">فيديو وشرح مرئي برابط</option>
+                        <option value="PODCASTS">بودكاست وشرح صوتي (MP3)</option>
+                        <option value="ARTICLES">شرح كتابي مباشر (بدون روابط خارجية)</option>
+                        <option value="POWERPOINTS">عرض تقديمي باوربوينت (PPT / PPTX)</option>
+                        <option value="WORD_DOCS">مستند وورد (DOC / DOCX)</option>
+                        <option value="WORKSHEETS">أوراق عمل وتدريبات (PDF)</option>
+                        <option value="EXAMS">اختبار شامل ونماذج امتحانات</option>
+                        <option value="REVISIONS">مراجعة ليلة الامتحان وملخصات</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>المنهاج والصف المستهدف</label>
+                      <select id="contentTarget" required>
+                        ${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label>عنوان المادة التعليمية</label>
+                      <input type="text" id="contentTitle" required placeholder="مثال: بودكاست شرح الهندسة التحليلية">
+                    </div>
+                    <div class="form-group">
+                      <label>الوحدة / الفصل</label>
+                      <input type="text" id="contentUnit" required placeholder="مثال: الوحدة 2 - التفاضل والتكامل">
+                    </div>
+                  </div>
+
+                  <div class="form-group" id="urlFieldGroup">
+                    <label id="urlLabel">رابط الملف المباشر (فيديو / صوت / PPT / Word / PDF)</label>
+                    <div class="input-with-paste">
+                      <input type="text" id="contentUrl" placeholder="https://...">
+                      <button type="button" class="btn btn-gold" style="padding:10px 14px; font-size:0.8rem;" onclick="App.pasteToInput('contentUrl')">
+                        <i class="fa-solid fa-paste"></i> لصق
+                      </button>
+                    </div>
+                  </div>
+
+                  <div class="form-group" id="textFieldGroup">
+                    <label id="textLabel">نصوص الشرح المباشر / المحتوى الكتابي / الملاحظات</label>
+                    <textarea id="contentText" rows="6" placeholder="اكتب الشرح الرياضي والمفاهيم هنا مباشرة..."></textarea>
+                  </div>
+
+                  <button type="submit" class="btn btn-gold" style="width:100%; margin-top:10px;">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> نشر المادة في منصة الأستاذ عمر
+                  </button>
+                </form>
+              </div>
+            ` : `
+              <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
+                  <div class="search-box-wrapper" style="flex:1; min-width:240px; margin-bottom:0;">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="🔍 ابحث في المحتويات المنشورة..." value="${State.adminSearchQuery}" oninput="App.handleAdminSearch(this.value)">
+                  </div>
+                  <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button class="btn ${State.adminTargetFilter === 'ALL' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 10px; font-size:0.75rem;" onclick="App.setAdminTargetFilter('ALL')">الكل</button>
+                    ${CURRICULUM_DEFINITIONS.map(c => `
+                      <button class="btn ${State.adminTargetFilter === c.id ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 8px; font-size:0.72rem;" onclick="App.setAdminTargetFilter('${c.id}')">
+                        ${c.name}
+                      </button>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>عنوان المادة</th>
+                        <th>النوع والتصنيف</th>
+                        <th>الصف والمنهاج</th>
+                        <th>الوحدة</th>
+                        <th>الإجراءات</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      ${filtered.length === 0 ? `
+                        <tr>
+                          <td colspan="5" style="text-align:center; padding:30px; color:var(--text-muted);">
+                            <i class="fa-solid fa-folder-open" style="font-size:32px; color:var(--gold-orange); display:block; margin-bottom:10px;"></i>
+                            لم تقم بإضافة مواد تعليمية في هذا القسم حتى الآن.
+                          </td>
+                        </tr>
+                      ` : filtered.map(item => `
+                        <tr>
+                          <td><strong>${item.title}</strong></td>
+                          <td>${UI.getMediaTypeBadge(item)}</td>
+                          <td>${UI.getTargetLabel(item.target)}</td>
+                          <td>${item.unit || 'عام'}</td>
+                          <td>
+                            <div style="display:flex; gap:4px;">
+                              <button class="btn btn-navy" style="padding:4px 8px; font-size:0.72rem;" onclick="App.openEditModal('${item.id}', '${item.type}')">
+                                <i class="fa-solid fa-pen"></i> تعديل
+                              </button>
+                              <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptDeleteContent('${item.id}')">
+                                <i class="fa-solid fa-trash"></i> حذف
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      `).join('')}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            `}
+          `;
+        },
+
+        adminStudents() {
+          const filtered = State.adminTargetFilter === "ALL" 
+            ? State.students 
+            : State.students.filter(s => s.target === State.adminTargetFilter);
+
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h2 style="color: var(--navy-dark); font-weight: 800;">سجل الطلاب والشهادات المعتمدة</h2>
+                <p style="font-size:0.8rem; color:var(--text-muted);">إدارة اشتراكات الطلاب وعزل خصوصية كل طالب في منهجه</p>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_CREATE_STUDENT')">
+                  <i class="fa-solid fa-user-plus"></i> إضافة طالب جديد
+                </button>
+                <button class="btn btn-navy" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
+                  <i class="fa-solid fa-arrow-right"></i> الرئيسية
+                </button>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>الطالب</th>
+                      <th>Username</th>
+                      <th>المنهاج والصف</th>
+                      <th>الحالة</th>
+                      <th>اعتماد الشهادة</th>
+                      <th>انتهاء الاشتراك</th>
+                      <th>الإجراءات الإدارية</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${filtered.length === 0 ? `
+                      <tr>
+                        <td colspan="7" style="text-align:center; padding:30px; color:var(--text-muted);">
+                          <i class="fa-solid fa-users-slash" style="font-size:32px; color:var(--gold-orange); display:block; margin-bottom:10px;"></i>
+                          لا يوجد طلاب مسجلين حالياً.
+                        </td>
+                      </tr>
+                    ` : filtered.map(st => `
+                      <tr>
+                        <td><strong>${st.name}</strong><br><small style="color:var(--text-muted);">${st.phone}</small></td>
+                        <td><code>${st.username}</code></td>
+                        <td><span class="badge badge-curriculum">${UI.getTargetLabel(st.target)}</span></td>
+                        <td>
+                          <span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : (st.status === 'TRIAL' ? 'badge-trial' : 'badge-expired')}">
+                            ${st.status === 'TRIAL' ? 'تجربة (3 أيام)' : st.status}
+                          </span>
+                        </td>
+                        <td>
+                          ${st.certificateApproved ? `
+                            <span style="color:var(--success); font-weight:700;"><i class="fa-solid fa-circle-check"></i> معتمدة</span>
+                            <button class="btn btn-secondary" style="padding:2px 6px; font-size:0.7rem; margin-right:4px;" onclick="App.toggleCertApproval('${st.uid}')">إلغاء</button>
+                          ` : `
+                            <span style="color:var(--danger); font-weight:700;"><i class="fa-solid fa-circle-xmark"></i> غير معتمدة</span>
+                            <button class="btn btn-gold" style="padding:2px 6px; font-size:0.7rem; margin-right:4px;" onclick="App.toggleCertApproval('${st.uid}')">اعتماد ✓</button>
+                          `}
+                        </td>
+                        <td>${st.expiresAt}</td>
+                        <td>
+                          <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                            <button class="btn btn-navy" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptActivateStudent('${st.uid}', 1)">
+                              تفعيل (شهر)
+                            </button>
+                            <button class="btn btn-gold" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptActivateStudent('${st.uid}', 3)">
+                              تفعيل (فصل كامل)
+                            </button>
+                            <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="App.promptDeleteStudent('${st.uid}')">
+                              حذف
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    `).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        },
+
+        adminCreateStudent() {
+          return `
+            <div style="max-width: 520px; margin: 20px auto;">
+              <div class="card">
+                <h3 style="color: var(--navy-dark); margin-bottom: 16px;">
+                  <i class="fa-solid fa-user-plus"></i> إضافة طالب وتخصيص منهجه (الأستاذ عمر)
+                </h3>
+                <form onsubmit="App.handleCreateStudent(event)">
+                  <div class="form-group">
+                    <label>المنهاج والصف الدراسي المخصص للطالب</label>
+                    <select id="newStudentTarget" required>
+                      ${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>الاسم الكامل للطالب</label>
+                    <input type="text" id="newStudentName" required placeholder="مثال: محمد أحمد علي">
+                  </div>
+                  <div class="form-group">
+                    <label>اسم المستخدم (Username)</label>
+                    <input type="text" id="newStudentUsername" required placeholder="مثال: mohamed_math">
+                  </div>
+                  <div class="form-group">
+                    <label>كلمة المرور (مشفرة بـ PBKDF2)</label>
+                    <input type="password" id="newStudentPassword" required placeholder="••••••••">
+                  </div>
+                  <div class="form-group">
+                    <label>رقم هاتف الطالب / واتساب</label>
+                    <input type="text" id="newStudentPhone" placeholder="0500000000">
+                  </div>
+                  <div style="display:flex; gap:8px; margin-top:18px;">
+                    <button type="submit" class="btn btn-gold" style="flex:1;">إنشاء وتفعيل حساب الطالب (3 أيام تجريبية)</button>
+                    <button type="button" class="btn btn-navy" onclick="App.setRoute('ADMIN_STUDENTS')">إلغاء</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          `;
+        },
+
+        adminActivity() {
+          return `
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <h2 style="color: var(--navy-dark); font-weight: 800;">سجل النشاط والأمان المشفر</h2>
+              <button class="btn btn-gold" style="padding:6px 12px; font-size:0.8rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">
+                العودة للرئيسية
+              </button>
+            </div>
+            <div class="card">
+              <div class="table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>الوقت والتاريخ</th>
+                      <th>المستخدم</th>
+                      <th>النشاط المنفذ والتنبيهات</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${State.activityLogs.length === 0 ? '<tr><td colspan="3" style="text-align:center; padding:20px; color:var(--text-muted);">لا توجد أنشطة مسجلة حالياً.</td></tr>' : State.activityLogs.map(log => {
+                      const isAlert = log.action && (log.action.includes('محاولة') || log.action.includes('تنبيه'));
+                      return `
+                        <tr style="${isAlert ? 'background:#FEF2F2;' : ''}">
+                          <td>${log.time || 'الآن'}</td>
+                          <td><code>${log.user || 'مستخدم'}</code></td>
+                          <td style="${isAlert ? 'color:var(--danger); font-weight:700;' : ''}">
+                            ${isAlert ? '<i class="fa-solid fa-triangle-exclamation"></i> ' : ''}${log.action}
+                          </td>
+                        </tr>
+                      `;
+                    }).join('')}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          `;
+        }
+      },
+
+      getTabTitle(tab) {
+        const titles = {
+          'VIDEOS': 'الفيديوهات والشروحات المرئية',
+          'PODCASTS': 'البودكاست والشروحات الصوتية 🎙️',
+          'ARTICLES': 'الشروحات والدروس الكتابية المباشرة 📝',
+          'POWERPOINTS': 'عروض الباوربوينت والشرائح التفاعلية PPT',
+          'WORD_DOCS': 'ملفات ومذكرات Word',
+          'WORKSHEETS': 'أوراق العمل ومذكرات PDF',
+          'QUIZZES': 'الكويزات التفاعلية',
+          'EXAMS': 'الاختبارات الشاملة ونماذج الامتحانات',
+          'REVISIONS': 'مراجعات ليلة الامتحان والملخصات'
+        };
+        return titles[tab] || tab;
+      },
+
+      getTabIcon(tab) {
+        const icons = {
+          'VIDEOS': 'fa-circle-play',
+          'PODCASTS': 'fa-podcast',
+          'ARTICLES': 'fa-book-open',
+          'POWERPOINTS': 'fa-file-powerpoint',
+          'WORD_DOCS': 'fa-file-word',
+          'WORKSHEETS': 'fa-file-pdf',
+          'QUIZZES': 'fa-bolt',
+          'EXAMS': 'fa-file-shield',
+          'REVISIONS': 'fa-star'
+        };
+        return icons[tab] || 'fa-folder';
+      },
+
+      initTrafficChart() {
+        const ctx = document.getElementById('trafficChart');
+        if (!ctx) return;
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: ['السبت', 'الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'],
+            datasets: [{
+              label: 'تفاعل الطلاب مع مسائل الأستاذ عمر',
+              data: [85, 110, 145, 130, 180, 165, 230],
+              borderColor: '#F59E0B',
+              backgroundColor: 'rgba(245, 158, 11, 0.1)',
+              fill: true,
+              tension: 0.3
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } }
+          }
+        });
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 8. المتحكم الرئيسي للتطبيق (App Controller)
+     * =========================================================================
+     */
+    let calcExpression = "";
+    let activeAudioElement = null;
+
+    const App = {
+      async init() {
+        AntiTamperGuard.init();
+        await DataStore.syncAll();
+        UI.render();
+      },
+
+      setRoute(route) {
+        State.currentRoute = route;
+        UI.render();
+      },
+
+      setContentTab(tab) {
+        State.activeContentTab = tab;
+        UI.render();
+      },
+
+      setAdminContentTab(tab) {
+        State.adminContentTab = tab;
+        UI.render();
+      },
+
+      setAdminTargetFilter(target) {
+        State.adminTargetFilter = target;
+        UI.render();
+      },
+
+      handleStudentSearch(query) {
+        State.studentSearchQuery = query;
+        UI.render();
+      },
+
+      handleAdminSearch(query) {
+        State.adminSearchQuery = query;
+        UI.render();
+      },
+
+      navigateHome() {
+        if (!State.currentUser) {
+          App.setRoute("LOGIN");
+        } else if (State.currentUser.role === "ADMIN") {
+          App.setRoute("ADMIN_DASHBOARD");
+        } else {
+          App.setRoute("STUDENT_DASHBOARD");
+        }
+      },
+
+      showSecurityAlert(msg) {
+        const toast = document.getElementById("securityToast");
+        const text = document.getElementById("securityToastText");
+        text.innerText = msg;
+        toast.style.display = "flex";
+        setTimeout(() => { toast.style.display = "none"; }, 3500);
+      },
+
+      recordSecurityViolation(detail) {
+        const username = State.currentUser ? State.currentUser.username : "زائر";
+        const logEntry = {
+          time: new Date().toLocaleTimeString('ar-AE', { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
+          user: username,
+          action: `[تنبيه أمان]: ${detail}`
+        };
+        State.activityLogs.unshift(logEntry);
+        DataStore.save("logs", State.activityLogs);
+      },
+
+      async pasteToInput(inputId) {
+        try {
+          const text = await navigator.clipboard.readText();
+          if (text) {
+            document.getElementById(inputId).value = text.trim();
+            App.showSecurityAlert("تم لصق الرابط بنجاح.");
+          } else {
+            const promptVal = prompt("الصق الرابط هنا:");
+            if (promptVal) document.getElementById(inputId).value = promptVal.trim();
+          }
+        } catch (e) {
+          const promptVal = prompt("الصق الرابط هنا:");
+          if (promptVal) document.getElementById(inputId).value = promptVal.trim();
+        }
+      },
+
+      openEngineerModal() {
+        document.getElementById("engineerModal").classList.add("active");
+      },
+
+      closeEngineerModal() {
+        document.getElementById("engineerModal").classList.remove("active");
+      },
+
+      openSettingsModal() {
+        document.getElementById("settingLogoUrl").value = State.settings.logoUrl || OFFICIAL_LOGO_URL;
+        document.getElementById("settingWhatsAppPhone").value = State.settings.adminPhoneWhatsApp || "";
+        document.getElementById("settingsModal").classList.add("active");
+      },
+
+      closeSettingsModal() {
+        document.getElementById("settingsModal").classList.remove("active");
+      },
+
+      handleSaveSettings(e) {
+        e.preventDefault();
+        const logo = document.getElementById("settingLogoUrl").value.trim() || OFFICIAL_LOGO_URL;
+        const phone = document.getElementById("settingWhatsAppPhone").value.trim();
+        
+        State.settings.logoUrl = logo;
+        localStorage.setItem("omer_logo_url", logo);
+
+        if (phone) {
+          State.settings.adminPhoneWhatsApp = phone;
+          localStorage.setItem("omer_whatsapp_phone", phone);
+        }
+
+        App.closeSettingsModal();
+        App.showSecurityAlert("تم تحديث شعار وإعدادات المنصة بنجاح.");
+        UI.render();
+      },
+
+      toggleAiChat() {
+        document.getElementById("aiChatWindow").classList.toggle("active");
+      },
+
+      toggleCalculator() {
+        document.getElementById("calcWidget").classList.toggle("active");
+      },
+
+      toggleTimer() {
+        document.getElementById("timerWidget").classList.toggle("active");
+      },
+
+      openFormulaSheetModal() {
+        document.getElementById("formulaSheetModal").classList.add("active");
+      },
+
+      closeFormulaSheetModal() {
+        document.getElementById("formulaSheetModal").classList.remove("active");
+      },
+
+      calcInput(char) {
+        calcExpression += char;
+        document.getElementById("calcDisplay").innerText = calcExpression;
+      },
+
+      calcClear() {
+        calcExpression = "";
+        document.getElementById("calcDisplay").innerText = "0";
+      },
+
+      calcEquals() {
+        try {
+          const res = eval(calcExpression);
+          document.getElementById("calcDisplay").innerText = Number(res).toFixed(4).replace(/\.?0+$/, "");
+          calcExpression = res.toString();
+        } catch (e) {
+          document.getElementById("calcDisplay").innerText = "خطأ رياضي";
+          calcExpression = "";
+        }
+      },
+
+      sendAiMessage() {
+        const input = document.getElementById("aiInput");
+        const body = document.getElementById("aiChatBody");
+        const query = input.value.trim();
+        if (!query) return;
+
+        const userDiv = document.createElement("div");
+        userDiv.className = "ai-msg user";
+        userDiv.innerText = query;
+        body.appendChild(userDiv);
+        input.value = "";
+
+        setTimeout(() => {
+          const botDiv = document.createElement("div");
+          botDiv.className = "ai-msg bot";
+          
+          if (query.includes("تفاضل") || query.includes("مشتقة")) {
+            botDiv.innerHTML = "📐 <strong>قواعد التفاضل الأساسية:</strong><br>• مشتقة حاصل الضرب: \\( (u \\cdot v)' = u'v + uv' \\)<br>• مشتقة الدالة الأسية: \\( (e^x)' = e^x \\).";
+          } else if (query.includes("تكامل")) {
+            botDiv.innerHTML = "∫ <strong>قواعد التكامل:</strong><br>• \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\)<br>• التكامل بالتجزئة: \\( \\int u dv = uv - \\int v du \\).";
+          } else {
+            botDiv.innerHTML = `💡 <strong>المساعد الرياضي للأستاذ عمر:</strong> لحل هذه المسألة، رتب المعطيات وطبق القانون المعتمد لمنهاجك وسأساعدك خطوة بخطوة.`;
+          }
+
+          body.appendChild(botDiv);
+          if (window.renderMathInElement) renderMathInElement(body);
+          body.scrollTop = body.scrollHeight;
+        }, 500);
+      },
+
+      // مشغل الفيديو
+      openVideoPlayer(materialId) {
+        document.getElementById('pdfControlsBar').style.display = 'none';
+        const item = State.materials.find(m => m.id === materialId);
+        if (!item) return;
+
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-circle-play"></i> ${item.title}`;
+        const viewport = document.getElementById("playerViewport");
+        const url = item.fileUrl || "";
+
+        let playerHtml = "";
+        if (url.includes("youtube.com") || url.includes("youtu.be")) {
+          let videoId = "";
+          if (url.includes("youtu.be/")) videoId = url.split("youtu.be/")[1].split("?")[0];
+          else if (url.includes("v=")) videoId = url.split("v=")[1].split("&")[0];
+          playerHtml = `<iframe style="width:100%; height:100%; border:none;" src="https://www.youtube-nocookie.com/embed/${videoId}?rel=0&modestbranding=1" allowfullscreen></iframe>`;
+        } else if (url.includes("drive.google.com")) {
+          const driveEmbed = url.replace("/view", "/preview").replace("/edit", "/preview");
+          playerHtml = `<iframe style="width:100%; height:100%; border:none;" src="${driveEmbed}" allow="autoplay"></iframe>`;
+        } else {
+          playerHtml = `
+            <video id="activeVideoPlayer" controls controlsList="nodownload nofullscreen" disablePictureInPicture oncontextmenu="return false;">
+              <source src="${url}" type="video/mp4">
+              متصفحك لا يدعم مشغل الفيديو.
+            </video>
+          `;
+        }
+        
+        viewport.innerHTML = `
+          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
+            <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
+          </button>
+          ${playerHtml}
+          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+        `;
+
+        document.getElementById("mediaPlayerModal").classList.add("active");
+        App.resetToNormalOrientation();
+      },
+
+      // مشغل البودكاست
+      openPodcastPlayer(materialId) {
+        document.getElementById('pdfControlsBar').style.display = 'none';
+        const item = State.materials.find(m => m.id === materialId);
+        if (!item) return;
+
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-podcast"></i> بودكاست: ${item.title}`;
+        const viewport = document.getElementById("playerViewport");
+
+        viewport.innerHTML = `
+          <div class="podcast-player-box">
+            <div class="podcast-cover-art">
+              <i class="fa-solid fa-headphones"></i>
+            </div>
+            <h3 style="color:#FFF; font-size:1.2rem; margin-bottom:6px;">${item.title}</h3>
+            <p style="color:var(--gold-orange); font-size:0.85rem; margin-bottom:20px;">${item.unit || 'بودكاست الأستاذ عمر التعليمي'}</p>
+            
+            <audio id="activeAudioPlayer" src="${item.fileUrl}" preload="metadata"></audio>
+
+            <div class="audio-controls-panel">
+              <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94A3B8;">
+                <span id="audioCurrentTime">00:00</span>
+                <span id="audioDuration">--:--</span>
+              </div>
+              <input type="range" id="audioSeekBar" class="audio-progress-slider" value="0" min="0" max="100" oninput="App.seekPodcast(this.value)">
+
+              <div style="display:flex; justify-content:center; align-items:center; gap:16px; margin-top:14px;">
+                <button class="btn btn-secondary" style="border-radius:50%; width:40px; height:40px; padding:0;" onclick="App.skipPodcast(-10)" title="تأخير 10 ثوانٍ">
+                  <i class="fa-solid fa-rotate-left"></i>
+                </button>
+                <button class="btn btn-gold" id="audioPlayPauseBtn" style="border-radius:50%; width:54px; height:54px; padding:0; font-size:1.2rem;" onclick="App.togglePodcastPlay()">
+                  <i class="fa-solid fa-play"></i>
+                </button>
+                <button class="btn btn-secondary" style="border-radius:50%; width:40px; height:40px; padding:0;" onclick="App.skipPodcast(10)" title="تقديم 10 ثوانٍ">
+                  <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <button class="btn btn-secondary" id="audioSpeedBtn" style="font-size:0.75rem; padding:6px 10px;" onclick="App.cyclePodcastSpeed()">
+                  1.0x
+                </button>
+              </div>
+            </div>
+
+            ${item.sampleContent ? `
+              <div style="max-width:520px; background:rgba(255,255,255,0.04); border-radius:var(--radius-sm); padding:12px; margin-top:16px; font-size:0.85rem; color:#CBD5E1; text-align:right;">
+                <strong><i class="fa-solid fa-align-right"></i> ملخص الدرس الصوتي:</strong>
+                <p style="margin-top:4px; line-height:1.6;">${item.sampleContent}</p>
+              </div>
+            ` : ''}
+          </div>
+          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+        `;
+
+        document.getElementById("mediaPlayerModal").classList.add("active");
+        App.resetToNormalOrientation();
+
+        activeAudioElement = document.getElementById("activeAudioPlayer");
+        if (activeAudioElement) {
+          activeAudioElement.addEventListener("timeupdate", App.updatePodcastProgress);
+          activeAudioElement.addEventListener("loadedmetadata", () => {
+            document.getElementById("audioDuration").innerText = App.formatTime(activeAudioElement.duration);
+          });
+        }
+      },
+
+      togglePodcastPlay() {
+        if (!activeAudioElement) return;
+        const btn = document.getElementById("audioPlayPauseBtn");
+        if (activeAudioElement.paused) {
+          activeAudioElement.play();
+          if (btn) btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        } else {
+          activeAudioElement.pause();
+          if (btn) btn.innerHTML = '<i class="fa-solid fa-play"></i>';
+        }
+      },
+
+      skipPodcast(sec) {
+        if (!activeAudioElement) return;
+        activeAudioElement.currentTime += sec;
+      },
+
+      seekPodcast(percent) {
+        if (!activeAudioElement || !activeAudioElement.duration) return;
+        activeAudioElement.currentTime = (percent / 100) * activeAudioElement.duration;
+      },
+
+      updatePodcastProgress() {
+        if (!activeAudioElement) return;
+        const current = activeAudioElement.currentTime;
+        const total = activeAudioElement.duration || 1;
+        const bar = document.getElementById("audioSeekBar");
+        const timeEl = document.getElementById("audioCurrentTime");
+        if (bar) bar.value = (current / total) * 100;
+        if (timeEl) timeEl.innerText = App.formatTime(current);
+      },
+
+      cyclePodcastSpeed() {
+        if (!activeAudioElement) return;
+        const speeds = [1.0, 1.25, 1.5, 2.0];
+        let idx = speeds.indexOf(activeAudioElement.playbackRate);
+        idx = (idx + 1) % speeds.length;
+        activeAudioElement.playbackRate = speeds[idx];
+        document.getElementById("audioSpeedBtn").innerText = `${speeds[idx]}x`;
+      },
+
+      formatTime(sec) {
+        const m = Math.floor(sec / 60).toString().padStart(2, '0');
+        const s = Math.floor(sec % 60).toString().padStart(2, '0');
+        return `${m}:${s}`;
+      },
+
+      openArticleViewer(materialId) {
+        document.getElementById('pdfControlsBar').style.display = 'none';
+        const item = State.materials.find(m => m.id === materialId);
+        if (!item) return;
+
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-book-open"></i> ${item.title}`;
+        const viewport = document.getElementById("playerViewport");
+
+        viewport.innerHTML = `
+          <div class="article-reading-container">
+            <div style="border-bottom:2px solid var(--gold-subtle); padding-bottom:12px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <h2>${item.title}</h2>
+                <span class="badge badge-curriculum">${item.unit || 'مقرر الرياضيات'}</span>
+              </div>
+              <button class="btn btn-secondary" style="padding:6px 12px; font-size:0.8rem;" onclick="window.print()">
+                <i class="fa-solid fa-print"></i> طباعة الدرس
+              </button>
+            </div>
+
+            <div class="math-theorem-box">
+              <strong><i class="fa-solid fa-lightbulb" style="color:var(--gold-deep);"></i> المفهوم والشرح الرياضي:</strong>
+              <p style="margin-top:6px; font-size:1.05rem; line-height:2;">${item.sampleContent || 'لا يوجد نص للشرح بعد.'}</p>
+            </div>
+          </div>
+          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+        `;
+
+        document.getElementById("mediaPlayerModal").classList.add("active");
+        App.resetToNormalOrientation();
+        if (window.renderMathInElement) renderMathInElement(viewport);
+      },
+
+      openOfficeViewer(materialId, type) {
+        document.getElementById('pdfControlsBar').style.display = 'none';
+        const item = State.materials.find(m => m.id === materialId);
+        if (!item) return;
+
+        const icon = type === 'ppt' ? 'fa-file-powerpoint' : 'fa-file-word';
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid ${icon}"></i> ${item.title}`;
+        const viewport = document.getElementById("playerViewport");
+        const url = item.fileUrl || "";
+
+        const officeUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
+
+        viewport.innerHTML = `
+          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
+            <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
+          </button>
+          <iframe class="document-viewer-frame" src="${officeUrl}"></iframe>
+          <div style="background:#0A1424; padding:10px; width:100%; text-align:center; display:flex; justify-content:center; gap:8px;">
+            <a href="${url}" target="_blank" class="btn btn-gold" style="font-size:0.8rem;">
+              <i class="fa-solid fa-download"></i> فتح أو تنزيل الملف الأصلي
+            </a>
+          </div>
+          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+        `;
+
+        document.getElementById("mediaPlayerModal").classList.add("active");
+        App.resetToNormalOrientation();
+      },
+
+      openDocumentViewer(materialId) {
+        const item = State.materials.find(m => m.id === materialId);
+        if (!item) return;
+
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-book-open"></i> ${item.title}`;
+        const viewport = document.getElementById("playerViewport");
+
+        if (item.fileUrl && item.fileUrl.startsWith("http")) {
+          viewport.innerHTML = `
+            <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
+              <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
+            </button>
+            <div id="pdfCanvasWrapper" class="pdf-canvas-container"></div>
+            <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+          `;
+          document.getElementById("mediaPlayerModal").classList.add("active");
+          const canvasWrap = document.getElementById("pdfCanvasWrapper");
+          PDFViewerEngine.loadPDF(item.fileUrl, canvasWrap);
+        } else {
+          App.openArticleViewer(materialId);
+        }
+
+        App.resetToNormalOrientation();
+      },
+
+      toggleDeviceRotation() {
+        if (State.isRotatedLandscape) {
+          App.resetToNormalOrientation();
+        } else {
+          App.setLandscapeOrientation();
+        }
+      },
+
+      setLandscapeOrientation() {
+        const viewport = document.getElementById("playerViewport");
+        const btnText = document.getElementById("rotateBtnText");
+        State.isRotatedLandscape = true;
+        if (viewport) viewport.classList.add("rotated-fullscreen");
+        if (btnText) btnText.innerText = "الوضع الطبيعي";
+
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock("landscape").catch(() => {});
+        }
+      },
+
+      resetToNormalOrientation() {
+        const viewport = document.getElementById("playerViewport");
+        const btnText = document.getElementById("rotateBtnText");
+        State.isRotatedLandscape = false;
+        if (viewport) viewport.classList.remove("rotated-fullscreen");
+        if (btnText) btnText.innerText = "تدوير عرضي";
+
+        if (screen.orientation && screen.orientation.unlock) {
+          screen.orientation.unlock();
+        }
+      },
+
+      toggleNativeFullscreen() {
+        const video = document.getElementById("activeVideoPlayer");
+        if (video) {
+          if (!document.fullscreenElement) {
+            if (video.requestFullscreen) video.requestFullscreen();
+            else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+          } else {
+            if (document.exitFullscreen) document.exitFullscreen();
+          }
+        }
+      },
+
+      closeMediaPlayer() {
+        const video = document.getElementById("activeVideoPlayer");
+        if (video) video.pause();
+        if (activeAudioElement) activeAudioElement.pause();
+        document.getElementById('pdfControlsBar').style.display = 'none';
+        App.resetToNormalOrientation();
+        document.getElementById("mediaPlayerModal").classList.remove("active");
+      },
+
+      openEditModal(contentId, type) {
+        const item = State.materials.find(m => m.id === contentId);
+        if (!item) return;
+
+        const targetSelect = document.getElementById('editContentTarget');
+        targetSelect.innerHTML = CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}" ${item.target === c.id ? 'selected' : ''}>${c.full}</option>`).join('');
+
+        document.getElementById('editContentId').value = item.id;
+        document.getElementById('editContentType').value = type;
+        document.getElementById('editContentTitle').value = item.title;
+        document.getElementById('editContentUnit').value = item.unit || '';
+        document.getElementById('editContentUrl').value = item.fileUrl || '';
+        document.getElementById('editContentText').value = item.sampleContent || '';
+
+        const urlGroup = document.getElementById('editUrlGroup');
+        if (type === 'ARTICLES') {
+          urlGroup.style.display = 'none';
+        } else {
+          urlGroup.style.display = 'block';
+        }
+
+        document.getElementById('editContentModal').classList.add('active');
+      },
+
+      closeEditModal() {
+        document.getElementById('editContentModal').classList.remove('active');
+      },
+
+      handleSaveEditContent(e) {
+        e.preventDefault();
+        const id = document.getElementById('editContentId').value;
+        const target = document.getElementById('editContentTarget').value;
+        const title = document.getElementById('editContentTitle').value.trim();
+        const unit = document.getElementById('editContentUnit').value.trim();
+        const url = document.getElementById('editContentUrl').value.trim();
+        const text = document.getElementById('editContentText').value.trim();
+
+        const item = State.materials.find(m => m.id === id);
+        if (item) {
+          item.target = target;
+          item.title = title;
+          item.unit = unit;
+          item.fileUrl = url;
+          item.sampleContent = text;
+          DataStore.save('materials', State.materials);
+        }
+
+        App.closeEditModal();
+        alert('تم حفظ التعديلات بنجاح.');
+        UI.render();
+      },
+
+      promptDeleteContent(contentId) {
+        App.showConfirmModal("حذف المادة التعليمية", "هل أنت متأكد من رغبتك في حذف هذا المحتوى نهائياً؟", () => {
+          State.materials = State.materials.filter(m => m.id !== contentId);
+          if (db) db.collection("omer_materials").doc(contentId).delete().catch(err => console.error(err));
+          DataStore.save('materials', State.materials);
+          UI.render();
+        });
+      },
+
+      startInteractiveQuiz(quizId) {
+        State.activeQuiz = State.quizzes.find(q => q.id === quizId);
+        State.activeQuestionIndex = 0;
+        State.quizScore = 0;
+        State.isQuestionAnswered = false;
+        App.setRoute("INTERACTIVE_QUIZ");
+      },
+
+      chooseOption(selectedOptionNumber) {
+        if (State.isQuestionAnswered) return;
+        State.isQuestionAnswered = true;
+
+        const currentQ = State.activeQuiz.questions[State.activeQuestionIndex];
+        const isCorrect = (selectedOptionNumber === parseInt(currentQ.correctOption));
+
+        const selectedEl = document.getElementById(`opt_${selectedOptionNumber}`);
+        const correctEl = document.getElementById(`opt_${currentQ.correctOption}`);
+
+        if (isCorrect) {
+          selectedEl.classList.add("correct");
+          AudioFX.correct();
+          State.quizScore++;
+        } else {
+          selectedEl.classList.add("wrong");
+          if (correctEl) correctEl.classList.add("correct");
+          AudioFX.wrong();
+        }
+
+        const expBox = document.getElementById("aiExplanationBox");
+        const expText = document.getElementById("aiExplanationText");
+        expText.innerText = currentQ.aiExplanation || "وفقاً للقوانين والمبرهنات المعتمدة بالمنهاج.";
+        expBox.style.display = "block";
+
+        const nextBtn = document.getElementById("nextQuestionBtn");
+        nextBtn.style.display = "inline-flex";
+        if (State.activeQuestionIndex + 1 >= State.activeQuiz.questions.length) {
+          nextBtn.innerHTML = `إنهاء الكويز <i class="fa-solid fa-flag-checkered"></i>`;
+        }
+      },
+
+      nextQuizQuestion() {
+        State.activeQuestionIndex++;
+        State.isQuestionAnswered = false;
+
+        if (State.activeQuestionIndex < State.activeQuiz.questions.length) {
+          UI.render();
+        } else {
+          AudioFX.celebrate();
+          ConfettiFX.fire();
+          const total = State.activeQuiz.questions.length;
+          const percent = Math.round((State.quizScore / total) * 100);
+
+          setTimeout(() => {
+            alert(`🎉 أحسنت صنعاً يا بطل!\nنتيجتك: ${State.quizScore} من ${total} (${percent}%)\nتم تسجيل إنجازك بنجاح في منصة الأستاذ عمر.`);
+            App.setRoute("STUDENT_DASHBOARD");
+          }, 600);
+        }
+      },
+
+      handleCreateQuizQuestion(e) {
+        e.preventDefault();
+        const target = document.getElementById("quizTarget").value;
+        const quizTitle = document.getElementById("quizTitle").value.trim();
+        const questionText = document.getElementById("questionText").value.trim();
+        const option1 = document.getElementById("opt1").value.trim();
+        const option2 = document.getElementById("opt2").value.trim();
+        const option3 = document.getElementById("opt3").value.trim();
+        const correctOption = parseInt(document.getElementById("correctOptionSelect").value);
+        const aiExplanation = document.getElementById("explanationText").value.trim();
+
+        let targetQuiz = State.quizzes.find(q => q.target === target);
+        if (!targetQuiz) {
+          targetQuiz = {
+            id: "quiz_" + Date.now(),
+            title: quizTitle,
+            target,
+            questions: []
+          };
+          State.quizzes.push(targetQuiz);
+        }
+
+        targetQuiz.questions.push({
+          id: "q_" + Date.now(),
+          text: questionText,
+          option1,
+          option2,
+          option3,
+          correctOption,
+          aiExplanation
+        });
+
+        DataStore.save("quizzes", State.quizzes);
+        alert(`تمت إضافة السؤال ونشره في كويز (${targetQuiz.title}) بنجاح.`);
+        App.setRoute("ADMIN_DASHBOARD");
+      },
+
+      toggleCertApproval(uid) {
+        const student = State.students.find(s => s.uid === uid);
+        if (student) {
+          student.certificateApproved = !student.certificateApproved;
+          DataStore.save("students", State.students);
+          UI.render();
+        }
+      },
+
+      generateCertificate() {
+        const user = State.currentUser;
+        if (!user.certificateApproved) {
+          alert("الشهادة تتطلب اعتماد الأستاذ عمر أولاً.");
+          return;
+        }
+
+        // إدراج ختم الشعار الرسمي على الشهادة
+        const certLogoBox = document.getElementById("certLogoContainer");
+        const logoUrl = State.settings.logoUrl || OFFICIAL_LOGO_URL;
+        certLogoBox.innerHTML = `
+          <div class="cert-logo-badge">
+            <img src="${logoUrl}" class="cert-logo-img" alt="شعار الأستاذ عمر" onerror="this.outerHTML='<i class=\\'fa-solid fa-shapes\\' style=\\'font-size:36px; color:var(--gold-orange);\\'></i>'">
+          </div>
+        `;
+
+        document.getElementById("certStudentName").innerText = user.name;
+        document.getElementById("certGradeText").innerText = `مقرر الرياضيات – ${UI.getTargetLabel(user.target)}`;
+        
+        const certHash = CryptoJS.MD5(user.uid + user.name + "OMER_GASIM_2026").toString().substring(0, 8).toUpperCase();
+        document.getElementById("certSerial").innerText = `OMER-${certHash}`;
+        
+        document.getElementById("certificateModal").classList.add("active");
+      },
+
+      closeCertificateModal() {
+        document.getElementById("certificateModal").classList.remove("active");
+      },
+
+      showConfirmModal(title, msg, onOk) {
+        document.getElementById("confirmTitle").innerText = title;
+        document.getElementById("confirmMessage").innerText = msg;
+        const okBtn = document.getElementById("confirmOkBtn");
+        okBtn.onclick = () => {
+          App.closeConfirmModal();
+          onOk();
+        };
+        document.getElementById("confirmModal").classList.add("active");
+      },
+
+      closeConfirmModal() {
+        document.getElementById("confirmModal").classList.remove("active");
+      },
+
+      handleLogin(e) {
+    e.preventDefault();
+    const username = document.getElementById("loginUsername").value.trim();
+    const passwordInput = document.getElementById("loginPassword").value.trim();
+    
+    const bruteStatus = CryptoSecurity.checkBruteForce();
+    if (bruteStatus.locked) {
+      App.showSecurityAlert(`الحساب معلق لحمايتك. انتظر ${bruteStatus.remainingSec} ثانية.`);
+      UI.render();
+      return;
+    }
+    
+    // فحص بيانات المشرف: Admin و Omar2026
+    if (username.toLowerCase() === "admin" && passwordInput === "Omar2026") {
+      CryptoSecurity.resetFailedAttempts();
+      // الانتقال لخطوة رمز التحقق الأمني الثنائي 2030
+      State.pendingAdminAuth = true;
+      State.loginStage = "2FA";
+      UI.render();
+      return;
+    }
+    
+    const inputHash = CryptoSecurity.hashPassword(passwordInput);
+    
+    // فحص الطلاب المسجلين
+    const student = State.students.find(s => s.username.toLowerCase() === username.toLowerCase());
+    if (student && (student.passwordHash === inputHash || student.passwordHash === passwordInput)) {
+      CryptoSecurity.resetFailedAttempts();
+      State.currentUser = { ...student, role: "STUDENT" };
+      const token = CryptoSecurity.createSessionToken(State.currentUser);
+      localStorage.setItem("omer_session_token", token);
+      App.setRoute("STUDENT_DASHBOARD");
+      return;
+    }
+    
+    CryptoSecurity.recordFailedAttempt();
+    App.recordSecurityViolation(`محاولة تسجيل دخول غير صحيحة للمستخدم (${username})`);
+    App.showSecurityAlert("اسم المستخدم أو كلمة المرور غير صحيحة.");
+    UI.render();
+  },
+  
+  handle2FASubmit(e) {
+    e.preventDefault();
+    const code = document.getElementById("twoFactorCode").value.trim();
+    
+    // رمز التحقق الأمني المعتمد للمشرف (2030)
+    if (code === "2030" && State.pendingAdminAuth) {
+      State.pendingAdminAuth = false;
+      State.loginStage = "CREDENTIALS";
+      State.currentUser = {
+        uid: "admin_omer",
+        name: "الأستاذ عمر (المشرف)",
+        username: "Admin",
+        role: "ADMIN"
+      };
+      const token = CryptoSecurity.createSessionToken(State.currentUser);
+      localStorage.setItem("omer_session_token", token);
+      App.setRoute("ADMIN_DASHBOARD");
+    } else {
+      App.recordSecurityViolation("إدخال رمز تحقق أمني (2FA) خاطئ للأدمن");
+      alert("❌ رمز التحقق الأمني غير صحيح!");
+    }
+  },
+  
+  cancel2FA() {
+    State.pendingAdminAuth = false;
+    State.loginStage = "CREDENTIALS";
+    UI.render();
+  },
+  
+  handleCreateStudent(e) {
+    e.preventDefault();
+    const target = document.getElementById("newStudentTarget").value;
+    const name = document.getElementById("newStudentName").value.trim();
+    const username = document.getElementById("newStudentUsername").value.trim();
+    const plainPassword = document.getElementById("newStudentPassword").value.trim();
+    const phone = document.getElementById("newStudentPhone").value.trim();
+    
+    const passwordHash = CryptoSecurity.hashPassword(plainPassword);
+    
+    // تفعيل فترة تجريبية مجانية لمدة 3 أيام
+    const now = Date.now();
+    const threeDaysMs = 3 * 24 * 60 * 60 * 1000;
+    const trialEndTimestamp = now + threeDaysMs;
+    
+    const newStudent = {
+      uid: "st_" + Date.now(),
+      name,
+      username,
+      passwordHash,
+      target,
+      phone: phone || "غير محدد",
+      status: "TRIAL",
+      plan: "3_DAYS_TRIAL",
+      trialEndTimestamp: trialEndTimestamp,
+      expiresAt: "تجربة (3 أيام)",
+      certificateApproved: false
+    };
+    
+    State.students.push(newStudent);
+    DataStore.save("students", State.students);
+    
+    alert(`تم إنشاء وتشفير حساب الطالب: ${name} بنجاح مع فترة تجريبية لمدة 3 أيام.`);
+    App.setRoute("ADMIN_STUDENTS");
+  },
+  
+  handleCreateContent(e) {
+    e.preventDefault();
+    const type = document.getElementById("contentType").value;
+    const target = document.getElementById("contentTarget").value;
+    const title = document.getElementById("contentTitle").value.trim();
+    const unit = document.getElementById("contentUnit").value.trim();
+    const url = document.getElementById("contentUrl") ? document.getElementById("contentUrl").value.trim() : "";
+    const text = document.getElementById("contentText") ? document.getElementById("contentText").value.trim() : "";
+    
+    const newMaterial = {
+      id: "mat_" + Date.now(),
+      type,
+      target,
+      title,
+      unit,
+      fileUrl: url,
+      sampleContent: text,
+      format: UI.getTabTitle(type)
+    };
+    
+    State.materials.push(newMaterial);
+    DataStore.save("materials", State.materials);
+    
+    alert(`تم نشر مادة (${title}) بنجاح.`);
+    App.setRoute("ADMIN_CONTENT_MANAGER");
+  },
+  
+  toggleContentFields() {
+    const type = document.getElementById("contentType").value;
+    const urlGroup = document.getElementById("urlFieldGroup");
+    const textGroup = document.getElementById("textFieldGroup");
+    const urlLabel = document.getElementById("urlLabel");
+    
+    if (type === "ARTICLES") {
+      urlGroup.style.display = "none";
+      textGroup.style.display = "block";
+    } else if (type === "PODCASTS") {
+      urlGroup.style.display = "block";
+      textGroup.style.display = "block";
+      urlLabel.innerText = "رابط ملف الصوت المباشر (MP3 / Audio URL / Drive)";
+    } else if (type === "POWERPOINTS") {
+      urlGroup.style.display = "block";
+      textGroup.style.display = "block";
+      urlLabel.innerText = "رابط ملف العرض التقديمي (PPTX / PPT / Drive)";
+    } else if (type === "WORD_DOCS") {
+      urlGroup.style.display = "block";
+      textGroup.style.display = "block";
+      urlLabel.innerText = "رابط ملف الوورد المباشر (DOCX / DOC / Drive)";
+    } else {
+      urlGroup.style.display = "block";
+      textGroup.style.display = "block";
+      urlLabel.innerText = "رابط الملف المباشر أو الفيديو";
+    }
+  },
+  
+  promptActivateStudent(uid, months) {
+    const student = State.students.find(s => s.uid === uid);
+    App.showConfirmModal("تفعيل الاشتراك", `هل تريد تفعيل اشتراك الطالب (${student.name}) لمدة ${months} أشهر؟`, () => {
+      student.status = "ACTIVE";
+      student.plan = months === 1 ? "1_MONTH" : "3_MONTHS";
+      student.expiresAt = months === 1 ? "ساري لمدة شهر" : "ساري لمدة 3 أشهر (فصل كامل)";
+      DataStore.save("students", State.students);
+      UI.render();
+    });
+  },
+  
+  promptDeleteStudent(uid) {
+    const student = State.students.find(s => s.uid === uid);
+    App.showConfirmModal("حذف الطالب", `هل أنت متأكد تماماً من حذف حساب الطالب (${student.name})؟`, () => {
+      State.students = State.students.filter(s => s.uid !== uid);
+      if (db) db.collection("omer_students").doc(uid).delete().catch(err => console.error(err));
+      DataStore.save("students", State.students);
+      UI.render();
+    });
+  },
+  
+  sendWhatsAppOrder(planType) {
+    const user = State.currentUser || { name: "طالب جديد", username: "غير مسجل", target: "UAE_12_ADV" };
+    const phone = State.settings.adminPhoneWhatsApp;
+    let planDesc = "اشتراك شهري (120 درهم)";
+    if (planType === 'SEMESTER' || planType === 'TRIAL_CONVERT') {
+      planDesc = "باقة الفصل الدراسي 3 أشهر (300 درهم)";
+    } else if (planType === 'EXP_RENEW') {
+      planDesc = "تجديد وتفعيل الاشتراك بعد انتهاء فترة الـ 3 أيام التجريبية";
+    }
+    
+    const message = `السلام عليكم أستاذ عمر (Omer Gasim)، أرغب في الاشتراك في منصة الرياضيات.
+
+الاسم: ${user.name}
+اسم المستخدم: ${user.username}
+الصف والمنهاج: ${UI.getTargetLabel(user.target)}
+الطلب: ${planDesc}
+
+يرجى إرسال تفاصيل التفعيل والدفع. شكراً جزيلاً.`;
+    
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+  },
+  
+  logout() {
+    localStorage.removeItem("omer_session_token");
+    State.currentUser = null;
+    State.pendingAdminAuth = false;
+    State.loginStage = "CREDENTIALS";
+    App.setRoute("LOGIN");
+  }
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  App.init();
+});
+</script>
+</body>
+</html>

@@ -1648,34 +1648,40 @@
       }
     };
 
+    // نظام التشفير المحسن مع ملح تشفير ثابت ومستقل
     const CryptoSecurity = {
-      deriveSalt(username) {
-        return CryptoJS.SHA256("SEC_SYS_" + (username || "").toLowerCase().trim()).toString();
+      deriveSalt() {
+        return "SEC_GLOBAL_OMER_GASIM_VAULT_2026_MATH_SECURE";
       },
-      hashPassword(plainPassword, username = "") {
+      hashPassword(plainPassword) {
         if (!plainPassword) return "";
         const clean = normalizeInput(plainPassword);
-        const dynamicSalt = this.deriveSalt(username);
+        const dynamicSalt = this.deriveSalt();
         const key = CryptoJS.PBKDF2(clean, dynamicSalt, { keySize: 256 / 32, iterations: 1500 });
         return key.toString(CryptoJS.enc.Hex);
       },
       verify(inputPassword, storedHash, username = "") {
         if (!inputPassword || !storedHash) return false;
         const cleanInput = normalizeInput(inputPassword);
-        if (cleanInput === storedHash) return true;
-        const hashedAttempt = this.hashPassword(cleanInput, username);
+        if (cleanInput === storedHash) return true; // للتوافق مع كلمات المرور الأولية
+        const hashedAttempt = this.hashPassword(cleanInput);
         if (hashedAttempt === storedHash) return true;
+        if (username) {
+          const oldSalt = CryptoJS.SHA256("SEC_SYS_" + username.toLowerCase().trim()).toString();
+          const oldHash = CryptoJS.PBKDF2(cleanInput, oldSalt, { keySize: 256 / 32, iterations: 1500 }).toString(CryptoJS.enc.Hex);
+          if (oldHash === storedHash) return true;
+        }
         if (CryptoJS.SHA256(cleanInput).toString() === storedHash) return true;
         return false;
       },
       createSessionToken(user) {
         const payload = { uid: user.uid, role: user.role, username: user.username, target: user.target, expiresAt: Date.now() + (12 * 60 * 60 * 1000) };
-        const dynamicSecret = this.deriveSalt(user.username || user.uid);
+        const dynamicSecret = this.deriveSalt();
         return CryptoJS.AES.encrypt(JSON.stringify(payload), dynamicSecret).toString();
       },
-      validateSessionToken(token, username) {
+      validateSessionToken(token) {
         try {
-          const dynamicSecret = this.deriveSalt(username);
+          const dynamicSecret = this.deriveSalt();
           const bytes = CryptoJS.AES.decrypt(token, dynamicSecret);
           const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
           if (decrypted && decrypted.expiresAt > Date.now()) return decrypted;
@@ -1837,14 +1843,14 @@
         if (db) {
           try {
             const docRef = db.collection("omer_system").doc("admin_config");
-            const snap = await docRef.get();
-            if (snap.exists) {
+            const snap = await docRef.get({ source: 'server' }).catch(() => docRef.get());
+            if (snap && snap.exists) {
               const cloudVault = snap.data();
               localStorage.setItem("og_admin_vault_cache", JSON.stringify(cloudVault));
               return cloudVault;
             }
           } catch (e) {
-            console.warn("تعذر الاتصال بالسحابة لجلب بيانات المشرف:", e);
+            console.warn("تعذر الاتصال بالسحابة لجلب بيانات المشرف، سيتم استخدام الكاش:", e);
           }
         }
         
@@ -1965,6 +1971,7 @@
         }
 
         if (db) {
+          // استماع لحظي لأي تحديث في إعدادات المشرف عبر السحابة
           db.collection("omer_system").doc("admin_config").onSnapshot(doc => {
             if (doc.exists) {
               const cloudData = doc.data();
@@ -2064,7 +2071,6 @@
       }
     };
 
-    /* كائن واجهة المستخدم (UI) الذي كان مفقوداً */
     const UI = {
       renderLogoHtml(className = 'brand-logo-img') {
         const logo = State.settings.logoUrl || OFFICIAL_LOGO_URL;
@@ -2535,8 +2541,7 @@
                 <p style="font-size:0.78rem; color:var(--text-muted);">متابعة التقييمات ومشاركتها مع أولياء الأمور والطلاب بسهولة</p>
               </div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <button class="btn btn-gold" style="padding:6px 12px; font-size:0.78rem;" onclick="App.openCreateSurveyModal()"><i class="fa-solid fa-plus-circle"></i> إنشاء استبيان جديد</button>
-                <button class="btn btn-navy" style="padding:6px 12px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')"><i class="fa-solid fa-arrow-right"></i> الرئيسية</button>
+                <button class="btn btn-gold" style="padding:6px 12px; font-size:0.78rem;" onclick="App.openCreateSurveyModal()"><i class="fa-solid fa-plus-circle"></i> إنشاء استبيان جديد<button class="btn btn-navy" style="padding:6px 12px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')"><i class="fa-solid fa-arrow-right"></i> الرئيسية</button>
               </div>
             </div>
             <div class="survey-mobile-grid">
@@ -3001,14 +3006,6 @@
         const newAdminPass = normalizeInput(document.getElementById("settingAdminPass").value);
         const newAdminPin = normalizeInput(document.getElementById("settingAdminPin").value);
         
-        State.settings.logoUrl = logo;
-        localStorage.setItem("og_logo_url", logo);
-        
-        if (phone) {
-          State.settings.adminPhoneWhatsApp = phone;
-          localStorage.setItem("og_whatsapp_phone", phone);
-        }
-        
         const currentVault = (await DataStore.getAdminVault()) || {
           username: "admin",
           passwordHash: "123456",
@@ -3019,21 +3016,12 @@
         
         const updateObj = {
           username: finalUsername,
-          passwordHash: newAdminPass ? CryptoSecurity.hashPassword(newAdminPass, finalUsername) : currentVault.passwordHash,
-          pinHash: newAdminPin ? CryptoSecurity.hashPassword(newAdminPin, finalUsername) : currentVault.pinHash,
+          passwordHash: newAdminPass ? CryptoSecurity.hashPassword(newAdminPass) : currentVault.passwordHash,
+          pinHash: newAdminPin ? CryptoSecurity.hashPassword(newAdminPin) : currentVault.pinHash,
           logoUrl: logo,
           whatsappPhone: phone || State.settings.adminPhoneWhatsApp,
           updatedAt: new Date().toISOString()
         };
-        
-        localStorage.setItem("og_admin_vault_cache", JSON.stringify(updateObj));
-        
-        if (State.currentUser && State.currentUser.role === "ADMIN") {
-          State.currentUser.username = finalUsername;
-          localStorage.setItem("og_session_user", finalUsername);
-          const newToken = CryptoSecurity.createSessionToken(State.currentUser);
-          localStorage.setItem("og_session_token", newToken);
-        }
         
         let cloudSaved = false;
         if (db) {
@@ -3041,12 +3029,27 @@
             await db.collection("omer_system").doc("admin_config").set(updateObj, { merge: true });
             cloudSaved = true;
           } catch (err) {
-            console.error("خطأ في حفظ السحابة:", err);
+            console.error("خطأ في رفع بيانات الإدارة للسحابة:", err);
             await NotificationEngine.alert(
-              "تنبيه: تم الحفظ محلياً فقط. تأكد من إعدادات وصلاحيات Firestore للمزامنة الكاملة.",
-              "تنبيه السحابة"
+              "تنبيه: تعذر الحفظ في السحابة بسبب قواعد Firebase. تأكد من فتح Rules في Firestore.",
+              "فشل المزامنة السحابية"
             );
           }
+        }
+        
+        localStorage.setItem("og_admin_vault_cache", JSON.stringify(updateObj));
+        State.settings.logoUrl = logo;
+        localStorage.setItem("og_logo_url", logo);
+        if (phone) {
+          State.settings.adminPhoneWhatsApp = phone;
+          localStorage.setItem("og_whatsapp_phone", phone);
+        }
+        
+        if (State.currentUser && State.currentUser.role === "ADMIN") {
+          State.currentUser.username = finalUsername;
+          localStorage.setItem("og_session_user", finalUsername);
+          const newToken = CryptoSecurity.createSessionToken(State.currentUser);
+          localStorage.setItem("og_session_token", newToken);
         }
         
         if (saveBtn) {
@@ -3056,9 +3059,9 @@
         
         App.closeSettingsModal();
         if (cloudSaved) {
-          App.showSecurityAlert("☁️ تم حفظ التعديلات سحابياً وستعمل على كافة الأجهزة فوراً!");
+          App.showSecurityAlert("☁️ تم تحديث بيانات المشرف سحابياً بنجاح وتعمل الآن على كافة الأجهزة فوراً!");
         } else {
-          App.showSecurityAlert("✅ تم حفظ وتطبيق الإعدادات بنجاح!");
+          App.showSecurityAlert("⚠️ تم الحفظ على هذا الجهاز فقط. يرجى تفعيل قواعد Firestore للمزامنة مع بقية الأجهزة.");
         }
         UI.render();
       },
@@ -3157,7 +3160,6 @@
         document.getElementById('resetNewPass').value = '';
         document.getElementById('chkResetTrial').checked = false;
         document.getElementById('chkResetProgress').checked = false;
-        document.getElementById('chkResetProgress').checked = false;
         document.getElementById('chkRevokeCert').checked = false;
 
         document.getElementById('studentResetModal').classList.add('active');
@@ -3181,7 +3183,7 @@
         let actionsDone = [];
 
         if (newPass) {
-          student.passwordHash = CryptoSecurity.hashPassword(newPass, student.username);
+          student.passwordHash = CryptoSecurity.hashPassword(newPass);
           actionsDone.push('تغيير كلمة المرور');
         }
 
@@ -3356,7 +3358,7 @@ ${link}
         App.navigateHome();
       },
 
-      // تشغيل روابط الذكاء الاصطناعي (Claude / ChatGPT) مباشرة داخل مشغل المنصة
+      // تشغيل روابط الذكاء الاصطناعي (Claude / ChatGPT) مباشرة داخل مشغل المنصة المدمج
       openAiToolLink(materialId) {
         document.getElementById('pdfControlsBar').style.display = 'none';
         const item = State.materials.find(m => m.id === materialId);
@@ -4116,7 +4118,7 @@ ${link}
         const phone = normalizeInput(document.getElementById("newStudentPhone").value);
         const parentPhone = normalizeInput(document.getElementById("newParentPhone")?.value || "");
 
-        const passwordHash = CryptoSecurity.hashPassword(plainPassword, username);
+        const passwordHash = CryptoSecurity.hashPassword(plainPassword);
         const now = Date.now();
         const trialEndTimestamp = now + (3 * 24 * 60 * 60 * 1000);
 

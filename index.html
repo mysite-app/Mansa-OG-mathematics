@@ -292,28 +292,39 @@
     .modal-card { background: var(--white); border-radius: var(--radius-lg); border: 2px solid var(--gold-orange); max-width: 720px; width: 100%; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; }
     .security-toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: var(--danger); color: #FFF; padding: 10px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; display: none; align-items: center; gap: 8px; z-index: 99999; box-shadow: var(--shadow-lg); }
 
-    /* تحسينات الاستبيانات لتفادي التداخل في الهواتف */
-    .survey-builder-qcard { background: var(--bg-light); border: 1.5px solid #CBD5E1; border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; position: relative; }
-    .survey-builder-qcard.highlight { border-color: var(--gold-orange); background: #FFFDF5; }
-    .survey-mobile-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
-    .survey-star-rating { display: inline-flex; flex-direction: row-reverse; gap: 8px; font-size: 1.5rem; cursor: pointer; }
+    /* تحسينات الاستبيانات والتجاوب على الهواتف */
+    .survey-mobile-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; align-items: start; }
+    .survey-builder-qcard { background: #FFFFFF; border: 1.5px solid #E2E8F0; border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+    .survey-builder-qcard:focus-within { border-color: var(--gold-orange); }
+    
+    .survey-star-rating { display: inline-flex; flex-direction: row-reverse; gap: 12px; font-size: 1.8rem; cursor: pointer; padding: 6px 0; }
     .survey-star-rating input { display: none; }
-    .survey-star-rating label { color: #CBD5E1; transition: color 0.15s; }
+    .survey-star-rating label { color: #CBD5E1; transition: transform 0.1s, color 0.15s; }
+    .survey-star-rating label:hover { transform: scale(1.15); }
     .survey-star-rating input:checked ~ label,
     .survey-star-rating label:hover,
     .survey-star-rating label:hover ~ label { color: #F59E0B; }
 
-    @media (max-width: 820px) {
+    /* متصفح الذكاء الاصطناعي الداخلي المدمج لمنع حجب المتصفحات */
+    .ai-browser-container { width: 100%; height: 100%; display: flex; flex-direction: column; background: #070D18; }
+    .ai-browser-navbar { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #0B1424; border-bottom: 1.5px solid #1E293B; gap: 8px; flex-wrap: wrap; }
+    .ai-browser-address-bar { flex: 1; min-width: 200px; display: flex; align-items: center; gap: 8px; background: #050B14; padding: 6px 12px; border-radius: 50px; border: 1px solid #334155; font-size: 0.78rem; color: #38BDF8; font-family: 'Fira Code', monospace; }
+    .ai-browser-actions { display: flex; align-items: center; gap: 6px; }
+    .ai-browser-workspace { flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 14px; overflow-y: auto; }
+
+    @media (max-width: 860px) {
       .survey-mobile-grid { grid-template-columns: 1fr; }
       .voice-call-bubble { left: 8px; right: 8px; width: auto; top: 65px; }
-      .modal-card { padding: 16px; }
+      .modal-card { padding: 14px; max-height: 94vh; width: 100%; }
+      .ai-browser-workspace { grid-template-columns: 1fr; }
+      .survey-builder-qcard { padding: 10px; }
+      .plans-container { grid-template-columns: 1fr; }
     }
 
     footer.app-footer { background: var(--navy-gradient); color: var(--white); padding: 18px 20px; margin-top: auto; text-align: center; border-top: 2px solid var(--gold-orange); }
     .footer-content { max-width: 1320px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; }
     .engineer-tag { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--gold-orange); padding: 5px 14px; border-radius: 50px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: var(--gold-orange); font-weight: 700; }
 
-    /* حماية إضافية للطباعة */
     @page { size: A4 landscape; margin: 0; }
     @media print {
       body, html { background: #FFF !important; width: 297mm; height: 210mm; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -329,9 +340,9 @@
   <!-- درع الحماية الأمني -->
   <div id="securityPrivacyShield">
     <i class="fa-solid fa-shield-halved" style="font-size:54px; color:var(--gold-orange); margin-bottom:14px;"></i>
-    <h2 style="font-size:1.3rem; font-weight:800;">درع الحماية المشفر – منصة الأستاذ عمر</h2>
+    <h2 style="font-size:1.3rem; font-weight:800;">درع الحماية والتشفير – منصة الأستاذ عمر</h2>
     <p style="margin-top:8px; color:var(--gold-subtle); font-size:0.88rem; max-width:480px;">
-      محتوى الرياضيات، البودكاست التعليمي، وملفات المنهج الإماراتي والسوداني مشفرة ومحمية من النسخ والتحميل غير المصرح به.
+      محتوى الرياضيات، البودكاست التعليمي، وملفات المنهج الإماراتي والسوداني مشفرة ومحمية من التلاعب.
     </p>
     <button class="btn btn-gold" style="margin-top:18px;" onclick="document.getElementById('securityPrivacyShield').style.display='none'">
       متابعة التعلم بأمان
@@ -342,10 +353,10 @@
 
   <div class="security-toast" id="securityToast">
     <i class="fa-solid fa-shield-halved"></i>
-    <span id="securityToastText">تنبيه أمني: محتويات منصة الأستاذ عمر محمية بحقوق الطبع والتشفير.</span>
+    <span id="securityToastText">تنبيه أمني: محتويات منصة الأستاذ عمر محمية.</span>
   </div>
 
-  <!-- النافذة التفاعلية العامة (بديل alert, confirm, prompt) -->
+  <!-- النافذة التفاعلية العامة المخصصة -->
   <div class="modal-overlay" id="customDialogOverlay" style="z-index: 100000;">
     <div class="modal-card" style="max-width: 440px; text-align: center; border-width: 2px;">
       <div id="customDialogIcon" style="font-size: 40px; margin-bottom: 12px; color: var(--gold-orange);">
@@ -365,7 +376,7 @@
     </div>
   </div>
 
-  <!-- فقاعة المكالمة الصوتية الاحترافية التفاعلية -->
+  <!-- فقاعة المكالمة الصوتية WebRTC -->
   <div class="voice-call-bubble" id="voiceCallBubble">
     <div class="voice-header">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -378,7 +389,7 @@
         </div>
       </div>
       <div style="display:flex; align-items:center; gap:4px;">
-        <button class="voice-btn-sm" id="btnToggleAudioOutput" style="background:#334155; color:#FFF;" onclick="VoiceEngine.cycleAudioOutput()" title="تبديل مخرج الصوت (سماعات/سبيكر)">
+        <button class="voice-btn-sm" id="btnToggleAudioOutput" style="background:#334155; color:#FFF;" onclick="VoiceEngine.cycleAudioOutput()" title="تبديل مخرج الصوت">
           <i class="fa-solid fa-volume-high"></i>
         </button>
         <button class="btn btn-danger" style="padding:3px 8px; font-size:0.72rem; min-height:28px;" onclick="VoiceEngine.endCall()">
@@ -387,24 +398,18 @@
       </div>
     </div>
 
-    <!-- أزرار التحكم السريع للمتحدث -->
     <div style="display:flex; gap:6px; align-items:center; justify-content:space-between; border-top:1px solid #1E293B; padding-top:6px;">
       <button class="btn btn-gold" id="btnToggleMic" style="flex:1; padding:4px 8px; font-size:0.74rem; min-height:30px;" onclick="VoiceEngine.toggleMute()">
         <i class="fa-solid fa-microphone"></i> كتم الصوت
       </button>
-      
-      <!-- زر استئذان للحديث للطلاب -->
       <button class="btn btn-purple" id="btnRaiseHand" style="padding:4px 10px; font-size:0.74rem; min-height:30px; display:none;" onclick="VoiceEngine.studentRaiseHand()">
-        <i class="fa-solid fa-hand"></i> استئذان للحديث
+        <i class="fa-solid fa-hand"></i> استئذان
       </button>
-
-      <!-- تحكم المشرف: كتم الجميع -->
       <button class="btn btn-danger" id="btnAdminMuteAll" style="padding:4px 10px; font-size:0.74rem; min-height:30px; display:none;" onclick="VoiceEngine.adminMuteAll()">
         <i class="fa-solid fa-microphone-slash"></i> كتم الجميع
       </button>
     </div>
 
-    <!-- قائمة المشاركين في المكالمة الجماعية -->
     <div id="voiceParticipantsList" class="voice-participants-box" style="display:none;"></div>
   </div>
 
@@ -457,17 +462,17 @@
     </div>
   </div>
 
-  <!-- الآلة الحاسبة العلمية المتطورة -->
+  <!-- الآلة الحاسبة العلمية المتطورة (Safe Math Evaluator) -->
   <div class="calculator-widget" id="calcWidget">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E293B; padding-bottom:6px;">
-      <span style="font-weight:700; font-size:0.82rem; color:var(--gold-orange);"><i class="fa-solid fa-calculator"></i> الحاسبة العلمية المتقدمة (أستاذ عمر)</span>
+      <span style="font-weight:700; font-size:0.82rem; color:var(--gold-orange);"><i class="fa-solid fa-calculator"></i> الحاسبة العلمية الآمنة</span>
       <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.toggleCalculator()"></i>
     </div>
     
     <div class="calc-screen-container">
       <div class="calc-mode-bar">
         <span id="calcAngleMode" style="cursor:pointer; color:var(--gold-orange); font-weight:800;" onclick="SciCalc.toggleAngleMode()">DEG</span>
-        <span style="font-size:0.68rem; color:#64748B;">fx-991ES Plus Edition</span>
+        <span style="font-size:0.68rem; color:#64748B;">fx-991ES Secure Math Engine</span>
       </div>
       <div class="calc-expr" id="calcExprDisplay"></div>
       <div class="calc-screen" id="calcDisplay">0</div>
@@ -518,7 +523,7 @@
     </div>
   </div>
 
-  <!-- المساعد الذكي AI ومحطة الذكاء الاصطناعي الداخلية -->
+  <!-- نافذة المساعد الذكي AI المدمجة -->
   <div class="ai-chat-window" id="aiChatWindow">
     <div class="ai-chat-header">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -529,9 +534,7 @@
     </div>
     <div class="ai-chat-body" id="aiChatBody">
       <div class="ai-msg bot" id="aiWelcomeMsg">
-        مرحباً بك في منصة <strong>الأستاذ عمر (Omer Gasim)</strong>! أنا رفيقك الرياضي الذكي.
-        <br><small style="color:var(--gold-deep); font-weight:700;">• المنهج السوداني: حلول مفصلة وفق معايير الشهادة السودانية.</small>
-        <br><small style="color:#0284C7; font-weight:700;">• UAE Curriculum: Detailed calculus, vectors & algebraic solutions.</small>
+        مرحباً بك في منصة <strong>الأستاذ عمر</strong>! أنا رفيقك الرياضي الذكي لحل المسائل خطوة بخطوة للمنهاج الإماراتي والسوداني.
       </div>
     </div>
     <div class="ai-chat-footer">
@@ -542,7 +545,7 @@
     </div>
   </div>
 
-  <!-- المشغل الداخلي الذكي الشامل -->
+  <!-- المشغل الداخلي الذكي الشامل للوسائط والـ AI -->
   <div class="modal-overlay" id="mediaPlayerModal">
     <div class="modal-card" style="max-width: 980px; padding: 0; background: #0A1424; border-color: var(--gold-orange);">
       <div class="player-modal-content">
@@ -615,7 +618,7 @@
     </div>
   </div>
 
-  <!-- نافذة التقييم الشامل للطلاب وإرسال التقرير لولي الأمر -->
+  <!-- نافذة تقرير المتابعة وواتساب -->
   <div class="modal-overlay" id="evaluationModal">
     <div class="modal-card" style="max-width: 620px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -636,7 +639,7 @@
           <span id="evalStudentTargetDisplay" style="display:block; font-size:0.75rem; color:var(--text-muted);"></span>
         </div>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
           <div class="form-group">
             <label>رقم هاتف ولي الأمر (واتساب)</label>
             <input type="text" id="evalParentPhone" placeholder="مثال: 971500000000" required>
@@ -647,7 +650,7 @@
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
           <div class="form-group">
             <label>التقدير الأكاديمي العام</label>
             <select id="evalGrade">
@@ -668,7 +671,7 @@
           </div>
         </div>
 
-        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
           <div class="form-group">
             <label>الحضور والمواظبة</label>
             <select id="evalAttendanceStatus">
@@ -679,7 +682,7 @@
           </div>
           <div class="form-group">
             <label>فترة التقييم / الاختبار</label>
-            <input type="text" id="evalPeriod" placeholder="مثال: اختبار منتصف الفصل / الوحدة الأولى">
+            <input type="text" id="evalPeriod" placeholder="مثال: اختبار منتصف الفصل">
           </div>
         </div>
 
@@ -740,21 +743,21 @@
     </div>
   </div>
 
-  <!-- منشئ الاستبيانات الديناميكي -->
+  <!-- منشئ الاستبيانات المتجاوب 100% مع الهواتف -->
   <div class="modal-overlay" id="createSurveyModal">
-    <div class="modal-card" style="max-width: 760px;">
+    <div class="modal-card" style="max-width: 780px;">
       <h3 style="color: var(--navy-dark); margin-bottom: 8px;">
-        <i class="fa-solid fa-square-poll-vertical" style="color:var(--gold-orange);"></i> منشئ الاستبيانات واستطلاعات الرأي
+        <i class="fa-solid fa-square-poll-vertical" style="color:var(--gold-orange);"></i> منشئ الاستبيانات الأكاديمية الذكية
       </h3>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px;">
-        أنشئ استبياناً بعدد غير محدود من الأسئلة مع روابط فورية متجاوبة 100% مع كافة شاشات الهواتف.
+        أنشئ استبياناً بعدد غير محدود من الأسئلة، بتنسيق متجاوب بدون أي تداخل في الهواتف الذكية.
       </p>
 
       <form onsubmit="App.handleSaveDynamicSurvey(event)">
-        <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px;">
           <div class="form-group">
             <label>عنوان الاستبيان</label>
-            <input type="text" id="surveyMainTitle" required placeholder="مثال: استطلاع رأي الطلاب حول وحدة التفاضل والتكامل">
+            <input type="text" id="surveyMainTitle" required placeholder="مثال: استطلاع رأي الطلاب حول وحدة التفاضل">
           </div>
           <div class="form-group">
             <label>الفئة المستهدفة</label>
@@ -768,14 +771,14 @@
           </div>
         </div>
 
-        <div style="display:flex; justify-content:space-between; align-items:center; margin: 12px 0 6px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin: 12px 0 8px; flex-wrap:wrap; gap:6px;">
           <label style="font-weight:800; font-size:0.9rem; color:var(--navy-dark);">أسئلة الاستبيان:</label>
           <button type="button" class="btn btn-gold" style="padding:4px 12px; font-size:0.75rem; min-height:32px;" onclick="SurveyBuilder.addNewQuestion()">
             <i class="fa-solid fa-plus"></i> إضافة سؤال جديد
           </button>
         </div>
 
-        <div id="surveyQuestionsDynamicContainer" style="max-height: 50vh; overflow-y: auto; padding-right: 4px;"></div>
+        <div id="surveyQuestionsDynamicContainer" style="max-height: 52vh; overflow-y: auto; padding: 2px;"></div>
 
         <div style="display:flex; gap:8px; margin-top:16px;">
           <button type="submit" class="btn btn-gold" style="flex:1;">
@@ -795,7 +798,7 @@
       </div>
       <h3 style="color:var(--navy-dark); font-weight:800; margin-bottom:6px;">غرفة الاتصال الصوتي المباشر (الأستاذ عمر)</h3>
       <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:16px;">
-        تواصل فائق الوضوح عبر أحدث بروتوكولات WebRTC بدون تقطيع ومتوافق مع جميع الشبكات.
+        تواصل فائق الوضوح عبر أحدث بروتوكولات WebRTC بدون تقطيع.
       </p>
 
       <div style="background:var(--bg-light); padding:14px; border-radius:var(--radius-md); margin-bottom:16px; text-align:right;">
@@ -812,9 +815,6 @@
         <label style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px; color:#6D28D9;">
           2. غرفة نقاش صوتي جماعية:
         </label>
-        <p style="font-size:0.75rem; color:#64748B; margin-bottom:8px;">
-          إتاحة الحوار الصوتي لجميع الطلاب مع أدوات كاملة للمشرف (كتم الجميع / إتاحة المايك لمن يرفع يده).
-        </p>
         <button class="btn btn-purple" style="width:100%; font-size:0.8rem;" onclick="VoiceEngine.startBroadcastRoom()">
           <i class="fa-solid fa-tower-broadcast"></i> فتح وإطلاق الغرفة الجماعية
         </button>
@@ -876,7 +876,7 @@
   <div class="modal-overlay" id="settingsModal">
     <div class="modal-card" style="max-width: 520px;">
       <h3 style="color: var(--navy-dark); margin-bottom: 14px;">
-        <i class="fa-solid fa-sliders"></i> إعدادات المنصة وأمان المشرف
+        <i class="fa-solid fa-sliders"></i> إعدادات المنصة والأمان السحابي
       </h3>
       <form onsubmit="App.handleSaveSettings(event)">
         <div class="form-group">
@@ -896,11 +896,11 @@
 
         <div style="border-top: 2px dashed var(--gold-orange); margin: 18px 0 14px; padding-top: 14px;">
           <h4 style="color:var(--navy-dark); font-size:0.95rem; margin-bottom:10px;">
-            <i class="fa-solid fa-user-shield" style="color:var(--gold-deep);"></i> بيانات المشرف السحابية المشفرة
+            <i class="fa-solid fa-user-shield" style="color:var(--gold-deep);"></i> تعيين بيانات دخول المشرف
           </h4>
           <div class="form-group">
             <label>اسم مستخدم الأدمن (Username)</label>
-            <input type="text" id="settingAdminUser" placeholder="admin">
+            <input type="text" id="settingAdminUser" placeholder="أدخل اسم المشرف الجديد">
           </div>
           <div class="form-group">
             <label>كلمة المرور الجديدة (اتركها فارغة إذا لم ترد التغيير)</label>
@@ -908,7 +908,7 @@
           </div>
           <div class="form-group">
             <label>رمز التحقق المزدوج الجديد (2FA PIN)</label>
-            <input type="text" id="settingAdminPin" maxlength="6" placeholder="******">
+            <input type="password" id="settingAdminPin" maxlength="6" placeholder="••••••">
           </div>
         </div>
 
@@ -951,7 +951,7 @@
         <button class="btn btn-navy" style="flex: 1;" onclick="window.print()">
           <i class="fa-solid fa-print"></i> طباعة الشهادة A4
         </button>
-        <button class="btn btn-secondary" onclick="App.closeCertificateModal()">إغلاق</button>
+        <button class="btn btn-secondary" onclick="App.closeCertificateModal()">إلغاء</button>
       </div>
     </div>
   </div>
@@ -1006,9 +1006,19 @@
   <script>
     /**
      * =========================================================================
-     * 1. دوال مساعدة لحماية البيانات وتطبيع الأرقام وإخفاء الهواتف
+     * 1. دوال الحماية وتطهير المدخلات من ثغرات XSS والأرقام
      * =========================================================================
      */
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
     function normalizeInput(val) {
       if (!val) return "";
       return val.toString().trim()
@@ -1017,7 +1027,6 @@
         .replace(/[\u200B-\u200D\uFEFF]/g, '');
     }
 
-    // إخفاء أرقام الهواتف لحماية الخصوصية
     function maskPhoneNumber(phone) {
       if (!phone || phone === 'غير محدد') return 'غير محدد';
       const clean = normalizeInput(phone).replace(/\s+/g, '');
@@ -1142,7 +1151,7 @@
 
     /**
      * =========================================================================
-     * 4. الحاسبة العلمية المتقدمة
+     * 4. الحاسبة العلمية المتقدمة الآمنة (Safe Math Evaluator)
      * =========================================================================
      */
     const SciCalc = {
@@ -1190,37 +1199,48 @@
         }
       },
 
+      safeMathEvaluate(expr) {
+        let clean = expr
+          .replace(/Ans/g, this.lastAnswer)
+          .replace(/pi/g, Math.PI)
+          .replace(/\be\b/g, Math.E);
+
+        let tokens = clean
+          .replace(/\^/g, '**')
+          .replace(/fact\(([^)]+)\)/g, 'SciCalc.factorial($1)');
+
+        if (this.isDeg) {
+          tokens = tokens.replace(/asin\(([^)]+)\)/g, '(Math.asin($1)*180/Math.PI)')
+                         .replace(/acos\(([^)]+)\)/g, '(Math.acos($1)*180/Math.PI)')
+                         .replace(/atan\(([^)]+)\)/g, '(Math.atan($1)*180/Math.PI)')
+                         .replace(/sin\(([^)]+)\)/g, 'Math.sin(($1)*Math.PI/180)')
+                         .replace(/cos\(([^)]+)\)/g, 'Math.cos(($1)*Math.PI/180)')
+                         .replace(/tan\(([^)]+)\)/g, 'Math.tan(($1)*Math.PI/180)');
+        } else {
+          tokens = tokens.replace(/asin\(/g, 'Math.asin(')
+                         .replace(/acos\(/g, 'Math.acos(')
+                         .replace(/atan\(/g, 'Math.atan(')
+                         .replace(/sin\(/g, 'Math.sin(')
+                         .replace(/cos\(/g, 'Math.cos(')
+                         .replace(/tan\(/g, 'Math.tan(');
+        }
+
+        tokens = tokens.replace(/log\(/g, 'Math.log10(')
+                       .replace(/ln\(/g, 'Math.log(')
+                       .replace(/sqrt\(/g, 'Math.sqrt(');
+
+        if (!/^[\d\s+\-*/().Math,EPIe_SciCalc!*]+$/.test(tokens.replace(/Math\.\w+/g, 'Math.fn').replace(/SciCalc\.factorial/g, 'fact'))) {
+          throw new Error("Invalid tokens");
+        }
+
+        const compute = new Function('SciCalc', 'return (' + tokens + ')');
+        return compute(SciCalc);
+      },
+
       equals() {
         if (!this.rawExpr) return;
         try {
-          let parsed = this.rawExpr
-            .replace(/Ans/g, `(${this.lastAnswer})`)
-            .replace(/pi/g, `(${Math.PI})`)
-            .replace(/\be\b/g, `(${Math.E})`)
-            .replace(/\^/g, '**');
-
-          if (this.isDeg) {
-            parsed = parsed.replace(/\basin\(([^)]+)\)/g, '(Math.asin($1)*180/Math.PI)');
-            parsed = parsed.replace(/\bacos\(([^)]+)\)/g, '(Math.acos($1)*180/Math.PI)');
-            parsed = parsed.replace(/\batan\(([^)]+)\)/g, '(Math.atan($1)*180/Math.PI)');
-            parsed = parsed.replace(/\bsin\(([^)]+)\)/g, 'Math.sin(($1)*Math.PI/180)');
-            parsed = parsed.replace(/\bcos\(([^)]+)\)/g, 'Math.cos(($1)*Math.PI/180)');
-            parsed = parsed.replace(/\btan\(([^)]+)\)/g, 'Math.tan(($1)*Math.PI/180)');
-          } else {
-            parsed = parsed.replace(/\basin\(/g, 'Math.asin(');
-            parsed = parsed.replace(/\bacos\(/g, 'Math.acos(');
-            parsed = parsed.replace(/\batan\(/g, 'Math.atan(');
-            parsed = parsed.replace(/\bsin\(/g, 'Math.sin(');
-            parsed = parsed.replace(/\bcos\(/g, 'Math.cos(');
-            parsed = parsed.replace(/\btan\(/g, 'Math.tan(');
-          }
-
-          parsed = parsed.replace(/\blog\(/g, 'Math.log10(');
-          parsed = parsed.replace(/\bln\(/g, 'Math.log(');
-          parsed = parsed.replace(/\bsqrt\(/g, 'Math.sqrt(');
-          parsed = parsed.replace(/\bfact\(([^)]+)\)/g, 'SciCalc.factorial($1)');
-
-          const res = Function(`'use strict'; return (${parsed})`)();
+          const res = this.safeMathEvaluate(this.rawExpr);
           let finalRes = Number(res);
 
           if (isNaN(finalRes) || !isFinite(finalRes)) {
@@ -1238,7 +1258,7 @@
 
     /**
      * =========================================================================
-     * 5. المساعد الرياضي الذكي (Curriculum AI Assistant)
+     * 5. المساعد الرياضي الذكي التفاعلي
      * =========================================================================
      */
     const CurriculumAiEngine = {
@@ -1267,7 +1287,7 @@
           } else {
             return `
               <strong>Hello! I am Mr. Omer Gasim's Smart Math Assistant.</strong><br>
-              Ask any mathematical question regarding <strong>${UI.getTargetLabel(target)}</strong>.
+              Ask any mathematical question regarding <strong>${escapeHTML(UI.getTargetLabel(target))}</strong>.
             `;
           }
         } else {
@@ -1297,7 +1317,7 @@
 
     /**
      * =========================================================================
-     * 6. محرك الفيديو الاحترافي
+     * 6. محرك الفيديو
      * =========================================================================
      */
     const VideoEngine = {
@@ -1408,7 +1428,7 @@
 
     /**
      * =========================================================================
-     * 7. محرك الاتصال الصوتي المتقدم WebRTC (Voice Engine)
+     * 7. محرك الاتصال الصوتي WebRTC PeerJS
      * =========================================================================
      */
     const VoiceEngine = {
@@ -1445,8 +1465,7 @@
               iceServers: [
                 { urls: 'stun:stun.l.google.com:19302' },
                 { urls: 'stun:stun1.l.google.com:19302' },
-                { urls: 'stun:stun2.l.google.com:19302' },
-                { urls: 'stun:stun.services.mozilla.com' }
+                { urls: 'stun:stun2.l.google.com:19302' }
               ]
             }
           });
@@ -1456,7 +1475,7 @@
             const isGroup = !!call.metadata?.isGroup;
 
             const accept = await NotificationEngine.confirm(
-              `لديك اتصال صوتي ${isGroup ? 'في غرفة نقاش جماعية' : 'مباشر'} من (${callerName})!\nهل تود الرد والمشاركة؟`,
+              `اتصال صوتي وارد ${isGroup ? 'في غرفة نقاش جماعية' : 'مباشر'} من (${callerName})!\nهل تود الرد والمشاركة؟`,
               'مكالمة واردة'
             );
 
@@ -1684,7 +1703,7 @@
           const isAdmin = (State.currentUser?.role === 'ADMIN');
           row.innerHTML = `
             <div>
-              <strong>${data.name}</strong>
+              <strong>${escapeHTML(data.name)}</strong>
               ${data.handRaised ? '<span class="badge badge-trial" style="font-size:0.65rem; padding:1px 6px;">✋ استئذان</span>' : ''}
             </div>
             <div style="display:flex; gap:4px;">
@@ -1868,7 +1887,7 @@
 
         container.innerHTML = this.questions.map((q, idx) => `
           <div class="survey-builder-qcard">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:6px;">
               <strong style="color:var(--navy-dark); font-size:0.85rem;">السؤال (${idx + 1}):</strong>
               <button type="button" class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem; min-height:26px;" onclick="SurveyBuilder.removeQuestion(${idx})">
                 <i class="fa-solid fa-trash"></i> حذف
@@ -1876,7 +1895,7 @@
             </div>
 
             <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:8px;">
-              <input type="text" value="${q.text}" placeholder="اكتب نص السؤال هنا..." oninput="SurveyBuilder.questions[${idx}].text = this.value" required>
+              <input type="text" value="${escapeHTML(q.text)}" placeholder="اكتب نص السؤال هنا..." oninput="SurveyBuilder.questions[${idx}].text = this.value" required>
               <select onchange="SurveyBuilder.changeQType(${idx}, this.value)">
                 <option value="RATING" ${q.type === 'RATING' ? 'selected' : ''}>⭐ تقييم نجوم (1 إلى 5)</option>
                 <option value="CHOICE" ${q.type === 'CHOICE' ? 'selected' : ''}>🔘 اختيار من متعدد</option>
@@ -1886,20 +1905,20 @@
             </div>
 
             ${q.type === 'CHOICE' ? `
-              <div style="background:var(--white); padding:8px; border-radius:6px; border:1px dashed var(--gold-orange); margin-top:6px;">
-                <label style="font-size:0.75rem; font-weight:700; color:var(--gold-deep); display:block; margin-bottom:4px;">خيارات الإجابة:</label>
+              <div style="background:var(--bg-light); padding:10px; border-radius:6px; border:1px dashed var(--gold-orange); margin-top:6px;">
+                <label style="font-size:0.75rem; font-weight:700; color:var(--gold-deep); display:block; margin-bottom:6px;">خيارات الإجابة:</label>
                 <div style="display:flex; flex-direction:column; gap:6px;">
                   ${q.options.map((opt, optIdx) => `
                     <div style="display:flex; gap:6px;">
-                      <input type="text" value="${opt}" placeholder="الخيار ${optIdx + 1}" oninput="SurveyBuilder.questions[${idx}].options[${optIdx}] = this.value" required>
+                      <input type="text" value="${escapeHTML(opt)}" placeholder="الخيار ${optIdx + 1}" oninput="SurveyBuilder.questions[${idx}].options[${optIdx}] = this.value" required>
                       <button type="button" class="btn btn-secondary" style="padding:2px 6px; min-height:30px;" onclick="SurveyBuilder.removeChoiceOption(${idx}, ${optIdx})">
                         <i class="fa-solid fa-xmark"></i>
                       </button>
                     </div>
                   `).join('')}
                 </div>
-                <button type="button" class="btn btn-secondary" style="padding:3px 8px; font-size:0.72rem; min-height:28px; margin-top:6px;" onclick="SurveyBuilder.addChoiceOption(${idx})">
-                  <i class="fa-solid fa-plus"></i> إضافة خيار آخر
+                <button type="button" class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem; min-height:28px; margin-top:8px; width:100%;" onclick="SurveyBuilder.addChoiceOption(${idx})">
+                  <i class="fa-solid fa-plus"></i> إضافة خيار إضافي
                 </button>
               </div>
             ` : ''}
@@ -2096,30 +2115,39 @@
 
     /**
      * =========================================================================
-     * 12. نظام التشفير وجلسات العمل المشفرة
+     * 12. نظام التشفير وعزل الجلسات
      * =========================================================================
      */
     const CryptoSecurity = {
-      SALT: "OMER_SECURE_VAULT_KEY_2026",
+      deriveSalt(username) {
+        return CryptoJS.SHA256("SEC_SYS_" + (username || "").toLowerCase().trim()).toString();
+      },
 
-      hashPassword(plainPassword) {
+      hashPassword(plainPassword, username = "") {
         if (!plainPassword) return "";
         const clean = normalizeInput(plainPassword);
-        const key = CryptoJS.PBKDF2(clean, this.SALT, {
+        const dynamicSalt = this.deriveSalt(username);
+        const key = CryptoJS.PBKDF2(clean, dynamicSalt, {
           keySize: 256 / 32,
-          iterations: 1000
+          iterations: 1500
         });
         return key.toString(CryptoJS.enc.Hex);
       },
 
-      verify(inputPassword, storedHash) {
+      // تعديل دالة التحقق لدعم كلمات المرور الصريحة والمشفرة
+      verify(inputPassword, storedHash, username = "") {
         if (!inputPassword || !storedHash) return false;
         const cleanInput = normalizeInput(inputPassword);
         
-        if (this.hashPassword(cleanInput) === storedHash) return true;
-        if (this.hashPassword(cleanInput.toLowerCase()) === storedHash) return true;
+        // 1. فحص إذا كانت كلمة المرور مطابقة كنص صريح (Plain Text)
+        if (cleanInput === storedHash) return true;
+
+        // 2. التحقق الآمن عبر الهاش المشتق PBKDF2
+        const hashedAttempt = this.hashPassword(cleanInput, username);
+        if (hashedAttempt === storedHash) return true;
+        
+        // 3. دعم التوافقية السابقة لهاشات SHA256 القياسية
         if (CryptoJS.SHA256(cleanInput).toString() === storedHash) return true;
-        if (cleanInput === storedHash || cleanInput.toLowerCase() === storedHash.toLowerCase()) return true;
 
         return false;
       },
@@ -2132,12 +2160,14 @@
           target: user.target,
           expiresAt: Date.now() + (12 * 60 * 60 * 1000)
         };
-        return CryptoJS.AES.encrypt(JSON.stringify(payload), this.SALT).toString();
+        const dynamicSecret = this.deriveSalt(user.username || user.uid);
+        return CryptoJS.AES.encrypt(JSON.stringify(payload), dynamicSecret).toString();
       },
 
-      validateSessionToken(token) {
+      validateSessionToken(token, username) {
         try {
-          const bytes = CryptoJS.AES.decrypt(token, this.SALT);
+          const dynamicSecret = this.deriveSalt(username);
+          const bytes = CryptoJS.AES.decrypt(token, dynamicSecret);
           const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
           if (decrypted && decrypted.expiresAt > Date.now()) return decrypted;
         } catch (e) {
@@ -2159,7 +2189,7 @@
         let attempts = parseInt(localStorage.getItem("og_login_attempts") || "0") + 1;
         localStorage.setItem("og_login_attempts", attempts.toString());
         if (attempts >= 5) {
-          localStorage.setItem("og_lock_until", (Date.now() + 25000).toString());
+          localStorage.setItem("og_lock_until", (Date.now() + 30000).toString());
           localStorage.setItem("og_login_attempts", "0");
         }
       },
@@ -2174,7 +2204,7 @@
       init() {
         document.addEventListener('contextmenu', e => {
           e.preventDefault();
-          App.recordSecurityViolation("محاولة استخدام القائمة المنسدلة للنسخ أو التنزيل");
+          App.recordSecurityViolation("محاولة استخدام القائمة المنسدلة للنسخ");
           App.showSecurityAlert("محتويات منصة الأستاذ عمر محمية ومسجلة بحقوق الملكية الفكرية.");
         });
 
@@ -2186,7 +2216,7 @@
           ) {
             e.preventDefault();
             document.getElementById('securityPrivacyShield').style.display = 'flex';
-            App.recordSecurityViolation(`محاولة فتح شاشة التفتيش (${e.key})`);
+            App.recordSecurityViolation(`محاولة فحص أمني (${e.key})`);
           }
         });
       }
@@ -2296,7 +2326,7 @@
 
     /**
      * =========================================================================
-     * 14. التزامن السحابي الآمن عبر Firebase Firestore (Admin Protection)
+     * 14. التزامن السحابي الآمن عبر Firebase Firestore
      * =========================================================================
      */
     const State = {
@@ -2309,7 +2339,7 @@
       adminSearchQuery: "",
       
       loginStage: "CREDENTIALS",
-      pendingAdminAuth: false,
+      pendingAdminUsername: null,
 
       activeQuiz: null,
       activeQuestionIndex: 0,
@@ -2348,70 +2378,33 @@
       firebase.initializeApp(firebaseConfig);
       db = firebase.firestore();
     } catch (e) {
-      console.warn("Firestore running in localized mode.");
+      console.warn("Firestore running in isolated mode.");
     }
 
     const DataStore = {
-      // جلب بيانات الأدمن المشفرة فقط من فايربيز دون تخزين أي نص صريح في الكود
+      // تم التعديل لضمان وجود حساب أدمن افتراضي فوري
       async getAdminVault() {
         if (db) {
           try {
             const docRef = db.collection("omer_system").doc("admin_config");
             const snap = await docRef.get();
             if (snap.exists) {
-              const data = snap.data();
-              localStorage.setItem("og_admin_vault_cache", JSON.stringify(data));
-              return data;
+              return snap.data();
             }
           } catch (e) {}
         }
-        
         const cached = JSON.parse(localStorage.getItem("og_admin_vault_cache") || "null");
-        if (cached && cached.username) return cached;
+        if (cached) return cached;
 
-        // في حال عدم وجود وثيقة مسبقة في فايربيز يتم إنشاؤها مشفرة فقط
-        const defaultVault = {
+        // حساب افتراضي فوري للأدمن
+        return {
           username: "admin",
-          passwordHash: CryptoSecurity.hashPassword("Omar2026"),
-          pinHash: CryptoSecurity.hashPassword("2030")
+          passwordHash: "123456",
+          pinHash: "1234"
         };
-
-        if (db) {
-          db.collection("omer_system").doc("admin_config").set(defaultVault).catch(()=>{});
-        }
-
-        return defaultVault;
       },
 
       seedInitialSampleData() {
-        if (State.students.length === 0) {
-          State.students = [{
-            uid: "st_sample_1",
-            name: "طالب تجريبي",
-            username: "student",
-            passwordHash: CryptoSecurity.hashPassword("123"),
-            target: "UAE_12_ADV",
-            phone: "0505144695",
-            parentPhone: "971505144695",
-            status: "ACTIVE",
-            plan: "1_MONTH",
-            expiresAt: "ساري",
-            certificateApproved: true,
-            xp: 250,
-            trophies: 2,
-            recentEvaluation: {
-              date: new Date().toLocaleDateString('ar-AE'),
-              score: "96",
-              grade: "ممتاز مع مرتبة الشرف 🌟",
-              homeworkStatus: "ملتزم تماماً بتسليم كافة الواجبات في موعدها ✓",
-              attendanceStatus: "حضور ممتاز وتفاعل نشط دائم",
-              period: "اختبار التفاضل والتكامل",
-              notes: "طالب متفوق يتمتع بمهارات تحليلية ممتازة وحل دقيق للمسائل المعقدة."
-            }
-          }];
-          localStorage.setItem("og_students", JSON.stringify(State.students));
-        }
-
         if (State.materials.length === 0) {
           State.materials = [
             {
@@ -2427,13 +2420,13 @@
             },
             {
               id: "mat_demo_2",
-              type: "IMAGES",
-              target: "SUD_12_SCI",
-              title: "مخطط قوانين الدائرة والهندسة التحليلية",
-              unit: "الوحدة الثانية: الهندسة التحليلية",
-              fileUrl: OFFICIAL_LOGO_URL,
-              sampleContent: "خريطة ذهنية لمعادلة الدائرة واستخراج المركز ونصف القطر.",
-              format: "صورة / مخطط",
+              type: "AI_PROMPT_LINK",
+              target: "ALL",
+              title: "محطة الذكاء الاصطناعي لحل مسائل الرياضيات (Claude / ChatGPT)",
+              unit: "أدوات الذكاء الاصطناعي",
+              fileUrl: "https://chatgpt.com",
+              sampleContent: "قم بحل المسألة الرياضية التالية بخطوات تفصيلية مع التبرير الرياضي الهندسي:",
+              format: "ذكاء اصطناعي AI",
               assignedStudentUids: []
             }
           ];
@@ -2455,37 +2448,69 @@
           }];
           localStorage.setItem("og_surveys", JSON.stringify(State.surveys));
         }
+
+        // إضافة طالب تجريبي تلقائياً لتجربة حسابات الطلاب
+        if (State.students.length === 0) {
+          State.students = [{
+            uid: "st_demo_1",
+            name: "طالب تجريبي",
+            username: "student",
+            passwordHash: "123456",
+            target: "UAE_12_ADV",
+            phone: "0500000000",
+            parentPhone: "0500000000",
+            status: "TRIAL",
+            plan: "3_DAYS_TRIAL",
+            trialEndTimestamp: Date.now() + (3 * 24 * 60 * 60 * 1000),
+            expiresAt: "تجربة (3 أيام)",
+            certificateApproved: true,
+            xp: 250,
+            trophies: 2,
+            recentEvaluation: null
+          }];
+          localStorage.setItem("og_students", JSON.stringify(State.students));
+        }
       },
 
       async syncAll() {
-        State.students = JSON.parse(localStorage.getItem("og_students") || "[]");
         State.materials = JSON.parse(localStorage.getItem("og_materials") || "[]");
         State.quizzes = JSON.parse(localStorage.getItem("og_quizzes") || "[]");
         State.activityLogs = JSON.parse(localStorage.getItem("og_logs") || "[]");
         State.surveys = JSON.parse(localStorage.getItem("og_surveys") || "[]");
         State.surveyResponses = JSON.parse(localStorage.getItem("og_survey_responses") || "[]");
+        State.students = JSON.parse(localStorage.getItem("og_students") || "[]");
 
         this.seedInitialSampleData();
-        await this.getAdminVault();
+
+        const savedToken = localStorage.getItem("og_session_token");
+        const savedUser = localStorage.getItem("og_session_user");
+
+        if (savedToken && savedUser) {
+          const validated = CryptoSecurity.validateSessionToken(savedToken, savedUser);
+          if (validated) {
+            if (validated.role === "ADMIN") {
+              State.currentUser = { uid: "admin_omer", name: "الأستاذ عمر (المشرف)", username: validated.username, role: "ADMIN" };
+              State.currentRoute = "ADMIN_DASHBOARD";
+              VoiceEngine.init("admin_omer");
+              this.listenToAllStudents();
+            } else {
+              State.currentUser = { uid: validated.uid, username: validated.username, role: "STUDENT", target: validated.target, name: validated.username };
+              State.currentRoute = "STUDENT_DASHBOARD";
+              VoiceEngine.init(validated.uid);
+              this.fetchCurrentStudentProfile(validated.uid);
+            }
+          } else {
+            localStorage.removeItem("og_session_token");
+            localStorage.removeItem("og_session_user");
+          }
+        }
 
         if (db) {
-          db.collection("omer_students").onSnapshot(snapshot => {
-            if (!snapshot.empty) {
-              State.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              localStorage.setItem("og_students", JSON.stringify(State.students));
-              if (["ADMIN_STUDENTS", "ADMIN_DASHBOARD", "ARENA_VIEW"].includes(State.currentRoute)) {
-                UI.render();
-              }
-            }
-          }, err => console.warn(err));
-
           db.collection("omer_materials").onSnapshot(snapshot => {
             if (!snapshot.empty) {
               State.materials = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
               localStorage.setItem("og_materials", JSON.stringify(State.materials));
-              if (["STUDENT_DASHBOARD", "ADMIN_CONTENT_MANAGER"].includes(State.currentRoute)) {
-                UI.render();
-              }
+              if (["STUDENT_DASHBOARD", "ADMIN_CONTENT_MANAGER"].includes(State.currentRoute)) UI.render();
             }
           }, err => console.warn(err));
 
@@ -2511,34 +2536,33 @@
               if (State.currentRoute === "ADMIN_SURVEYS") UI.render();
             }
           }, err => console.warn(err));
+        }
+      },
 
-          db.collection("omer_logs").onSnapshot(snapshot => {
+      listenToAllStudents() {
+        if (db && State.currentUser?.role === "ADMIN") {
+          db.collection("omer_students").onSnapshot(snapshot => {
             if (!snapshot.empty) {
-              State.activityLogs = snapshot.docs.map(doc => doc.data());
-              localStorage.setItem("og_logs", JSON.stringify(State.activityLogs));
+              State.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+              localStorage.setItem("og_students", JSON.stringify(State.students));
+              if (["ADMIN_STUDENTS", "ADMIN_DASHBOARD", "ARENA_VIEW"].includes(State.currentRoute)) {
+                UI.render();
+              }
             }
           }, err => console.warn(err));
         }
+      },
 
-        const savedToken = localStorage.getItem("og_session_token");
-        if (savedToken) {
-          const validated = CryptoSecurity.validateSessionToken(savedToken);
-          if (validated) {
-            if (validated.role === "ADMIN") {
-              State.currentUser = { uid: "admin_omer", name: "الأستاذ عمر (المشرف)", username: validated.username || "admin", role: "ADMIN" };
-              State.currentRoute = "ADMIN_DASHBOARD";
-              VoiceEngine.init("admin_omer");
-            } else {
-              const student = State.students.find(s => s.uid === validated.uid);
-              if (student) {
-                State.currentUser = { ...student, role: "STUDENT" };
-                State.currentRoute = "STUDENT_DASHBOARD";
-                VoiceEngine.init(student.uid);
-              }
+      async fetchCurrentStudentProfile(uid) {
+        if (db) {
+          try {
+            const doc = await db.collection("omer_students").doc(uid).get();
+            if (doc.exists) {
+              const data = doc.data();
+              State.currentUser = { ...data, role: "STUDENT" };
+              UI.render();
             }
-          } else {
-            localStorage.removeItem("og_session_token");
-          }
+          } catch(e){}
         }
       },
 
@@ -2594,13 +2618,13 @@
           case 'ARTICLES': return `<span class="badge badge-article"><i class="fa-solid fa-file-lines"></i> شرح كتابي مباشر</span>`;
           case 'IMAGES': return `<span class="badge badge-img"><i class="fa-solid fa-image"></i> صورة / مخطط</span>`;
           case 'HTML_EMBED': return `<span class="badge badge-html"><i class="fa-solid fa-code"></i> تفاعلي HTML</span>`;
-          case 'AI_PROMPT_LINK': return `<span class="badge badge-ai"><i class="fa-solid fa-robot"></i> ذكاء اصطناعي AI</span>`;
+          case 'AI_PROMPT_LINK': return `<span class="badge badge-ai"><i class="fa-solid fa-robot"></i> متصفح الذكاء الاصطناعي</span>`;
           case 'POWERPOINTS': return `<span class="badge badge-ppt"><i class="fa-solid fa-file-powerpoint"></i> عرض PPT</span>`;
           case 'WORD_DOCS': return `<span class="badge badge-word"><i class="fa-solid fa-file-word"></i> مستند Word</span>`;
           case 'WORKSHEETS': return `<span class="badge badge-curriculum"><i class="fa-solid fa-file-pdf"></i> مذكرة PDF</span>`;
           case 'EXAMS': return `<span class="badge badge-tag"><i class="fa-solid fa-file-shield"></i> نموذج امتحاني</span>`;
           case 'REVISIONS': return `<span class="badge badge-trial"><i class="fa-solid fa-star"></i> مراجعة نهائية</span>`;
-          default: return `<span class="badge badge-tag">${item.format || 'مادة تعليمية'}</span>`;
+          default: return `<span class="badge badge-tag">${escapeHTML(item.format) || 'مادة تعليمية'}</span>`;
         }
       },
 
@@ -2624,7 +2648,7 @@
                 <span class="badge badge-xp"><i class="fa-solid fa-trophy"></i> XP ${State.currentUser.xp || 100}</span>
               `}
               <span style="font-size:0.82rem; font-weight:700; color:var(--gold-orange);">
-                <i class="fa-solid fa-user-graduate"></i> ${State.currentUser.name}
+                <i class="fa-solid fa-user-graduate"></i> ${escapeHTML(State.currentUser.name)}
               </span>
               <button class="btn btn-gold" style="padding:4px 10px; font-size:0.75rem; min-height:34px;" onclick="App.logout()">
                 <i class="fa-solid fa-power-off"></i> خروج
@@ -2677,7 +2701,7 @@
                   <i class="fa-solid fa-ban" style="font-size: 46px; color: var(--danger); margin-bottom: 12px;"></i>
                   <h3 style="color: var(--navy-dark); margin-bottom: 6px;">تم تعليق المحاولة مؤقتاً</h3>
                   <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">
-                    انتظر <strong>${bruteStatus.remainingSec}</strong> ثانية للمحاولة مجدداً للحماية.
+                    يرجى الانتظار <strong>${bruteStatus.remainingSec}</strong> ثانية للمحاولة مجدداً للحماية.
                   </p>
                   <button class="btn btn-secondary" onclick="UI.render()">تحديث</button>
                 </div>
@@ -2786,7 +2810,6 @@
           const userTarget = user.target;
           const q = State.studentSearchQuery.toLowerCase().trim();
           
-          // حصر المواد المصرح للطالب برؤيتها فقط (المنهاج + التخصيص الفردي)
           const filteredMaterials = State.materials.filter(item => {
             const matchTarget = item.target === userTarget || item.target === 'ALL';
             const matchStudent = !item.assignedStudentUids || item.assignedStudentUids.length === 0 || item.assignedStudentUids.includes(user.uid);
@@ -2818,7 +2841,7 @@
                 <div>
                   <h2 style="color: var(--navy-dark); font-weight: 800;">أهلاً بك في منصة الأستاذ عمر 📐</h2>
                   <p style="color: var(--text-muted); font-size: 0.85rem;">
-                    الطالب: <strong>${user.name}</strong> | <span class="badge badge-curriculum">${UI.getTargetLabel(user.target)}</span>
+                    الطالب: <strong>${escapeHTML(user.name)}</strong> | <span class="badge badge-curriculum">${UI.getTargetLabel(user.target)}</span>
                   </p>
                 </div>
                 <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
@@ -2847,28 +2870,31 @@
                   <span style="font-weight:800; color:var(--navy-dark); font-size:0.9rem;">
                     <i class="fa-solid fa-file-signature" style="color:var(--gold-deep);"></i> تقرير المتابعة الرياضية (الأستاذ عمر قاسم)
                   </span>
-                  <span class="badge badge-active">${user.recentEvaluation.grade}</span>
+                  <span class="badge badge-active">${escapeHTML(user.recentEvaluation.grade)}</span>
                 </div>
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:8px; font-size:0.82rem; margin-bottom:8px;">
-                  <div><strong>الدرجة المحرزة:</strong> ${user.recentEvaluation.score}%</div>
-                  <div><strong>الواجبات:</strong> ${user.recentEvaluation.homeworkStatus || 'ملتزم'}</div>
-                  <div><strong>المواظبة:</strong> ${user.recentEvaluation.attendanceStatus || 'ممتازة'}</div>
-                  <div><strong>الفترة:</strong> ${user.recentEvaluation.period || 'تقييم شامل'}</div>
+                  <div><strong>الدرجة المحرزة:</strong> ${escapeHTML(user.recentEvaluation.score)}%</div>
+                  <div><strong>الواجبات:</strong> ${escapeHTML(user.recentEvaluation.homeworkStatus || 'ملتزم')}</div>
+                  <div><strong>المواظبة:</strong> ${escapeHTML(user.recentEvaluation.attendanceStatus || 'ممتازة')}</div>
+                  <div><strong>الفترة:</strong> ${escapeHTML(user.recentEvaluation.period || 'تقييم شامل')}</div>
                 </div>
                 <div style="background:var(--white); padding:10px; border-radius:var(--radius-sm); border-right:3px solid var(--gold-orange); font-size:0.84rem; color:var(--navy-dark);">
-                  <strong>توجيه وملاحظة الأستاذ عمر:</strong> ${user.recentEvaluation.notes}
+                  <strong>توجيه وملاحظة الأستاذ عمر:</strong> ${escapeHTML(user.recentEvaluation.notes)}
                 </div>
               </div>
             ` : ''}
 
             <div class="search-box-wrapper">
               <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" placeholder="🔍 ابحث في دروسك ومذكراتك الرياضية..." value="${State.studentSearchQuery}" oninput="App.handleStudentSearch(this.value)">
+              <input type="text" placeholder="🔍 ابحث في دروسك ومذكراتك الرياضية..." value="${escapeHTML(State.studentSearchQuery)}" oninput="App.handleStudentSearch(this.value)">
             </div>
 
             <div class="nav-tabs-wrapper">
               <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')">
                 <i class="fa-solid fa-circle-play"></i> الفيديوهات
+              </button>
+              <button class="btn ${State.activeContentTab === 'AI_PROMPT_LINK' ? 'btn-ai' : 'btn-secondary'}" onclick="App.setContentTab('AI_PROMPT_LINK')">
+                <i class="fa-solid fa-robot"></i> متصفح الذكاء الاصطناعي (Claude / ChatGPT)
               </button>
               <button class="btn ${State.activeContentTab === 'PODCASTS' ? 'btn-purple' : 'btn-secondary'}" onclick="App.setContentTab('PODCASTS')">
                 <i class="fa-solid fa-podcast"></i> البودكاست 🎙️
@@ -2878,9 +2904,6 @@
               </button>
               <button class="btn ${State.activeContentTab === 'HTML_EMBED' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('HTML_EMBED')">
                 <i class="fa-solid fa-code"></i> تفاعلي HTML
-              </button>
-              <button class="btn ${State.activeContentTab === 'AI_PROMPT_LINK' ? 'btn-ai' : 'btn-secondary'}" onclick="App.setContentTab('AI_PROMPT_LINK')">
-                <i class="fa-solid fa-robot"></i> الذكاء الاصطناعي (Claude/GPT)
               </button>
               <button class="btn ${State.activeContentTab === 'ARTICLES' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('ARTICLES')">
                 <i class="fa-solid fa-book-open"></i> شروحات كتابية 📝
@@ -2912,7 +2935,7 @@
                   ${filteredQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:25px;">لا توجد كويزات متاحة لصفك حالياً.</p>' : filteredQuizzes.map(qz => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--gold-light); border:1.5px solid var(--gold-subtle); border-radius:var(--radius-md); flex-wrap:wrap; gap:8px;">
                       <div>
-                        <strong style="font-size:0.95rem; display:block; color:var(--navy-dark);">${qz.title}</strong>
+                        <strong style="font-size:0.95rem; display:block; color:var(--navy-dark);">${escapeHTML(qz.title)}</strong>
                         <span style="font-size:0.78rem; color:var(--text-muted);">${qz.questions ? qz.questions.length : 0} أسئلة • تصحيح وشرح فوري</span>
                       </div>
                       <button class="btn btn-gold" style="padding:6px 14px; font-size:0.8rem; min-height:36px;" onclick="App.startInteractiveQuiz('${qz.id}')">
@@ -2936,11 +2959,11 @@
                         <div>
                           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
                             ${UI.getMediaTypeBadge(item)}
-                            <span style="font-size:0.72rem; color:var(--text-muted);">${item.unit || 'عام'}</span>
+                            <span style="font-size:0.72rem; color:var(--text-muted);">${escapeHTML(item.unit) || 'عام'}</span>
                           </div>
-                          <h4 style="font-size:0.92rem; margin-bottom:6px; color:var(--navy-dark);">${item.title}</h4>
+                          <h4 style="font-size:0.92rem; margin-bottom:6px; color:var(--navy-dark);">${escapeHTML(item.title)}</h4>
                           <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
-                            ${item.sampleContent ? item.sampleContent.substring(0, 80) + '...' : 'مادة دراسية معتمدة من الأستاذ عمر.'}
+                            ${escapeHTML(item.sampleContent ? item.sampleContent.substring(0, 80) + '...' : 'مادة دراسية معتمدة من الأستاذ عمر.')}
                           </p>
                         </div>
                         
@@ -2963,7 +2986,7 @@
                             </button>
                           ` : item.type === 'AI_PROMPT_LINK' ? `
                             <button class="btn btn-ai" style="width:100%; font-size:0.8rem;" onclick="App.openAiToolLink('${item.id}')">
-                              <i class="fa-solid fa-robot"></i> تشغيل محطة الذكاء الاصطناعي
+                              <i class="fa-solid fa-robot"></i> فتح متصفح الذكاء الاصطناعي الداخلي
                             </button>
                           ` : item.type === 'ARTICLES' ? `
                             <button class="btn btn-navy" style="width:100%; font-size:0.8rem;" onclick="App.openArticleViewer('${item.id}')">
@@ -3024,7 +3047,7 @@
                           ${idx + 1}
                         </div>
                         <div>
-                          <strong style="color:var(--navy-dark); font-size:0.95rem; display:block;">${st.name}</strong>
+                          <strong style="color:var(--navy-dark); font-size:0.95rem; display:block;">${escapeHTML(st.name)}</strong>
                           <span style="font-size:0.75rem; color:var(--text-muted);">${UI.getTargetLabel(st.target)}</span>
                         </div>
                       </div>
@@ -3075,13 +3098,13 @@
           return `
             <div class="quiz-gamified-box">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <span style="font-weight:800; color:var(--navy-dark); font-size:1rem;">${quiz.title}</span>
+                <span style="font-weight:800; color:var(--navy-dark); font-size:1rem;">${escapeHTML(quiz.title)}</span>
                 <span class="badge badge-curriculum">السؤال ${State.activeQuestionIndex + 1} من ${totalQ}</span>
               </div>
               <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width: ${progressPercent}%;"></div></div>
               <div class="quiz-card-question">
                 <h3 style="font-size:1.05rem; color:var(--navy-dark); margin-bottom:14px; font-weight:800;">
-                  ${State.activeQuestionIndex + 1}. ${q.text}
+                  ${State.activeQuestionIndex + 1}. ${escapeHTML(q.text)}
                 </h3>
 
                 ${q.imageUrl ? `
@@ -3090,9 +3113,9 @@
                   </div>
                 ` : ''}
 
-                <div class="interactive-option" id="opt_1" onclick="App.chooseOption(1)"><span>${q.option1}</span><div class="option-letter">أ</div></div>
-                <div class="interactive-option" id="opt_2" onclick="App.chooseOption(2)"><span>${q.option2}</span><div class="option-letter">ب</div></div>
-                <div class="interactive-option" id="opt_3" onclick="App.chooseOption(3)"><span>${q.option3}</span><div class="option-letter">ج</div></div>
+                <div class="interactive-option" id="opt_1" onclick="App.chooseOption(1)"><span>${escapeHTML(q.option1)}</span><div class="option-letter">أ</div></div>
+                <div class="interactive-option" id="opt_2" onclick="App.chooseOption(2)"><span>${escapeHTML(q.option2)}</span><div class="option-letter">ب</div></div>
+                <div class="interactive-option" id="opt_3" onclick="App.chooseOption(3)"><span>${escapeHTML(q.option3)}</span><div class="option-letter">ج</div></div>
                 <div id="aiExplanationBox" style="display:none; margin-top:14px; padding:12px; background:var(--gold-light); border-right:3px solid var(--gold-orange); border-radius:var(--radius-sm); font-size:0.85rem;">
                   <strong>طريقة الحل الرياضية:</strong>
                   <p id="aiExplanationText" style="margin-top:4px; color:var(--navy-dark); line-height:1.6;"></p>
@@ -3116,49 +3139,51 @@
 
           return `
             <div style="max-width:680px; margin:20px auto; padding: 0 10px;">
-              <div class="card" style="border-top:4px solid var(--gold-orange);">
+              <div class="card" style="border-top:4px solid var(--gold-orange); padding:20px 14px;">
                 <div style="text-align:center; margin-bottom:18px;">
                   <i class="fa-solid fa-square-poll-vertical" style="font-size:42px; color:var(--gold-orange); margin-bottom:8px;"></i>
-                  <h2 style="color:var(--navy-dark); font-weight:900; font-size:1.35rem;">${s.title}</h2>
-                  <p style="font-size:0.85rem; color:var(--text-muted);">منصة الأستاذ عمر قاسم (Omer Gasim) – استطلاع الرأي الأكاديمي</p>
+                  <h2 style="color:var(--navy-dark); font-weight:900; font-size:1.35rem;">${escapeHTML(s.title)}</h2>
+                  <p style="font-size:0.85rem; color:var(--text-muted);">منصة الأستاذ عمر قاسم – استطلاع الرأي الأكاديمي</p>
                 </div>
 
                 <form onsubmit="App.handleSubmitDynamicSurveyResponse(event)">
                   <div class="form-group">
                     <label>الاسم الكامل (أو كتابة "طالب"):</label>
-                    <input type="text" id="surveyRespName" required placeholder="أدخل اسمك الكريم" value="${State.currentUser ? State.currentUser.name : ''}">
+                    <input type="text" id="surveyRespName" required placeholder="أدخل اسمك الكريم" value="${State.currentUser ? escapeHTML(State.currentUser.name) : ''}">
                   </div>
 
                   <div style="display:flex; flex-direction:column; gap:14px; margin-top:14px;">
                     ${questions.map((q, idx) => `
-                      <div class="card" style="margin:0; background:var(--gold-light); border:1.5px solid var(--gold-subtle); padding:16px;">
+                      <div class="card" style="margin:0; background:var(--gold-light); border:1.5px solid var(--gold-subtle); padding:14px;">
                         <strong style="color:var(--navy-dark); font-size:0.92rem; display:block; margin-bottom:10px;">
-                          ${idx + 1}. ${q.text}
+                          ${idx + 1}. ${escapeHTML(q.text)}
                         </strong>
 
                         ${q.type === 'RATING' ? `
-                          <div class="survey-star-rating">
-                            <input type="radio" id="star5_${idx}" name="q_ans_${idx}" value="5" checked><label for="star5_${idx}"><i class="fa-solid fa-star"></i></label>
-                            <input type="radio" id="star4_${idx}" name="q_ans_${idx}" value="4"><label for="star4_${idx}"><i class="fa-solid fa-star"></i></label>
-                            <input type="radio" id="star3_${idx}" name="q_ans_${idx}" value="3"><label for="star3_${idx}"><i class="fa-solid fa-star"></i></label>
-                            <input type="radio" id="star2_${idx}" name="q_ans_${idx}" value="2"><label for="star2_${idx}"><i class="fa-solid fa-star"></i></label>
-                            <input type="radio" id="star1_${idx}" name="q_ans_${idx}" value="1"><label for="star1_${idx}"><i class="fa-solid fa-star"></i></label>
+                          <div style="display:flex; justify-content:center;">
+                            <div class="survey-star-rating">
+                              <input type="radio" id="star5_${idx}" name="q_ans_${idx}" value="5" checked><label for="star5_${idx}"><i class="fa-solid fa-star"></i></label>
+                              <input type="radio" id="star4_${idx}" name="q_ans_${idx}" value="4"><label for="star4_${idx}"><i class="fa-solid fa-star"></i></label>
+                              <input type="radio" id="star3_${idx}" name="q_ans_${idx}" value="3"><label for="star3_${idx}"><i class="fa-solid fa-star"></i></label>
+                              <input type="radio" id="star2_${idx}" name="q_ans_${idx}" value="2"><label for="star2_${idx}"><i class="fa-solid fa-star"></i></label>
+                              <input type="radio" id="star1_${idx}" name="q_ans_${idx}" value="1"><label for="star1_${idx}"><i class="fa-solid fa-star"></i></label>
+                            </div>
                           </div>
                         ` : q.type === 'CHOICE' ? `
                           <div style="display:flex; flex-direction:column; gap:8px;">
                             ${(q.options || []).map((opt, oIdx) => `
-                              <label style="display:flex; align-items:center; gap:8px; font-size:0.88rem; cursor:pointer;">
-                                <input type="radio" name="q_ans_${idx}" value="${opt}" ${oIdx === 0 ? 'checked' : ''}>
-                                <span>${opt}</span>
+                              <label style="display:flex; align-items:center; gap:8px; font-size:0.88rem; cursor:pointer; background:#FFF; padding:8px 12px; border-radius:6px; border:1px solid #E2E8F0;">
+                                <input type="radio" name="q_ans_${idx}" value="${escapeHTML(opt)}" ${oIdx === 0 ? 'checked' : ''}>
+                                <span>${escapeHTML(opt)}</span>
                               </label>
                             `).join('')}
                           </div>
                         ` : q.type === 'BOOLEAN' ? `
-                          <div style="display:flex; gap:16px;">
-                            <label style="display:flex; align-items:center; gap:8px; font-size:0.88rem; cursor:pointer;">
+                          <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                            <label style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.88rem; cursor:pointer; background:#FFF; padding:10px; border-radius:6px; border:1px solid #E2E8F0;">
                               <input type="radio" name="q_ans_${idx}" value="نعم" checked> نعم ✓
                             </label>
-                            <label style="display:flex; align-items:center; gap:8px; font-size:0.88rem; cursor:pointer;">
+                            <label style="flex:1; display:flex; align-items:center; justify-content:center; gap:8px; font-size:0.88rem; cursor:pointer; background:#FFF; padding:10px; border-radius:6px; border:1px solid #E2E8F0;">
                               <input type="radio" name="q_ans_${idx}" value="لا"> لا ✗
                             </label>
                           </div>
@@ -3264,7 +3289,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
               <div>
                 <h2 style="color: var(--navy-dark); font-weight: 800;">نظام الاستبيانات واستطلاعات الرأي الشامل (الأستاذ عمر)</h2>
-                <p style="font-size:0.78rem; color:var(--text-muted);">إنشاء استبيانات بعدد أسئلة غير محدود، توليد روابط حقيقية أونلاين، ومتابعة النتائج لحظياً</p>
+                <p style="font-size:0.78rem; color:var(--text-muted);">تصميم تفاعلي متجاوب 100% مع الهواتف دون تداخل للعناصر ومتابعة النتائج لحظياً</p>
               </div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
                 <button class="btn btn-gold" style="padding:6px 12px; font-size:0.78rem;" onclick="App.openCreateSurveyModal()">
@@ -3277,7 +3302,7 @@
             </div>
 
             <div class="survey-mobile-grid">
-              <!-- قائمة الاستبيانات -->
+              <!-- قائمة الاستبيانات المتاحة -->
               <div class="card" style="margin:0;">
                 <h4 style="color:var(--navy-dark); margin-bottom:12px; font-size:0.95rem;">
                   <i class="fa-solid fa-list-check"></i> الاستبيانات المتاحة (${State.surveys.length})
@@ -3288,22 +3313,22 @@
                   ` : State.surveys.map(s => {
                     const isSelected = selectedSurvey && selectedSurvey.id === s.id;
                     const respCount = State.surveyResponses.filter(r => r.surveyId === s.id).length;
-                    const qCount = s.questions ? s.questions.length : (s.q1 ? 3 : 0);
+                    const qCount = s.questions ? s.questions.length : 0;
                     return `
                       <div style="padding:12px; border-radius:var(--radius-sm); border:1.5px solid ${isSelected ? 'var(--gold-orange)' : '#E2E8F0'}; background:${isSelected ? 'var(--gold-light)' : '#FFF'}; cursor:pointer; transition:var(--transition);" onclick="App.selectSurveyForResults('${s.id}')">
-                        <strong style="font-size:0.88rem; color:var(--navy-dark); display:block; margin-bottom:4px;">${s.title}</strong>
+                        <strong style="font-size:0.88rem; color:var(--navy-dark); display:block; margin-bottom:4px;">${escapeHTML(s.title)}</strong>
                         <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;">
-                          <span>${UI.getTargetLabel(s.target)}</span>
+                          <span>${escapeHTML(UI.getTargetLabel(s.target))}</span>
                           <span>${qCount} أسئلة • ${respCount} استجابة</span>
                         </div>
-                        <div style="display:flex; justify-content:space-between; align-items:center; gap:6px;">
-                          <button class="btn btn-gold" style="padding:3px 10px; font-size:0.72rem; min-height:28px; flex:1;" onclick="event.stopPropagation(); App.copySurveyLink('${s.id}')">
-                            <i class="fa-solid fa-link"></i> نسخ الرابط الحقيقي
+                        <div style="display:flex; justify-content:space-between; align-items:center; gap:6px; flex-wrap:wrap;">
+                          <button class="btn btn-gold" style="padding:4px 8px; font-size:0.72rem; min-height:28px; flex:1;" onclick="event.stopPropagation(); App.copySurveyLink('${s.id}')">
+                            <i class="fa-solid fa-link"></i> نسخ الرابط
                           </button>
-                          <button class="btn btn-navy" style="padding:3px 8px; font-size:0.72rem; min-height:28px;" onclick="event.stopPropagation(); App.previewSurvey('${s.id}')" title="معاينة الاستبيان كما يراه الطالب">
-                            <i class="fa-solid fa-eye"></i>
+                          <button class="btn btn-navy" style="padding:4px 8px; font-size:0.72rem; min-height:28px;" onclick="event.stopPropagation(); App.previewSurvey('${s.id}')" title="معاينة">
+                            <i class="fa-solid fa-eye"></i> معاينة
                           </button>
-                          <button class="btn btn-danger" style="padding:3px 8px; font-size:0.72rem; min-height:28px;" onclick="event.stopPropagation(); App.deleteSurvey('${s.id}')" title="حذف">
+                          <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem; min-height:28px;" onclick="event.stopPropagation(); App.deleteSurvey('${s.id}')" title="حذف">
                             <i class="fa-solid fa-trash"></i>
                           </button>
                         </div>
@@ -3313,47 +3338,45 @@
                 </div>
               </div>
 
-              <!-- لوحة النتائج والردود -->
+              <!-- لوحة نتائج وتحليل الاستبيان المحدد -->
               <div class="card" style="margin:0;">
                 ${selectedSurvey ? `
                   <div style="border-bottom:1.5px solid #E2E8F0; padding-bottom:12px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                     <div>
-                      <h3 style="color:var(--navy-dark); font-size:1.15rem; font-weight:800;">${selectedSurvey.title}</h3>
+                      <h3 style="color:var(--navy-dark); font-size:1.15rem; font-weight:800;">${escapeHTML(selectedSurvey.title)}</h3>
                       <span style="font-size:0.78rem; color:var(--text-muted);">
-                        تاريخ الإنشاء: ${selectedSurvey.createdAt || 'اليوم'} | عدد الأسئلة: <strong>${questions.length}</strong> | إجمالي الردود المستلمة: <strong>${responses.length}</strong>
+                        تاريخ الإنشاء: ${escapeHTML(selectedSurvey.createdAt || 'اليوم')} | عدد الأسئلة: <strong>${questions.length}</strong> | إجمالي الردود: <strong>${responses.length}</strong>
                       </span>
                     </div>
-                    <button class="btn btn-whatsapp" style="padding:5px 12px; font-size:0.76rem;" onclick="App.shareSurveyWhatsApp('${selectedSurvey.id}')">
-                      <i class="fa-brands fa-whatsapp"></i> مشاركة الرابط عبر واتساب
+                    <button class="btn btn-whatsapp" style="padding:6px 12px; font-size:0.76rem;" onclick="App.shareSurveyWhatsApp('${selectedSurvey.id}')">
+                      <i class="fa-brands fa-whatsapp"></i> مشاركة عبر واتساب
                     </button>
                   </div>
 
                   <h4 style="color:var(--navy-dark); font-size:0.9rem; margin-bottom:10px;">
-                    <i class="fa-solid fa-chart-pie" style="color:var(--gold-orange);"></i> تحليل أسئلة الاستبيان وإجابات الطلاب:
+                    <i class="fa-solid fa-chart-pie" style="color:var(--gold-orange);"></i> هيكل الأسئلة المعتمدة:
                   </h4>
                   
-                  ${questions.length === 0 ? `
-                    <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:16px;">تم إنشاء هذا الاستبيان بالنمط القياسي البسيط.</p>
-                  ` : `
-                    <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:18px;">
-                      ${questions.map((q, qIdx) => `
-                        <div style="background:var(--bg-light); border:1px solid #CBD5E1; border-radius:var(--radius-sm); padding:10px 14px;">
-                          <div style="font-weight:700; font-size:0.85rem; color:var(--navy-dark); margin-bottom:6px;">
-                            ${qIdx + 1}. ${q.text}
-                            <span class="badge badge-curriculum" style="font-size:0.65rem; margin-right:6px;">
-                              ${q.type === 'RATING' ? 'تقييم نجوم' : (q.type === 'CHOICE' ? 'اختيار متعدد' : (q.type === 'BOOLEAN' ? 'نعم/لا' : 'إجابة نصية'))}
-                            </span>
-                          </div>
-                          <div style="font-size:0.78rem; color:var(--text-muted);">
-                            ${q.type === 'CHOICE' ? `الخيارات المحددة: ${(q.options || []).join(' | ')}` : ''}
-                          </div>
+                  <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:18px;">
+                    ${questions.map((q, qIdx) => `
+                      <div style="background:var(--bg-light); border:1px solid #CBD5E1; border-radius:var(--radius-sm); padding:10px 14px;">
+                        <div style="font-weight:700; font-size:0.85rem; color:var(--navy-dark); margin-bottom:6px;">
+                          ${qIdx + 1}. ${escapeHTML(q.text)}
+                          <span class="badge badge-curriculum" style="font-size:0.65rem; margin-right:6px;">
+                            ${q.type === 'RATING' ? 'تقييم نجوم' : (q.type === 'CHOICE' ? 'اختيار متعدد' : (q.type === 'BOOLEAN' ? 'نعم/لا' : 'إجابة نصية'))}
+                          </span>
                         </div>
-                      `).join('')}
-                    </div>
-                  `}
+                        ${q.type === 'CHOICE' ? `
+                          <div style="font-size:0.78rem; color:var(--text-muted);">
+                            الخيارات المتاحة: ${(q.options || []).map(o => escapeHTML(o)).join(' | ')}
+                          </div>
+                        ` : ''}
+                      </div>
+                    `).join('')}
+                  </div>
 
                   <h4 style="color:var(--navy-dark); font-size:0.9rem; margin-bottom:8px;">
-                    <i class="fa-solid fa-users"></i> تفاصيل استجابات الطلاب وأولياء الأمور (${responses.length}):
+                    <i class="fa-solid fa-users"></i> استجابات الطلاب وأولياء الأمور المستلمة (${responses.length}):
                   </h4>
                   <div class="table-container">
                     <table>
@@ -3366,28 +3389,22 @@
                       </thead>
                       <tbody>
                         ${responses.length === 0 ? `
-                          <tr><td colspan="3" style="text-align:center; padding:22px; color:var(--text-muted);">لم يتم استلام أي ردود لهذا الاستبيان حتى الآن. انسخ الرابط وشاركه مع طلابك!</td></tr>
+                          <tr><td colspan="3" style="text-align:center; padding:22px; color:var(--text-muted);">لم يتم استلام أي ردود لهذا الاستبيان حتى الآن.</td></tr>
                         ` : responses.map(r => `
                           <tr>
-                            <td><strong>${r.respondentName}</strong></td>
-                            <td><small>${r.date || 'اليوم'}</small></td>
+                            <td><strong>${escapeHTML(r.respondentName)}</strong></td>
+                            <td><small>${escapeHTML(r.date || 'اليوم')}</small></td>
                             <td>
                               ${r.answers && Array.isArray(r.answers) ? `
                                 <div style="display:flex; flex-direction:column; gap:4px; font-size:0.78rem;">
                                   ${r.answers.map((ans, aIdx) => `
                                     <div>
                                       <strong style="color:var(--gold-deep);">س${aIdx + 1}:</strong> 
-                                      <span>${ans.value}</span>
+                                      <span>${escapeHTML(ans.value)}</span>
                                     </div>
                                   `).join('')}
                                 </div>
-                              ` : `
-                                <div style="font-size:0.78rem;">
-                                  <div><strong>س1:</strong> ⭐ ${r.q1Rating || '-'} / 5</div>
-                                  <div><strong>س2:</strong> ${r.q2Choice || '-'}</div>
-                                  <div><strong>س3:</strong> ${r.q3Notes || '-'}</div>
-                                </div>
-                              `}
+                              ` : '<span style="color:#94A3B8;">استجابة قياسية سابقة</span>'}
                             </td>
                           </tr>
                         `).join('')}
@@ -3395,7 +3412,7 @@
                     </table>
                   </div>
                 ` : `
-                  <p style="color:var(--text-muted); text-align:center; padding:45px;">يرجى اختيار أو إنشاء استبيان لعرض النتائج والروابط.</p>
+                  <p style="color:var(--text-muted); text-align:center; padding:45px;">يرجى اختيار أو إنشاء استبيان لعرض النتائج.</p>
                 `}
               </div>
             </div>
@@ -3411,7 +3428,7 @@
               </button>
             </div>
             <div class="card">
-              <h3 style="color: var(--navy-dark); margin-bottom: 12px;"><i class="fa-solid fa-plus-circle"></i> إضافة مسألة كويز تفاعلية مع إمكانية إرفاق صورة</h3>
+              <h3 style="color: var(--navy-dark); margin-bottom: 12px;"><i class="fa-solid fa-plus-circle"></i> إضافة مسألة كويز تفاعلية</h3>
               <form onsubmit="App.handleCreateQuizQuestion(event)">
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
                   <div class="form-group"><label>المنهاج والصف المستهدف</label><select id="quizTarget" required>${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}</select></div>
@@ -3474,10 +3491,10 @@
                       <label>نوع المحتوى</label>
                       <select id="contentType" required onchange="App.toggleContentFields()">
                         <option value="VIDEOS">فيديو مسجل (YouTube / Drive / MP4 / HLS)</option>
+                        <option value="AI_PROMPT_LINK">متصفح ذكاء اصطناعي مدمج (Claude / ChatGPT Prompt)</option>
                         <option value="PODCASTS">بودكاست وشرح صوتي (MP3)</option>
                         <option value="IMAGES">صورة / مخطط ومذكرة سبورة (JPG/PNG)</option>
                         <option value="HTML_EMBED">ملف / أداة تفاعلية HTML (GeoGebra / Desmos)</option>
-                        <option value="AI_PROMPT_LINK">محطة ذكاء اصطناعي (Claude / ChatGPT Prompt)</option>
                         <option value="ARTICLES">شرح كتابي مباشر (بدون روابط)</option>
                         <option value="POWERPOINTS">عرض باوربوينت (PPT / PPTX)</option>
                         <option value="WORD_DOCS">مستند وورد (DOC / DOCX داخلي)</option>
@@ -3491,18 +3508,16 @@
                     <div class="form-group"><label>الوحدة / الفصل</label><input type="text" id="contentUnit" required></div>
                   </div>
 
-                  <!-- خيار تخصيص المادة لطالب محدد أو لكافة طلاب الصف -->
                   <div class="form-group" style="background:var(--bg-light); padding:10px; border-radius:var(--radius-sm); border:1px solid #CBD5E1;">
                     <label style="color:var(--gold-deep);"><i class="fa-solid fa-user-lock"></i> تخصيص الوصول والأمان (اختياري):</label>
                     <select id="contentAssignedStudent" style="margin-top:4px;">
                       <option value="">متاح لكافة طلاب الصف المختار ✓</option>
-                      ${State.students.map(s => `<option value="${s.uid}">${s.name} (${s.username}) - ${UI.getTargetLabel(s.target)}</option>`).join('')}
+                      ${State.students.map(s => `<option value="${s.uid}">${escapeHTML(s.name)} (${escapeHTML(s.username)})</option>`).join('')}
                     </select>
-                    <small style="color:var(--text-muted); display:block; margin-top:4px;">عند تحديد طالب، لن يتمكن أي طالب آخر في المنصة من رؤية هذا المحتوى لضمان الخصوصية التامة.</small>
                   </div>
 
                   <div class="form-group" id="fileUploadHelperGroup">
-                    <label><i class="fa-solid fa-cloud-arrow-up"></i> رفع صورة أو مستند Word أو ملف HTML من جهازك مباشرة (اختياري)</label>
+                    <label><i class="fa-solid fa-cloud-arrow-up"></i> رفع صورة أو مستند Word أو ملف HTML من جهازك مباشرة</label>
                     <input type="file" id="contentFileInput" accept="image/*,.html,.htm,.docx,.doc" onchange="App.handleFileUpload(event)" style="padding:6px; background:var(--bg-light);">
                   </div>
 
@@ -3515,7 +3530,7 @@
                   </div>
 
                   <div class="form-group" id="textFieldGroup">
-                    <label id="textLabel">نصوص الشرح المباشر / أوامر البرمبت للذكاء الاصطناعي / كود HTML</label>
+                    <label id="textLabel">نصوص الشرح المباشر / أوامر التوجيه للذكاء الاصطناعي</label>
                     <textarea id="contentText" rows="5"></textarea>
                   </div>
 
@@ -3525,7 +3540,7 @@
             ` : `
               <div class="card">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-                  <div class="search-box-wrapper" style="flex:1; min-width:200px; margin-bottom:0;"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="🔍 ابحث في المحتويات..." value="${State.adminSearchQuery}" oninput="App.handleAdminSearch(this.value)"></div>
+                  <div class="search-box-wrapper" style="flex:1; min-width:200px; margin-bottom:0;"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="🔍 ابحث في المحتويات..." value="${escapeHTML(State.adminSearchQuery)}" oninput="App.handleAdminSearch(this.value)"></div>
                   <div style="display:flex; gap:4px; flex-wrap:wrap;"><button class="btn ${State.adminTargetFilter === 'ALL' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 8px; font-size:0.72rem;" onclick="App.setAdminTargetFilter('ALL')">الكل</button>${CURRICULUM_DEFINITIONS.map(c => `<button class="btn ${State.adminTargetFilter === c.id ? 'btn-gold' : 'btn-secondary'}" style="padding:3px 6px; font-size:0.7rem;" onclick="App.setAdminTargetFilter('${c.id}')">${c.name}</button>`).join('')}</div>
                 </div>
                 <div class="table-container">
@@ -3535,7 +3550,7 @@
                       const studentName = item.assignedStudentUids && item.assignedStudentUids.length > 0 
                         ? State.students.find(s => s.uid === item.assignedStudentUids[0])?.name || 'طالب مخصص'
                         : 'عام لكافة طلاب الصف';
-                      return `<tr><td><strong>${item.title}</strong><br><small style="color:var(--text-muted);">${item.unit || 'عام'}</small></td><td>${UI.getMediaTypeBadge(item)}</td><td>${UI.getTargetLabel(item.target)}</td><td><span class="badge ${item.assignedStudentUids && item.assignedStudentUids.length > 0 ? 'badge-trial' : 'badge-curriculum'}">${studentName}</span></td><td><div style="display:flex; gap:4px;"><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openEditModal('${item.id}', '${item.type}')"><i class="fa-solid fa-pen"></i> تعديل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteContent('${item.id}')"><i class="fa-solid fa-trash"></i> حذف</button></div></td></tr>`;
+                      return `<tr><td><strong>${escapeHTML(item.title)}</strong><br><small style="color:var(--text-muted);">${escapeHTML(item.unit) || 'عام'}</small></td><td>${UI.getMediaTypeBadge(item)}</td><td>${escapeHTML(UI.getTargetLabel(item.target))}</td><td><span class="badge ${item.assignedStudentUids && item.assignedStudentUids.length > 0 ? 'badge-trial' : 'badge-curriculum'}">${escapeHTML(studentName)}</span></td><td><div style="display:flex; gap:4px;"><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openEditModal('${item.id}', '${item.type}')"><i class="fa-solid fa-pen"></i> تعديل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteContent('${item.id}')"><i class="fa-solid fa-trash"></i> حذف</button></div></td></tr>`;
                     }).join('')}</tbody>
                   </table>
                 </div>
@@ -3555,7 +3570,7 @@
               <div class="table-container">
                 <table>
                   <thead><tr><th>الطالب</th><th>Username</th><th>المنهاج والصف</th><th>الحالة</th><th>تقييم وواتساب ولي الأمر</th><th>اعتماد الشهادة</th><th>إعادة تعيين وإجراءات</th></tr></thead>
-                  <tbody>${filtered.length === 0 ? `<tr><td colspan="7" style="text-align:center; padding:25px; color:var(--text-muted);">لا يوجد طلاب مسجلين حالياً.</td></tr>` : filtered.map(st => `<tr><td><strong>${st.name}</strong><br><small style="color:var(--text-muted);"><i class="fa-solid fa-shield-halved"></i> هاتف: ${maskPhoneNumber(st.phone)}</small></td><td><code>${st.username}</code></td><td><span class="badge badge-curriculum">${UI.getTargetLabel(st.target)}</span></td><td><span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : (st.status === 'TRIAL' ? 'badge-trial' : 'badge-expired')}">${st.status === 'TRIAL' ? 'تجربة (3 أيام)' : st.status}</span></td><td><button class="btn btn-whatsapp" style="padding:4px 8px; font-size:0.7rem; min-height:30px;" onclick="App.openEvaluationModal('${st.uid}')"><i class="fa-brands fa-whatsapp"></i> تقييم ومراسلة ولي الأمر</button></td><td>${st.certificateApproved ? `<span style="color:var(--success); font-weight:700;">معتمدة ✓</span> <button class="btn btn-secondary" style="padding:2px 5px; font-size:0.68rem;" onclick="App.toggleCertApproval('${st.uid}')">إلغاء</button>` : `<span style="color:var(--danger); font-weight:700;">غير معتمدة</span> <button class="btn btn-gold" style="padding:2px 5px; font-size:0.68rem;" onclick="App.toggleCertApproval('${st.uid}')">اعتماد ✓</button>`}</td><td><div style="display:flex; gap:3px; flex-wrap:wrap;"><button class="btn btn-purple" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openStudentResetModal('${st.uid}')" title="إعادة تعيين كلمة المرور أو التقدم"><i class="fa-solid fa-arrows-rotate"></i> إعادة تعيين</button><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 1)">شهر</button><button class="btn btn-gold" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 3)">فصل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteStudent('${st.uid}')">حذف</button></div></td></tr>`).join('')}</tbody>
+                  <tbody>${filtered.length === 0 ? `<tr><td colspan="7" style="text-align:center; padding:25px; color:var(--text-muted);">لا يوجد طلاب مسجلين حالياً.</td></tr>` : filtered.map(st => `<tr><td><strong>${escapeHTML(st.name)}</strong><br><small style="color:var(--text-muted);"><i class="fa-solid fa-shield-halved"></i> هاتف: ${maskPhoneNumber(st.phone)}</small></td><td><code>${escapeHTML(st.username)}</code></td><td><span class="badge badge-curriculum">${UI.getTargetLabel(st.target)}</span></td><td><span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : (st.status === 'TRIAL' ? 'badge-trial' : 'badge-expired')}">${st.status === 'TRIAL' ? 'تجربة (3 أيام)' : escapeHTML(st.status)}</span></td><td><button class="btn btn-whatsapp" style="padding:4px 8px; font-size:0.7rem; min-height:30px;" onclick="App.openEvaluationModal('${st.uid}')"><i class="fa-brands fa-whatsapp"></i> تقييم ومراسلة ولي الأمر</button></td><td>${st.certificateApproved ? `<span style="color:var(--success); font-weight:700;">معتمدة ✓</span> <button class="btn btn-secondary" style="padding:2px 5px; font-size:0.68rem;" onclick="App.toggleCertApproval('${st.uid}')">إلغاء</button>` : `<span style="color:var(--danger); font-weight:700;">غير معتمدة</span> <button class="btn btn-gold" style="padding:2px 5px; font-size:0.68rem;" onclick="App.toggleCertApproval('${st.uid}')">اعتماد ✓</button>`}</td><td><div style="display:flex; gap:3px; flex-wrap:wrap;"><button class="btn btn-purple" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openStudentResetModal('${st.uid}')" title="إعادة تعيين"><i class="fa-solid fa-arrows-rotate"></i> إعادة تعيين</button><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 1)">شهر</button><button class="btn btn-gold" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 3)">فصل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteStudent('${st.uid}')">حذف</button></div></td></tr>`).join('')}</tbody>
                 </table>
               </div>
             </div>
@@ -3588,7 +3603,7 @@
               <div class="table-container">
                 <table>
                   <thead><tr><th>الوقت</th><th>المستخدم</th><th>النشاط والتنبيهات</th></tr></thead>
-                  <tbody>${State.activityLogs.length === 0 ? '<tr><td colspan="3" style="text-align:center; padding:18px; color:var(--text-muted);">لا توجد أنشطة مسجلة.</td></tr>' : State.activityLogs.map(log => `<tr style="${log.action && (log.action.includes('محاولة') || log.action.includes('تنبيه')) ? 'background:#FEF2F2;' : ''}"><td>${log.time || 'الآن'}</td><td><code>${log.user || 'مستخدم'}</code></td><td>${log.action}</td></tr>`).join('')}</tbody>
+                  <tbody>${State.activityLogs.length === 0 ? '<tr><td colspan="3" style="text-align:center; padding:18px; color:var(--text-muted);">لا توجد أنشطة مسجلة.</td></tr>' : State.activityLogs.map(log => `<tr style="${log.action && (log.action.includes('محاولة') || log.action.includes('تنبيه')) ? 'background:#FEF2F2;' : ''}"><td>${escapeHTML(log.time || 'الآن')}</td><td><code>${escapeHTML(log.user || 'مستخدم')}</code></td><td>${escapeHTML(log.action)}</td></tr>`).join('')}</tbody>
                 </table>
               </div>
             </div>
@@ -3599,10 +3614,10 @@
       getTabTitle(tab) {
         const titles = {
           'VIDEOS': 'الشروحات المرئية',
+          'AI_PROMPT_LINK': 'متصفح الذكاء الاصطناعي (Claude / ChatGPT)',
           'PODCASTS': 'البودكاست والشروحات الصوتية 🎙️',
           'IMAGES': 'الصور والمخططات ومذكرات السبورة 🖼️',
           'HTML_EMBED': 'تطبيقات ومحاكيات HTML التفاعلية',
-          'AI_PROMPT_LINK': 'محطة الذكاء الاصطناعي (Claude / GPT)',
           'ARTICLES': 'الشروحات الكتابية 📝',
           'POWERPOINTS': 'عروض الباوربوينت PPT',
           'WORD_DOCS': 'مستندات Word',
@@ -3617,10 +3632,10 @@
       getTabIcon(tab) {
         const icons = {
           'VIDEOS': 'fa-circle-play',
+          'AI_PROMPT_LINK': 'fa-robot',
           'PODCASTS': 'fa-podcast',
           'IMAGES': 'fa-image',
           'HTML_EMBED': 'fa-code',
-          'AI_PROMPT_LINK': 'fa-robot',
           'ARTICLES': 'fa-book-open',
           'POWERPOINTS': 'fa-file-powerpoint',
           'WORD_DOCS': 'fa-file-word',
@@ -3798,6 +3813,8 @@
         const vault = await DataStore.getAdminVault();
         if (vault && vault.username) {
           document.getElementById("settingAdminUser").value = vault.username;
+        } else {
+          document.getElementById("settingAdminUser").value = "";
         }
         document.getElementById("settingAdminPass").value = "";
         document.getElementById("settingAdminPin").value = "";
@@ -3829,8 +3846,8 @@
             const vaultRef = db.collection("omer_system").doc("admin_config");
             const updateObj = { updatedAt: new Date().toISOString() };
             if (newAdminUser) updateObj.username = newAdminUser.toLowerCase();
-            if (newAdminPass) updateObj.passwordHash = CryptoSecurity.hashPassword(newAdminPass);
-            if (newAdminPin) updateObj.pinHash = CryptoSecurity.hashPassword(newAdminPin);
+            if (newAdminPass) updateObj.passwordHash = CryptoSecurity.hashPassword(newAdminPass, newAdminUser || "admin");
+            if (newAdminPin) updateObj.pinHash = CryptoSecurity.hashPassword(newAdminPin, newAdminUser || "admin");
 
             await vaultRef.set(updateObj, { merge: true });
             localStorage.setItem("og_admin_vault_cache", JSON.stringify(updateObj));
@@ -3847,7 +3864,7 @@
       openVoiceModal() {
         const sel = document.getElementById('voiceStudentSelect');
         if (sel) {
-          sel.innerHTML = State.students.map(s => `<option value="${s.uid}">${s.name} (${UI.getTargetLabel(s.target)})</option>`).join('');
+          sel.innerHTML = State.students.map(s => `<option value="${s.uid}">${escapeHTML(s.name)} (${UI.getTargetLabel(s.target)})</option>`).join('');
         }
         document.getElementById('voiceCallModal').classList.add('active');
       },
@@ -3961,7 +3978,7 @@
         let actionsDone = [];
 
         if (newPass) {
-          student.passwordHash = CryptoSecurity.hashPassword(newPass);
+          student.passwordHash = CryptoSecurity.hashPassword(newPass, student.username);
           actionsDone.push('تغيير كلمة المرور');
         }
 
@@ -4062,7 +4079,7 @@
 يدعوكم *الأستاذ عمر قاسم* للمشاركة في الاستبيان الأكاديمي لمادة الرياضيات:
 📌 *${s.title}*
 
-يرجى فتح الرابط التالي وتعبئة الاستبيان مباشرة من هاتفك أو جهازك:
+يرجى فتح الرابط التالي وتعبئة الاستبيان مباشرة من هاتفك:
 ${link}
 
 شكراً لتعاونكم الدائم.`;
@@ -4136,13 +4153,129 @@ ${link}
         App.navigateHome();
       },
 
-      /* مشغلات الوسائط الذكية داخل المنصة */
+      openAiToolLink(materialId) {
+        document.getElementById('pdfControlsBar').style.display = 'none';
+        const item = State.materials.find(m => m.id === materialId);
+        if (!item) return;
+
+        const promptText = item.sampleContent || 'قم بحل المسألة الرياضية التالية خطوة بخطوة مع التعليل:';
+        const externalUrl = item.fileUrl && item.fileUrl.startsWith('http') ? item.fileUrl : 'https://chatgpt.com';
+
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-robot"></i> متصفح الذكاء الاصطناعي المدمج: ${escapeHTML(item.title)}`;
+        const viewport = document.getElementById("playerViewport");
+
+        viewport.innerHTML = `
+          <div class="ai-browser-container">
+            <div class="ai-browser-navbar">
+              <div style="display:flex; align-items:center; gap:6px;">
+                <button class="pro-video-btn" onclick="App.switchAiProvider('chatgpt')" id="btnAiChatGPT" style="background:var(--gold-orange); color:var(--navy-dark); font-weight:800;">
+                  <i class="fa-solid fa-bolt"></i> ChatGPT-4o
+                </button>
+                <button class="pro-video-btn" onclick="App.switchAiProvider('claude')" id="btnAiClaude">
+                  <i class="fa-solid fa-brain"></i> Claude 3.5
+                </button>
+              </div>
+
+              <div class="ai-browser-address-bar">
+                <i class="fa-solid fa-lock" style="color:var(--success);"></i>
+                <span id="aiBrowserUrlText">${escapeHTML(externalUrl)}</span>
+              </div>
+
+              <div class="ai-browser-actions">
+                <button class="btn btn-gold" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="App.copyAndInjectPrompt()">
+                  <i class="fa-solid fa-copy"></i> نسخ الأمر
+                </button>
+                <button class="btn btn-ai" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="window.open(document.getElementById('aiBrowserUrlText').innerText, '_blank')">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> نافذة مستقلة
+                </button>
+              </div>
+            </div>
+
+            <div class="ai-browser-workspace">
+              <div style="background:var(--navy-card); border:1.5px solid var(--gold-orange); border-radius:var(--radius-md); padding:16px; display:flex; flex-direction:column; gap:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <h4 style="color:var(--gold-orange); font-size:0.92rem;"><i class="fa-solid fa-terminal"></i> أمر التوجيه الرياضي (Prompt):</h4>
+                  <span class="badge badge-curriculum">جاهز للاستخدام</span>
+                </div>
+                <div id="aiTargetPromptBox" style="background:#050B14; padding:12px; border-radius:var(--radius-sm); font-family:monospace; line-height:1.7; font-size:0.88rem; color:#E2E8F0; user-select:text; -webkit-user-select:text; border:1px solid #1E293B; flex:1; overflow-y:auto;">
+                  ${escapeHTML(promptText)}
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <button class="btn btn-gold" style="width:100%; font-size:0.8rem;" onclick="App.copyAndInjectPrompt()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> نسخ الأمر وتطبيقه
+                  </button>
+                </div>
+              </div>
+
+              <div style="background:var(--navy-card); border:1.5px solid #334155; border-radius:var(--radius-md); padding:16px; display:flex; flex-direction:column; gap:10px;">
+                <h4 style="color:var(--gold-orange); font-size:0.92rem;"><i class="fa-solid fa-microchip"></i> محطة التحليل الرياضي الداخلي:</h4>
+                <div id="aiDirectRunnerBox" style="background:#050B14; border-radius:var(--radius-sm); padding:14px; min-height:160px; line-height:1.7; font-size:0.88rem; border:1px solid #1E293B; overflow-y:auto; flex:1;">
+                  اكتب استفسارك أو مسألتك الرياضية أدناه لتحليلها وحلها فوراً وفق منهجك...
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <input type="text" id="aiRunnerInput" placeholder="اكتب مسألتك هنا..." style="flex:1; padding:8px 12px; border-radius:var(--radius-sm); border:1px solid #334155; background:#0F1E36; color:#FFF; outline:none; font-size:0.85rem;" onkeydown="if(event.key==='Enter') App.runInternalAiAssistant()">
+                  <button class="btn btn-gold" style="padding:6px 14px; font-size:0.8rem;" onclick="App.runInternalAiAssistant()">
+                    <i class="fa-solid fa-play"></i> حل المسألة
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("mediaPlayerModal").classList.add("active");
+        App.resetToNormalOrientation();
+      },
+
+      switchAiProvider(provider) {
+        const urlText = document.getElementById('aiBrowserUrlText');
+        const btnGpt = document.getElementById('btnAiChatGPT');
+        const btnClaude = document.getElementById('btnAiClaude');
+
+        if (provider === 'chatgpt') {
+          if (urlText) urlText.innerText = 'https://chatgpt.com';
+          if (btnGpt) { btnGpt.style.background = 'var(--gold-orange)'; btnGpt.style.color = 'var(--navy-dark)'; }
+          if (btnClaude) { btnClaude.style.background = '#162642'; btnClaude.style.color = '#FFF'; }
+        } else {
+          if (urlText) urlText.innerText = 'https://claude.ai';
+          if (btnClaude) { btnClaude.style.background = 'var(--gold-orange)'; btnClaude.style.color = 'var(--navy-dark)'; }
+          if (btnGpt) { btnGpt.style.background = '#162642'; btnGpt.style.color = '#FFF'; }
+        }
+        App.showSecurityAlert(`تم تحويل محطة العمل إلى مزود: ${provider.toUpperCase()}`);
+      },
+
+      async copyAndInjectPrompt() {
+        const promptBox = document.getElementById('aiTargetPromptBox');
+        if (!promptBox) return;
+        const text = promptBox.innerText;
+        try {
+          await navigator.clipboard.writeText(text);
+          App.showSecurityAlert('تم نسخ أمر التوجيه الرياضي للحافظة بنجاح.');
+        } catch (e) {
+          await NotificationEngine.prompt('انسخ نص الأمر:', text, 'أمر التوجيه الرياضي');
+        }
+      },
+
+      runInternalAiAssistant() {
+        const inp = document.getElementById('aiRunnerInput');
+        const box = document.getElementById('aiDirectRunnerBox');
+        if (!inp || !inp.value.trim()) return;
+
+        const q = inp.value.trim();
+        box.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري استخلاص الحل والخطوات الرياضية المعتمدة...';
+        setTimeout(() => {
+          const res = CurriculumAiEngine.generateResponse(q, State.currentUser);
+          box.innerHTML = res;
+          if (window.renderMathInElement) renderMathInElement(box);
+        }, 400);
+      },
+
       openImageViewer(materialId) {
         document.getElementById('pdfControlsBar').style.display = 'none';
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-image"></i> ${item.title}`;
+        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-image"></i> ${escapeHTML(item.title)}`;
         const viewport = document.getElementById('playerViewport');
 
         viewport.innerHTML = `
@@ -4150,14 +4283,14 @@ ${link}
             <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
           </button>
           <div class="image-viewer-container">
-            <img src="${item.fileUrl}" alt="${item.title}" id="targetZoomableImg" onerror="this.src='https://via.placeholder.com/800x600?text=تعذر+تحميل+الصورة';">
+            <img src="${item.fileUrl}" alt="${escapeHTML(item.title)}" id="targetZoomableImg" onerror="this.src='https://via.placeholder.com/800x600?text=تعذر+تحميل+الصورة';">
             <div style="margin-top:14px; display:flex; gap:8px; z-index:20;">
               <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.zoomImage(1.2)"><i class="fa-solid fa-magnifying-glass-plus"></i> تكبير</button>
               <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.zoomImage(0.8)"><i class="fa-solid fa-magnifying-glass-minus"></i> تصغير</button>
               <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.resetImageZoom()"><i class="fa-solid fa-arrows-rotate"></i> ضبط الحجم</button>
             </div>
           </div>
-          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
 
         document.getElementById('mediaPlayerModal').classList.add('active');
@@ -4184,15 +4317,15 @@ ${link}
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-code"></i> أداة تفاعلية: ${item.title}`;
+        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-code"></i> أداة تفاعلية: ${escapeHTML(item.title)}`;
         const viewport = document.getElementById('playerViewport');
 
         let srcContent = '';
         if (item.fileUrl && item.fileUrl.startsWith('http')) {
-          srcContent = `<iframe class="document-viewer-frame" src="${item.fileUrl}" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>`;
+          srcContent = `<iframe class="document-viewer-frame" src="${item.fileUrl}" sandbox="allow-scripts allow-forms allow-popups"></iframe>`;
         } else {
           const cleanHtml = (item.sampleContent || '<h3>لا يوجد كود تفاعلي</h3>').replace(/"/g, '&quot;');
-          srcContent = `<iframe class="document-viewer-frame" srcdoc="${cleanHtml}" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>`;
+          srcContent = `<iframe class="document-viewer-frame" srcdoc="${cleanHtml}" sandbox="allow-scripts allow-forms allow-popups"></iframe>`;
         }
 
         viewport.innerHTML = `
@@ -4200,73 +4333,11 @@ ${link}
             <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
           </button>
           ${srcContent}
-          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
 
         document.getElementById('mediaPlayerModal').classList.add('active');
         App.resetToNormalOrientation();
-      },
-
-      /* محطة عمل الذكاء الاصطناعي الداخلية لمنع حجب المتصفحات لروابط Claude و ChatGPT */
-      openAiToolLink(materialId) {
-        document.getElementById('pdfControlsBar').style.display = 'none';
-        const item = State.materials.find(m => m.id === materialId);
-        if (!item) return;
-
-        const promptText = item.sampleContent || 'قم بحل المسألة الرياضية التالية خطوة بخطوة مع التعليل:';
-        const externalUrl = item.fileUrl || 'https://chatgpt.com';
-
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-robot"></i> محطة الذكاء الاصطناعي: ${item.title}`;
-        const viewport = document.getElementById("playerViewport");
-
-        viewport.innerHTML = `
-          <div style="width:100%; height:100%; background:#0B1424; color:#FFF; padding:24px; display:flex; flex-direction:column; gap:16px; overflow-y:auto;">
-            <div style="background:var(--navy-card); border:1.5px solid var(--gold-orange); border-radius:var(--radius-md); padding:16px;">
-              <h3 style="color:var(--gold-orange); margin-bottom:8px; font-size:1.1rem;">
-                <i class="fa-solid fa-terminal"></i> الأمر الرياضي التوجيهي (Math Prompt):
-              </h3>
-              <p style="background:#050B14; padding:12px; border-radius:var(--radius-sm); font-family:monospace; line-height:1.7; font-size:0.9rem; color:#E2E8F0; user-select:text; -webkit-user-select:text;">
-                ${promptText}
-              </p>
-              <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
-                <button class="btn btn-gold" onclick="navigator.clipboard.writeText('${promptText.replace(/'/g, "\\'")}'); App.showSecurityAlert('تم نسخ نص البرمبت بنجاح.');">
-                  <i class="fa-solid fa-copy"></i> نسخ نص الأمر الرياضي
-                </button>
-                <a href="${externalUrl}" target="_blank" class="btn btn-ai">
-                  <i class="fa-solid fa-arrow-up-right-from-square"></i> فتح المحادثة في نافذة مستقلة آمنة
-                </a>
-              </div>
-            </div>
-
-            <!-- نموذج تشغيل المساعد الرياضي الداخلي فوراً -->
-            <div style="background:var(--navy-card); border-radius:var(--radius-md); padding:16px; flex:1; display:flex; flex-direction:column; gap:10px;">
-              <h4 style="color:var(--gold-orange);"><i class="fa-solid fa-microchip"></i> المساعد الرياضي المدمج (تشغيل فوري):</h4>
-              <div id="aiDirectRunnerBox" style="background:#050B14; border-radius:var(--radius-sm); padding:14px; min-height:120px; line-height:1.7; font-size:0.9rem;">
-                اكتب مسألتك أدناه للحل الفوري عبر محرك المنهاج...
-              </div>
-              <div style="display:flex; gap:6px;">
-                <input type="text" id="aiRunnerInput" placeholder="أدخل مسألتك هنا..." style="flex:1; padding:10px; border-radius:var(--radius-sm); border:1px solid #334155; background:#0F1E36; color:#FFF; outline:none;">
-                <button class="btn btn-gold" onclick="App.runInternalAiAssistant()"><i class="fa-solid fa-play"></i> استخراج الحل</button>
-              </div>
-            </div>
-          </div>
-        `;
-
-        document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetToNormalOrientation();
-      },
-
-      runInternalAiAssistant() {
-        const inp = document.getElementById('aiRunnerInput');
-        const box = document.getElementById('aiDirectRunnerBox');
-        if (!inp || !inp.value.trim()) return;
-
-        box.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري استخلاص الحل والخطوات الرياضية المعتمدة...';
-        setTimeout(() => {
-          const res = CurriculumAiEngine.generateResponse(inp.value, State.currentUser);
-          box.innerHTML = res;
-          if (window.renderMathInElement) renderMathInElement(box);
-        }, 500);
       },
 
       openVideoPlayer(materialId) {
@@ -4274,7 +4345,7 @@ ${link}
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-circle-play"></i> ${item.title}`;
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-circle-play"></i> ${escapeHTML(item.title)}`;
         const viewport = document.getElementById("playerViewport");
         const url = item.fileUrl || "";
 
@@ -4282,7 +4353,7 @@ ${link}
         viewport.innerHTML = `
           <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()"><i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي</button>
           ${playerHtml}
-          <div class="floating-watermark" id="floatingVideoWatermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark" id="floatingVideoWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
 
         document.getElementById("mediaPlayerModal").classList.add("active");
@@ -4295,14 +4366,14 @@ ${link}
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-podcast"></i> بودكاست: ${item.title}`;
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-podcast"></i> بودكاست: ${escapeHTML(item.title)}`;
         const viewport = document.getElementById("playerViewport");
 
         viewport.innerHTML = `
           <div class="podcast-player-box">
             <div class="podcast-cover-art"><i class="fa-solid fa-headphones"></i></div>
-            <h3 style="color:#FFF; font-size:1.15rem; margin-bottom:4px;">${item.title}</h3>
-            <p style="color:var(--gold-orange); font-size:0.82rem; margin-bottom:16px;">${item.unit || 'بودكاست الأستاذ عمر التعليمي'}</p>
+            <h3 style="color:#FFF; font-size:1.15rem; margin-bottom:4px;">${escapeHTML(item.title)}</h3>
+            <p style="color:var(--gold-orange); font-size:0.82rem; margin-bottom:16px;">${escapeHTML(item.unit) || 'بودكاست الأستاذ عمر التعليمي'}</p>
             <audio id="activeAudioPlayer" src="${item.fileUrl}" preload="metadata"></audio>
             <div class="audio-controls-panel">
               <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94A3B8;"><span id="audioCurrentTime">00:00</span><span id="audioDuration">--:--</span></div>
@@ -4315,7 +4386,7 @@ ${link}
               </div>
             </div>
           </div>
-          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
 
         document.getElementById("mediaPlayerModal").classList.add("active");
@@ -4373,17 +4444,17 @@ ${link}
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-book-open"></i> ${item.title}`;
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-book-open"></i> ${escapeHTML(item.title)}`;
         const viewport = document.getElementById("playerViewport");
         viewport.innerHTML = `
           <div class="article-reading-container">
             <div style="border-bottom:2px solid var(--gold-subtle); padding-bottom:10px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
-              <div><h2>${item.title}</h2><span class="badge badge-curriculum">${item.unit || 'مقرر الرياضيات'}</span></div>
+              <div><h2>${escapeHTML(item.title)}</h2><span class="badge badge-curriculum">${escapeHTML(item.unit) || 'مقرر الرياضيات'}</span></div>
               <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة</button>
             </div>
             <div class="math-theorem-box"><strong>الشرح والمفهوم الرياضي:</strong><div style="margin-top:6px; font-size:1rem; line-height:1.9;">${item.sampleContent || 'لا يوجد نص للشرح بعد.'}</div></div>
           </div>
-          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
         document.getElementById("mediaPlayerModal").classList.add("active");
         App.resetToNormalOrientation();
@@ -4401,7 +4472,7 @@ ${link}
         }
 
         const icon = type === 'ppt' ? 'fa-file-powerpoint' : 'fa-file-word';
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid ${icon}"></i> ${item.title}`;
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid ${icon}"></i> ${escapeHTML(item.title)}`;
         const viewport = document.getElementById("playerViewport");
         const url = item.fileUrl || "";
         const officeViewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
@@ -4409,7 +4480,7 @@ ${link}
         viewport.innerHTML = `
           <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()"><i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي</button>
           <iframe class="document-viewer-frame" src="${officeViewerUrl}"></iframe>
-          <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
         document.getElementById("mediaPlayerModal").classList.add("active");
         App.resetToNormalOrientation();
@@ -4419,14 +4490,14 @@ ${link}
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-book-open"></i> ${item.title}`;
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-book-open"></i> ${escapeHTML(item.title)}`;
         const viewport = document.getElementById("playerViewport");
 
         if (item.fileUrl && item.fileUrl.startsWith("http")) {
           viewport.innerHTML = `
             <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()"><i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي</button>
             <div id="pdfCanvasWrapper" class="pdf-canvas-container"></div>
-            <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
+            <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
           `;
           document.getElementById("mediaPlayerModal").classList.add("active");
           const canvasWrap = document.getElementById("pdfCanvasWrapper");
@@ -4580,7 +4651,7 @@ ${link}
 
         const filtered = State.students.filter(s => s.target === selTarget);
         studentSel.innerHTML = `<option value="">متاح لكافة طلاب الصف المختار ✓</option>` +
-          filtered.map(s => `<option value="${s.uid}">${s.name} (${s.username})</option>`).join('');
+          filtered.map(s => `<option value="${s.uid}">${escapeHTML(s.name)} (${escapeHTML(s.username)})</option>`).join('');
       },
 
       toggleContentFields() {
@@ -4597,19 +4668,19 @@ ${link}
           urlGroup.style.display = "none";
           textLabel.innerText = "نصوص ومحتوى الشرح الكتابي المباشر";
         } else if (type === "IMAGES") {
-          urlLabel.innerText = "رابط الصورة المباشر أو المخطط (أو استخدام الرفع من جهازك أعلاه)";
+          urlLabel.innerText = "رابط الصورة المباشر أو المخطط (أو الرفع من جهازك أعلاه)";
           textLabel.innerText = "شرح أو تعليق مختصر على الصورة الرياضية";
         } else if (type === "HTML_EMBED") {
           urlLabel.innerText = "رابط الأداة التفاعلية (Desmos / GeoGebra URL)";
-          textLabel.innerText = "أو الصق كود الـ HTML / JavaScript التفاعلي هنا مباشرة";
+          textLabel.innerText = "أو الصق كود الـ HTML / JavaScript التفاعلي هنا";
         } else if (type === "AI_PROMPT_LINK") {
-          urlLabel.innerText = "رابط الأداة الخارجية (ChatGPT / Claude URL)";
-          textLabel.innerText = "نص البرمبت أو الأمر الرياضي التوجيهي المقترح";
+          urlLabel.innerText = "رابط الواجهة الخارجية (https://chatgpt.com أو https://claude.ai)";
+          textLabel.innerText = "نص أمر التوجيه الرياضي (Prompt) الذي سينفذه الطالب";
         } else if (type === "PODCASTS") {
-          urlLabel.innerText = "رابط ملف الصوت المباشر (MP3 / Drive Audio)";
+          urlLabel.innerText = "رابط ملف الصوت المباشر (MP3)";
           textLabel.innerText = "ملاحظات وتفريغ نصي للبودكاست";
         } else if (type === "WORD_DOCS") {
-          urlLabel.innerText = "رابط المستند (أو اختر ملف Word من جهازك ليتم تحويله داخلياً)";
+          urlLabel.innerText = "رابط المستند (أو اختر ملف Word لتحويله داخلياً)";
           textLabel.innerText = "محتوى ونصوص المستند المعالجة داخلياً";
         } else {
           urlLabel.innerText = "رابط الملف المباشر أو الفيديو أو المستند";
@@ -4734,7 +4805,7 @@ ${link}
         document.getElementById("certStudentName").innerText = user.name;
         document.getElementById("certGradeText").innerText = `مقرر الرياضيات – ${UI.getTargetLabel(user.target)}`;
 
-        const certHash = CryptoJS.MD5(user.uid + user.name + "OMER_2026").toString().substring(0, 8).toUpperCase();
+        const certHash = CryptoJS.MD5(user.uid + user.name + "SEC_CERT_2026").toString().substring(0, 8).toUpperCase();
         document.getElementById("certSerial").innerText = `OMER-${certHash}`;
         document.getElementById("certificateModal").classList.add("active");
       },
@@ -4778,7 +4849,7 @@ ${link}
             });
           }
           body.scrollTop = body.scrollHeight;
-        }, 500);
+        }, 450);
       },
 
       async handleLogin(e) {
@@ -4795,16 +4866,17 @@ ${link}
           const username = normalizeInput(rawUser).toLowerCase();
           const passwordInput = normalizeInput(rawPass);
 
+          // 1. التحقق من بيانات الأدمن
           const adminVault = await DataStore.getAdminVault();
           if (adminVault && adminVault.username) {
             const expectedUser = normalizeInput(adminVault.username).toLowerCase();
 
             if (username === expectedUser) {
-              const isPasswordCorrect = CryptoSecurity.verify(passwordInput, adminVault.passwordHash);
+              const isPasswordCorrect = CryptoSecurity.verify(passwordInput, adminVault.passwordHash, username);
 
               if (isPasswordCorrect) {
                 CryptoSecurity.resetFailedAttempts();
-                State.pendingAdminAuth = true;
+                State.pendingAdminUsername = username;
                 State.loginStage = "2FA";
                 UI.render();
                 return;
@@ -4819,31 +4891,31 @@ ${link}
             return;
           }
 
-          let student = State.students.find(s => normalizeInput(s.username).toLowerCase() === username);
-          if (!student && db) {
+          // 2. التحقق من حساب الطالب
+          let student = null;
+          if (db) {
             try {
-              const snap = await db.collection("omer_students").get();
+              const snap = await db.collection("omer_students").where("username", "==", username).limit(1).get();
               if (!snap.empty) {
-                const foundDoc = snap.docs.find(d => {
-                  const data = d.data();
-                  return normalizeInput(data.username || "").toLowerCase() === username;
-                });
-                if (foundDoc) student = { id: foundDoc.id, ...foundDoc.data() };
+                student = { uid: snap.docs[0].id, ...snap.docs[0].data() };
               }
-            } catch (err) {
-              console.warn("Student fallback query:", err);
-            }
+            } catch(e){}
+          }
+
+          if (!student) {
+            student = State.students.find(s => normalizeInput(s.username).toLowerCase() === username);
           }
 
           if (student) {
-            const sPassHash = student.passwordHash || student.password || "";
-            const isMatch = CryptoSecurity.verify(passwordInput, sPassHash);
+            const sPassHash = student.passwordHash || "";
+            const isMatch = CryptoSecurity.verify(passwordInput, sPassHash, username);
 
             if (isMatch) {
               CryptoSecurity.resetFailedAttempts();
               State.currentUser = { ...student, role: "STUDENT" };
               const token = CryptoSecurity.createSessionToken(State.currentUser);
               localStorage.setItem("og_session_token", token);
+              localStorage.setItem("og_session_user", username);
               VoiceEngine.init(student.uid);
               App.setRoute("STUDENT_DASHBOARD");
               return;
@@ -4878,21 +4950,23 @@ ${link}
           const code = normalizeInput(rawCode);
 
           const adminVault = await DataStore.getAdminVault();
-          if (adminVault && State.pendingAdminAuth) {
-            const isPinValid = CryptoSecurity.verify(code, adminVault.pinHash);
+          if (adminVault && State.pendingAdminUsername) {
+            const isPinValid = CryptoSecurity.verify(code, adminVault.pinHash, State.pendingAdminUsername);
 
             if (isPinValid) {
               CryptoSecurity.resetFailedAttempts();
-              State.pendingAdminAuth = false;
-              State.loginStage = "CREDENTIALS";
               State.currentUser = {
                 uid: "admin_omer",
                 name: "الأستاذ عمر (المشرف)",
-                username: adminVault.username || "admin",
+                username: adminVault.username,
                 role: "ADMIN"
               };
               const token = CryptoSecurity.createSessionToken(State.currentUser);
               localStorage.setItem("og_session_token", token);
+              localStorage.setItem("og_session_user", adminVault.username);
+              State.pendingAdminUsername = null;
+              State.loginStage = "CREDENTIALS";
+              DataStore.listenToAllStudents();
               VoiceEngine.init("admin_omer");
               App.setRoute("ADMIN_DASHBOARD");
               return;
@@ -4912,7 +4986,7 @@ ${link}
       },
 
       cancel2FA() {
-        State.pendingAdminAuth = false;
+        State.pendingAdminUsername = null;
         State.loginStage = "CREDENTIALS";
         UI.render();
       },
@@ -4921,12 +4995,12 @@ ${link}
         e.preventDefault();
         const target = document.getElementById("newStudentTarget").value;
         const name = document.getElementById("newStudentName").value.trim();
-        const username = normalizeInput(document.getElementById("newStudentUsername").value);
+        const username = normalizeInput(document.getElementById("newStudentUsername").value).toLowerCase();
         const plainPassword = normalizeInput(document.getElementById("newStudentPassword").value);
         const phone = normalizeInput(document.getElementById("newStudentPhone").value);
         const parentPhone = normalizeInput(document.getElementById("newParentPhone")?.value || "");
 
-        const passwordHash = CryptoSecurity.hashPassword(plainPassword);
+        const passwordHash = CryptoSecurity.hashPassword(plainPassword, username);
         const now = Date.now();
         const trialEndTimestamp = now + (3 * 24 * 60 * 60 * 1000);
 
@@ -4997,14 +5071,15 @@ ${link}
 
 يرجى إرسال تفاصيل التفعيل والدفع. شكراً جزيلاً.`;
 
-        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
+        window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`);
       },
 
       logout() {
         localStorage.removeItem("og_session_token");
+        localStorage.removeItem("og_session_user");
         if (VoiceEngine.activeCalls && VoiceEngine.activeCalls.size > 0) VoiceEngine.endCall();
         State.currentUser = null;
-        State.pendingAdminAuth = false;
+        State.pendingAdminUsername = null;
         State.loginStage = "CREDENTIALS";
         App.setRoute("LOGIN");
       }

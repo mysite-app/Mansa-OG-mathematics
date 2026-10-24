@@ -18,8 +18,9 @@
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
 
-  <!-- محرك PDF.js -->
+  <!-- محرك PDF.js ومحرك قراءة Word (Mammoth.js) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js"></script>
 
   <!-- مكتبة التشفير Crypto-JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
@@ -146,7 +147,7 @@
     .pdf-controls-bar { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 8px 14px; background: var(--navy-dark); border-bottom: 1px solid rgba(245, 158, 11, 0.2); color: #FFF; font-size: 0.8rem; width: 100%; }
 
     video { width: 100%; height: 100%; object-fit: contain; outline: none; background: #000; }
-    .floating-watermark { position: absolute; color: rgba(255, 255, 255, 0.25); font-size: 1rem; font-weight: 800; pointer-events: none; user-select: none; z-index: 50; transition: all 1s ease; }
+    .floating-watermark { position: absolute; color: rgba(255, 255, 255, 0.35); font-size: 0.95rem; font-weight: 800; pointer-events: none; user-select: none; z-index: 50; transition: all 1s ease; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
     .document-viewer-frame { width: 100%; height: 100%; min-height: 70vh; border: none; background: #F8FAFC; }
 
     .image-viewer-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 20px; background: #0B1424; overflow: hidden; position: relative; }
@@ -173,9 +174,7 @@
     .rank-2 { background: #94A3B8; color: #FFF; }
     .rank-3 { background: #B45309; color: #FFF; }
 
-    /* =========================================================================
-     * ترقيات نافذة المكالمة الصوتية الاحترافية والتحكم التفاعلي
-     * ========================================================================= */
+    /* فقاعة المكالمات الصوتية */
     .voice-call-bubble {
       position: fixed;
       top: 75px;
@@ -190,7 +189,7 @@
       flex-direction: column;
       gap: 10px;
       box-shadow: var(--shadow-lg);
-      max-width: 360px;
+      max-width: 380px;
       width: calc(100vw - 30px);
       animation: pulseGlow 2.5s infinite;
     }
@@ -291,35 +290,13 @@
     .modal-overlay { position: fixed; inset: 0; background: rgba(10, 20, 36, 0.85); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 14px; }
     .modal-overlay.active { display: flex; }
     .modal-card { background: var(--white); border-radius: var(--radius-lg); border: 2px solid var(--gold-orange); max-width: 720px; width: 100%; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; }
-    .security-toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: var(--danger); color: #FFF; padding: 10px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; display: none; align-items: center; gap: 8px; z-index: 9999; }
+    .security-toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: var(--danger); color: #FFF; padding: 10px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; display: none; align-items: center; gap: 8px; z-index: 99999; box-shadow: var(--shadow-lg); }
 
-    /* =========================================================================
-     * تحسينات تجاوب قسم الاستبيانات على الهواتف والشاشات الصغيرة
-     * ========================================================================= */
-    .survey-builder-qcard {
-      background: var(--bg-light);
-      border: 1.5px solid #CBD5E1;
-      border-radius: var(--radius-md);
-      padding: 14px;
-      margin-bottom: 12px;
-      position: relative;
-    }
-    .survey-builder-qcard.highlight {
-      border-color: var(--gold-orange);
-      background: #FFFDF5;
-    }
-    .survey-mobile-grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 16px;
-    }
-    .survey-star-rating {
-      display: inline-flex;
-      flex-direction: row-reverse;
-      gap: 8px;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
+    /* تحسينات الاستبيانات لتفادي التداخل في الهواتف */
+    .survey-builder-qcard { background: var(--bg-light); border: 1.5px solid #CBD5E1; border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; position: relative; }
+    .survey-builder-qcard.highlight { border-color: var(--gold-orange); background: #FFFDF5; }
+    .survey-mobile-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; }
+    .survey-star-rating { display: inline-flex; flex-direction: row-reverse; gap: 8px; font-size: 1.5rem; cursor: pointer; }
     .survey-star-rating input { display: none; }
     .survey-star-rating label { color: #CBD5E1; transition: color 0.15s; }
     .survey-star-rating input:checked ~ label,
@@ -327,24 +304,16 @@
     .survey-star-rating label:hover ~ label { color: #F59E0B; }
 
     @media (max-width: 820px) {
-      .survey-mobile-grid {
-        grid-template-columns: 1fr;
-      }
-      .voice-call-bubble {
-        left: 8px;
-        right: 8px;
-        width: auto;
-        top: 65px;
-      }
-      .modal-card {
-        padding: 16px;
-      }
+      .survey-mobile-grid { grid-template-columns: 1fr; }
+      .voice-call-bubble { left: 8px; right: 8px; width: auto; top: 65px; }
+      .modal-card { padding: 16px; }
     }
 
     footer.app-footer { background: var(--navy-gradient); color: var(--white); padding: 18px 20px; margin-top: auto; text-align: center; border-top: 2px solid var(--gold-orange); }
     .footer-content { max-width: 1320px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 0.85rem; }
     .engineer-tag { background: rgba(245, 158, 11, 0.15); border: 1px solid var(--gold-orange); padding: 5px 14px; border-radius: 50px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; color: var(--gold-orange); font-weight: 700; }
 
+    /* حماية إضافية للطباعة */
     @page { size: A4 landscape; margin: 0; }
     @media print {
       body, html { background: #FFF !important; width: 297mm; height: 210mm; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -376,7 +345,27 @@
     <span id="securityToastText">تنبيه أمني: محتويات منصة الأستاذ عمر محمية بحقوق الطبع والتشفير.</span>
   </div>
 
-  <!-- فقاعة المكالمة الصوتية الاحترافية التفاعلية (فردية / جماعية) -->
+  <!-- النافذة التفاعلية العامة (بديل alert, confirm, prompt) -->
+  <div class="modal-overlay" id="customDialogOverlay" style="z-index: 100000;">
+    <div class="modal-card" style="max-width: 440px; text-align: center; border-width: 2px;">
+      <div id="customDialogIcon" style="font-size: 40px; margin-bottom: 12px; color: var(--gold-orange);">
+        <i class="fa-solid fa-circle-info"></i>
+      </div>
+      <h3 id="customDialogTitle" style="color: var(--navy-dark); font-weight: 800; margin-bottom: 8px;">إشعار</h3>
+      <p id="customDialogMessage" style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;"></p>
+      
+      <div id="customDialogInputGroup" style="display: none; margin-bottom: 16px;">
+        <input type="text" id="customDialogInput" style="width: 100%; padding: 10px; border-radius: var(--radius-sm); border: 1.5px solid var(--gold-orange); outline: none; font-size: 0.9rem;">
+      </div>
+
+      <div style="display: flex; gap: 8px; justify-content: center;">
+        <button class="btn btn-gold" id="customDialogOkBtn" style="flex: 1;">موافق</button>
+        <button class="btn btn-secondary" id="customDialogCancelBtn" style="flex: 1; display: none;">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- فقاعة المكالمة الصوتية الاحترافية التفاعلية -->
   <div class="voice-call-bubble" id="voiceCallBubble">
     <div class="voice-header">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -404,7 +393,7 @@
         <i class="fa-solid fa-microphone"></i> كتم الصوت
       </button>
       
-      <!-- زر رفع اليد للطلاب -->
+      <!-- زر استئذان للحديث للطلاب -->
       <button class="btn btn-purple" id="btnRaiseHand" style="padding:4px 10px; font-size:0.74rem; min-height:30px; display:none;" onclick="VoiceEngine.studentRaiseHand()">
         <i class="fa-solid fa-hand"></i> استئذان للحديث
       </button>
@@ -529,7 +518,7 @@
     </div>
   </div>
 
-  <!-- المساعد الذكي AI -->
+  <!-- المساعد الذكي AI ومحطة الذكاء الاصطناعي الداخلية -->
   <div class="ai-chat-window" id="aiChatWindow">
     <div class="ai-chat-header">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -541,8 +530,8 @@
     <div class="ai-chat-body" id="aiChatBody">
       <div class="ai-msg bot" id="aiWelcomeMsg">
         مرحباً بك في منصة <strong>الأستاذ عمر (Omer Gasim)</strong>! أنا رفيقك الرياضي الذكي.
-        <br><small style="color:var(--gold-deep); font-weight:700;">• المنهج السوداني: إجابات عربية معتمدة ومفصلة وفق متطلبات الشهادة السودانية.</small>
-        <br><small style="color:#0284C7; font-weight:700;">• المنهاج الإماراتي: Comprehensive English step-by-step calculus & algebra explanations.</small>
+        <br><small style="color:var(--gold-deep); font-weight:700;">• المنهج السوداني: حلول مفصلة وفق معايير الشهادة السودانية.</small>
+        <br><small style="color:#0284C7; font-weight:700;">• UAE Curriculum: Detailed calculus, vectors & algebraic solutions.</small>
       </div>
     </div>
     <div class="ai-chat-footer">
@@ -631,12 +620,12 @@
     <div class="modal-card" style="max-width: 620px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <h3 style="color: var(--navy-dark); font-weight:800;">
-          <i class="fa-solid fa-file-invoice" style="color:var(--gold-orange);"></i> تقييم ومتابعة الطالب الأكاديمية (الأستاذ عمر)
+          <i class="fa-solid fa-file-invoice" style="color:var(--gold-orange);"></i> تقرير المتابعة الرياضية (الأستاذ عمر)
         </h3>
         <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.closeEvaluationModal()"></i>
       </div>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px;">
-        إنشاء بطاقة تقرير متكاملة وإرسالها مباشرة بصياغة رسمية إلى رقم هاتف ولي الأمر عبر واتساب.
+        إنشاء بطاقة تقرير رسمي وإرسالها فوراً لولي الأمر عبر واتساب.
       </p>
 
       <form onsubmit="App.handleSaveEvaluation(event)">
@@ -695,7 +684,7 @@
         </div>
 
         <div class="form-group">
-          <label>ملاحظات وتوجيهات الأستاذ عمر قاسم الأكاديمية لولي الأمر</label>
+          <label>ملاحظات وتوجيهات الأستاذ عمر قاسم لولي الأمر</label>
           <textarea id="evalNotes" rows="3" placeholder="اكتب نصيحتك للأسرة لدعم الطالب..."></textarea>
         </div>
 
@@ -751,14 +740,14 @@
     </div>
   </div>
 
-  <!-- نافذة إنشاء وتوليد الاستبيانات الديناميكية بعدد لا نهائي من الأسئلة -->
+  <!-- منشئ الاستبيانات الديناميكي -->
   <div class="modal-overlay" id="createSurveyModal">
     <div class="modal-card" style="max-width: 760px;">
       <h3 style="color: var(--navy-dark); margin-bottom: 8px;">
-        <i class="fa-solid fa-square-poll-vertical" style="color:var(--gold-orange);"></i> منشئ الاستبيانات واستطلاعات الرأي الديناميكي
+        <i class="fa-solid fa-square-poll-vertical" style="color:var(--gold-orange);"></i> منشئ الاستبيانات واستطلاعات الرأي
       </h3>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px;">
-        أنشئ استبياناً بعدد غير محدود من الأسئلة، حدد نوع كل سؤال (نجوم، اختيارات، مقالي، نعم/لا)، وسيتم توليد رابط حقيقي فوري يعمل أونلاين على كافة الأجهزة.
+        أنشئ استبياناً بعدد غير محدود من الأسئلة مع روابط فورية متجاوبة 100% مع كافة شاشات الهواتف.
       </p>
 
       <form onsubmit="App.handleSaveDynamicSurvey(event)">
@@ -780,19 +769,17 @@
         </div>
 
         <div style="display:flex; justify-content:space-between; align-items:center; margin: 12px 0 6px;">
-          <label style="font-weight:800; font-size:0.9rem; color:var(--navy-dark);">أسئلة الاستبيان (أضف ما تشاء):</label>
+          <label style="font-weight:800; font-size:0.9rem; color:var(--navy-dark);">أسئلة الاستبيان:</label>
           <button type="button" class="btn btn-gold" style="padding:4px 12px; font-size:0.75rem; min-height:32px;" onclick="SurveyBuilder.addNewQuestion()">
             <i class="fa-solid fa-plus"></i> إضافة سؤال جديد
           </button>
         </div>
 
-        <div id="surveyQuestionsDynamicContainer" style="max-height: 50vh; overflow-y: auto; padding-right: 4px;">
-          <!-- توليد الأسئلة ديناميكياً هنا -->
-        </div>
+        <div id="surveyQuestionsDynamicContainer" style="max-height: 50vh; overflow-y: auto; padding-right: 4px;"></div>
 
         <div style="display:flex; gap:8px; margin-top:16px;">
           <button type="submit" class="btn btn-gold" style="flex:1;">
-            <i class="fa-solid fa-bolt"></i> حفظ وتوليد الرابط المباشر أونلاين
+            <i class="fa-solid fa-bolt"></i> حفظ وتوليد الرابط المباشر
           </button>
           <button type="button" class="btn btn-secondary" onclick="App.closeCreateSurveyModal()">إلغاء</button>
         </div>
@@ -800,7 +787,7 @@
     </div>
   </div>
 
-  <!-- نافذة إدارة الاتصال الصوتي للأدمن (فردي وجماعي) -->
+  <!-- نافذة الاتصال الصوتي للأدمن -->
   <div class="modal-overlay" id="voiceCallModal">
     <div class="modal-card" style="max-width: 520px; text-align: center;">
       <div style="width:70px; height:70px; border-radius:50%; background:var(--gold-subtle); border:2px solid var(--gold-orange); display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
@@ -808,7 +795,7 @@
       </div>
       <h3 style="color:var(--navy-dark); font-weight:800; margin-bottom:6px;">غرفة الاتصال الصوتي المباشر (الأستاذ عمر)</h3>
       <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:16px;">
-        تواصل صوتي عالي النقاء متوافق مع سماعات الأذن، السبيكر، والكمبيوتر، مع إمكانية التحكم بصوت الطلاب ومشاركتهم.
+        تواصل فائق الوضوح عبر أحدث بروتوكولات WebRTC بدون تقطيع ومتوافق مع جميع الشبكات.
       </p>
 
       <div style="background:var(--bg-light); padding:14px; border-radius:var(--radius-md); margin-bottom:16px; text-align:right;">
@@ -823,13 +810,13 @@
 
       <div style="background:#F5F3FF; padding:14px; border-radius:var(--radius-md); margin-bottom:16px; border:1px solid #DDD6FE; text-align:right;">
         <label style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px; color:#6D28D9;">
-          2. غرفة نقاش صوتي جماعية (كافة الطلاب):
+          2. غرفة نقاش صوتي جماعية:
         </label>
         <p style="font-size:0.75rem; color:#64748B; margin-bottom:8px;">
-          فتح غرفة صوتية تفاعلية تمكّن الأستاذ عمر من التحدث لجميع الطلاب المتواجدين مع إمكانية إتاحة المايك لمن يرفع يده أو كتم الجميع.
+          إتاحة الحوار الصوتي لجميع الطلاب مع أدوات كاملة للمشرف (كتم الجميع / إتاحة المايك لمن يرفع يده).
         </p>
         <button class="btn btn-purple" style="width:100%; font-size:0.8rem;" onclick="VoiceEngine.startBroadcastRoom()">
-          <i class="fa-solid fa-tower-broadcast"></i> فتح وإطلاق الغرفة الجماعية الآن
+          <i class="fa-solid fa-tower-broadcast"></i> فتح وإطلاق الغرفة الجماعية
         </button>
       </div>
 
@@ -863,7 +850,7 @@
         </div>
 
         <div class="form-group" id="editUrlGroup">
-          <label>رابط الملف أو الفيديو / الصوت / الصورة / رابط AI أو HTML</label>
+          <label>رابط الملف أو الفيديو أو الصورة أو الأداة</label>
           <div class="input-with-paste">
             <input type="text" id="editContentUrl">
             <button type="button" class="btn btn-gold" style="padding:8px 12px;" onclick="App.pasteToInput('editContentUrl')">
@@ -873,7 +860,7 @@
         </div>
 
         <div class="form-group" id="editTextGroup">
-          <label>نصوص الشرح المباشر / المحتوى الكتابي / كود HTML أو الأوامر</label>
+          <label>نصوص الشرح المباشر / المحتوى الكتابي / كود HTML</label>
           <textarea id="editContentText" rows="5"></textarea>
         </div>
 
@@ -885,11 +872,11 @@
     </div>
   </div>
 
-  <!-- نافذة تخصيص الشعار وإعدادات المنصة وإدارة حساب المشرف السحابي -->
+  <!-- إعدادات المنصة وإدارة حساب المشرف -->
   <div class="modal-overlay" id="settingsModal">
     <div class="modal-card" style="max-width: 520px;">
       <h3 style="color: var(--navy-dark); margin-bottom: 14px;">
-        <i class="fa-solid fa-sliders"></i> إعدادات المنصة وإدارة حساب الأدمن
+        <i class="fa-solid fa-sliders"></i> إعدادات المنصة وأمان المشرف
       </h3>
       <form onsubmit="App.handleSaveSettings(event)">
         <div class="form-group">
@@ -909,7 +896,7 @@
 
         <div style="border-top: 2px dashed var(--gold-orange); margin: 18px 0 14px; padding-top: 14px;">
           <h4 style="color:var(--navy-dark); font-size:0.95rem; margin-bottom:10px;">
-            <i class="fa-solid fa-user-shield" style="color:var(--gold-deep);"></i> تعديل بيانات حساب المشرف (سحابياً في فايربيز)
+            <i class="fa-solid fa-user-shield" style="color:var(--gold-deep);"></i> بيانات المشرف السحابية المشفرة
           </h4>
           <div class="form-group">
             <label>اسم مستخدم الأدمن (Username)</label>
@@ -920,7 +907,7 @@
             <input type="password" id="settingAdminPass" placeholder="••••••••">
           </div>
           <div class="form-group">
-            <label>رمز التحقق الأمني المزدوج الجديد (2FA PIN)</label>
+            <label>رمز التحقق المزدوج الجديد (2FA PIN)</label>
             <input type="text" id="settingAdminPin" maxlength="6" placeholder="******">
           </div>
         </div>
@@ -965,21 +952,6 @@
           <i class="fa-solid fa-print"></i> طباعة الشهادة A4
         </button>
         <button class="btn btn-secondary" onclick="App.closeCertificateModal()">إغلاق</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- نافذة التأكيد -->
-  <div class="modal-overlay" id="confirmModal">
-    <div class="modal-card" style="max-width: 400px; text-align: center;">
-      <div style="font-size: 42px; color: var(--gold-orange); margin-bottom: 12px;">
-        <i class="fa-solid fa-circle-question"></i>
-      </div>
-      <h3 id="confirmTitle" style="color: var(--navy-dark); margin-bottom: 8px;">تأكيد الإجراء</h3>
-      <p id="confirmMessage" style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;"></p>
-      <div style="display: flex; gap: 8px;">
-        <button class="btn btn-gold" id="confirmOkBtn" style="flex: 1;">تأكيد</button>
-        <button class="btn btn-secondary" onclick="App.closeConfirmModal()" style="flex: 1;">إلغاء</button>
       </div>
     </div>
   </div>
@@ -1034,7 +1006,7 @@
   <script>
     /**
      * =========================================================================
-     * 1. دالة تطبيع المدخلات ومعالجة الأرقام العربية
+     * 1. دوال مساعدة لحماية البيانات وتطبيع الأرقام وإخفاء الهواتف
      * =========================================================================
      */
     function normalizeInput(val) {
@@ -1045,9 +1017,106 @@
         .replace(/[\u200B-\u200D\uFEFF]/g, '');
     }
 
+    // إخفاء أرقام الهواتف لحماية الخصوصية
+    function maskPhoneNumber(phone) {
+      if (!phone || phone === 'غير محدد') return 'غير محدد';
+      const clean = normalizeInput(phone).replace(/\s+/g, '');
+      if (clean.length <= 5) return '••••••';
+      const start = clean.substring(0, 4);
+      const end = clean.substring(clean.length - 3);
+      return `${start}****${end}`;
+    }
+
     /**
      * =========================================================================
-     * 2. رابط الشعار وقائمة المناهج الموسعة
+     * 2. نظام النوافذ التفاعلية المخصصة (Custom Modal System)
+     * =========================================================================
+     */
+    const NotificationEngine = {
+      resolvePromise: null,
+
+      alert(message, title = "تنبيه المنصة", icon = "fa-circle-info") {
+        return new Promise(resolve => {
+          this.resolvePromise = resolve;
+          document.getElementById('customDialogTitle').innerText = title;
+          document.getElementById('customDialogMessage').innerText = message;
+          document.getElementById('customDialogIcon').innerHTML = `<i class="fa-solid ${icon}"></i>`;
+          document.getElementById('customDialogInputGroup').style.display = 'none';
+          document.getElementById('customDialogCancelBtn').style.display = 'none';
+          
+          const okBtn = document.getElementById('customDialogOkBtn');
+          okBtn.innerText = 'حسناً';
+          okBtn.onclick = () => {
+            document.getElementById('customDialogOverlay').classList.remove('active');
+            resolve(true);
+          };
+
+          document.getElementById('customDialogOverlay').classList.add('active');
+        });
+      },
+
+      confirm(message, title = "تأكيد الإجراء", icon = "fa-circle-question") {
+        return new Promise(resolve => {
+          this.resolvePromise = resolve;
+          document.getElementById('customDialogTitle').innerText = title;
+          document.getElementById('customDialogMessage').innerText = message;
+          document.getElementById('customDialogIcon').innerHTML = `<i class="fa-solid ${icon}"></i>`;
+          document.getElementById('customDialogInputGroup').style.display = 'none';
+          
+          const cancelBtn = document.getElementById('customDialogCancelBtn');
+          cancelBtn.style.display = 'inline-flex';
+          cancelBtn.onclick = () => {
+            document.getElementById('customDialogOverlay').classList.remove('active');
+            resolve(false);
+          };
+
+          const okBtn = document.getElementById('customDialogOkBtn');
+          okBtn.innerText = 'تأكيد';
+          okBtn.onclick = () => {
+            document.getElementById('customDialogOverlay').classList.remove('active');
+            resolve(true);
+          };
+
+          document.getElementById('customDialogOverlay').classList.add('active');
+        });
+      },
+
+      prompt(message, defaultValue = "", title = "إدخال مطلوب") {
+        return new Promise(resolve => {
+          this.resolvePromise = resolve;
+          document.getElementById('customDialogTitle').innerText = title;
+          document.getElementById('customDialogMessage').innerText = message;
+          document.getElementById('customDialogIcon').innerHTML = `<i class="fa-solid fa-pen-to-square"></i>`;
+          
+          const inputGroup = document.getElementById('customDialogInputGroup');
+          const input = document.getElementById('customDialogInput');
+          inputGroup.style.display = 'block';
+          input.value = defaultValue;
+
+          const cancelBtn = document.getElementById('customDialogCancelBtn');
+          cancelBtn.style.display = 'inline-flex';
+          cancelBtn.onclick = () => {
+            document.getElementById('customDialogOverlay').classList.remove('active');
+            resolve(null);
+          };
+
+          const okBtn = document.getElementById('customDialogOkBtn');
+          okBtn.innerText = 'إرسال';
+          okBtn.onclick = () => {
+            const val = input.value;
+            document.getElementById('customDialogOverlay').classList.remove('active');
+            resolve(val);
+          };
+
+          document.getElementById('customDialogOverlay').classList.add('active');
+          setTimeout(() => input.focus(), 100);
+        });
+      }
+    };
+
+    /**
+     * =========================================================================
+     * 3. ثوابت المنظومة والمناهج
      * =========================================================================
      */
     const OFFICIAL_LOGO_URL = "https://videotourl.com/images/1792673507558-0d8ff32e-d7a0-49bd-a008-2ea9fbcbf1b4.jpg";
@@ -1073,7 +1142,7 @@
 
     /**
      * =========================================================================
-     * 3. محرك الحاسبة العلمية المتقدمة (Advanced Scientific Calculator Engine)
+     * 4. الحاسبة العلمية المتقدمة
      * =========================================================================
      */
     const SciCalc = {
@@ -1169,7 +1238,7 @@
 
     /**
      * =========================================================================
-     * 4. محرك المساعد الذكي المنهجي
+     * 5. المساعد الرياضي الذكي (Curriculum AI Assistant)
      * =========================================================================
      */
     const CurriculumAiEngine = {
@@ -1178,71 +1247,48 @@
         const target = user ? user.target : 'UAE_12_ADV';
         const isUAE = target.startsWith('UAE');
 
-        const matchedMaterial = State.materials.find(m => 
-          (m.target === target || m.target === 'ALL') && (
-            q.includes(m.title.toLowerCase()) || 
-            (m.unit && q.includes(m.unit.toLowerCase()))
-          )
-        );
-
-        let contextNote = "";
-        if (matchedMaterial) {
-          contextNote = isUAE 
-            ? `<div style="background:#EFF6FF; padding:8px; border-radius:6px; margin-top:8px; border-left:3px solid #3B82F6; font-size:0.8rem;"><strong>📘 Platform Reference:</strong> Included in unit "${matchedMaterial.unit}" - <em>${matchedMaterial.title}</em>.</div>`
-            : `<div style="background:#FFFBEB; padding:8px; border-radius:6px; margin-top:8px; border-right:3px solid #F59E0B; font-size:0.8rem;"><strong>📘 مرجع من المنصة:</strong> مشروح ضمن وحدة "${matchedMaterial.unit}" - <em>${matchedMaterial.title}</em> تحت إشراف الأستاذ عمر.</div>`;
-        }
-
         if (isUAE) {
           if (q.includes('derivative') || q.includes('differentiat') || q.includes('مشتق') || q.includes('تفاضل')) {
             return `
-              <strong>📐 Differentiation Rules (UAE Advanced & General Math):</strong><br>
+              <strong>📐 Differentiation Rules (UAE Syllabus):</strong><br>
               • <strong>Power Rule:</strong> \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>
               • <strong>Product Rule:</strong> \\( (u \\cdot v)' = u'v + u v' \\)<br>
               • <strong>Quotient Rule:</strong> \\( \\left(\\frac{u}{v}\\right)' = \\frac{u'v - u v'}{v^2} \\)<br>
               • <strong>Chain Rule:</strong> \\( \\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x) \\)<br>
-              <em>Teacher Omer's Tip:</em> Always identify the inner and outer functions carefully before applying chain rule.
-              ${contextNote}
+              <em>Teacher Omer's Advice:</em> Differentiate the outermost function first, keep the inner function unchanged, then multiply by the derivative of the inner function.
             `;
           } else if (q.includes('integral') || q.includes('integration') || q.includes('تكامل')) {
             return `
-              <strong>∫ Integration Techniques (UAE Curriculum):</strong><br>
-              • <strong>Basic Power:</strong> \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\quad (n \\neq -1) \\)<br>
+              <strong>∫ Integration Guidelines:</strong><br>
+              • <strong>Power Rule:</strong> \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\quad (n \\neq -1) \\)<br>
               • <strong>Exponential:</strong> \\( \\int e^{kx} dx = \\frac{1}{k} e^{kx} + C \\)<br>
-              • <strong>Integration by Parts:</strong> \\( \\int u \\, dv = u v - \\int v \\, du \\)<br>
-              Choose \\(u\\) according to <strong>LIATE</strong> (Logarithmic, Inverse trig, Algebraic, Trig, Exponential).
-              ${contextNote}
+              • <strong>Parts formula:</strong> \\( \\int u \\, dv = u v - \\int v \\, du \\)
             `;
           } else {
             return `
               <strong>Hello! I am Mr. Omer Gasim's Smart Math Assistant.</strong><br>
-              For your current syllabus (<strong>${UI.getTargetLabel(target)}</strong>), I can help step-by-step with Derivatives, Definite Integrals, Vectors, Matrices, and Trigonometric equations.
-              ${contextNote}
+              Ask any mathematical question regarding <strong>${UI.getTargetLabel(target)}</strong>.
             `;
           }
         } else {
           if (q.includes('مشتق') || q.includes('تفاضل')) {
             return `
-              <strong>📐 قواعد التفاضل المعتمدة (الشهادة الثانوية السودانية):</strong><br>
-              • <strong>مشتقة الدالة البسيطة:</strong> \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>
-              • <strong>مشتقة حاصل ضرب دالتين:</strong> (مشتقة الأولى × الثانية) + (الأولى × مشتقة الثانية)<br>
-              • <strong>مشتقة خارج قسمة دالتين:</strong> \\( \\frac{\\text{المقام} \\times \\text{مشتقة البسط} - \\text{البسط} \\times \\text{مشتقة المقام}}{(\\text{المقام})^2} \\)<br>
-              • <strong>قاعدة السلسلة:</strong> \\( \\frac{dy}{dx} = \\frac{dy}{du} \\times \\frac{du}{dx} \\)<br>
-              <em>توجيه الأستاذ عمر:</em> احرص على استخدام رمز الدالة \\( f'(x) \\) وتبسيط المقادير لأقصى حد.
-              ${contextNote}
+              <strong>📐 قواعد التفاضل (الشهادة الثانوية السودانية):</strong><br>
+              • <strong>مشتقة القوة:</strong> \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>
+              • <strong>مشتقة الضرب:</strong> (مشتقة الأولى × الثانية) + (الأولى × مشتقة الثانية)<br>
+              • <strong>مشتقة القسمة:</strong> \\( \\frac{\\text{المقام} \\times \\text{مشتقة البسط} - \\text{البسط} \\times \\text{مشتقة المقام}}{(\\text{المقام})^2} \\)<br>
+              <em>توجيه الأستاذ عمر:</em> احرص على تدوين الخطوات كاملة لنيل الدرجة القصوى في امتحان الشهادة.
             `;
           } else if (q.includes('تكامل')) {
             return `
               <strong>∫ قواعد التكامل (المقرر والشهادة السودانية):</strong><br>
-              • <strong>تكامل القوة:</strong> \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + جـ \\)<br>
-              • <strong>التكامل بالتعويض:</strong> عندما يكون المقدار دالة في مشتقتها \\( \\int f'(x) [f(x)]^n dx = \\frac{[f(x)]^{n+1}}{n+1} + جـ \\)<br>
-              • <strong>التكامل بالتجزيء:</strong> \\( \\int ص \\, د ع = ص \\, ع - \\int ع \\, د ص \\)<br>
-              ${contextNote}
+              • <strong>تكامل الدالة الجبرية:</strong> \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + جـ \\)<br>
+              • <strong>التكامل بالتعويض:</strong> عندما تتواجد الدالة مضروبة في مشتقتها.
             `;
           } else {
             return `
-              <strong>مرحباً بك! أنا المساعد الرياضي للأستاذ عمر قاسم.</strong><br>
-              أنا مهيأ لمساعدتك في مقررات <strong>${UI.getTargetLabel(target)}</strong> في التفاضل، التكامل، الإحصاء والاحتمالات، والهندسة التحليلية. اكتب مسألتك الآن!
-              ${contextNote}
+              <strong>مرحباً بك! أنا المساعد الذكي للأستاذ عمر قاسم.</strong><br>
+              اكتب مسألتك أو المعادلة وسأوضح لك الحل والخطوات بحسب المنهج المعتمد.
             `;
           }
         }
@@ -1251,7 +1297,7 @@
 
     /**
      * =========================================================================
-     * 5. محرك الفيديو الاحترافي
+     * 6. محرك الفيديو الاحترافي
      * =========================================================================
      */
     const VideoEngine = {
@@ -1282,11 +1328,6 @@
           const match = url.match(/vimeo\.com\/(\d+)/);
           const vimeoId = match ? match[1] : '';
           return `<iframe style="width:100%; height:100%; border:none;" src="https://player.vimeo.com/video/${vimeoId}?autoplay=1" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-        }
-
-        if (url.includes('loom.com')) {
-          const loomEmbed = url.replace('/share/', '/embed/');
-          return `<iframe style="width:100%; height:100%; border:none;" src="${loomEmbed}" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>`;
         }
 
         return `<video id="activeVideoPlayer" playsinline controls controlsList="nodownload" disablePictureInPicture oncontextmenu="return false;" style="width:100%; height:100%; background:#000;"><source src="${url}"></video>`;
@@ -1354,7 +1395,7 @@
           const left = Math.floor(Math.random() * 60) + 10;
           el.style.top = top + '%';
           el.style.left = left + '%';
-        }, 6000);
+        }, 5000);
       },
 
       cleanup() {
@@ -1367,8 +1408,7 @@
 
     /**
      * =========================================================================
-     * 6. محرك الاتصال الصوتي الاحترافي المتقدم (Pro Voice Engine)
-     * يدعم: سماعات الرأس / السبيكر / الهاتف / الغرف الفردية والجماعية / التحكم بالمايك
+     * 7. محرك الاتصال الصوتي المتقدم WebRTC (Voice Engine)
      * =========================================================================
      */
     const VoiceEngine = {
@@ -1376,21 +1416,20 @@
       localStream: null,
       isMuted: false,
       isRoomCall: false,
-      activeCalls: new Map(), // PeerId -> Call
-      dataConnections: new Map(), // PeerId -> DataConnection
-      participants: new Map(), // PeerId -> { name, isMuted, canSpeak, handRaised, audioEl }
+      activeCalls: new Map(),
+      dataConnections: new Map(),
+      participants: new Map(),
       audioOutputs: [],
       currentAudioOutputIdx: 0,
 
-      // تهيئة المايك مع عزل الصدى المتقدم وإلغاء الضوضاء
       async getOptimizedMediaStream() {
         return await navigator.mediaDevices.getUserMedia({
           audio: {
-            echoCancellation: { ideal: true },
-            noiseSuppression: { ideal: true },
-            autoGainControl: { ideal: true },
+            echoCancellation: true,
+            noiseSuppression: true,
+            autoGainControl: true,
             channelCount: 1,
-            sampleRate: { ideal: 48000 }
+            sampleRate: 48000
           },
           video: false
         });
@@ -1399,23 +1438,28 @@
       init(userUid) {
         if (this.peer) return;
         try {
-          const cleanId = 'omer_v2_' + userUid.replace(/[^a-zA-Z0-9]/g, '_');
+          const cleanId = 'og_voice_' + userUid.replace(/[^a-zA-Z0-9]/g, '_');
           this.peer = new Peer(cleanId, {
-            debug: 1,
+            debug: 0,
             config: {
               iceServers: [
                 { urls: 'stun:stun.l.google.com:19302' },
-                { urls: 'stun:stun1.l.google.com:19302' }
+                { urls: 'stun:stun1.l.google.com:19302' },
+                { urls: 'stun:stun2.l.google.com:19302' },
+                { urls: 'stun:stun.services.mozilla.com' }
               ]
             }
           });
 
-          // استقبال المكالمات الصوتية
           this.peer.on('call', async call => {
             const callerName = call.metadata?.callerName || 'الأستاذ عمر قاسم';
             const isGroup = !!call.metadata?.isGroup;
 
-            const accept = confirm(`📞 لديك اتصال صوتي ${isGroup ? 'في غرفة نقاش جماعية' : 'مباشر'} من (${callerName})!\nهل تود الرد؟`);
+            const accept = await NotificationEngine.confirm(
+              `لديك اتصال صوتي ${isGroup ? 'في غرفة نقاش جماعية' : 'مباشر'} من (${callerName})!\nهل تود الرد والمشاركة؟`,
+              'مكالمة واردة'
+            );
+
             if (accept) {
               try {
                 this.localStream = await this.getOptimizedMediaStream();
@@ -1423,12 +1467,11 @@
                 this.isRoomCall = isGroup;
                 this.setupCallEvents(call, callerName);
               } catch (err) {
-                alert('يرجى منح الإذن للمتصفح للوصول إلى الميكروفون للمشاركة.');
+                NotificationEngine.alert('يرجى منح الإذن للمتصفح للوصول إلى الميكروفون.', 'تنبيه الميكروفون');
               }
             }
           });
 
-          // استقبال اتصالات الأوامر والبيانات (كتم الصوت، رفع اليد، الأذونات)
           this.peer.on('connection', conn => {
             this.setupDataConnection(conn);
           });
@@ -1452,25 +1495,21 @@
         if (this.audioOutputs.length === 0) {
           await this.detectAudioOutputs();
           if (this.audioOutputs.length === 0) {
-            alert('التحويل التلقائي مفعل عبر نظام جهازك (سماعة الرأس أو السبيكر).');
+            App.showSecurityAlert('يتم توجيه الصوت تلقائياً عبر نظام جهازك الحالي.');
             return;
           }
         }
         this.currentAudioOutputIdx = (this.currentAudioOutputIdx + 1) % this.audioOutputs.length;
         const targetDevice = this.audioOutputs[this.currentAudioOutputIdx];
         
-        let applied = false;
         document.querySelectorAll('audio.voice-remote-audio').forEach(async el => {
           if (el.setSinkId) {
-            try {
-              await el.setSinkId(targetDevice.deviceId);
-              applied = true;
-            } catch(e){}
+            try { await el.setSinkId(targetDevice.deviceId); } catch(e){}
           }
         });
 
-        const label = targetDevice.label || `جهاز ${this.currentAudioOutputIdx + 1}`;
-        App.showSecurityAlert(`تم توجيه مخرج الصوت إلى: ${label}`);
+        const label = targetDevice.label || `مخرج صوت ${this.currentAudioOutputIdx + 1}`;
+        App.showSecurityAlert(`تم تحويل الصوت إلى: ${label}`);
       },
 
       setupDataConnection(conn) {
@@ -1479,19 +1518,17 @@
         conn.on('data', data => {
           if (!data) return;
 
-          // 1. أمر كتم الصوت الإجباري من الأستاذ
           if (data.type === 'FORCE_MUTE') {
             if (this.localStream) {
               this.localStream.getAudioTracks().forEach(t => t.enabled = false);
               this.isMuted = true;
               this.updateMicButtonUI();
-              alert('🔇 قام الأستاذ عمر بتصميت الميكروفون الخاص بك حالياً.');
+              NotificationEngine.alert('قام الأستاذ عمر بتصميت الميكروفون الخاص بك لتنظيم الجلسة.', 'تنبيه تنظيمي');
             }
           }
 
-          // 2. أمر السماح بالحديث
           if (data.type === 'ALLOW_SPEAK') {
-            alert('🎙️ منحك الأستاذ عمر الإذن بالحديث الآن! يمكنك تفعيل المايك.');
+            NotificationEngine.alert('منحك الأستاذ عمر الإذن بالحديث الآن! يمكنك تفعيل المايك.', 'إذن الحديث');
             if (this.localStream) {
               this.localStream.getAudioTracks().forEach(t => t.enabled = true);
               this.isMuted = false;
@@ -1499,10 +1536,9 @@
             }
           }
 
-          // 3. إشعار رفع اليد للأدمن
           if (data.type === 'HAND_RAISE' && State.currentUser?.role === 'ADMIN') {
             const studentName = data.studentName || 'طالب';
-            App.showSecurityAlert(`✋ الطالب (${studentName}) يرفع يده ويطلب الإذن بالحديث!`);
+            App.showSecurityAlert(`✋ الطالب (${studentName}) يطلب الإذن بالحديث.`);
             const p = this.participants.get(conn.peer);
             if (p) {
               p.handRaised = true;
@@ -1516,17 +1552,16 @@
         });
       },
 
-      // بدء مكالمة فردية
       async callSelectedStudent() {
         const studentUid = document.getElementById('voiceStudentSelect').value;
         const student = State.students.find(s => s.uid === studentUid);
-        if (!student) { alert('يرجى تحديد طالب للاتصال.'); return; }
+        if (!student) { NotificationEngine.alert('يرجى تحديد طالب للاتصال به.'); return; }
 
         App.closeVoiceModal();
 
         try {
           this.localStream = await this.getOptimizedMediaStream();
-          const targetPeerId = 'omer_v2_' + student.uid.replace(/[^a-zA-Z0-9]/g, '_');
+          const targetPeerId = 'og_voice_' + student.uid.replace(/[^a-zA-Z0-9]/g, '_');
           
           const conn = this.peer.connect(targetPeerId);
           this.setupDataConnection(conn);
@@ -1537,13 +1572,12 @@
           
           this.isRoomCall = false;
           this.setupCallEvents(call, student.name);
-          App.showSecurityAlert(`جاري الاتصال المباشر بالطالب: ${student.name}...`);
+          App.showSecurityAlert(`جاري الاتصال المباشر بـ ${student.name}...`);
         } catch (err) {
-          alert('تعذر فتح الميكروفون. تأكد من منح الإذن للمتصفح وسلامة توصيل السماعات.');
+          NotificationEngine.alert('تعذر فتح الميكروفون. تأكد من منح الإذن للمتصفح.', 'خطأ الميكروفون');
         }
       },
 
-      // فتح وإطلاق غرفة نقاش جماعية للجميع
       async startBroadcastRoom() {
         App.closeVoiceModal();
         try {
@@ -1551,15 +1585,14 @@
           this.isRoomCall = true;
 
           document.getElementById('voiceCallStatusTitle').innerText = 'غرفة نقاش جماعية نشطة';
-          document.getElementById('voiceCallPeerName').innerText = 'الأستاذ عمر (المضيف والمشرف)';
+          document.getElementById('voiceCallPeerName').innerText = 'الأستاذ عمر (المشرف)';
           document.getElementById('voiceCallBubble').classList.add('active');
           document.getElementById('voiceParticipantsList').style.display = 'flex';
           document.getElementById('btnAdminMuteAll').style.display = 'inline-flex';
           document.getElementById('btnRaiseHand').style.display = 'none';
 
-          // الاتصال بكافة الطلاب المسجلين
           State.students.forEach(st => {
-            const targetPeerId = 'omer_v2_' + st.uid.replace(/[^a-zA-Z0-9]/g, '_');
+            const targetPeerId = 'og_voice_' + st.uid.replace(/[^a-zA-Z0-9]/g, '_');
             const conn = this.peer.connect(targetPeerId);
             this.setupDataConnection(conn);
 
@@ -1572,14 +1605,13 @@
           this.renderParticipantsList();
           App.showSecurityAlert('تم إطلاق غرفة البث الجماعية ودعوة كافة الطلاب للانضمام.');
         } catch (err) {
-          alert('تعذر الوصول للميكروفون لبدء الغرفة الجماعية.');
+          NotificationEngine.alert('تعذر الوصول للميكروفون لبدء الغرفة الجماعية.', 'خطأ في الصوت');
         }
       },
 
       setupCallEvents(call, peerName) {
         this.activeCalls.set(call.peer, call);
 
-        // إنشاء مشغل الصوت البعيد
         let audioEl = document.getElementById('remoteVoiceAudio_' + call.peer);
         if (!audioEl) {
           audioEl = document.createElement('audio');
@@ -1597,7 +1629,6 @@
           audioEl: audioEl
         });
 
-        // ضبط واجهة المستخدم
         document.getElementById('voiceCallStatusTitle').innerText = this.isRoomCall ? 'غرفة نقاش جماعية' : 'مكالمة صوتية نشطة';
         document.getElementById('voiceCallPeerName').innerText = peerName;
         document.getElementById('voiceCallBubble').classList.add('active');
@@ -1612,16 +1643,12 @@
 
         call.on('stream', remoteStream => {
           audioEl.srcObject = remoteStream;
+          audioEl.play().catch(()=>{});
           this.renderParticipantsList();
         });
 
-        call.on('close', () => {
-          this.removeParticipant(call.peer);
-        });
-
-        call.on('error', () => {
-          this.removeParticipant(call.peer);
-        });
+        call.on('close', () => this.removeParticipant(call.peer));
+        call.on('error', () => this.removeParticipant(call.peer));
 
         this.renderParticipantsList();
       },
@@ -1658,7 +1685,7 @@
           row.innerHTML = `
             <div>
               <strong>${data.name}</strong>
-              ${data.handRaised ? '<span class="badge badge-trial" style="font-size:0.65rem; padding:1px 6px;">✋ رفع اليد</span>' : ''}
+              ${data.handRaised ? '<span class="badge badge-trial" style="font-size:0.65rem; padding:1px 6px;">✋ استئذان</span>' : ''}
             </div>
             <div style="display:flex; gap:4px;">
               ${isAdmin ? `
@@ -1686,7 +1713,7 @@
         const btn = document.getElementById('btnToggleMic');
         if (!btn) return;
         if (this.isMuted) {
-          btn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> كتم الصوت (مكتوم)';
+          btn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> مكتوم';
           btn.classList.add('btn-danger');
           btn.classList.remove('btn-gold');
         } else {
@@ -1703,31 +1730,27 @@
             conn.send({ type: 'HAND_RAISE', studentName: user ? user.name : 'طالب' });
           }
         });
-        App.showSecurityAlert('تم رفع اليد وإشعار الأستاذ عمر برغبتك في الحديث.');
+        App.showSecurityAlert('تم رفع اليد وإشعار الأستاذ برغبتك في التحدث.');
       },
 
       adminMuteStudent(peerId) {
         const conn = this.dataConnections.get(peerId);
-        if (conn && conn.open) {
-          conn.send({ type: 'FORCE_MUTE' });
-        }
+        if (conn && conn.open) conn.send({ type: 'FORCE_MUTE' });
         const p = this.participants.get(peerId);
         if (p && p.audioEl) p.audioEl.muted = true;
-        App.showSecurityAlert(`تم كتم صوت الطالب بنجاح.`);
+        App.showSecurityAlert(`تم كتم صوت الطالب.`);
       },
 
       adminAllowSpeak(peerId) {
         const conn = this.dataConnections.get(peerId);
-        if (conn && conn.open) {
-          conn.send({ type: 'ALLOW_SPEAK' });
-        }
+        if (conn && conn.open) conn.send({ type: 'ALLOW_SPEAK' });
         const p = this.participants.get(peerId);
         if (p) {
           p.handRaised = false;
           if (p.audioEl) p.audioEl.muted = false;
         }
         this.renderParticipantsList();
-        App.showSecurityAlert(`تم منح إذن الحديث للطالب.`);
+        App.showSecurityAlert(`تم منح إذن الحديث.`);
       },
 
       adminMuteAll() {
@@ -1764,7 +1787,7 @@
 
     /**
      * =========================================================================
-     * 7. نظام بناء وتوليد الاستبيانات غير المحدودة (Dynamic Survey Builder)
+     * 8. منشئ الاستبيانات الديناميكي المتجاوب بالكامل
      * =========================================================================
      */
     const SurveyBuilder = {
@@ -1786,7 +1809,7 @@
           },
           {
             id: 'q_' + Date.now() + '_3',
-            text: 'ما هي الموضوعات أو الدروس التي ترغب في تكثيف مراجعتها وحل نماذج إضافية لها؟',
+            text: 'ما هي الموضوعات أو الدروس التي ترغب في تكثيف مراجعتها؟',
             type: 'TEXT',
             options: []
           }
@@ -1800,18 +1823,17 @@
           id: qId,
           text: '',
           type: 'RATING',
-          options: ['خيار 1', 'خيار 2']
+          options: ['خيار أ', 'خيار ب']
         });
         this.renderQuestionsList();
         
-        // التمرير التلقائي للأسفل
         const container = document.getElementById('surveyQuestionsDynamicContainer');
         if (container) container.scrollTop = container.scrollHeight;
       },
 
       removeQuestion(index) {
         if (this.questions.length <= 1) {
-          alert('يجب أن يحتوي الاستبيان على سؤال واحد على الأقل.');
+          NotificationEngine.alert('يجب أن يحتوي الاستبيان على سؤال واحد على الأقل.', 'تنبيه');
           return;
         }
         this.questions.splice(index, 1);
@@ -1827,13 +1849,13 @@
       },
 
       addChoiceOption(qIndex) {
-        this.questions[qIndex].options.push('خيار جديد');
+        this.questions[qIndex].options.push('خيار إضافي');
         this.renderQuestionsList();
       },
 
       removeChoiceOption(qIndex, optIndex) {
         if (this.questions[qIndex].options.length <= 2) {
-          alert('يجب وضع خيارين على الأقل لسؤال الاختيارات.');
+          NotificationEngine.alert('يجب وضع خيارين على الأقل لسؤال الاختيارات.', 'تنبيه');
           return;
         }
         this.questions[qIndex].options.splice(optIndex, 1);
@@ -1847,13 +1869,13 @@
         container.innerHTML = this.questions.map((q, idx) => `
           <div class="survey-builder-qcard">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-              <strong style="color:var(--navy-dark); font-size:0.85rem;">السؤال رقم (${idx + 1}):</strong>
+              <strong style="color:var(--navy-dark); font-size:0.85rem;">السؤال (${idx + 1}):</strong>
               <button type="button" class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem; min-height:26px;" onclick="SurveyBuilder.removeQuestion(${idx})">
-                <i class="fa-solid fa-trash"></i> حذف السؤال
+                <i class="fa-solid fa-trash"></i> حذف
               </button>
             </div>
 
-            <div style="display:grid; grid-template-columns: 2fr 1fr; gap:8px; margin-bottom:8px;">
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:8px;">
               <input type="text" value="${q.text}" placeholder="اكتب نص السؤال هنا..." oninput="SurveyBuilder.questions[${idx}].text = this.value" required>
               <select onchange="SurveyBuilder.changeQType(${idx}, this.value)">
                 <option value="RATING" ${q.type === 'RATING' ? 'selected' : ''}>⭐ تقييم نجوم (1 إلى 5)</option>
@@ -1888,15 +1910,15 @@
 
     /**
      * =========================================================================
-     * 8. حلبة فرسان الرياضيات وتحديات الطلاب (Math Arena)
+     * 9. حلبة فرسان الرياضيات وتحديات الطلاب
      * =========================================================================
      */
     const MathArena = {
       dailyQuestions: [
-        { q: "ما هي مشتقة \\( f(x) = 3x^2 + 5x - 7 \\)؟", opts: ["\\( 6x + 5 \\)", "\\( 3x + 5 \\)", "\\( 6x^2 + 5 \\)"], correct: 0 },
-        { q: "قيمة \\( \\int 4x^3 dx \\) تساوي:", opts: ["\\( x^4 + C \\)", "\\( 12x^2 + C \\)", "\\( 4x^4 + C \\)"], correct: 0 },
-        { q: "حل المعادلة: \\( 2^x = 16 \\) هو:", opts: ["\\( x = 4 \\)", "\\( x = 3 \\)", "\\( x = 8 \\)"], correct: 0 },
-        { q: "المتطابقة \\( \\sin^2\\theta + \\cos^2\\theta \\) تساوي دائماً:", opts: ["\\( 1 \\)", "\\( 0 \\)", "\\( 2 \\)"], correct: 0 }
+        { q: "ما هي مشتقة دالة \\( f(x) = 3x^2 + 5x - 7 \\)؟", opts: ["\\( 6x + 5 \\)", "\\( 3x + 5 \\)", "\\( 6x^2 + 5 \\)"], correct: 0 },
+        { q: "قيمة التكامل \\( \\int 4x^3 dx \\) هي:", opts: ["\\( x^4 + C \\)", "\\( 12x^2 + C \\)", "\\( 4x^4 + C \\)"], correct: 0 },
+        { q: "حل المعادلة الأسية: \\( 2^x = 16 \\) هو:", opts: ["\\( x = 4 \\)", "\\( x = 3 \\)", "\\( x = 8 \\)"], correct: 0 },
+        { q: "المتطابقة \\( \\sin^2\\theta + \\cos^2\\theta \\) تساوي:", opts: ["\\( 1 \\)", "\\( 0 \\)", "\\( 2 \\)"], correct: 0 }
       ],
       currentQIndex: 0,
       score: 0,
@@ -1928,7 +1950,7 @@
             user.trophies = (user.trophies || 1) + 1;
             DataStore.save('students', State.students);
           }
-          alert(`⚔️ انتهت جولة التحدي!\nأحرزت: ${this.score} نقطة خبرة (XP) مضافة إلى رصيدك!`);
+          NotificationEngine.alert(`انتهت جولة التحدي بنجاح!\nأحرزت: ${this.score} نقطة خبرة (XP) مضافة إلى رصيدك!`, 'فرسان الرياضيات');
           App.openArenaView();
         }
       }
@@ -1936,7 +1958,7 @@
 
     /**
      * =========================================================================
-     * 9. محرك تشغيل الـ PDF
+     * 10. محرك تشغيل الـ PDF والـ Word داخل المنصة
      * =========================================================================
      */
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
@@ -1952,7 +1974,7 @@
         this.canvasContainer.innerHTML = `
           <div style="color:#FFF; padding:35px; text-align:center;">
             <i class="fa-solid fa-spinner fa-spin" style="font-size:30px; color:var(--gold-orange); margin-bottom:10px;"></i>
-            <p>جاري معالجة وتهيئة ملف الـ PDF بدقة عالية...</p>
+            <p>جاري معالجة وتهيئة ملف الـ PDF داخلياً...</p>
           </div>
         `;
 
@@ -1970,13 +1992,10 @@
           document.getElementById('pdfControlsBar').style.display = 'flex';
           this.renderPage(this.pageNum);
         } catch (error) {
-          const gViewer = `https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true`;
           this.canvasContainer.innerHTML = `
-            <iframe class="document-viewer-frame" src="${gViewer}"></iframe>
-            <div style="background:#0A1424; padding:10px; width:100%; text-align:center;">
-              <a href="${url}" target="_blank" class="btn btn-gold" style="font-size:0.8rem;">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> فتح الملف في نافذة خارجية
-              </a>
+            <div style="background:#0A1424; padding:30px; color:#FFF; text-align:center;">
+              <p style="color:var(--gold-orange);">تعذر تحميل الملف مباشرة عبر Canvas. جاري تشغيل العارض الآمن البديل...</p>
+              <iframe class="document-viewer-frame" style="margin-top:14px;" src="https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true"></iframe>
             </div>
           `;
           document.getElementById('pdfControlsBar').style.display = 'none';
@@ -2025,7 +2044,7 @@
 
     /**
      * =========================================================================
-     * 10. مؤقت التركيز (Pomodoro Timer)
+     * 11. مؤقت التركيز (Pomodoro Timer)
      * =========================================================================
      */
     const PomodoroTimer = {
@@ -2040,7 +2059,7 @@
 
       start() {
         this.isRunning = true;
-        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-pause"></i> إيقاف مؤقت';
+        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-pause"></i> إيقاف';
         this.timerId = setInterval(() => {
           if (this.timeLeft > 0) {
             this.timeLeft--;
@@ -2048,7 +2067,7 @@
           } else {
             this.pause();
             AudioFX.celebrate();
-            alert("⏰ انتهت جلسة التركيز! خذ استراحة لمدة 5 دقائق.");
+            NotificationEngine.alert("⏰ انتهت جلسة التركيز! خذ استراحة لمدة 5 دقائق.", "جلسة التركيز");
             this.reset();
           }
         }, 1000);
@@ -2077,11 +2096,11 @@
 
     /**
      * =========================================================================
-     * 11. نظام التشفير وجلسات العمل
+     * 12. نظام التشفير وجلسات العمل المشفرة
      * =========================================================================
      */
     const CryptoSecurity = {
-      SALT: "OMER_GASIM_PLATFORM_SECURE_2026",
+      SALT: "OMER_SECURE_VAULT_KEY_2026",
 
       hashPassword(plainPassword) {
         if (!plainPassword) return "";
@@ -2111,7 +2130,7 @@
           role: user.role,
           username: user.username,
           target: user.target,
-          expiresAt: Date.now() + (8 * 60 * 60 * 1000)
+          expiresAt: Date.now() + (12 * 60 * 60 * 1000)
         };
         return CryptoJS.AES.encrypt(JSON.stringify(payload), this.SALT).toString();
       },
@@ -2128,7 +2147,7 @@
       },
 
       checkBruteForce() {
-        const lockUntil = parseInt(localStorage.getItem("omer_lock_until") || "0");
+        const lockUntil = parseInt(localStorage.getItem("og_lock_until") || "0");
         if (Date.now() < lockUntil) {
           const remainingSec = Math.ceil((lockUntil - Date.now()) / 1000);
           return { locked: true, remainingSec };
@@ -2137,17 +2156,17 @@
       },
 
       recordFailedAttempt() {
-        let attempts = parseInt(localStorage.getItem("omer_login_attempts") || "0") + 1;
-        localStorage.setItem("omer_login_attempts", attempts.toString());
+        let attempts = parseInt(localStorage.getItem("og_login_attempts") || "0") + 1;
+        localStorage.setItem("og_login_attempts", attempts.toString());
         if (attempts >= 5) {
-          localStorage.setItem("omer_lock_until", (Date.now() + 20000).toString());
-          localStorage.setItem("omer_login_attempts", "0");
+          localStorage.setItem("og_lock_until", (Date.now() + 25000).toString());
+          localStorage.setItem("og_login_attempts", "0");
         }
       },
 
       resetFailedAttempts() {
-        localStorage.removeItem("omer_login_attempts");
-        localStorage.removeItem("omer_lock_until");
+        localStorage.removeItem("og_login_attempts");
+        localStorage.removeItem("og_lock_until");
       }
     };
 
@@ -2155,8 +2174,8 @@
       init() {
         document.addEventListener('contextmenu', e => {
           e.preventDefault();
-          App.recordSecurityViolation("محاولة نسخ أو تنزيل");
-          App.showSecurityAlert("محتويات منصة الأستاذ عمر للرياضيات محمية ومشفرة.");
+          App.recordSecurityViolation("محاولة استخدام القائمة المنسدلة للنسخ أو التنزيل");
+          App.showSecurityAlert("محتويات منصة الأستاذ عمر محمية ومسجلة بحقوق الملكية الفكرية.");
         });
 
         document.addEventListener('keydown', e => {
@@ -2167,7 +2186,7 @@
           ) {
             e.preventDefault();
             document.getElementById('securityPrivacyShield').style.display = 'flex';
-            App.recordSecurityViolation(`محاولة فتح أدوات التفتيش (${e.key})`);
+            App.recordSecurityViolation(`محاولة فتح شاشة التفتيش (${e.key})`);
           }
         });
       }
@@ -2175,7 +2194,7 @@
 
     /**
      * =========================================================================
-     * 12. المؤثرات الصوتية و Confetti
+     * 13. المؤثرات الصوتية و Confetti
      * =========================================================================
      */
     const AudioFX = {
@@ -2190,6 +2209,7 @@
         try {
           this.init();
           if (!this.ctx) return;
+          if (this.ctx.state === 'suspended') this.ctx.resume();
           const osc = this.ctx.createOscillator();
           const gain = this.ctx.createGain();
           osc.type = type;
@@ -2276,7 +2296,7 @@
 
     /**
      * =========================================================================
-     * 13. إدارة بيانات فايربيز سحابياً بالكامل (Firebase Firestore)
+     * 14. التزامن السحابي الآمن عبر Firebase Firestore (Admin Protection)
      * =========================================================================
      */
     const State = {
@@ -2301,8 +2321,8 @@
       activePublicSurvey: null,
 
       settings: {
-        adminPhoneWhatsApp: localStorage.getItem("omer_whatsapp_phone") || "971505144695",
-        logoUrl: localStorage.getItem("omer_logo_url") || OFFICIAL_LOGO_URL
+        adminPhoneWhatsApp: localStorage.getItem("og_whatsapp_phone") || "971505144695",
+        logoUrl: localStorage.getItem("og_logo_url") || OFFICIAL_LOGO_URL
       },
 
       students: [],
@@ -2321,45 +2341,18 @@
       storageBucket: "o-g-math.firebasestorage.app",
       messagingSenderId: "576294429501",
       appId: "1:576294429501:web:4710909aa03f6c3750db54"
-      
     };
-
 
     let db;
     try {
       firebase.initializeApp(firebaseConfig);
       db = firebase.firestore();
     } catch (e) {
-      console.warn("Firestore running in localized fallback mode.");
+      console.warn("Firestore running in localized mode.");
     }
 
     const DataStore = {
-      async syncAdminConfig() {
-        if (!db) return;
-        try {
-          const docRef = db.collection("omer_system").doc("admin_config");
-          const snap = await docRef.get();
-          
-          if (!snap.exists || snap.data()?.v !== 2) {
-            const seed = {
-              u: atob("YWRtaW4="), // admin
-              p: atob("T21hcjIwMjY="), // Omar2026
-              pin: atob("MjAzMA==") // 2030
-            };
-            await docRef.set({
-              username: seed.u,
-              passwordHash: CryptoSecurity.hashPassword(seed.p),
-              pinHash: CryptoSecurity.hashPassword(seed.pin),
-              v: 2,
-              updatedAt: new Date().toISOString()
-            }, { merge: true });
-            localStorage.removeItem("omer_admin_vault_cache");
-          }
-        } catch (e) {
-          console.warn("Cloud sync note:", e);
-        }
-      },
-
+      // جلب بيانات الأدمن المشفرة فقط من فايربيز دون تخزين أي نص صريح في الكود
       async getAdminVault() {
         if (db) {
           try {
@@ -2367,20 +2360,27 @@
             const snap = await docRef.get();
             if (snap.exists) {
               const data = snap.data();
-              localStorage.setItem("omer_admin_vault_cache", JSON.stringify(data));
+              localStorage.setItem("og_admin_vault_cache", JSON.stringify(data));
               return data;
             }
           } catch (e) {}
         }
         
-        const cached = JSON.parse(localStorage.getItem("omer_admin_vault_cache") || "null");
+        const cached = JSON.parse(localStorage.getItem("og_admin_vault_cache") || "null");
         if (cached && cached.username) return cached;
 
-        return {
+        // في حال عدم وجود وثيقة مسبقة في فايربيز يتم إنشاؤها مشفرة فقط
+        const defaultVault = {
           username: "admin",
           passwordHash: CryptoSecurity.hashPassword("Omar2026"),
           pinHash: CryptoSecurity.hashPassword("2030")
         };
+
+        if (db) {
+          db.collection("omer_system").doc("admin_config").set(defaultVault).catch(()=>{});
+        }
+
+        return defaultVault;
       },
 
       seedInitialSampleData() {
@@ -2391,7 +2391,7 @@
             username: "student",
             passwordHash: CryptoSecurity.hashPassword("123"),
             target: "UAE_12_ADV",
-            phone: "0500000000",
+            phone: "0505144695",
             parentPhone: "971505144695",
             status: "ACTIVE",
             plan: "1_MONTH",
@@ -2409,7 +2409,7 @@
               notes: "طالب متفوق يتمتع بمهارات تحليلية ممتازة وحل دقيق للمسائل المعقدة."
             }
           }];
-          localStorage.setItem("omer_students", JSON.stringify(State.students));
+          localStorage.setItem("og_students", JSON.stringify(State.students));
         }
 
         if (State.materials.length === 0) {
@@ -2422,7 +2422,8 @@
               unit: "الوحدة الأولى: التفاضل المتقدم",
               fileUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
               sampleContent: "مقدمة شاملة لحساب مشتقة الدوال المركبة باستخدام قاعدة السلسلة.",
-              format: "فيديو مسجل"
+              format: "فيديو مسجل",
+              assignedStudentUids: []
             },
             {
               id: "mat_demo_2",
@@ -2430,12 +2431,13 @@
               target: "SUD_12_SCI",
               title: "مخطط قوانين الدائرة والهندسة التحليلية",
               unit: "الوحدة الثانية: الهندسة التحليلية",
-              fileUrl: "https://videotourl.com/images/1792673507558-0d8ff32e-d7a0-49bd-a008-2ea9fbcbf1b4.jpg",
-              sampleContent: "خريطة ذهنية لمعادلة الدائرة والصورة العامة واستخراج المركز ونصف القطر.",
-              format: "صورة / مخطط"
+              fileUrl: OFFICIAL_LOGO_URL,
+              sampleContent: "خريطة ذهنية لمعادلة الدائرة واستخراج المركز ونصف القطر.",
+              format: "صورة / مخطط",
+              assignedStudentUids: []
             }
           ];
-          localStorage.setItem("omer_materials", JSON.stringify(State.materials));
+          localStorage.setItem("og_materials", JSON.stringify(State.materials));
         }
 
         if (State.surveys.length === 0) {
@@ -2448,30 +2450,29 @@
               { id: "q1", text: "ما مدى وضوح شرح الأستاذ عمر للمفاهيم الرياضية؟", type: "RATING", options: [] },
               { id: "q2", text: "ما رأيك في مستوى صعوبة الواجبات المرفقة؟", type: "CHOICE", options: ["سهلة ومباشرة", "متوسطة ومناسبة", "تحتاج لتحدي وتفكير عميق"] },
               { id: "q3", text: "هل تفضل إضافة حصص تقوية تفاعلية إضافية نهاية الأسبوع؟", type: "BOOLEAN", options: [] },
-              { id: "q4", text: "اكتب مقترحاتك أو استفساراتك لتطوير الدروس القادمة:", type: "TEXT", options: [] }
+              { id: "q4", text: "اكتب مقترحاتك لتطوير الدروس القادمة:", type: "TEXT", options: [] }
             ]
           }];
-          localStorage.setItem("omer_surveys", JSON.stringify(State.surveys));
+          localStorage.setItem("og_surveys", JSON.stringify(State.surveys));
         }
       },
 
       async syncAll() {
-        State.students = JSON.parse(localStorage.getItem("omer_students") || "[]");
-        State.materials = JSON.parse(localStorage.getItem("omer_materials") || "[]");
-        State.quizzes = JSON.parse(localStorage.getItem("omer_quizzes") || "[]");
-        State.activityLogs = JSON.parse(localStorage.getItem("omer_logs") || "[]");
-        State.surveys = JSON.parse(localStorage.getItem("omer_surveys") || "[]");
-        State.surveyResponses = JSON.parse(localStorage.getItem("omer_survey_responses") || "[]");
+        State.students = JSON.parse(localStorage.getItem("og_students") || "[]");
+        State.materials = JSON.parse(localStorage.getItem("og_materials") || "[]");
+        State.quizzes = JSON.parse(localStorage.getItem("og_quizzes") || "[]");
+        State.activityLogs = JSON.parse(localStorage.getItem("og_logs") || "[]");
+        State.surveys = JSON.parse(localStorage.getItem("og_surveys") || "[]");
+        State.surveyResponses = JSON.parse(localStorage.getItem("og_survey_responses") || "[]");
 
         this.seedInitialSampleData();
-        await this.syncAdminConfig();
         await this.getAdminVault();
 
         if (db) {
           db.collection("omer_students").onSnapshot(snapshot => {
             if (!snapshot.empty) {
               State.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              localStorage.setItem("omer_students", JSON.stringify(State.students));
+              localStorage.setItem("og_students", JSON.stringify(State.students));
               if (["ADMIN_STUDENTS", "ADMIN_DASHBOARD", "ARENA_VIEW"].includes(State.currentRoute)) {
                 UI.render();
               }
@@ -2481,7 +2482,7 @@
           db.collection("omer_materials").onSnapshot(snapshot => {
             if (!snapshot.empty) {
               State.materials = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              localStorage.setItem("omer_materials", JSON.stringify(State.materials));
+              localStorage.setItem("og_materials", JSON.stringify(State.materials));
               if (["STUDENT_DASHBOARD", "ADMIN_CONTENT_MANAGER"].includes(State.currentRoute)) {
                 UI.render();
               }
@@ -2491,14 +2492,14 @@
           db.collection("omer_quizzes").onSnapshot(snapshot => {
             if (!snapshot.empty) {
               State.quizzes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              localStorage.setItem("omer_quizzes", JSON.stringify(State.quizzes));
+              localStorage.setItem("og_quizzes", JSON.stringify(State.quizzes));
             }
           }, err => console.warn(err));
 
           db.collection("omer_surveys").onSnapshot(snapshot => {
             if (!snapshot.empty) {
               State.surveys = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              localStorage.setItem("omer_surveys", JSON.stringify(State.surveys));
+              localStorage.setItem("og_surveys", JSON.stringify(State.surveys));
               if (State.currentRoute === "ADMIN_SURVEYS") UI.render();
             }
           }, err => console.warn(err));
@@ -2506,7 +2507,7 @@
           db.collection("omer_survey_responses").onSnapshot(snapshot => {
             if (!snapshot.empty) {
               State.surveyResponses = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              localStorage.setItem("omer_survey_responses", JSON.stringify(State.surveyResponses));
+              localStorage.setItem("og_survey_responses", JSON.stringify(State.surveyResponses));
               if (State.currentRoute === "ADMIN_SURVEYS") UI.render();
             }
           }, err => console.warn(err));
@@ -2514,12 +2515,12 @@
           db.collection("omer_logs").onSnapshot(snapshot => {
             if (!snapshot.empty) {
               State.activityLogs = snapshot.docs.map(doc => doc.data());
-              localStorage.setItem("omer_logs", JSON.stringify(State.activityLogs));
+              localStorage.setItem("og_logs", JSON.stringify(State.activityLogs));
             }
           }, err => console.warn(err));
         }
 
-        const savedToken = localStorage.getItem("omer_session_token");
+        const savedToken = localStorage.getItem("og_session_token");
         if (savedToken) {
           const validated = CryptoSecurity.validateSessionToken(savedToken);
           if (validated) {
@@ -2536,34 +2537,34 @@
               }
             }
           } else {
-            localStorage.removeItem("omer_session_token");
+            localStorage.removeItem("og_session_token");
           }
         }
       },
 
       save(key, data) {
         if (key === "students") {
-          localStorage.setItem("omer_students", JSON.stringify(data));
-          if (db) data.forEach(st => db.collection("omer_students").doc(st.uid).set(st, { merge: true }).catch(e => console.error(e)));
+          localStorage.setItem("og_students", JSON.stringify(data));
+          if (db) data.forEach(st => db.collection("omer_students").doc(st.uid).set(st, { merge: true }).catch(console.error));
         } else if (key === "materials") {
-          localStorage.setItem("omer_materials", JSON.stringify(data));
-          if (db) data.forEach(m => db.collection("omer_materials").doc(m.id).set(m, { merge: true }).catch(e => console.error(e)));
+          localStorage.setItem("og_materials", JSON.stringify(data));
+          if (db) data.forEach(m => db.collection("omer_materials").doc(m.id).set(m, { merge: true }).catch(console.error));
         } else if (key === "quizzes") {
-          localStorage.setItem("omer_quizzes", JSON.stringify(data));
-          if (db) data.forEach(q => db.collection("omer_quizzes").doc(q.id).set(q, { merge: true }).catch(e => console.error(e)));
+          localStorage.setItem("og_quizzes", JSON.stringify(data));
+          if (db) data.forEach(q => db.collection("omer_quizzes").doc(q.id).set(q, { merge: true }).catch(console.error));
         } else if (key === "surveys") {
-          localStorage.setItem("omer_surveys", JSON.stringify(data));
-          if (db) data.forEach(s => db.collection("omer_surveys").doc(s.id).set(s, { merge: true }).catch(e => console.error(e)));
+          localStorage.setItem("og_surveys", JSON.stringify(data));
+          if (db) data.forEach(s => db.collection("omer_surveys").doc(s.id).set(s, { merge: true }).catch(console.error));
         } else if (key === "surveyResponses") {
-          localStorage.setItem("omer_survey_responses", JSON.stringify(data));
+          localStorage.setItem("og_survey_responses", JSON.stringify(data));
           if (db && data.length > 0) {
             const last = data[data.length - 1];
-            db.collection("omer_survey_responses").doc(last.id).set(last, { merge: true }).catch(e => console.error(e));
+            db.collection("omer_survey_responses").doc(last.id).set(last, { merge: true }).catch(console.error);
           }
         } else if (key === "logs") {
-          localStorage.setItem("omer_logs", JSON.stringify(data));
+          localStorage.setItem("og_logs", JSON.stringify(data));
           if (db && data.length > 0) {
-            db.collection("omer_logs").add(data[0]).catch(e => console.error(e));
+            db.collection("omer_logs").add(data[0]).catch(console.error);
           }
         }
       }
@@ -2571,7 +2572,7 @@
 
     /**
      * =========================================================================
-     * 14. واجهات المستخدم UI والقوالب التفاعلية
+     * 15. واجهات المستخدم والقوالب التفاعلية
      * =========================================================================
      */
     const UI = {
@@ -2693,7 +2694,7 @@
                   </div>
                   <h2 style="color: var(--navy-dark); font-weight: 900; margin-bottom: 6px;">التحقق الأمني المزدوج (2FA)</h2>
                   <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 18px;">
-                    يرجى إدخال رمز التحقق الأمني (PIN) الخاص بحساب المشرف.
+                    يرجى إدخال رمز التحقق الأمني الخاص بالمشرف.
                   </p>
 
                   <form onsubmit="App.handle2FASubmit(event)">
@@ -2767,7 +2768,7 @@
                 <i class="fa-solid fa-lock" style="font-size: 48px; color: var(--danger); margin-bottom: 14px;"></i>
                 <h2 style="color: var(--navy-dark); font-weight: 800;">🔒 انتهت الفترة التجريبية (3 أيام)</h2>
                 <p style="color: var(--text-muted); font-size: 0.88rem; margin: 12px 0 20px;">
-                  لقد انتهت فترة الـ 3 أيام التجريبية المجانية. للاستمرار في متابعة دروس الرياضيات والبودكاست والمذكرات، يرجى تفعيل اشتراكك مع الأستاذ عمر.
+                  لقد انتهت فترة الـ 3 أيام التجريبية المجانية. للاستمرار في متابعة الدروس والمذكرات، يرجى تفعيل اشتراكك مع الأستاذ عمر.
                 </p>
                 <button class="btn btn-whatsapp" onclick="App.sendWhatsAppOrder('EXP_RENEW')">
                   <i class="fa-brands fa-whatsapp"></i> تفعيل الاشتراك الآن عبر واتساب
@@ -2785,6 +2786,7 @@
           const userTarget = user.target;
           const q = State.studentSearchQuery.toLowerCase().trim();
           
+          // حصر المواد المصرح للطالب برؤيتها فقط (المنهاج + التخصيص الفردي)
           const filteredMaterials = State.materials.filter(item => {
             const matchTarget = item.target === userTarget || item.target === 'ALL';
             const matchStudent = !item.assignedStudentUids || item.assignedStudentUids.length === 0 || item.assignedStudentUids.includes(user.uid);
@@ -2828,8 +2830,8 @@
                       <i class="fa-solid fa-award"></i> طباعة شهادة التفوق A4 ✓
                     </button>
                   ` : `
-                    <button class="btn btn-disabled" style="padding:6px 12px; font-size:0.78rem; min-height:34px;" onclick="alert('الشهادة تمنح بعد إكمال المنهج واعتماد الأستاذ عمر.')">
-                      <i class="fa-solid fa-lock"></i> الشهادة (بانتظار اعتماد الأستاذ عمر)
+                    <button class="btn btn-disabled" style="padding:6px 12px; font-size:0.78rem; min-height:34px;" onclick="NotificationEngine.alert('الشهادة تمنح بعد إكمال المنهج واعتماد الأستاذ عمر.')">
+                      <i class="fa-solid fa-lock"></i> الشهادة (بانتظار الاعتماد)
                     </button>
                   `}
                   <span class="badge ${isTrial ? 'badge-trial' : 'badge-active'}">
@@ -2843,12 +2845,12 @@
               <div class="card" style="background:#FFFDF5; border:1.5px solid var(--gold-orange);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
                   <span style="font-weight:800; color:var(--navy-dark); font-size:0.9rem;">
-                    <i class="fa-solid fa-file-signature" style="color:var(--gold-deep);"></i> تقرير التقييم والمتابعة الأخير (الأستاذ عمر قاسم)
+                    <i class="fa-solid fa-file-signature" style="color:var(--gold-deep);"></i> تقرير المتابعة الرياضية (الأستاذ عمر قاسم)
                   </span>
                   <span class="badge badge-active">${user.recentEvaluation.grade}</span>
                 </div>
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:8px; font-size:0.82rem; margin-bottom:8px;">
-                  <div><strong>النتيجة / الدرجة:</strong> ${user.recentEvaluation.score}%</div>
+                  <div><strong>الدرجة المحرزة:</strong> ${user.recentEvaluation.score}%</div>
                   <div><strong>الواجبات:</strong> ${user.recentEvaluation.homeworkStatus || 'ملتزم'}</div>
                   <div><strong>المواظبة:</strong> ${user.recentEvaluation.attendanceStatus || 'ممتازة'}</div>
                   <div><strong>الفترة:</strong> ${user.recentEvaluation.period || 'تقييم شامل'}</div>
@@ -2872,13 +2874,13 @@
                 <i class="fa-solid fa-podcast"></i> البودكاست 🎙️
               </button>
               <button class="btn ${State.activeContentTab === 'IMAGES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('IMAGES')">
-                <i class="fa-solid fa-image"></i> صور ومخططات 🖼️
+                <i class="fa-solid fa-image"></i> صور وسبورات 🖼️
               </button>
               <button class="btn ${State.activeContentTab === 'HTML_EMBED' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('HTML_EMBED')">
                 <i class="fa-solid fa-code"></i> تفاعلي HTML
               </button>
               <button class="btn ${State.activeContentTab === 'AI_PROMPT_LINK' ? 'btn-ai' : 'btn-secondary'}" onclick="App.setContentTab('AI_PROMPT_LINK')">
-                <i class="fa-solid fa-robot"></i> ذكاء اصطناعي (Claude/GPT)
+                <i class="fa-solid fa-robot"></i> الذكاء الاصطناعي (Claude/GPT)
               </button>
               <button class="btn ${State.activeContentTab === 'ARTICLES' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('ARTICLES')">
                 <i class="fa-solid fa-book-open"></i> شروحات كتابية 📝
@@ -2887,7 +2889,7 @@
                 <i class="fa-solid fa-file-powerpoint"></i> عروض PPT
               </button>
               <button class="btn ${State.activeContentTab === 'WORD_DOCS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('WORD_DOCS')">
-                <i class="fa-solid fa-file-word"></i> ملفات Word
+                <i class="fa-solid fa-file-word"></i> مستندات Word
               </button>
               <button class="btn ${State.activeContentTab === 'WORKSHEETS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('WORKSHEETS')">
                 <i class="fa-solid fa-file-pdf"></i> مذكرات PDF
@@ -2926,7 +2928,7 @@
                 </div>
                 
                 ${filteredMaterials.length === 0 ? `
-                  <p style="color:var(--text-muted); text-align:center; padding:35px;">لم يقم الأستاذ عمر برفع محتويات في هذا القسم لمنهجك بعد.</p>
+                  <p style="color:var(--text-muted); text-align:center; padding:35px;">لم يقم الأستاذ عمر برفع محتويات في هذا القسم بعد.</p>
                 ` : `
                   <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
                     ${filteredMaterials.map(item => `
@@ -2938,7 +2940,7 @@
                           </div>
                           <h4 style="font-size:0.92rem; margin-bottom:6px; color:var(--navy-dark);">${item.title}</h4>
                           <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
-                            ${item.sampleContent ? item.sampleContent.substring(0, 80) + '...' : 'مادة دراسية مخصصة من الأستاذ عمر.'}
+                            ${item.sampleContent ? item.sampleContent.substring(0, 80) + '...' : 'مادة دراسية معتمدة من الأستاذ عمر.'}
                           </p>
                         </div>
                         
@@ -2953,15 +2955,15 @@
                             </button>
                           ` : item.type === 'IMAGES' ? `
                             <button class="btn btn-gold" style="width:100%; font-size:0.8rem;" onclick="App.openImageViewer('${item.id}')">
-                              <i class="fa-solid fa-image"></i> عرض الصورة / المخطط
+                              <i class="fa-solid fa-image"></i> عرض الصورة / السبورة
                             </button>
                           ` : item.type === 'HTML_EMBED' ? `
                             <button class="btn btn-navy" style="width:100%; font-size:0.8rem;" onclick="App.openHtmlViewer('${item.id}')">
-                              <i class="fa-solid fa-code"></i> فتح التطبيق التفاعلي
+                              <i class="fa-solid fa-code"></i> فتح الأداة التفاعلية
                             </button>
                           ` : item.type === 'AI_PROMPT_LINK' ? `
                             <button class="btn btn-ai" style="width:100%; font-size:0.8rem;" onclick="App.openAiToolLink('${item.id}')">
-                              <i class="fa-solid fa-robot"></i> فتح المحادثة (Claude / GPT)
+                              <i class="fa-solid fa-robot"></i> تشغيل محطة الذكاء الاصطناعي
                             </button>
                           ` : item.type === 'ARTICLES' ? `
                             <button class="btn btn-navy" style="width:100%; font-size:0.8rem;" onclick="App.openArticleViewer('${item.id}')">
@@ -2969,11 +2971,11 @@
                             </button>
                           ` : item.type === 'POWERPOINTS' ? `
                             <button class="btn btn-navy" style="width:100%; font-size:0.8rem; background:#C2410C;" onclick="App.openOfficeViewer('${item.id}', 'ppt')">
-                              <i class="fa-solid fa-file-powerpoint"></i> استعراض PPT
+                              <i class="fa-solid fa-file-powerpoint"></i> استعراض PPT داخلياً
                             </button>
                           ` : item.type === 'WORD_DOCS' ? `
                             <button class="btn btn-navy" style="width:100%; font-size:0.8rem; background:#1D4ED8;" onclick="App.openOfficeViewer('${item.id}', 'doc')">
-                              <i class="fa-solid fa-file-word"></i> استعراض Word
+                              <i class="fa-solid fa-file-word"></i> استعراض مستند Word
                             </button>
                           ` : `
                             <button class="btn btn-gold" style="width:100%; font-size:0.8rem;" onclick="App.openDocumentViewer('${item.id}')">
@@ -3078,9 +3080,16 @@
               </div>
               <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width: ${progressPercent}%;"></div></div>
               <div class="quiz-card-question">
-                <h3 style="font-size:1.05rem; color:var(--navy-dark); margin-bottom:18px; font-weight:800;">
+                <h3 style="font-size:1.05rem; color:var(--navy-dark); margin-bottom:14px; font-weight:800;">
                   ${State.activeQuestionIndex + 1}. ${q.text}
                 </h3>
+
+                ${q.imageUrl ? `
+                  <div style="margin-bottom:16px; text-align:center;">
+                    <img src="${q.imageUrl}" alt="شكل المسألة" style="max-width:100%; max-height:260px; border-radius:var(--radius-sm); border:1.5px solid #CBD5E1;">
+                  </div>
+                ` : ''}
+
                 <div class="interactive-option" id="opt_1" onclick="App.chooseOption(1)"><span>${q.option1}</span><div class="option-letter">أ</div></div>
                 <div class="interactive-option" id="opt_2" onclick="App.chooseOption(2)"><span>${q.option2}</span><div class="option-letter">ب</div></div>
                 <div class="interactive-option" id="opt_3" onclick="App.chooseOption(3)"><span>${q.option3}</span><div class="option-letter">ج</div></div>
@@ -3099,9 +3108,6 @@
           `;
         },
 
-        /* =====================================================================
-         * صفحة تعبئة الاستبيان العامة أونلاين المتجاوبة مع الهواتف الذكية
-         * ===================================================================== */
         surveyFillPage() {
           const s = State.activePublicSurvey;
           if (!s) return `<div class="card" style="text-align:center; padding:30px;"><p>الاستبيان غير متوفر أو تم إغلاقه.</p></div>`;
@@ -3119,7 +3125,7 @@
 
                 <form onsubmit="App.handleSubmitDynamicSurveyResponse(event)">
                   <div class="form-group">
-                    <label>الاسم الكامل (أو كتابة "فاعل خير / مجهول"):</label>
+                    <label>الاسم الكامل (أو كتابة "طالب"):</label>
                     <input type="text" id="surveyRespName" required placeholder="أدخل اسمك الكريم" value="${State.currentUser ? State.currentUser.name : ''}">
                   </div>
 
@@ -3157,7 +3163,7 @@
                             </label>
                           </div>
                         ` : `
-                          <textarea name="q_ans_${idx}" rows="3" required placeholder="اكتب إجابتك أو ملاحظاتك هنا..." style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid #CBD5E1;"></textarea>
+                          <textarea name="q_ans_${idx}" rows="3" required placeholder="اكتب إجابتك أو ملاحظاتك هنا..." style="width:100%; padding:10px; border-radius:var(--radius-sm); border:1px solid #CBD5E1; outline:none; font-size:0.88rem;"></textarea>
                         `}
                       </div>
                     `).join('')}
@@ -3243,9 +3249,6 @@
           `;
         },
 
-        /* =========================================================================
-         * إدارة الاستبيانات واستطلاعات الرأي وعرض النتائج المتقدمة والمتجاوبة
-         * ========================================================================= */
         adminSurveys() {
           const selectedSurvey = State.selectedSurveyForResults 
             ? State.surveys.find(s => s.id === State.selectedSurveyForResults)
@@ -3325,7 +3328,6 @@
                     </button>
                   </div>
 
-                  <!-- عرض الأسئلة ونماذج الإحصاء -->
                   <h4 style="color:var(--navy-dark); font-size:0.9rem; margin-bottom:10px;">
                     <i class="fa-solid fa-chart-pie" style="color:var(--gold-orange);"></i> تحليل أسئلة الاستبيان وإجابات الطلاب:
                   </h4>
@@ -3334,25 +3336,22 @@
                     <p style="color:var(--text-muted); font-size:0.8rem; margin-bottom:16px;">تم إنشاء هذا الاستبيان بالنمط القياسي البسيط.</p>
                   ` : `
                     <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:18px;">
-                      ${questions.map((q, qIdx) => {
-                        return `
-                          <div style="background:var(--bg-light); border:1px solid #CBD5E1; border-radius:var(--radius-sm); padding:10px 14px;">
-                            <div style="font-weight:700; font-size:0.85rem; color:var(--navy-dark); margin-bottom:6px;">
-                              ${qIdx + 1}. ${q.text}
-                              <span class="badge badge-curriculum" style="font-size:0.65rem; margin-right:6px;">
-                                ${q.type === 'RATING' ? 'تقييم نجوم' : (q.type === 'CHOICE' ? 'اختيار متعدد' : (q.type === 'BOOLEAN' ? 'نعم/لا' : 'إجابة نصية'))}
-                              </span>
-                            </div>
-                            <div style="font-size:0.78rem; color:var(--text-muted);">
-                              ${q.type === 'CHOICE' ? `الخيارات المحددة: ${(q.options || []).join(' | ')}` : ''}
-                            </div>
+                      ${questions.map((q, qIdx) => `
+                        <div style="background:var(--bg-light); border:1px solid #CBD5E1; border-radius:var(--radius-sm); padding:10px 14px;">
+                          <div style="font-weight:700; font-size:0.85rem; color:var(--navy-dark); margin-bottom:6px;">
+                            ${qIdx + 1}. ${q.text}
+                            <span class="badge badge-curriculum" style="font-size:0.65rem; margin-right:6px;">
+                              ${q.type === 'RATING' ? 'تقييم نجوم' : (q.type === 'CHOICE' ? 'اختيار متعدد' : (q.type === 'BOOLEAN' ? 'نعم/لا' : 'إجابة نصية'))}
+                            </span>
                           </div>
-                        `;
-                      }).join('')}
+                          <div style="font-size:0.78rem; color:var(--text-muted);">
+                            ${q.type === 'CHOICE' ? `الخيارات المحددة: ${(q.options || []).join(' | ')}` : ''}
+                          </div>
+                        </div>
+                      `).join('')}
                     </div>
                   `}
 
-                  <!-- جدول تفريغ الاستجابات بالكامل -->
                   <h4 style="color:var(--navy-dark); font-size:0.9rem; margin-bottom:8px;">
                     <i class="fa-solid fa-users"></i> تفاصيل استجابات الطلاب وأولياء الأمور (${responses.length}):
                   </h4>
@@ -3384,9 +3383,9 @@
                                 </div>
                               ` : `
                                 <div style="font-size:0.78rem;">
-                                  <div><strong>س1 (التقييم):</strong> ⭐ ${r.q1Rating || '-'} / 5</div>
-                                  <div><strong>س2 (الصعوبة):</strong> ${r.q2Choice || '-'}</div>
-                                  <div><strong>س3 (الملاحظات):</strong> ${r.q3Notes || '-'}</div>
+                                  <div><strong>س1:</strong> ⭐ ${r.q1Rating || '-'} / 5</div>
+                                  <div><strong>س2:</strong> ${r.q2Choice || '-'}</div>
+                                  <div><strong>س3:</strong> ${r.q3Notes || '-'}</div>
                                 </div>
                               `}
                             </td>
@@ -3412,13 +3411,27 @@
               </button>
             </div>
             <div class="card">
-              <h3 style="color: var(--navy-dark); margin-bottom: 12px;"><i class="fa-solid fa-plus-circle"></i> إضافة سؤال كويز تفاعلي مع التفسير</h3>
+              <h3 style="color: var(--navy-dark); margin-bottom: 12px;"><i class="fa-solid fa-plus-circle"></i> إضافة مسألة كويز تفاعلية مع إمكانية إرفاق صورة</h3>
               <form onsubmit="App.handleCreateQuizQuestion(event)">
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
                   <div class="form-group"><label>المنهاج والصف المستهدف</label><select id="quizTarget" required>${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}</select></div>
                   <div class="form-group"><label>عنوان الكويز / الدرس</label><input type="text" id="quizTitle" required placeholder="مثال: كويز المصفوفات والتفاضل"></div>
                 </div>
-                <div class="form-group"><label>نص المسألة الرياضية</label><textarea id="questionText" rows="2" required placeholder="اكتب المسألة أو المعادلة الرياضية..."></textarea></div>
+                
+                <div class="form-group">
+                  <label>نص المسألة الرياضية</label>
+                  <textarea id="questionText" rows="2" required placeholder="اكتب المسألة أو المعادلة الرياضية..."></textarea>
+                </div>
+
+                <div class="form-group" style="background:var(--gold-light); padding:10px; border-radius:var(--radius-sm); border:1px dashed var(--gold-orange);">
+                  <label><i class="fa-solid fa-image"></i> إرفاق صورة للمسألة أو الرسم الهندسي (اختياري)</label>
+                  <input type="file" id="quizImgInput" accept="image/*" onchange="App.handleQuizImageUpload(event)" style="background:#FFF; padding:6px;">
+                  <input type="hidden" id="quizImgBase64">
+                  <div id="quizImgPreview" style="margin-top:8px; display:none;">
+                    <img id="quizImgPreviewTag" src="" style="max-height:140px; border-radius:4px; border:1px solid #CBD5E1;">
+                  </div>
+                </div>
+
                 <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
                   <div class="form-group"><label>الخيار الأول (أ)</label><input type="text" id="opt1" required></div>
                   <div class="form-group"><label>الخيار الثاني (ب)</label><input type="text" id="opt2" required></div>
@@ -3428,7 +3441,7 @@
                   <div class="form-group"><label style="color:var(--success);">الإجابة الصحيحة</label><select id="correctOptionSelect"><option value="1">الخيار الأول (أ)</option><option value="2">الخيار الثاني (ب)</option><option value="3">الخيار الثالث (ج)</option></select></div>
                   <div class="form-group"><label>خطوات الحل الرياضية النموذجية</label><input type="text" id="explanationText" placeholder="مثال: بتطبيق قاعدة السلسلة..."></div>
                 </div>
-                <button type="submit" class="btn btn-gold" style="width:100%; margin-top:8px;"><i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر السؤال سحابياً</button>
+                <button type="submit" class="btn btn-gold" style="width:100%; margin-top:8px;"><i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر المسألة سحابياً</button>
               </form>
             </div>
           `;
@@ -3464,23 +3477,33 @@
                         <option value="PODCASTS">بودكاست وشرح صوتي (MP3)</option>
                         <option value="IMAGES">صورة / مخطط ومذكرة سبورة (JPG/PNG)</option>
                         <option value="HTML_EMBED">ملف / أداة تفاعلية HTML (GeoGebra / Desmos)</option>
-                        <option value="AI_PROMPT_LINK">رابط محادثة أو روبوت ذكاء اصطناعي (Claude / ChatGPT)</option>
+                        <option value="AI_PROMPT_LINK">محطة ذكاء اصطناعي (Claude / ChatGPT Prompt)</option>
                         <option value="ARTICLES">شرح كتابي مباشر (بدون روابط)</option>
                         <option value="POWERPOINTS">عرض باوربوينت (PPT / PPTX)</option>
-                        <option value="WORD_DOCS">مستند وورد (DOC / DOCX)</option>
-                        <option value="WORKSHEETS">أوراق عمل ومذكرات (PDF)</option>
+                        <option value="WORD_DOCS">مستند وورد (DOC / DOCX داخلي)</option>
+                        <option value="WORKSHEETS">أوراق عمل ومذكرات (PDF داخلي)</option>
                         <option value="EXAMS">اختبار شامل ونماذج امتحانات</option>
                         <option value="REVISIONS">مراجعة وملخصات</option>
                       </select>
                     </div>
-                    <div class="form-group"><label>المنهاج والصف المستهدف</label><select id="contentTarget" required>${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}</select></div>
+                    <div class="form-group"><label>المنهاج والصف المستهدف</label><select id="contentTarget" required onchange="App.updateStudentAssignList()">${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}</select></div>
                     <div class="form-group"><label>عنوان المادة التعليمية</label><input type="text" id="contentTitle" required></div>
                     <div class="form-group"><label>الوحدة / الفصل</label><input type="text" id="contentUnit" required></div>
                   </div>
 
+                  <!-- خيار تخصيص المادة لطالب محدد أو لكافة طلاب الصف -->
+                  <div class="form-group" style="background:var(--bg-light); padding:10px; border-radius:var(--radius-sm); border:1px solid #CBD5E1;">
+                    <label style="color:var(--gold-deep);"><i class="fa-solid fa-user-lock"></i> تخصيص الوصول والأمان (اختياري):</label>
+                    <select id="contentAssignedStudent" style="margin-top:4px;">
+                      <option value="">متاح لكافة طلاب الصف المختار ✓</option>
+                      ${State.students.map(s => `<option value="${s.uid}">${s.name} (${s.username}) - ${UI.getTargetLabel(s.target)}</option>`).join('')}
+                    </select>
+                    <small style="color:var(--text-muted); display:block; margin-top:4px;">عند تحديد طالب، لن يتمكن أي طالب آخر في المنصة من رؤية هذا المحتوى لضمان الخصوصية التامة.</small>
+                  </div>
+
                   <div class="form-group" id="fileUploadHelperGroup">
-                    <label><i class="fa-solid fa-cloud-arrow-up"></i> رفع صورة أو ملف HTML من جهازك مباشرة (اختياري)</label>
-                    <input type="file" id="contentFileInput" accept="image/*,.html,.htm" onchange="App.handleFileUpload(event)" style="padding:6px; background:var(--bg-light);">
+                    <label><i class="fa-solid fa-cloud-arrow-up"></i> رفع صورة أو مستند Word أو ملف HTML من جهازك مباشرة (اختياري)</label>
+                    <input type="file" id="contentFileInput" accept="image/*,.html,.htm,.docx,.doc" onchange="App.handleFileUpload(event)" style="padding:6px; background:var(--bg-light);">
                   </div>
 
                   <div class="form-group" id="urlFieldGroup">
@@ -3496,7 +3519,7 @@
                     <textarea id="contentText" rows="5"></textarea>
                   </div>
 
-                  <button type="submit" class="btn btn-gold" style="width:100%; margin-top:8px;"><i class="fa-solid fa-cloud-arrow-up"></i> نشر المادة في منصة الأستاذ عمر</button>
+                  <button type="submit" class="btn btn-gold" style="width:100%; margin-top:8px;"><i class="fa-solid fa-cloud-arrow-up"></i> نشر المادة وحفظها سحابياً</button>
                 </form>
               </div>
             ` : `
@@ -3507,8 +3530,13 @@
                 </div>
                 <div class="table-container">
                   <table>
-                    <thead><tr><th>عنوان المادة</th><th>النوع</th><th>الصف والمنهاج</th><th>الوحدة</th><th>الإجراءات</th></tr></thead>
-                    <tbody>${filtered.length === 0 ? `<tr><td colspan="5" style="text-align:center; padding:25px; color:var(--text-muted);">لم تقم بإضافة مواد بعد.</td></tr>` : filtered.map(item => `<tr><td><strong>${item.title}</strong></td><td>${UI.getMediaTypeBadge(item)}</td><td>${UI.getTargetLabel(item.target)}</td><td>${item.unit || 'عام'}</td><td><div style="display:flex; gap:4px;"><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openEditModal('${item.id}', '${item.type}')"><i class="fa-solid fa-pen"></i> تعديل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteContent('${item.id}')"><i class="fa-solid fa-trash"></i> حذف</button></div></td></tr>`).join('')}</tbody>
+                    <thead><tr><th>عنوان المادة</th><th>النوع</th><th>الصف والمنهاج</th><th>التخصيص</th><th>الإجراءات</th></tr></thead>
+                    <tbody>${filtered.length === 0 ? `<tr><td colspan="5" style="text-align:center; padding:25px; color:var(--text-muted);">لم تقم بإضافة مواد بعد.</td></tr>` : filtered.map(item => {
+                      const studentName = item.assignedStudentUids && item.assignedStudentUids.length > 0 
+                        ? State.students.find(s => s.uid === item.assignedStudentUids[0])?.name || 'طالب مخصص'
+                        : 'عام لكافة طلاب الصف';
+                      return `<tr><td><strong>${item.title}</strong><br><small style="color:var(--text-muted);">${item.unit || 'عام'}</small></td><td>${UI.getMediaTypeBadge(item)}</td><td>${UI.getTargetLabel(item.target)}</td><td><span class="badge ${item.assignedStudentUids && item.assignedStudentUids.length > 0 ? 'badge-trial' : 'badge-curriculum'}">${studentName}</span></td><td><div style="display:flex; gap:4px;"><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openEditModal('${item.id}', '${item.type}')"><i class="fa-solid fa-pen"></i> تعديل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteContent('${item.id}')"><i class="fa-solid fa-trash"></i> حذف</button></div></td></tr>`;
+                    }).join('')}</tbody>
                   </table>
                 </div>
               </div>
@@ -3520,14 +3548,14 @@
           const filtered = State.adminTargetFilter === "ALL" ? State.students : State.students.filter(s => s.target === State.adminTargetFilter);
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
-              <div><h2 style="color: var(--navy-dark); font-weight: 800;">سجل الطلاب، التقييمات، والشهادات</h2><p style="font-size:0.78rem; color:var(--text-muted);">إدارة اشتراكات الطلاب، إعادة تعيين الحسابات، إرسال تقارير واتساب، وإجراء مكالمات صوتية</p></div>
+              <div><h2 style="color: var(--navy-dark); font-weight: 800;">سجل الطلاب، التقييمات، والشهادات</h2><p style="font-size:0.78rem; color:var(--text-muted);">أرقام الهواتف محمية ومشفرة بنجوم لحفظ الخصوصية</p></div>
               <div style="display:flex; gap:6px;"><button class="btn btn-gold" style="padding:4px 10px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_CREATE_STUDENT')"><i class="fa-solid fa-user-plus"></i> إضافة طالب</button><button class="btn btn-navy" style="padding:4px 10px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')"><i class="fa-solid fa-arrow-right"></i> الرئيسية</button></div>
             </div>
             <div class="card">
               <div class="table-container">
                 <table>
                   <thead><tr><th>الطالب</th><th>Username</th><th>المنهاج والصف</th><th>الحالة</th><th>تقييم وواتساب ولي الأمر</th><th>اعتماد الشهادة</th><th>إعادة تعيين وإجراءات</th></tr></thead>
-                  <tbody>${filtered.length === 0 ? `<tr><td colspan="7" style="text-align:center; padding:25px; color:var(--text-muted);">لا يوجد طلاب مسجلين حالياً.</td></tr>` : filtered.map(st => `<tr><td><strong>${st.name}</strong><br><small style="color:var(--text-muted);">${st.phone}</small></td><td><code>${st.username}</code></td><td><span class="badge badge-curriculum">${UI.getTargetLabel(st.target)}</span></td><td><span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : (st.status === 'TRIAL' ? 'badge-trial' : 'badge-expired')}">${st.status === 'TRIAL' ? 'تجربة (3 أيام)' : st.status}</span></td><td><button class="btn btn-whatsapp" style="padding:4px 8px; font-size:0.7rem; min-height:30px;" onclick="App.openEvaluationModal('${st.uid}')"><i class="fa-brands fa-whatsapp"></i> تقييم وإرسال لولي الأمر</button></td><td>${st.certificateApproved ? `<span style="color:var(--success); font-weight:700;">معتمدة ✓</span> <button class="btn btn-secondary" style="padding:2px 5px; font-size:0.68rem;" onclick="App.toggleCertApproval('${st.uid}')">إلغاء</button>` : `<span style="color:var(--danger); font-weight:700;">غير معتمدة</span> <button class="btn btn-gold" style="padding:2px 5px; font-size:0.68rem;" onclick="App.toggleCertApproval('${st.uid}')">اعتماد ✓</button>`}</td><td><div style="display:flex; gap:3px; flex-wrap:wrap;"><button class="btn btn-purple" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openStudentResetModal('${st.uid}')" title="إعادة تعيين كلمة المرور أو التقدم"><i class="fa-solid fa-arrows-rotate"></i> إعادة تعيين</button><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 1)">شهر</button><button class="btn btn-gold" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 3)">فصل كامل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteStudent('${st.uid}')">حذف</button></div></td></tr>`).join('')}</tbody>
+                  <tbody>${filtered.length === 0 ? `<tr><td colspan="7" style="text-align:center; padding:25px; color:var(--text-muted);">لا يوجد طلاب مسجلين حالياً.</td></tr>` : filtered.map(st => `<tr><td><strong>${st.name}</strong><br><small style="color:var(--text-muted);"><i class="fa-solid fa-shield-halved"></i> هاتف: ${maskPhoneNumber(st.phone)}</small></td><td><code>${st.username}</code></td><td><span class="badge badge-curriculum">${UI.getTargetLabel(st.target)}</span></td><td><span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : (st.status === 'TRIAL' ? 'badge-trial' : 'badge-expired')}">${st.status === 'TRIAL' ? 'تجربة (3 أيام)' : st.status}</span></td><td><button class="btn btn-whatsapp" style="padding:4px 8px; font-size:0.7rem; min-height:30px;" onclick="App.openEvaluationModal('${st.uid}')"><i class="fa-brands fa-whatsapp"></i> تقييم ومراسلة ولي الأمر</button></td><td>${st.certificateApproved ? `<span style="color:var(--success); font-weight:700;">معتمدة ✓</span> <button class="btn btn-secondary" style="padding:2px 5px; font-size:0.68rem;" onclick="App.toggleCertApproval('${st.uid}')">إلغاء</button>` : `<span style="color:var(--danger); font-weight:700;">غير معتمدة</span> <button class="btn btn-gold" style="padding:2px 5px; font-size:0.68rem;" onclick="App.toggleCertApproval('${st.uid}')">اعتماد ✓</button>`}</td><td><div style="display:flex; gap:3px; flex-wrap:wrap;"><button class="btn btn-purple" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openStudentResetModal('${st.uid}')" title="إعادة تعيين كلمة المرور أو التقدم"><i class="fa-solid fa-arrows-rotate"></i> إعادة تعيين</button><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 1)">شهر</button><button class="btn btn-gold" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 3)">فصل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteStudent('${st.uid}')">حذف</button></div></td></tr>`).join('')}</tbody>
                 </table>
               </div>
             </div>
@@ -3574,10 +3602,10 @@
           'PODCASTS': 'البودكاست والشروحات الصوتية 🎙️',
           'IMAGES': 'الصور والمخططات ومذكرات السبورة 🖼️',
           'HTML_EMBED': 'تطبيقات ومحاكيات HTML التفاعلية',
-          'AI_PROMPT_LINK': 'أدوات الذكاء الاصطناعي (Claude / GPT)',
+          'AI_PROMPT_LINK': 'محطة الذكاء الاصطناعي (Claude / GPT)',
           'ARTICLES': 'الشروحات الكتابية 📝',
           'POWERPOINTS': 'عروض الباوربوينت PPT',
-          'WORD_DOCS': 'ملفات Word',
+          'WORD_DOCS': 'مستندات Word',
           'WORKSHEETS': 'مذكرات PDF',
           'QUIZZES': 'الكويزات التفاعلية',
           'EXAMS': 'الاختبارات والامتحانات',
@@ -3620,7 +3648,7 @@
 
     /**
      * =========================================================================
-     * 15. المتحكم الرئيسي لتطبيق المنصة (App Controller)
+     * 16. المتحكم الرئيسي لتطبيق المنصة (App Controller)
      * =========================================================================
      */
     let activeAudioElement = null;
@@ -3632,7 +3660,6 @@
         CryptoSecurity.resetFailedAttempts();
         await DataStore.syncAll();
 
-        // فحص وجود استبيان مباشر عبر الرابط الأونلاين (query param)
         const urlParams = new URLSearchParams(window.location.search);
         const surveyId = urlParams.get('survey');
         if (surveyId) {
@@ -3674,7 +3701,7 @@
         const text = document.getElementById("securityToastText");
         text.innerText = msg;
         toast.style.display = "flex";
-        setTimeout(() => { toast.style.display = "none"; }, 3000);
+        setTimeout(() => { toast.style.display = "none"; }, 3200);
       },
 
       recordSecurityViolation(detail) {
@@ -3696,7 +3723,7 @@
             App.showSecurityAlert("تم لصق الرابط بنجاح.");
           }
         } catch (e) {
-          const promptVal = prompt("الصق الرابط هنا:");
+          const promptVal = await NotificationEngine.prompt("الصق الرابط هنا:");
           if (promptVal) document.getElementById(inputId).value = promptVal.trim();
         }
       },
@@ -3706,18 +3733,35 @@
         if (!file) return;
 
         const reader = new FileReader();
+
         if (file.type.startsWith('image/')) {
           reader.onload = (e) => {
             const urlInput = document.getElementById('contentUrl');
             if (urlInput) urlInput.value = e.target.result;
-            App.showSecurityAlert('تم تحميل الصورة بنجاح.');
+            App.showSecurityAlert('تم تحميل ومعالجة الصورة بنجاح.');
           };
           reader.readAsDataURL(file);
+        } else if (file.name.endsWith('.docx') || file.name.endsWith('.doc')) {
+          reader.onload = function(e) {
+            const arrayBuffer = e.target.result;
+            if (window.mammoth) {
+              mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
+                .then(function(result) {
+                  const textInput = document.getElementById('contentText');
+                  if (textInput) textInput.value = result.value;
+                  App.showSecurityAlert('تم تحويل مستند Word إلى محتوى تفاعلي داخلي بنجاح.');
+                })
+                .catch(function(err) {
+                  NotificationEngine.alert('حدث خطأ أثناء معالجة ملف Word.', 'خطأ بالملف');
+                });
+            }
+          };
+          reader.readAsArrayBuffer(file);
         } else if (file.name.endsWith('.html') || file.name.endsWith('.htm')) {
           reader.onload = (e) => {
             const textInput = document.getElementById('contentText');
             if (textInput) textInput.value = e.target.result;
-            App.showSecurityAlert('تم قراءة كود ملف HTML بنجاح.');
+            App.showSecurityAlert('تم قراءة كود الـ HTML بنجاح.');
           };
           reader.readAsText(file);
         } else {
@@ -3728,6 +3772,20 @@
           };
           reader.readAsDataURL(file);
         }
+      },
+
+      handleQuizImageUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('quizImgBase64').value = e.target.result;
+          const previewTag = document.getElementById('quizImgPreviewTag');
+          previewTag.src = e.target.result;
+          document.getElementById('quizImgPreview').style.display = 'block';
+          App.showSecurityAlert('تم إرفاق صورة المسألة بنجاح.');
+        };
+        reader.readAsDataURL(file);
       },
 
       openEngineerModal() { document.getElementById("engineerModal").classList.add("active"); },
@@ -3755,11 +3813,11 @@
         const phone = normalizeInput(document.getElementById("settingWhatsAppPhone").value);
         
         State.settings.logoUrl = logo;
-        localStorage.setItem("omer_logo_url", logo);
+        localStorage.setItem("og_logo_url", logo);
 
         if (phone) {
           State.settings.adminPhoneWhatsApp = phone;
-          localStorage.setItem("omer_whatsapp_phone", phone);
+          localStorage.setItem("og_whatsapp_phone", phone);
         }
 
         const newAdminUser = normalizeInput(document.getElementById("settingAdminUser").value);
@@ -3769,24 +3827,23 @@
         if (db) {
           try {
             const vaultRef = db.collection("omer_system").doc("admin_config");
-            const updateObj = { updatedAt: new Date().toISOString(), v: 2 };
+            const updateObj = { updatedAt: new Date().toISOString() };
             if (newAdminUser) updateObj.username = newAdminUser.toLowerCase();
             if (newAdminPass) updateObj.passwordHash = CryptoSecurity.hashPassword(newAdminPass);
             if (newAdminPin) updateObj.pinHash = CryptoSecurity.hashPassword(newAdminPin);
 
             await vaultRef.set(updateObj, { merge: true });
-            await DataStore.getAdminVault();
+            localStorage.setItem("og_admin_vault_cache", JSON.stringify(updateObj));
           } catch (err) {
-            console.error("Failed to update cloud admin config:", err);
+            console.error("Cloud vault update error:", err);
           }
         }
 
         App.closeSettingsModal();
-        App.showSecurityAlert("تم حفظ الإعدادات وبيانات الأدمن سحابياً في فايربيز بنجاح.");
+        App.showSecurityAlert("تم حفظ الإعدادات وبيانات الأدمن المشفرة سحابياً بنجاح.");
         UI.render();
       },
 
-      /* نظام المكالمة الصوتية */
       openVoiceModal() {
         const sel = document.getElementById('voiceStudentSelect');
         if (sel) {
@@ -3796,7 +3853,6 @@
       },
       closeVoiceModal() { document.getElementById('voiceCallModal').classList.remove('active'); },
 
-      /* نظام التقييم وإرسال التقرير لولي الأمر */
       openEvaluationModal(studentUid) {
         const student = State.students.find(s => s.uid === studentUid);
         if (!student) return;
@@ -3848,7 +3904,7 @@
         App.closeEvaluationModal();
 
         const message = `بسم الله الرحمن الرحيم
-📌 *تقرير التقييم والمتابعة الأكاديمية لمادة الرياضيات*
+📌 *تقرير المتابعة والتقييم الأكاديمي لمادة الرياضيات*
 *منصة الأستاذ عمر قاسم (Omer Gasim)*
 
 المكرم ولي أمر الطالبـ(ـة): *${student.name}*
@@ -3864,7 +3920,7 @@
 💡 *توجيهات وملاحظات الأستاذ عمر قاسم:*
 "${notes}"
 ━━━━━━━━━━━━━━━━━━
-نسعد بتعاونكم المستمر لتحقيق أعلى الدرجات والتفوق الدراسي بإذن الله.
+نسعد بتعاونكم المستمر لتحقيق أعلى درجات التفوق بإذن الله.
 *منصة الأستاذ عمر قاسم للرياضيات والعلوم الرياضية*
 هاتف / واتساب: +971505144695`;
 
@@ -3873,7 +3929,6 @@
         UI.render();
       },
 
-      /* نظام إعادة تعيين حساب الطالب */
       openStudentResetModal(studentUid) {
         const student = State.students.find(s => s.uid === studentUid);
         if (!student) return;
@@ -3914,7 +3969,7 @@
           student.status = 'TRIAL';
           student.plan = '3_DAYS_TRIAL';
           student.trialEndTimestamp = Date.now() + (3 * 24 * 60 * 60 * 1000);
-          actionsDone.push('تجديد الفترة التجريبية 3 أيام');
+          actionsDone.push('تمديد الفترة التجريبية 3 أيام جديدة');
         }
 
         if (resetProgress) {
@@ -3930,13 +3985,10 @@
 
         DataStore.save('students', State.students);
         App.closeStudentResetModal();
-        alert(`تم تنفيذ الإجراءات التالية بنجاح للطالب (${student.name}):\n• ` + actionsDone.join('\n• '));
+        NotificationEngine.alert(`تم تنفيذ الإجراءات التالية بنجاح للطالب (${student.name}):\n• ` + actionsDone.join('\n• '), 'تم بنجاح');
         UI.render();
       },
 
-      /* =======================================================================
-       * إدارة الاستبيانات الديناميكية بعدد لا نهائي وتوليد الروابط الحقيقية أونلاين
-       * ======================================================================= */
       openCreateSurveyModal() {
         SurveyBuilder.reset();
         document.getElementById('createSurveyModal').classList.add('active');
@@ -3947,26 +3999,24 @@
       },
 
       getOnlineSurveyUrl(surveyId) {
-        // توليد رابط حقيقي يعمل أونلاين على أي نطاق أو جهاز
         const currentUrl = new URL(window.location.href);
         currentUrl.searchParams.set('survey', surveyId);
         return currentUrl.href;
       },
 
-      handleSaveDynamicSurvey(e) {
+      async handleSaveDynamicSurvey(e) {
         e.preventDefault();
         const title = document.getElementById('surveyMainTitle').value.trim();
         const target = document.getElementById('surveyTargetAudience').value;
 
         if (SurveyBuilder.questions.length === 0) {
-          alert('يرجى إضافة سؤال واحد على الأقل للاستبيان.');
+          NotificationEngine.alert('يرجى إضافة سؤال واحد على الأقل للاستبيان.', 'تنبيه');
           return;
         }
 
-        // التحقق من تعبئة كافة نصوص الأسئلة
         for (let i = 0; i < SurveyBuilder.questions.length; i++) {
           if (!SurveyBuilder.questions[i].text.trim()) {
-            alert(`يرجى كتابة نص السؤال رقم (${i + 1}).`);
+            NotificationEngine.alert(`يرجى كتابة نص السؤال رقم (${i + 1}).`, 'تنبيه');
             return;
           }
         }
@@ -3985,8 +4035,7 @@
         App.closeCreateSurveyModal();
 
         const realUrl = App.getOnlineSurveyUrl(newSurvey.id);
-
-        prompt('✅ تم إنشاء الاستبيان وتوليد الرابط الحقيقي بنجاح!\nانسخ الرابط التالي وشاركه مع طلابك أو أولياء الأمور:', realUrl);
+        await NotificationEngine.prompt('✅ تم إنشاء الاستبيان بنجاح!\nانسخ الرابط التالي لمشاركته:', realUrl, 'الرابط المباشر للاستبيان');
         App.setRoute('ADMIN_SURVEYS');
       },
 
@@ -3995,13 +4044,14 @@
         UI.render();
       },
 
-      copySurveyLink(surveyId) {
+      async copySurveyLink(surveyId) {
         const link = App.getOnlineSurveyUrl(surveyId);
-        navigator.clipboard.writeText(link).then(() => {
+        try {
+          await navigator.clipboard.writeText(link);
           App.showSecurityAlert('تم نسخ رابط الاستبيان المباشر للحافظة.');
-        }).catch(() => {
-          prompt('انسخ رابط الاستبيان المباشر:', link);
-        });
+        } catch {
+          await NotificationEngine.prompt('انسخ رابط الاستبيان المباشر:', link, 'رابط الاستبيان');
+        }
       },
 
       shareSurveyWhatsApp(surveyId) {
@@ -4009,13 +4059,13 @@
         if (!s) return;
         const link = App.getOnlineSurveyUrl(surveyId);
         const msg = `السلام عليكم ورحمة الله وبركاته،
-يدعوكم *الأستاذ عمر قاسم* للمشاركة في الاستبيان الأكاديمي:
+يدعوكم *الأستاذ عمر قاسم* للمشاركة في الاستبيان الأكاديمي لمادة الرياضيات:
 📌 *${s.title}*
 
-يرجى الضغط على الرابط التالي وتعبئة الاستبيان مباشرة من أي جهاز أو هاتف:
+يرجى فتح الرابط التالي وتعبئة الاستبيان مباشرة من هاتفك أو جهازك:
 ${link}
 
-شكراً لتعاونكم المستمر معنا.`;
+شكراً لتعاونكم الدائم.`;
         window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
       },
 
@@ -4028,17 +4078,16 @@ ${link}
         }
       },
 
-      deleteSurvey(surveyId) {
-        App.showConfirmModal('حذف الاستبيان', 'هل أنت متأكد من حذف هذا الاستبيان وجميع الاستجابات المرتبطة به؟', () => {
+      async deleteSurvey(surveyId) {
+        const confirmDelete = await NotificationEngine.confirm('هل أنت متأكد من رغبتك في حذف هذا الاستبيان وكافة الاستجابات الواردة فيه؟', 'حذف الاستبيان');
+        if (confirmDelete) {
           State.surveys = State.surveys.filter(s => s.id !== surveyId);
           State.surveyResponses = State.surveyResponses.filter(r => r.surveyId !== surveyId);
-          if (db) {
-            db.collection('omer_surveys').doc(surveyId).delete().catch(console.error);
-          }
+          if (db) db.collection('omer_surveys').doc(surveyId).delete().catch(console.error);
           DataStore.save('surveys', State.surveys);
-          localStorage.setItem('omer_survey_responses', JSON.stringify(State.surveyResponses));
+          localStorage.setItem('og_survey_responses', JSON.stringify(State.surveyResponses));
           UI.render();
-        });
+        }
       },
 
       handleSubmitDynamicSurveyResponse(e) {
@@ -4046,7 +4095,7 @@ ${link}
         const s = State.activePublicSurvey;
         if (!s) return;
 
-        const respondentName = document.getElementById('surveyRespName').value.trim() || 'فاعل خير';
+        const respondentName = document.getElementById('surveyRespName').value.trim() || 'طالب';
         const questions = s.questions || [];
         const collectedAnswers = [];
 
@@ -4081,15 +4130,13 @@ ${link}
         State.surveyResponses.push(responseObj);
         DataStore.save('surveyResponses', State.surveyResponses);
 
-        alert('🌟 شكرًا جزيلاً لك! تم استلام تقييمك بنجاح وسيقوم الأستاذ عمر بالاطلاع عليه.');
+        NotificationEngine.alert('🌟 شكرًا جزيلاً لك! تم استلام ردك وملاحظاتك بنجاح وسيقوم الأستاذ عمر بمراجعتها.', 'تم الاستلام بنجاح');
         State.activePublicSurvey = null;
         window.history.replaceState({}, document.title, window.location.pathname);
         App.navigateHome();
       },
 
-      /* =======================================================================
-       * مشغلات الوسائط (صور / HTML تفاعلي / أدوات AI)
-       * ======================================================================= */
+      /* مشغلات الوسائط الذكية داخل المنصة */
       openImageViewer(materialId) {
         document.getElementById('pdfControlsBar').style.display = 'none';
         const item = State.materials.find(m => m.id === materialId);
@@ -4108,7 +4155,6 @@ ${link}
               <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.zoomImage(1.2)"><i class="fa-solid fa-magnifying-glass-plus"></i> تكبير</button>
               <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.zoomImage(0.8)"><i class="fa-solid fa-magnifying-glass-minus"></i> تصغير</button>
               <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.resetImageZoom()"><i class="fa-solid fa-arrows-rotate"></i> ضبط الحجم</button>
-              <a href="${item.fileUrl}" target="_blank" class="btn btn-gold" style="padding:4px 10px; font-size:0.75rem;"><i class="fa-solid fa-arrow-up-right-from-square"></i> عرض بدقة كاملة</a>
             </div>
           </div>
           <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
@@ -4138,7 +4184,7 @@ ${link}
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-code"></i> محاكي تفاعلي: ${item.title}`;
+        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-code"></i> أداة تفاعلية: ${item.title}`;
         const viewport = document.getElementById('playerViewport');
 
         let srcContent = '';
@@ -4161,20 +4207,66 @@ ${link}
         App.resetToNormalOrientation();
       },
 
+      /* محطة عمل الذكاء الاصطناعي الداخلية لمنع حجب المتصفحات لروابط Claude و ChatGPT */
       openAiToolLink(materialId) {
+        document.getElementById('pdfControlsBar').style.display = 'none';
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        const promptText = item.sampleContent || 'قم بحل المسألة الرياضية التالية مع توضيح الخطوات بالتفصيل...';
-        const externalUrl = item.fileUrl || 'https://chat.openai.com';
+        const promptText = item.sampleContent || 'قم بحل المسألة الرياضية التالية خطوة بخطوة مع التعليل:';
+        const externalUrl = item.fileUrl || 'https://chatgpt.com';
 
-        const choice = confirm(`🤖 أداة الذكاء الاصطناعي: ${item.title}\n\nنص الأمر الرياضي المقترح:\n"${promptText}"\n\nاضغط [موافق] لنسخ الأمر وفتح رابط الذكاء الاصطناعي (ChatGPT / Claude) في نافذة جديدة.`);
-        if (choice) {
-          navigator.clipboard.writeText(promptText).then(() => {
-            App.showSecurityAlert('تم نسخ أمر الحل البرمجي للحافظة.');
-          }).catch(()=>{});
-          window.open(externalUrl, '_blank');
-        }
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-robot"></i> محطة الذكاء الاصطناعي: ${item.title}`;
+        const viewport = document.getElementById("playerViewport");
+
+        viewport.innerHTML = `
+          <div style="width:100%; height:100%; background:#0B1424; color:#FFF; padding:24px; display:flex; flex-direction:column; gap:16px; overflow-y:auto;">
+            <div style="background:var(--navy-card); border:1.5px solid var(--gold-orange); border-radius:var(--radius-md); padding:16px;">
+              <h3 style="color:var(--gold-orange); margin-bottom:8px; font-size:1.1rem;">
+                <i class="fa-solid fa-terminal"></i> الأمر الرياضي التوجيهي (Math Prompt):
+              </h3>
+              <p style="background:#050B14; padding:12px; border-radius:var(--radius-sm); font-family:monospace; line-height:1.7; font-size:0.9rem; color:#E2E8F0; user-select:text; -webkit-user-select:text;">
+                ${promptText}
+              </p>
+              <div style="display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;">
+                <button class="btn btn-gold" onclick="navigator.clipboard.writeText('${promptText.replace(/'/g, "\\'")}'); App.showSecurityAlert('تم نسخ نص البرمبت بنجاح.');">
+                  <i class="fa-solid fa-copy"></i> نسخ نص الأمر الرياضي
+                </button>
+                <a href="${externalUrl}" target="_blank" class="btn btn-ai">
+                  <i class="fa-solid fa-arrow-up-right-from-square"></i> فتح المحادثة في نافذة مستقلة آمنة
+                </a>
+              </div>
+            </div>
+
+            <!-- نموذج تشغيل المساعد الرياضي الداخلي فوراً -->
+            <div style="background:var(--navy-card); border-radius:var(--radius-md); padding:16px; flex:1; display:flex; flex-direction:column; gap:10px;">
+              <h4 style="color:var(--gold-orange);"><i class="fa-solid fa-microchip"></i> المساعد الرياضي المدمج (تشغيل فوري):</h4>
+              <div id="aiDirectRunnerBox" style="background:#050B14; border-radius:var(--radius-sm); padding:14px; min-height:120px; line-height:1.7; font-size:0.9rem;">
+                اكتب مسألتك أدناه للحل الفوري عبر محرك المنهاج...
+              </div>
+              <div style="display:flex; gap:6px;">
+                <input type="text" id="aiRunnerInput" placeholder="أدخل مسألتك هنا..." style="flex:1; padding:10px; border-radius:var(--radius-sm); border:1px solid #334155; background:#0F1E36; color:#FFF; outline:none;">
+                <button class="btn btn-gold" onclick="App.runInternalAiAssistant()"><i class="fa-solid fa-play"></i> استخراج الحل</button>
+              </div>
+            </div>
+          </div>
+        `;
+
+        document.getElementById("mediaPlayerModal").classList.add("active");
+        App.resetToNormalOrientation();
+      },
+
+      runInternalAiAssistant() {
+        const inp = document.getElementById('aiRunnerInput');
+        const box = document.getElementById('aiDirectRunnerBox');
+        if (!inp || !inp.value.trim()) return;
+
+        box.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري استخلاص الحل والخطوات الرياضية المعتمدة...';
+        setTimeout(() => {
+          const res = CurriculumAiEngine.generateResponse(inp.value, State.currentUser);
+          box.innerHTML = res;
+          if (window.renderMathInElement) renderMathInElement(box);
+        }, 500);
       },
 
       openVideoPlayer(materialId) {
@@ -4289,7 +4381,7 @@ ${link}
               <div><h2>${item.title}</h2><span class="badge badge-curriculum">${item.unit || 'مقرر الرياضيات'}</span></div>
               <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة</button>
             </div>
-            <div class="math-theorem-box"><strong>الشرح والمفهوم الرياضي:</strong><p style="margin-top:6px; font-size:1rem; line-height:1.9;">${item.sampleContent || 'لا يوجد نص للشرح بعد.'}</p></div>
+            <div class="math-theorem-box"><strong>الشرح والمفهوم الرياضي:</strong><div style="margin-top:6px; font-size:1rem; line-height:1.9;">${item.sampleContent || 'لا يوجد نص للشرح بعد.'}</div></div>
           </div>
           <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
         `;
@@ -4303,16 +4395,20 @@ ${link}
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
+        if (item.sampleContent && item.sampleContent.includes('<p>')) {
+          App.openArticleViewer(materialId);
+          return;
+        }
+
         const icon = type === 'ppt' ? 'fa-file-powerpoint' : 'fa-file-word';
         document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid ${icon}"></i> ${item.title}`;
         const viewport = document.getElementById("playerViewport");
         const url = item.fileUrl || "";
-        const officeUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
+        const officeViewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
 
         viewport.innerHTML = `
           <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()"><i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي</button>
-          <iframe class="document-viewer-frame" src="${officeUrl}"></iframe>
-          <div style="background:#0A1424; padding:8px; width:100%; text-align:center;"><a href="${url}" target="_blank" class="btn btn-gold" style="font-size:0.78rem;"><i class="fa-solid fa-download"></i> فتح أو تنزيل الملف الأصلي</a></div>
+          <iframe class="document-viewer-frame" src="${officeViewerUrl}"></iframe>
           <div class="floating-watermark">${State.currentUser ? State.currentUser.name : 'طالب'} – منصة الأستاذ عمر</div>
         `;
         document.getElementById("mediaPlayerModal").classList.add("active");
@@ -4390,7 +4486,6 @@ ${link}
         document.getElementById("mediaPlayerModal").classList.remove("active");
       },
 
-      /* إدارة وتعديل المحتوى */
       openEditModal(contentId, type) {
         const item = State.materials.find(m => m.id === contentId);
         if (!item) return;
@@ -4433,17 +4528,18 @@ ${link}
           DataStore.save('materials', State.materials);
         }
         App.closeEditModal();
-        alert('تم حفظ التعديلات بنجاح.');
+        App.showSecurityAlert('تم حفظ التعديلات سحابياً بنجاح.');
         UI.render();
       },
 
-      promptDeleteContent(contentId) {
-        App.showConfirmModal("حذف المادة التعليمية", "هل أنت متأكد من رغبتك في حذف هذا المحتوى نهائياً؟", () => {
+      async promptDeleteContent(contentId) {
+        const confirmDelete = await NotificationEngine.confirm('هل أنت متأكد من رغبتك في حذف هذا المحتوى التعليمي نهائياً؟', 'حذف المحتوى');
+        if (confirmDelete) {
           State.materials = State.materials.filter(m => m.id !== contentId);
-          if (db) db.collection("omer_materials").doc(contentId).delete().catch(e => console.error(e));
+          if (db) db.collection("omer_materials").doc(contentId).delete().catch(console.error);
           DataStore.save('materials', State.materials);
           UI.render();
-        });
+        }
       },
 
       handleCreateContent(e) {
@@ -4454,6 +4550,9 @@ ${link}
         const unit = document.getElementById("contentUnit").value.trim();
         const url = document.getElementById("contentUrl") ? document.getElementById("contentUrl").value.trim() : "";
         const text = document.getElementById("contentText") ? document.getElementById("contentText").value.trim() : "";
+        const assignedStudent = document.getElementById("contentAssignedStudent") ? document.getElementById("contentAssignedStudent").value : "";
+
+        const assignedList = assignedStudent ? [assignedStudent] : [];
 
         const newMaterial = {
           id: "mat_" + Date.now(),
@@ -4463,14 +4562,25 @@ ${link}
           unit,
           fileUrl: url,
           sampleContent: text,
-          format: UI.getTabTitle(type)
+          format: UI.getTabTitle(type),
+          assignedStudentUids: assignedList
         };
 
         State.materials.push(newMaterial);
         DataStore.save("materials", State.materials);
 
-        alert(`تم نشر مادة (${title}) بنجاح.`);
+        NotificationEngine.alert(`تم نشر مادة (${title}) بنجاح وتعيينها للمسار المحدد.`, 'تم النشر بنجاح');
         App.setRoute("ADMIN_CONTENT_MANAGER");
+      },
+
+      updateStudentAssignList() {
+        const selTarget = document.getElementById('contentTarget').value;
+        const studentSel = document.getElementById('contentAssignedStudent');
+        if (!studentSel) return;
+
+        const filtered = State.students.filter(s => s.target === selTarget);
+        studentSel.innerHTML = `<option value="">متاح لكافة طلاب الصف المختار ✓</option>` +
+          filtered.map(s => `<option value="${s.uid}">${s.name} (${s.username})</option>`).join('');
       },
 
       toggleContentFields() {
@@ -4487,24 +4597,26 @@ ${link}
           urlGroup.style.display = "none";
           textLabel.innerText = "نصوص ومحتوى الشرح الكتابي المباشر";
         } else if (type === "IMAGES") {
-          urlLabel.innerText = "رابط الصورة المباشر أو المخطط (JPG / PNG / WebP / Drive)";
+          urlLabel.innerText = "رابط الصورة المباشر أو المخطط (أو استخدام الرفع من جهازك أعلاه)";
           textLabel.innerText = "شرح أو تعليق مختصر على الصورة الرياضية";
         } else if (type === "HTML_EMBED") {
-          urlLabel.innerText = "رابط الأداة التفاعلية (Desmos / GeoGebra / Simulation URL) - اختياري";
+          urlLabel.innerText = "رابط الأداة التفاعلية (Desmos / GeoGebra URL)";
           textLabel.innerText = "أو الصق كود الـ HTML / JavaScript التفاعلي هنا مباشرة";
         } else if (type === "AI_PROMPT_LINK") {
-          urlLabel.innerText = "رابط المحادثة أو البوت المباشر (Claude / ChatGPT Link)";
-          textLabel.innerText = "الأمر الرياضي المخصص (Prompt) لنسخه للذكاء الاصطناعي";
+          urlLabel.innerText = "رابط الأداة الخارجية (ChatGPT / Claude URL)";
+          textLabel.innerText = "نص البرمبت أو الأمر الرياضي التوجيهي المقترح";
         } else if (type === "PODCASTS") {
           urlLabel.innerText = "رابط ملف الصوت المباشر (MP3 / Drive Audio)";
           textLabel.innerText = "ملاحظات وتفريغ نصي للبودكاست";
+        } else if (type === "WORD_DOCS") {
+          urlLabel.innerText = "رابط المستند (أو اختر ملف Word من جهازك ليتم تحويله داخلياً)";
+          textLabel.innerText = "محتوى ونصوص المستند المعالجة داخلياً";
         } else {
           urlLabel.innerText = "رابط الملف المباشر أو الفيديو أو المستند";
           textLabel.innerText = "نصوص الشرح والملاحظات المرفقة";
         }
       },
 
-      /* إدارة الكويزات */
       startInteractiveQuiz(quizId) {
         State.activeQuiz = State.quizzes.find(q => q.id === quizId);
         State.activeQuestionIndex = 0;
@@ -4561,10 +4673,10 @@ ${link}
             DataStore.save('students', State.students);
           }
 
-          setTimeout(() => {
-            alert(`🎉 أحسنت صنعاً!\nالنتيجة: ${State.quizScore} من ${total} (${percent}%)\nتم منحك ${State.quizScore * 20} نقطة XP بنجاح.`);
+          setTimeout(async () => {
+            await NotificationEngine.alert(`النتيجة: ${State.quizScore} من ${total} (${percent}%)\nتم منحك ${State.quizScore * 20} نقطة XP بنجاح.`, '🎉 نتيجة الكويز');
             App.setRoute("STUDENT_DASHBOARD");
-          }, 500);
+          }, 400);
         }
       },
 
@@ -4573,6 +4685,7 @@ ${link}
         const target = document.getElementById("quizTarget").value;
         const quizTitle = document.getElementById("quizTitle").value.trim();
         const questionText = document.getElementById("questionText").value.trim();
+        const imageUrl = document.getElementById("quizImgBase64").value;
         const option1 = document.getElementById("opt1").value.trim();
         const option2 = document.getElementById("opt2").value.trim();
         const option3 = document.getElementById("opt3").value.trim();
@@ -4586,15 +4699,14 @@ ${link}
         }
 
         targetQuiz.questions.push({
-          id: "q_" + Date.now(), text: questionText, option1, option2, option3, correctOption, aiExplanation
+          id: "q_" + Date.now(), text: questionText, imageUrl, option1, option2, option3, correctOption, aiExplanation
         });
 
         DataStore.save("quizzes", State.quizzes);
-        alert(`تمت إضافة السؤال ونشره في كويز (${targetQuiz.title}) بنجاح.`);
+        NotificationEngine.alert(`تمت إضافة المسألة بنجاح إلى (${targetQuiz.title}).`, 'تم الحفظ');
         App.setRoute("ADMIN_DASHBOARD");
       },
 
-      /* إدارة الشهادات */
       toggleCertApproval(uid) {
         const student = State.students.find(s => s.uid === uid);
         if (student) {
@@ -4607,7 +4719,7 @@ ${link}
       generateCertificate() {
         const user = State.currentUser;
         if (!user.certificateApproved) {
-          alert("الشهادة تتطلب اعتماد الأستاذ عمر أولاً.");
+          NotificationEngine.alert("الشهادة تتطلب اعتماد الأستاذ عمر أولاً.", "تنبيه");
           return;
         }
 
@@ -4629,7 +4741,6 @@ ${link}
 
       closeCertificateModal() { document.getElementById("certificateModal").classList.remove("active"); },
 
-      /* الأدوات التفاعلية العائمة */
       toggleAiChat() { document.getElementById("aiChatWindow").classList.toggle("active"); },
       toggleCalculator() { document.getElementById("calcWidget").classList.toggle("active"); },
       toggleTimer() { document.getElementById("timerWidget").classList.toggle("active"); },
@@ -4669,17 +4780,6 @@ ${link}
           body.scrollTop = body.scrollHeight;
         }, 500);
       },
-
-      /* إدارة جلسات الدخول والتحقق */
-      showConfirmModal(title, msg, onOk) {
-        document.getElementById("confirmTitle").innerText = title;
-        document.getElementById("confirmMessage").innerText = msg;
-        const okBtn = document.getElementById("confirmOkBtn");
-        okBtn.onclick = () => { App.closeConfirmModal(); onOk(); };
-        document.getElementById("confirmModal").classList.add("active");
-      },
-
-      closeConfirmModal() { document.getElementById("confirmModal").classList.remove("active"); },
 
       async handleLogin(e) {
         e.preventDefault();
@@ -4743,7 +4843,7 @@ ${link}
               CryptoSecurity.resetFailedAttempts();
               State.currentUser = { ...student, role: "STUDENT" };
               const token = CryptoSecurity.createSessionToken(State.currentUser);
-              localStorage.setItem("omer_session_token", token);
+              localStorage.setItem("og_session_token", token);
               VoiceEngine.init(student.uid);
               App.setRoute("STUDENT_DASHBOARD");
               return;
@@ -4751,13 +4851,13 @@ ${link}
           }
 
           CryptoSecurity.recordFailedAttempt();
-          App.recordSecurityViolation(`محاولة تسجيل دخول غير صحيحة للمستخدم (${username})`);
+          App.recordSecurityViolation(`محاولة تسجيل دخول غير مصرح بها للمستخدم (${username})`);
           App.showSecurityAlert("اسم المستخدم أو كلمة المرور غير صحيحة.");
           UI.render();
 
         } catch (error) {
           console.error("Login Error:", error);
-          App.showSecurityAlert("حدث خطأ أثناء الاتصال بالخادم. حاول مجدداً.");
+          App.showSecurityAlert("حدث خطأ أثناء الاتصال بالخادم.");
         } finally {
           if (submitBtn) {
             submitBtn.disabled = false;
@@ -4792,17 +4892,17 @@ ${link}
                 role: "ADMIN"
               };
               const token = CryptoSecurity.createSessionToken(State.currentUser);
-              localStorage.setItem("omer_session_token", token);
+              localStorage.setItem("og_session_token", token);
               VoiceEngine.init("admin_omer");
               App.setRoute("ADMIN_DASHBOARD");
               return;
             }
           }
 
-          App.recordSecurityViolation("إدخال رمز تحقق أمني (2FA) خاطئ للأدمن");
-          alert("❌ رمز التحقق الأمني غير صحيح!");
+          App.recordSecurityViolation("إدخال رمز تحقق أمني خاطئ لحساب الأدمن");
+          NotificationEngine.alert("رمز التحقق الأمني (PIN) غير صحيح!", "خطأ بالأمان");
         } catch (error) {
-          alert("حدث خطأ أثناء معالجة رمز الأمان.");
+          NotificationEngine.alert("حدث خطأ أثناء معالجة رمز الأمان.", "خطأ");
         } finally {
           if (submitBtn) {
             submitBtn.disabled = false;
@@ -4851,29 +4951,31 @@ ${link}
         State.students.push(newStudent);
         DataStore.save("students", State.students);
 
-        alert(`تم إنشاء وتشفير حساب الطالب: ${name} بنجاح.`);
+        NotificationEngine.alert(`تم إنشاء وتشفير حساب الطالب (${name}) بنجاح.`, 'تم الحفظ');
         App.setRoute("ADMIN_STUDENTS");
       },
 
-      promptActivateStudent(uid, months) {
+      async promptActivateStudent(uid, months) {
         const student = State.students.find(s => s.uid === uid);
-        App.showConfirmModal("تفعيل الاشتراك", `هل تريد تفعيل اشتراك الطالب (${student.name}) لمدة ${months} أشهر؟`, () => {
+        const confirmAct = await NotificationEngine.confirm(`هل تريد تفعيل اشتراك الطالب (${student.name}) لمدة ${months} أشهر؟`, 'تفعيل الاشتراك');
+        if (confirmAct) {
           student.status = "ACTIVE";
           student.plan = months === 1 ? "1_MONTH" : "3_MONTHS";
           student.expiresAt = months === 1 ? "ساري لمدة شهر" : "ساري لمدة 3 أشهر (فصل كامل)";
           DataStore.save("students", State.students);
           UI.render();
-        });
+        }
       },
 
-      promptDeleteStudent(uid) {
+      async promptDeleteStudent(uid) {
         const student = State.students.find(s => s.uid === uid);
-        App.showConfirmModal("حذف الطالب", `هل أنت متأكد من حذف حساب الطالب (${student.name})؟`, () => {
+        const confirmDel = await NotificationEngine.confirm(`هل أنت متأكد من حذف حساب الطالب (${student.name}) نهائياً؟`, 'حذف الحساب');
+        if (confirmDel) {
           State.students = State.students.filter(s => s.uid !== uid);
-          if (db) db.collection("omer_students").doc(uid).delete().catch(e => console.error(e));
+          if (db) db.collection("omer_students").doc(uid).delete().catch(console.error);
           DataStore.save("students", State.students);
           UI.render();
-        });
+        }
       },
 
       sendWhatsAppOrder(planType) {
@@ -4899,7 +5001,7 @@ ${link}
       },
 
       logout() {
-        localStorage.removeItem("omer_session_token");
+        localStorage.removeItem("og_session_token");
         if (VoiceEngine.activeCalls && VoiceEngine.activeCalls.size > 0) VoiceEngine.endCall();
         State.currentUser = null;
         State.pendingAdminAuth = false;

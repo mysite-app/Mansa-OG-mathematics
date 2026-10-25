@@ -46,7 +46,6 @@
       --gold-gradient: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
       --navy-gradient: linear-gradient(135deg, #0A1424 0%, #162642 100%);
       --purple-gradient: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
-      --ai-gradient: linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%);
       --gold-light: #FFFBEB;
       --gold-subtle: #FEF3C7;
       --bg-light: #F8FAFC;
@@ -66,27 +65,32 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Kufi Arabic', sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background-color: var(--bg-light); color: var(--text-dark); line-height: 1.6; min-height: 100vh; display: flex; flex-direction: column; user-select: none; -webkit-user-select: none; overflow-x: hidden; }
+    
     #securityPrivacyShield { position: fixed; inset: 0; background: rgba(10, 20, 36, 0.98); z-index: 99999; display: none; flex-direction: column; align-items: center; justify-content: center; color: var(--white); text-align: center; padding: 24px; }
     #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3000; }
+    
     header.app-header { background: var(--navy-gradient); color: var(--white); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-sm); position: sticky; top: 0; z-index: 1000; border-bottom: 2px solid var(--gold-orange); }
     .brand-container { display: flex; align-items: center; gap: 12px; cursor: pointer; }
     .brand-logo-img { width: 44px; height: 44px; border-radius: var(--radius-sm); object-fit: contain; background: #FFFFFF; padding: 2px; border: 1px solid rgba(255, 255, 255, 0.2); }
     .brand-text h1 { font-size: 1.15rem; font-weight: 900; color: var(--white); line-height: 1.2; }
     .brand-text span { font-size: 0.7rem; color: var(--gold-orange); display: block; font-weight: 600; }
+    
     .login-logo-container { width: 86px; height: 86px; margin: 0 auto 16px; border-radius: 50%; background: #FFFFFF; padding: 4px; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; position: relative; }
     .login-logo-container img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
+    
     .main-wrapper { flex: 1; max-width: 1320px; width: 100%; margin: 0 auto; padding: 18px 14px; }
     .card { background: var(--white); border-radius: var(--radius-md); border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); padding: 20px; margin-bottom: 18px; transition: var(--transition); }
     .card:hover { box-shadow: var(--shadow-md); border-color: #CBD5E1; }
-    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border-radius: var(--radius-sm); font-size: 0.88rem; font-weight: 700; cursor: pointer; border: none; transition: var(--transition); text-decoration: none; outline: none; min-height: 42px; }
+    
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 18px; border-radius: var(--radius-sm); font-size: 0.88rem; font-weight: 700; cursor: pointer; border: none; transition: var(--transition); text-decoration: none; outline: none; min-height: 40px; }
     .btn-gold { background: var(--gold-gradient); color: var(--navy-dark); }
     .btn-navy { background: var(--navy-gradient); color: var(--white); }
     .btn-purple { background: var(--purple-gradient); color: var(--white); }
-    .btn-ai { background: var(--ai-gradient); color: var(--white); }
     .btn-whatsapp { background: #25D366; color: var(--white); }
     .btn-danger { background: var(--danger); color: var(--white); }
     .btn-secondary { background: #F1F5F9; color: var(--text-dark); border: 1px solid #CBD5E1; }
     .btn-disabled { background: #E2E8F0; color: #94A3B8; cursor: not-allowed; }
+    
     .badge { padding: 4px 10px; border-radius: 50px; font-size: 0.72rem; font-weight: 700; display: inline-flex; align-items: center; gap: 5px; }
     .badge-trial { background: #FEF3C7; color: #B45309; border: 1px solid #FCD34D; }
     .badge-active { background: #ECFDF5; color: var(--success); border: 1px solid #6EE7B7; }
@@ -99,41 +103,81 @@
     .badge-article { background: #ECFDF5; color: #047857; border: 1px solid #A7F3D0; }
     .badge-img { background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; }
     .badge-html { background: #E0F2FE; color: #0284C7; border: 1px solid #BAE6FD; }
-    .badge-ai { background: #EEF2FF; color: #4F46E5; border: 1px solid #C7D2FE; }
     .badge-xp { background: linear-gradient(135deg, #F59E0B, #D97706); color: #FFF; font-weight: 800; border-radius: 50px; padding: 2px 8px; font-size: 0.72rem; }
+    
+    /* نظام الوحدات الدراسية المتقدم المنظم */
+    .unit-container-block { margin-bottom: 22px; border-radius: var(--radius-md); border: 1.5px solid #E2E8F0; background: var(--white); overflow: hidden; box-shadow: var(--shadow-sm); }
+    .unit-header-bar { background: linear-gradient(90deg, #0A1424 0%, #162642 100%); color: #FFF; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-right: 5px solid var(--gold-orange); }
+    .unit-header-title { display: flex; align-items: center; gap: 10px; font-size: 1.05rem; font-weight: 800; }
+    .unit-body-grid { padding: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; background: #F8FAFC; }
+    .lesson-item-card { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between; transition: var(--transition); }
+    .lesson-item-card:hover { transform: translateY(-2px); border-color: var(--gold-orange); box-shadow: var(--shadow-md); }
+
     .grid-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
     .nav-tabs-wrapper { display: flex; gap: 8px; margin-bottom: 18px; overflow-x: auto; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
     .search-box-wrapper { position: relative; margin-bottom: 16px; }
     .search-box-wrapper input { width: 100%; padding: 12px 42px 12px 16px; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); background: var(--white); font-size: 0.9rem; outline: none; }
     .search-box-wrapper i { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--gold-orange); font-size: 1rem; }
+    
     .plans-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 20px; margin: 20px 0; }
     .plan-card { border: 1.5px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); padding: 24px 18px; text-align: center; background: var(--white); position: relative; }
     .plan-card.featured { border-color: var(--gold-orange); background: linear-gradient(180deg, var(--white) 0%, var(--gold-light) 100%); }
     .plan-badge-top { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--navy-dark); color: var(--gold-orange); padding: 3px 14px; border-radius: 50px; font-size: 0.72rem; font-weight: 800; border: 1px solid var(--gold-orange); }
     .plan-price { font-size: 2rem; font-weight: 900; color: var(--navy-dark); margin: 12px 0; }
+    
+    /* المشغل الذكي الشامل والشاشة الكاملة المتطورة */
     .player-modal-content { position: relative; background: var(--navy-dark); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; color: #FFF; width: 100%; height: 100%; }
     .player-toolbar { display: flex; justify-content: space-between; align-items: center; background: var(--navy-dark); padding: 10px 16px; border-bottom: 1px solid rgba(245, 158, 11, 0.2); font-size: 0.82rem; }
-    .player-viewport { position: relative; width: 100%; min-height: 440px; height: 72vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; background: #0B1424; overflow-y: auto; }
-    .player-viewport.rotated-fullscreen { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 999999; background: #000; }
-    .floating-reset-orientation-btn { position: absolute; top: 14px; right: 14px; background: rgba(10, 20, 36, 0.9); color: var(--gold-orange); border: 1px solid var(--gold-orange); padding: 8px 16px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; cursor: pointer; z-index: 10000; display: none; }
-    .player-viewport.rotated-fullscreen .floating-reset-orientation-btn { display: inline-flex; }
+    .player-viewport { position: relative; width: 100%; min-height: 480px; height: 75vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; background: #070D18; overflow-y: auto; }
+    
+    .player-modal-content.rotated-fullscreen-active {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: 100vw !important;
+      max-height: 100vh !important;
+      z-index: 9999999 !important;
+      border-radius: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #000000 !important;
+    }
+    .player-modal-content.rotated-fullscreen-active .player-viewport {
+      height: calc(100vh - 50px) !important;
+      min-height: auto !important;
+    }
+    
+    .floating-reset-orientation-btn {
+      position: absolute; top: 12px; left: 12px; background: rgba(15, 30, 54, 0.85); backdrop-filter: blur(4px);
+      color: var(--gold-orange); border: 1.5px solid var(--gold-orange); padding: 6px 14px; border-radius: 50px;
+      font-size: 0.78rem; font-weight: 800; cursor: pointer; z-index: 10000; display: inline-flex; align-items: center; gap: 6px;
+    }
+    
     .pro-video-controls { display: flex; align-items: center; justify-content: center; gap: 8px; background: rgba(10, 20, 36, 0.95); padding: 8px 12px; width: 100%; border-top: 1px solid rgba(245, 158, 11, 0.2); z-index: 20; flex-wrap: wrap; }
     .pro-video-btn { background: #162642; border: 1px solid #334155; color: #FFF; padding: 4px 10px; border-radius: 4px; font-size: 0.78rem; cursor: pointer; }
     .pro-video-btn:hover { background: var(--gold-orange); color: var(--navy-dark); }
+    
     .podcast-player-box { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 30px 20px; background: radial-gradient(circle at center, #162642 0%, #0A1424 100%); width: 100%; height: 100%; text-align: center; }
-    .podcast-cover-art { width: 120px; height: 120px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; font-size: 46px; color: var(--navy-dark); margin-bottom: 20px; }
+    .podcast-cover-art { width: 110px; height: 110px; border-radius: 50%; background: var(--gold-gradient); display: flex; align-items: center; justify-content: center; font-size: 44px; color: var(--navy-dark); margin-bottom: 20px; box-shadow: 0 0 25px rgba(245, 158, 11, 0.3); }
     .audio-controls-panel { width: 100%; max-width: 480px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); padding: 16px; border-radius: var(--radius-lg); }
     .audio-progress-slider { width: 100%; accent-color: var(--gold-orange); height: 6px; cursor: pointer; margin: 10px 0 6px; }
+    
     .article-reading-container { width: 100%; height: 100%; background: #FFFFFF; color: var(--text-dark); padding: 26px 20px; overflow-y: auto; text-align: right; }
     .math-theorem-box { background: var(--gold-light); border-right: 4px solid var(--gold-orange); border-radius: var(--radius-sm); padding: 14px 16px; margin: 16px 0; }
-    .pdf-canvas-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 14px; background: #1E293B; gap: 14px; }
-    .pdf-canvas-container canvas { max-width: 100%; border-radius: 4px; background: #FFFFFF; }
-    .pdf-controls-bar { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 8px 14px; background: var(--navy-dark); border-bottom: 1px solid rgba(245, 158, 11, 0.2); color: #FFF; font-size: 0.8rem; width: 100%; }
+    
+    /* حاوية الـ PDF الآمنة */
+    .pdf-canvas-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 14px; background: #0E1726; gap: 14px; overflow-y: auto; }
+    .pdf-canvas-container canvas { max-width: 100%; border-radius: 4px; background: #FFFFFF; box-shadow: 0 4px 12px rgba(0,0,0,0.5); pointer-events: none; }
+    .pdf-controls-bar { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 14px; background: #0A1424; border-bottom: 1px solid rgba(245, 158, 11, 0.2); color: #FFF; font-size: 0.8rem; width: 100%; flex-wrap: wrap; }
+    
     video { width: 100%; height: 100%; object-fit: contain; outline: none; background: #000; }
-    .floating-watermark { position: absolute; color: rgba(255, 255, 255, 0.35); font-size: 0.95rem; font-weight: 800; pointer-events: none; user-select: none; z-index: 50; transition: all 1s ease; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+    .floating-watermark { position: absolute; color: rgba(255, 255, 255, 0.38); font-size: 0.92rem; font-weight: 800; pointer-events: none; user-select: none; z-index: 50; transition: all 1.2s ease; text-shadow: 0 1px 4px rgba(0,0,0,0.9); white-space: nowrap; }
     .document-viewer-frame { width: 100%; height: 100%; min-height: 70vh; border: none; background: #F8FAFC; }
-    .image-viewer-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 20px; background: #0B1424; overflow: hidden; position: relative; }
+    
+    .image-viewer-container { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; padding: 20px; background: #070D18; overflow: hidden; position: relative; }
     .image-viewer-container img { max-width: 95%; max-height: 82%; object-fit: contain; border-radius: 6px; box-shadow: var(--shadow-lg); transition: transform 0.2s ease; }
+    
     .quiz-gamified-box { max-width: 760px; margin: 0 auto; position: relative; }
     .quiz-progress-bar { height: 8px; background: #E2E8F0; border-radius: 50px; overflow: hidden; margin-bottom: 18px; }
     .quiz-progress-fill { height: 100%; background: var(--gold-gradient); width: 0%; transition: width 0.35s ease; }
@@ -143,6 +187,7 @@
     .interactive-option.correct { background: #ECFDF5 !important; border-color: var(--success) !important; color: #065F46; }
     .interactive-option.wrong { background: #FEF2F2 !important; border-color: var(--danger) !important; color: #991B1B; }
     .option-letter { width: 32px; height: 32px; border-radius: 50%; background: var(--gold-subtle); color: var(--navy-dark); display: flex; align-items: center; justify-content: center; font-weight: 800; }
+    
     .arena-hero-card { background: var(--navy-gradient); color: #FFF; border-radius: var(--radius-lg); padding: 24px; border: 2px solid var(--gold-orange); text-align: center; margin-bottom: 20px; position: relative; overflow: hidden; }
     .leaderboard-list { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
     .leaderboard-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 18px; background: var(--white); border: 1.5px solid var(--border-color); border-radius: var(--radius-md); }
@@ -153,6 +198,8 @@
     .rank-1 { background: #F59E0B; color: #FFF; }
     .rank-2 { background: #94A3B8; color: #FFF; }
     .rank-3 { background: #B45309; color: #FFF; }
+    
+    /* فقاعة المكالمات الصوتية المطورة */
     .voice-call-bubble { position: fixed; top: 75px; left: 15px; background: var(--navy-dark); border: 2px solid var(--gold-orange); border-radius: var(--radius-md); padding: 12px 16px; color: #FFF; z-index: 9999; display: none; flex-direction: column; gap: 10px; box-shadow: var(--shadow-lg); max-width: 380px; width: calc(100vw - 30px); animation: pulseGlow 2.5s infinite; }
     .voice-call-bubble.active { display: flex; }
     @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
@@ -166,7 +213,7 @@
     .voice-peer-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 8px; background: rgba(255,255,255,0.06); border-radius: 4px; }
     .voice-btn-sm { padding: 3px 8px; font-size: 0.7rem; border-radius: 4px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
     
-    /* أدوات الطلاب العائمة المتجاوبة */
+    /* أدوات الطلاب العائمة */
     .floating-tools-container { position: fixed; bottom: 20px; left: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1500; }
     .floating-tool-btn { width: 46px; height: 46px; border-radius: 50%; color: #FFF; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: var(--shadow-md); cursor: pointer; border: 2px solid var(--white); transition: transform 0.2s; }
     .floating-tool-btn:hover { transform: scale(1.1); }
@@ -179,6 +226,7 @@
     .timer-widget { position: fixed; bottom: 85px; left: 20px; width: 290px; background: var(--navy-dark); border-radius: var(--radius-lg); padding: 16px; border: 2px solid #EC4899; z-index: 1500; display: none; flex-direction: column; align-items: center; gap: 10px; color: #FFF; }
     .timer-widget.active { display: flex; }
     .timer-display { font-size: 2.6rem; font-weight: 900; color: #F472B6; font-family: monospace; }
+    
     .ai-chat-window { position: fixed; bottom: 85px; left: 20px; width: 440px; max-width: calc(100vw - 40px); height: 530px; background: #FFF; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); border: 2px solid var(--gold-orange); z-index: 1500; display: none; flex-direction: column; overflow: hidden; }
     .ai-chat-window.active { display: flex; }
     .ai-chat-header { background: var(--navy-gradient); color: var(--white); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; font-weight: 700; border-bottom: 2px solid var(--gold-orange); }
@@ -188,6 +236,7 @@
     .ai-msg.user { background: var(--navy-dark); color: #FFF; align-self: flex-end; }
     .ai-chat-footer { padding: 10px; display: flex; gap: 6px; background: #FFF; border-top: 1px solid #E2E8F0; }
     .ai-chat-footer input { flex: 1; padding: 8px 12px; border: 1.5px solid #CBD5E1; border-radius: var(--radius-sm); outline: none; }
+    
     .calculator-widget { position: fixed; bottom: 85px; left: 20px; width: 360px; max-width: calc(100vw - 40px); background: #0B1424; border-radius: var(--radius-lg); padding: 14px; border: 2px solid var(--gold-orange); z-index: 1500; display: none; flex-direction: column; gap: 8px; color: #FFF; box-shadow: var(--shadow-lg); }
     .calculator-widget.active { display: flex; }
     .calc-screen-container { background: #050B14; padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid #1E293B; display: flex; flex-direction: column; align-items: flex-end; }
@@ -202,25 +251,36 @@
     .calc-btn.equal { background: var(--gold-gradient); color: var(--navy-dark); font-weight: 900; }
     .calc-btn.clear { background: var(--danger); color: #FFF; }
     .calc-btn.del { background: #991B1B; color: #FFF; }
+    
     .certificate-card { background: #FFFFFF; border: 10px double var(--navy-dark); padding: 32px 24px; text-align: center; border-radius: 4px; color: var(--navy-dark); width: 100%; margin: 0 auto; }
     .cert-logo-badge { display: inline-flex; align-items: center; justify-content: center; width: 88px; height: 88px; background: #FFFFFF; border-radius: 50%; border: 2px solid var(--navy-dark); padding: 4px; margin: 0 auto 10px; }
     .cert-logo-img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
-    .table-container { overflow-x: auto; border: 1px solid #E2E8F0; border-radius: var(--radius-md); background: var(--white); -webkit-overflow-scrolling: touch; }
-    table { width: 100%; border-collapse: collapse; text-align: right; min-width: 600px; }
-    th, td { padding: 12px 14px; border-bottom: 1px solid #F1F5F9; font-size: 0.85rem; }
+    
+    .table-container { overflow-x: auto; border: 1px solid #E2E8F0; border-radius: var(--radius-md); background: var(--white); -webkit-overflow-scrolling: touch; width: 100%; }
+    table { width: 100%; border-collapse: collapse; text-align: right; min-width: 580px; }
+    th, td { padding: 10px 12px; border-bottom: 1px solid #F1F5F9; font-size: 0.82rem; }
     th { background-color: var(--gold-light); color: var(--navy-dark); font-weight: 800; }
+    
     .form-group { margin-bottom: 14px; text-align: right; }
     .form-group label { display: block; font-size: 0.84rem; font-weight: 700; margin-bottom: 5px; color: var(--navy-dark); }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 11px; border: 1.5px solid #CBD5E1; border-radius: var(--radius-sm); outline: none; font-size: 0.9rem; background: #FFF; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 12px; border: 1.5px solid #CBD5E1; border-radius: var(--radius-sm); outline: none; font-size: 0.88rem; background: #FFF; }
     .input-with-paste { display: flex; gap: 6px; }
+    
     .countdown-widget { background: #FFFBEB; border: 1.5px solid var(--gold-orange); padding: 12px 16px; border-radius: var(--radius-md); color: #92400E; font-weight: 700; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+    
     .modal-overlay { position: fixed; inset: 0; background: rgba(10, 20, 36, 0.85); display: none; align-items: center; justify-content: center; z-index: 2000; padding: 14px; }
     .modal-overlay.active { display: flex; }
-    .modal-card { background: var(--white); border-radius: var(--radius-lg); border: 2px solid var(--gold-orange); max-width: 720px; width: 100%; padding: 24px; position: relative; max-height: 90vh; overflow-y: auto; }
+    .modal-card { background: var(--white); border-radius: var(--radius-lg); border: 2px solid var(--gold-orange); max-width: 720px; width: 100%; padding: 22px; position: relative; max-height: 90vh; overflow-y: auto; }
+    
     .security-toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: var(--danger); color: #FFF; padding: 10px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; display: none; align-items: center; gap: 8px; z-index: 99999; box-shadow: var(--shadow-lg); }
-    .survey-mobile-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 16px; align-items: start; }
-    .survey-builder-qcard { background: #FFFFFF; border: 1.5px solid #E2E8F0; border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
-    .survey-builder-qcard:focus-within { border-color: var(--gold-orange); }
+    
+    /* نظام الاستبيانات المتجاوب */
+    .survey-responsive-layout { display: flex; flex-direction: column; gap: 16px; }
+    .survey-card-item { background: #FFFFFF; border: 1.5px solid #E2E8F0; border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; transition: var(--transition); }
+    .survey-card-item:hover { border-color: var(--gold-orange); }
+    .survey-actions-flex { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 10px; }
+    .survey-actions-flex .btn { flex: 1 1 auto; min-width: 75px; padding: 5px 8px; font-size: 0.74rem; min-height: 32px; white-space: nowrap; }
+    
     .survey-star-rating { display: inline-flex; flex-direction: row-reverse; gap: 12px; font-size: 1.8rem; cursor: pointer; padding: 6px 0; }
     .survey-star-rating input { display: none; }
     .survey-star-rating label { color: #CBD5E1; transition: transform 0.1s, color 0.15s; }
@@ -229,12 +289,9 @@
     .survey-star-rating label:hover,
     .survey-star-rating label:hover ~ label { color: #F59E0B; }
     
-    /* تجاوب فائق لكافة الأجهزة والهواتف */
     @media (max-width: 860px) {
-      .survey-mobile-grid { grid-template-columns: 1fr; }
       .voice-call-bubble { left: 8px; right: 8px; width: auto; top: 65px; }
       .modal-card { padding: 14px; max-height: 94vh; width: 100%; }
-      .survey-builder-qcard { padding: 10px; }
       .plans-container { grid-template-columns: 1fr; }
       .floating-tools-container { bottom: 12px; left: 10px; gap: 6px; }
       .floating-tool-btn { width: 40px; height: 40px; font-size: 15px; }
@@ -245,6 +302,7 @@
       .player-viewport { height: 60vh; min-height: 320px; }
       .main-wrapper { padding: 12px 8px; }
       .card { padding: 14px 12px; }
+      .unit-body-grid { grid-template-columns: 1fr; padding: 10px; }
     }
     
     footer.app-footer { background: var(--navy-gradient); color: var(--white); padding: 18px 20px; margin-top: auto; text-align: center; border-top: 2px solid var(--gold-orange); }
@@ -267,7 +325,7 @@
     <i class="fa-solid fa-shield-halved" style="font-size:54px; color:var(--gold-orange); margin-bottom:14px;"></i>
     <h2 style="font-size:1.3rem; font-weight:800;">درع الحماية والتشفير – منصة الأستاذ عمر</h2>
     <p style="margin-top:8px; color:var(--gold-subtle); font-size:0.88rem; max-width:480px;">
-      محتوى الرياضيات، البودكاست التعليمي، وملفات المنهج الإماراتي والسوداني مشفرة ومحمية من التلاعب.
+      محتوى الرياضيات، المذكرات والشروحات مشفرة ومحمية من التحميل والنسخ غير المصرح به.
     </p>
     <button class="btn btn-gold" style="margin-top:18px;" onclick="document.getElementById('securityPrivacyShield').style.display='none'">
       متابعة التعلم بأمان
@@ -301,7 +359,7 @@
     </div>
   </div>
 
-  <!-- فقاعة المكالمة الصوتية WebRTC -->
+  <!-- فقاعة المكالمة الصوتية WebRTC المحدثة -->
   <div class="voice-call-bubble" id="voiceCallBubble">
     <div class="voice-header">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -448,7 +506,7 @@
     </div>
   </div>
 
-  <!-- المساعد الذكي AI -->
+  <!-- المساعد الذكي AI المدمج -->
   <div class="ai-chat-window" id="aiChatWindow">
     <div class="ai-chat-header">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -470,36 +528,36 @@
     </div>
   </div>
 
-  <!-- المشغل المدمج للوسائط والـ AI -->
+  <!-- المشغل المدمج الشامل مع تدوير الشاشة الكاملة -->
   <div class="modal-overlay" id="mediaPlayerModal">
-    <div class="modal-card" style="max-width: 980px; padding: 0; background: #0A1424; border-color: var(--gold-orange);">
-      <div class="player-modal-content">
+    <div class="modal-card" id="mediaPlayerModalCard" style="max-width: 980px; padding: 0; background: #0A1424; border-color: var(--gold-orange);">
+      <div class="player-modal-content" id="playerModalContent">
         <div class="player-toolbar">
-          <span id="playerMediaTitle" style="font-weight: 700; color: var(--gold-orange);"></span>
-          <div class="player-toolbar-controls">
-            <button class="btn btn-secondary" id="rotateToggleBtn" style="padding:4px 10px; font-size:0.75rem;" onclick="App.toggleDeviceRotation()">
-              <i class="fa-solid fa-rotate"></i> <span id="rotateBtnText">تدوير عرضي</span>
+          <span id="playerMediaTitle" style="font-weight: 700; color: var(--gold-orange); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:65%;"></span>
+          <div class="player-toolbar-controls" style="display:flex; gap:6px; align-items:center;">
+            <button class="btn btn-secondary" id="rotateToggleBtn" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="App.toggleUniversalFullscreen()">
+              <i class="fa-solid fa-expand"></i> <span id="rotateBtnText">ملء الشاشة وتدوير</span>
             </button>
-            <button class="btn btn-secondary" id="fullscreenToggleBtn" style="padding:4px 8px; font-size:0.75rem;" onclick="App.toggleNativeFullscreen()">
-              <i class="fa-solid fa-expand"></i>
-            </button>
-            <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="App.closeMediaPlayer()">
+            <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="App.closeMediaPlayer()">
               <i class="fa-solid fa-xmark"></i> إغلاق
             </button>
           </div>
         </div>
 
+        <!-- شريط تحكم الـ PDF الآمن -->
         <div id="pdfControlsBar" class="pdf-controls-bar" style="display:none;">
-          <button class="btn btn-secondary" style="padding:3px 8px;" onclick="PDFViewerEngine.prevPage()"><i class="fa-solid fa-chevron-right"></i> السابق</button>
-          <span>الصفحة: <strong id="pdfPageNum">1</strong> / <strong id="pdfPageCount">--</strong></span>
-          <button class="btn btn-secondary" style="padding:3px 8px;" onclick="PDFViewerEngine.nextPage()">التالي <i class="fa-solid fa-chevron-left"></i></button>
-          <button class="btn btn-secondary" style="padding:3px 8px;" onclick="PDFViewerEngine.zoomIn()"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
-          <button class="btn btn-secondary" style="padding:3px 8px;" onclick="PDFViewerEngine.zoomOut()"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+          <button class="btn btn-secondary" style="padding:3px 8px; min-height:28px;" onclick="PDFViewerEngine.prevPage()"><i class="fa-solid fa-chevron-right"></i> السابق</button>
+          <span>الصفحة: <strong id="pdfPageNum" style="color:var(--gold-orange);">1</strong> / <strong id="pdfPageCount">--</strong></span>
+          <button class="btn btn-secondary" style="padding:3px 8px; min-height:28px;" onclick="PDFViewerEngine.nextPage()">التالي <i class="fa-solid fa-chevron-left"></i></button>
+          <button class="btn btn-secondary" style="padding:3px 8px; min-height:28px;" onclick="PDFViewerEngine.zoomIn()"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+          <button class="btn btn-secondary" style="padding:3px 8px; min-height:28px;" onclick="PDFViewerEngine.zoomOut()"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+          <span class="badge badge-trial" style="font-size:0.68rem;"><i class="fa-solid fa-lock"></i> محمي داخلياً</span>
         </div>
 
         <div class="player-viewport" id="playerViewport">
-          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
-            <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
+          <!-- زر الخروج العائم في وضع الشاشة الكاملة -->
+          <button class="floating-reset-orientation-btn" id="floatingExitFullscreenBtn" style="display:none;" onclick="App.toggleUniversalFullscreen()">
+            <i class="fa-solid fa-compress"></i> استعادة الوضع الطبيعي
           </button>
         </div>
 
@@ -668,14 +726,14 @@
     </div>
   </div>
 
-  <!-- منشئ الاستبيانات -->
+  <!-- منشئ الاستبيانات الأكاديمية -->
   <div class="modal-overlay" id="createSurveyModal">
     <div class="modal-card" style="max-width: 780px;">
       <h3 style="color: var(--navy-dark); margin-bottom: 8px;">
         <i class="fa-solid fa-square-poll-vertical" style="color:var(--gold-orange);"></i> منشئ الاستبيانات الأكاديمية الذكية
       </h3>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px;">
-        أنشئ استبياناً بعدد غير محدود من الأسئلة، بتنسيق متجاوب بدون أي تداخل في الهواتف الذكية.
+        أنشئ استبياناً بعدد غير محدود من الأسئلة، بتنسيق متجاوب بالكامل في الهواتف الذكية.
       </p>
 
       <form onsubmit="App.handleSaveDynamicSurvey(event)">
@@ -749,11 +807,11 @@
     </div>
   </div>
 
-  <!-- تعديل المحتوى -->
+  <!-- تعديل المحتوى والوحدات -->
   <div class="modal-overlay" id="editContentModal">
     <div class="modal-card">
       <h3 style="color: var(--navy-dark); margin-bottom: 14px;">
-        <i class="fa-solid fa-pen-to-square"></i> تعديل المادة التعليمية
+        <i class="fa-solid fa-pen-to-square"></i> تعديل المادة التعليمية والوحدة
       </h3>
       <form onsubmit="App.handleSaveEditContent(event)">
         <input type="hidden" id="editContentId">
@@ -765,17 +823,17 @@
         </div>
 
         <div class="form-group">
-          <label>العنوان</label>
-          <input type="text" id="editContentTitle" required>
+          <label>الوحدة التعليمية (كتابة يدوية)</label>
+          <input type="text" id="editContentUnit" required placeholder="اكتب اسم الوحدة التعليمية يدوياً هنا...">
         </div>
 
         <div class="form-group">
-          <label>الوحدة / الفصل / الموضوع</label>
-          <input type="text" id="editContentUnit" required>
+          <label>عنوان الدرس / المحتوى</label>
+          <input type="text" id="editContentTitle" required>
         </div>
 
         <div class="form-group" id="editUrlGroup">
-          <label>رابط الملف أو الفيديو أو الصورة أو الأداة</label>
+          <label>رابط الملف أو الفيديو أو المذكرة أو الصورة</label>
           <div class="input-with-paste">
             <input type="text" id="editContentUrl">
             <button type="button" class="btn btn-gold" style="padding:8px 12px;" onclick="App.pasteToInput('editContentUrl')">
@@ -857,7 +915,7 @@
         <h3 id="certStudentName" style="font-size: 1.45rem; color: var(--navy-dark); font-weight: 900; border-bottom: 2px dashed var(--gold-orange); display: inline-block; padding: 0 24px 4px; margin-bottom: 12px;"></h3>
         
         <p style="font-size: 0.92rem; line-height: 1.9; margin-bottom: 20px; max-width: 660px; margin-left: auto; margin-right: auto;">
-          قد اجتاز بنجاح واقتدار متطلبات دراسة مقرر <strong id="certGradeText" style="color:var(--gold-deep);"></strong>، بعد إتمام كافة الدروس، البودكاست التعليمي، والاختبارات بنجاح تحت إشراف الأستاذ عمر قاسم.
+          قد اجتاز بنجاح واقتدار متطلبات دراسة مقرر <strong id="certGradeText" style="color:var(--gold-deep);"></strong>، بعد إتمام كافة الدروس، المذكرات، والاختبارات بنجاح تحت إشراف الأستاذ عمر قاسم.
         </p>
 
         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 20px; border-top: 2px solid var(--gold-subtle); padding-top: 14px;">
@@ -1118,11 +1176,11 @@
         const isUAE = target.startsWith('UAE');
         if (isUAE) {
           if (q.includes('derivative') || q.includes('differentiat') || q.includes('مشتق') || q.includes('تفاضل')) {
-            return `<strong>📐 Differentiation Rules (UAE Syllabus):</strong><br>• <strong>Power Rule:</strong> \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>• <strong>Product Rule:</strong> \\( (u \\cdot v)' = u'v + u v' \\)<br>• <strong>Quotient Rule:</strong> \\( \\left(\\frac{u}{v}\\right)' = \\frac{u'v - u v'}{v^2} \\)<br>• <strong>Chain Rule:</strong> \\( \\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x) \\)`;
+            return `<strong>📐 قواعد التفاضل (منهاج دولة الإمارات):</strong><br>• <strong>مشتقة القوة:</strong> \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>• <strong>مشتقة الضرب:</strong> \\( (u \\cdot v)' = u'v + u v' \\)<br>• <strong>مشتقة القسمة:</strong> \\( \\left(\\frac{u}{v}\\right)' = \\frac{u'v - u v'}{v^2} \\)<br>• <strong>قاعدة السلسلة:</strong> \\( \\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x) \\)`;
           } else if (q.includes('integral') || q.includes('integration') || q.includes('تكامل')) {
-            return `<strong>∫ Integration Guidelines:</strong><br>• <strong>Power Rule:</strong> \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\)<br>• <strong>Exponential:</strong> \\( \\int e^{kx} dx = \\frac{1}{k} e^{kx} + C \\)`;
+            return `<strong>∫ قواعد التكامل الأساسية:</strong><br>• <strong>تكامل القوة:</strong> \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\)<br>• <strong>الدالة الأسية:</strong> \\( \\int e^{kx} dx = \\frac{1}{k} e^{kx} + C \\)`;
           } else {
-            return `<strong>مرحباً بك! رفيقك الرياضي الذكي لمنهاج (${escapeHTML(UI.getTargetLabel(target))}).</strong><br>اكتب مسألتك أو معادلتك الرياضية وسأساعدك في حلها خطوة بخطوة.`;
+            return `<strong>مرحباً بك! رفيقك الرياضي الذكي لمنهاج (${escapeHTML(UI.getTargetLabel(target))}).</strong><br>اكتب مسألتك الرياضية وسأساعدك في حلها خطوة بخطوة بالتفصيل.`;
           }
         } else {
           if (q.includes('مشتق') || q.includes('تفاضل')) {
@@ -1193,12 +1251,12 @@
       },
       startWatermarkAnimation() {
         if (this.watermarkInterval) clearInterval(this.watermarkInterval);
-        const el = document.getElementById('floatingVideoWatermark');
+        const el = document.getElementById('floatingGlobalWatermark');
         if (!el) return;
         this.watermarkInterval = setInterval(() => {
-          el.style.top = (Math.floor(Math.random() * 70) + 10) + '%';
+          el.style.top = (Math.floor(Math.random() * 65) + 15) + '%';
           el.style.left = (Math.floor(Math.random() * 60) + 10) + '%';
-        }, 5000);
+        }, 4500);
       },
       cleanup() {
         if (this.activeHls) { this.activeHls.destroy(); this.activeHls = null; }
@@ -1208,6 +1266,7 @@
       }
     };
 
+    /* محرك الاتصال الصوتي المطور WebRTC */
     const VoiceEngine = {
       peer: null,
       localStream: null,
@@ -1218,24 +1277,43 @@
       participants: new Map(),
       audioOutputs: [],
       currentAudioOutputIdx: 0,
+      
       async getOptimizedMediaStream() {
         return await navigator.mediaDevices.getUserMedia({
           audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1, sampleRate: 48000 },
           video: false
         });
       },
+
       init(userUid) {
-        if (this.peer) return;
+        if (this.peer && !this.peer.destroyed) return;
         try {
           const cleanId = 'og_voice_' + userUid.replace(/[^a-zA-Z0-9]/g, '_');
           this.peer = new Peer(cleanId, {
             debug: 0,
-            config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }] }
+            config: {
+              iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' },
+                { urls: 'stun:stun1.l.google.com:19302' },
+                { urls: 'stun:stun2.l.google.com:19302' },
+                { urls: 'stun:stun.services.mozilla.com' }
+              ]
+            }
           });
+
+          this.peer.on('open', () => {
+            console.log('Voice Peer ready:', cleanId);
+          });
+
+          this.peer.on('disconnected', () => {
+            if (this.peer && !this.peer.destroyed) this.peer.reconnect();
+          });
+
           this.peer.on('call', async call => {
             const callerName = call.metadata?.callerName || 'الأستاذ عمر قاسم';
             const isGroup = !!call.metadata?.isGroup;
-            const accept = await NotificationEngine.confirm(`اتصال صوتي وارد ${isGroup ? 'في غرفة نقاش جماعية' : 'مباشر'} من (${callerName})!\nهل تود الرد والمشاركة؟`, 'مكالمة واردة');
+            AudioFX.celebrate();
+            const accept = await NotificationEngine.confirm(`📞 اتصال صوتي وارد ${isGroup ? 'في غرفة نقاش جماعية' : 'مباشر'} من (${callerName})!\nهل تود الرد والمشاركة؟`, 'مكالمة واردة');
             if (accept) {
               try {
                 this.localStream = await this.getOptimizedMediaStream();
@@ -1243,26 +1321,29 @@
                 this.isRoomCall = isGroup;
                 this.setupCallEvents(call, callerName);
               } catch (err) {
-                NotificationEngine.alert('يرجى منح الإذن للمتصفح للوصول إلى الميكروفون.', 'تنبيه الميكروفون');
+                NotificationEngine.alert('يرجى منح المتصفح إذن الوصول إلى الميكروفون للمشاركة.', 'تنبيه الميكروفون');
               }
             }
           });
+
           this.peer.on('connection', conn => this.setupDataConnection(conn));
           this.detectAudioOutputs();
         } catch (e) { console.warn('Voice Engine init error:', e); }
       },
+
       async detectAudioOutputs() {
         if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
           try {
             const devices = await navigator.mediaDevices.enumerateDevices();
             this.audioOutputs = devices.filter(d => d.kind === 'audiooutput');
-          } catch(e) {}
+          } catch(e){}
         }
       },
+
       async cycleAudioOutput() {
         if (this.audioOutputs.length === 0) {
           await this.detectAudioOutputs();
-          if (this.audioOutputs.length === 0) { App.showSecurityAlert('يتم توجيه الصوت تلقائياً عبر نظام جهازك الحالي.'); return; }
+          if (this.audioOutputs.length === 0) { App.showSecurityAlert('يتم توجيه الصوت تلقائياً عبر سماعة جهازك الحالية.'); return; }
         }
         this.currentAudioOutputIdx = (this.currentAudioOutputIdx + 1) % this.audioOutputs.length;
         const targetDevice = this.audioOutputs[this.currentAudioOutputIdx];
@@ -1271,6 +1352,7 @@
         });
         App.showSecurityAlert(`تم تحويل الصوت إلى: ${targetDevice.label || 'مخرج صوت آخر'}`);
       },
+
       setupDataConnection(conn) {
         this.dataConnections.set(conn.peer, conn);
         conn.on('data', data => {
@@ -1279,10 +1361,10 @@
             this.localStream.getAudioTracks().forEach(t => t.enabled = false);
             this.isMuted = true;
             this.updateMicButtonUI();
-            NotificationEngine.alert('قام الأستاذ عمر بتصميت الميكروفون الخاص بك لتنظيم الجلسة.', 'تنبيه تنظيمي');
+            NotificationEngine.alert('قام الأستاذ عمر بتصميت الميكروفون لتنظيم الجلسة.', 'تنبيه تنظيمي');
           }
           if (data.type === 'ALLOW_SPEAK' && this.localStream) {
-            NotificationEngine.alert('منحك الأستاذ عمر الإذن بالحديث الآن! يمكنك تفعيل المايك.', 'إذن الحديث');
+            NotificationEngine.alert('منحك الأستاذ عمر الإذن بالحديث الآن! يمكنك تشغيل المايك.', 'إذن الحديث');
             this.localStream.getAudioTracks().forEach(t => t.enabled = true);
             this.isMuted = false;
             this.updateMicButtonUI();
@@ -1295,6 +1377,7 @@
         });
         conn.on('close', () => this.dataConnections.delete(conn.peer));
       },
+
       async callSelectedStudent() {
         const studentUid = document.getElementById('voiceStudentSelect').value;
         const student = State.students.find(s => s.uid === studentUid);
@@ -1313,6 +1396,7 @@
           NotificationEngine.alert('تعذر فتح الميكروفون. تأكد من منح الإذن للمتصفح.', 'خطأ الميكروفون');
         }
       },
+
       async startBroadcastRoom() {
         App.closeVoiceModal();
         try {
@@ -1324,6 +1408,7 @@
           document.getElementById('voiceParticipantsList').style.display = 'flex';
           document.getElementById('btnAdminMuteAll').style.display = 'inline-flex';
           document.getElementById('btnRaiseHand').style.display = 'none';
+          
           State.students.forEach(st => {
             const targetPeerId = 'og_voice_' + st.uid.replace(/[^a-zA-Z0-9]/g, '_');
             const conn = this.peer.connect(targetPeerId);
@@ -1337,6 +1422,7 @@
           NotificationEngine.alert('تعذر الوصول للميكروفون لبدء الغرفة الجماعية.', 'خطأ في الصوت');
         }
       },
+
       setupCallEvents(call, peerName) {
         this.activeCalls.set(call.peer, call);
         let audioEl = document.getElementById('remoteVoiceAudio_' + call.peer);
@@ -1345,6 +1431,7 @@
           audioEl.id = 'remoteVoiceAudio_' + call.peer;
           audioEl.className = 'voice-remote-audio';
           audioEl.autoplay = true;
+          audioEl.setAttribute('playsinline', '');
           document.body.appendChild(audioEl);
         }
         this.participants.set(call.peer, { name: peerName, isMuted: false, canSpeak: true, handRaised: false, audioEl });
@@ -1360,13 +1447,16 @@
         }
         call.on('stream', remoteStream => {
           audioEl.srcObject = remoteStream;
-          audioEl.play().catch(()=>{});
+          audioEl.play().catch(()=>{
+            console.log('Autoplay handled by user interaction');
+          });
           this.renderParticipantsList();
         });
         call.on('close', () => this.removeParticipant(call.peer));
         call.on('error', () => this.removeParticipant(call.peer));
         this.renderParticipantsList();
       },
+
       removeParticipant(peerId) {
         if (this.activeCalls.has(peerId)) this.activeCalls.delete(peerId);
         const p = this.participants.get(peerId);
@@ -1375,6 +1465,7 @@
         this.renderParticipantsList();
         if (this.activeCalls.size === 0 && !this.isRoomCall) this.endCall();
       },
+
       renderParticipantsList() {
         const listEl = document.getElementById('voiceParticipantsList');
         if (!listEl) return;
@@ -1403,12 +1494,14 @@
           listEl.appendChild(row);
         });
       },
+
       toggleMute() {
         if (!this.localStream) return;
         this.isMuted = !this.isMuted;
         this.localStream.getAudioTracks().forEach(track => track.enabled = !this.isMuted);
         this.updateMicButtonUI();
       },
+
       updateMicButtonUI() {
         const btn = document.getElementById('btnToggleMic');
         if (!btn) return;
@@ -1420,6 +1513,7 @@
           btn.classList.remove('btn-danger'); btn.classList.add('btn-gold');
         }
       },
+
       studentRaiseHand() {
         const user = State.currentUser;
         this.dataConnections.forEach(conn => {
@@ -1427,6 +1521,7 @@
         });
         App.showSecurityAlert('تم رفع اليد وإشعار الأستاذ برغبتك في التحدث.');
       },
+
       adminMuteStudent(peerId) {
         const conn = this.dataConnections.get(peerId);
         if (conn && conn.open) conn.send({ type: 'FORCE_MUTE' });
@@ -1434,6 +1529,7 @@
         if (p && p.audioEl) p.audioEl.muted = true;
         App.showSecurityAlert(`تم كتم صوت الطالب.`);
       },
+
       adminAllowSpeak(peerId) {
         const conn = this.dataConnections.get(peerId);
         if (conn && conn.open) conn.send({ type: 'ALLOW_SPEAK' });
@@ -1442,11 +1538,13 @@
         this.renderParticipantsList();
         App.showSecurityAlert(`تم منح إذن الحديث.`);
       },
+
       adminMuteAll() {
         this.dataConnections.forEach(conn => { if (conn.open) conn.send({ type: 'FORCE_MUTE' }); });
         this.participants.forEach(p => { if (p.audioEl) p.audioEl.muted = true; });
         App.showSecurityAlert('تم كتم صوت جميع الطلاب داخل الغرفة.');
       },
+
       endCall() {
         this.activeCalls.forEach(call => call.close());
         this.activeCalls.clear();
@@ -1463,6 +1561,7 @@
       }
     };
 
+    /* منشئ الاستبيانات الأكاديمية */
     const SurveyBuilder = {
       questions: [],
       reset() {
@@ -1504,7 +1603,7 @@
         const container = document.getElementById('surveyQuestionsDynamicContainer');
         if (!container) return;
         container.innerHTML = this.questions.map((q, idx) => `
-          <div class="survey-builder-qcard">
+          <div style="background:#FFF; border:1px solid #CBD5E1; border-radius:var(--radius-sm); padding:12px; margin-bottom:10px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:6px;">
               <strong style="color:var(--navy-dark); font-size:0.85rem;">السؤال (${idx + 1}):</strong>
               <button type="button" class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem; min-height:26px;" onclick="SurveyBuilder.removeQuestion(${idx})"><i class="fa-solid fa-trash"></i> حذف</button>
@@ -1570,26 +1669,48 @@
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
+    /* محرك الـ PDF الآمن الداخلي بنسبة 100% دون أي فتح خارجي */
     const PDFViewerEngine = {
       pdfDoc: null,
       pageNum: 1,
-      scale: 1.3,
+      scale: 1.25,
       canvasContainer: null,
+      
       async loadPDF(url, containerEl) {
         this.canvasContainer = containerEl;
-        this.canvasContainer.innerHTML = `<div style="color:#FFF; padding:35px; text-align:center;"><i class="fa-solid fa-spinner fa-spin" style="font-size:30px; color:var(--gold-orange); margin-bottom:10px;"></i><p>جاري معالجة وتهيئة ملف الـ PDF داخلياً...</p></div>`;
+        this.canvasContainer.innerHTML = `
+          <div style="color:#FFF; padding:40px; text-align:center;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size:32px; color:var(--gold-orange); margin-bottom:12px;"></i>
+            <p style="font-size:0.9rem;">جاري تشفير وتهيئة ملف الـ PDF للعرض الآمن داخل المنصة...</p>
+          </div>
+        `;
         try {
-          const loadingTask = pdfjsLib.getDocument({ url: url, cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/', cMapPacked: true, enableXfa: true });
+          const loadingTask = pdfjsLib.getDocument({
+            url: url,
+            cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+            cMapPacked: true,
+            enableXfa: true
+          });
           this.pdfDoc = await loadingTask.promise;
           document.getElementById('pdfPageCount').innerText = this.pdfDoc.numPages;
           this.pageNum = 1;
           document.getElementById('pdfControlsBar').style.display = 'flex';
           this.renderPage(this.pageNum);
         } catch (error) {
-          this.canvasContainer.innerHTML = `<div style="background:#0A1424; padding:30px; color:#FFF; text-align:center;"><p style="color:var(--gold-orange);">تعذر تحميل الملف مباشرة. جاري تشغيل العارض الآمن...</p><iframe class="document-viewer-frame" style="margin-top:14px;" src="https://docs.google.com/viewer?url=${encodeURIComponent(url)}&embedded=true"></iframe></div>`;
+          console.error("PDF Load Error:", error);
+          this.canvasContainer.innerHTML = `
+            <div style="background:#0A1424; padding:35px; color:#FFF; text-align:center; border-radius:var(--radius-md);">
+              <i class="fa-solid fa-triangle-exclamation" style="font-size:42px; color:var(--danger); margin-bottom:12px;"></i>
+              <h3 style="color:#FFF; font-size:1.1rem; margin-bottom:8px;">تعذر عرض ملف الـ PDF مباشرة</h3>
+              <p style="font-size:0.85rem; color:#94A3B8; max-width:440px; margin:0 auto 16px;">
+                ملف الـ PDF محمي ومحفوظ على السحابة، يرجى التأكد من صلاحية رابط المذكرة أو إشعار الأستاذ عمر.
+              </p>
+            </div>
+          `;
           document.getElementById('pdfControlsBar').style.display = 'none';
         }
       },
+
       async renderPage(num) {
         if (!this.pdfDoc) return;
         this.canvasContainer.innerHTML = '';
@@ -1603,6 +1724,7 @@
         document.getElementById('pdfPageNum').innerText = num;
         await page.render({ canvasContext: ctx, viewport: viewport }).promise;
       },
+
       prevPage() { if (this.pageNum <= 1) return; this.pageNum--; this.renderPage(this.pageNum); },
       nextPage() { if (!this.pdfDoc || this.pageNum >= this.pdfDoc.numPages) return; this.pageNum++; this.renderPage(this.pageNum); },
       zoomIn() { this.scale += 0.2; this.renderPage(this.pageNum); },
@@ -1648,7 +1770,6 @@
       }
     };
 
-    // نظام التشفير المحسن مع ملح تشفير ثابت ومستقل
     const CryptoSecurity = {
       deriveSalt() {
         return "SEC_GLOBAL_OMER_GASIM_VAULT_2026_MATH_SECURE";
@@ -1663,7 +1784,7 @@
       verify(inputPassword, storedHash, username = "") {
         if (!inputPassword || !storedHash) return false;
         const cleanInput = normalizeInput(inputPassword);
-        if (cleanInput === storedHash) return true; // للتوافق مع كلمات المرور الأولية
+        if (cleanInput === storedHash) return true;
         const hashedAttempt = this.hashPassword(cleanInput);
         if (hashedAttempt === storedHash) return true;
         if (username) {
@@ -1794,7 +1915,8 @@
     const State = {
       currentUser: null,
       currentRoute: "LOGIN",
-      activeContentTab: "VIDEOS",
+      activeContentTab: "ALL_TYPES",
+      selectedStudentUnit: "ALL_UNITS",
       adminTargetFilter: "ALL",
       adminContentTab: "LIST",
       studentSearchQuery: "",
@@ -1805,7 +1927,7 @@
       activeQuestionIndex: 0,
       quizScore: 0,
       isQuestionAnswered: false,
-      isRotatedLandscape: false,
+      isUniversalFullscreen: false,
       selectedSurveyForResults: null,
       activePublicSurvey: null,
       settings: {
@@ -1850,7 +1972,7 @@
               return cloudVault;
             }
           } catch (e) {
-            console.warn("تعذر الاتصال بالسحابة لجلب بيانات المشرف، سيتم استخدام الكاش:", e);
+            console.warn("استخدام بيانات المشرف المخزنة محلياً:", e);
           }
         }
         
@@ -1872,7 +1994,7 @@
               type: "VIDEOS",
               target: "UAE_12_ADV",
               title: "شرح قاعدة السلسلة وتطبيقات التفاضل",
-              unit: "الوحدة الأولى: التفاضل المتقدم",
+              unit: "الوحدة الأولى: التفاضل وتطبيقاته",
               fileUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
               sampleContent: "مقدمة شاملة لحساب مشتقة الدوال المركبة باستخدام قاعدة السلسلة.",
               format: "فيديو مسجل",
@@ -1880,13 +2002,24 @@
             },
             {
               id: "mat_demo_2",
-              type: "AI_PROMPT_LINK",
-              target: "ALL",
-              title: "منصة ChatGPT للرياضيات",
-              unit: "الذكاء الاصطناعي",
-              fileUrl: "https://chatgpt.com",
-              sampleContent: "رابط الذكاء الاصطناعي للمساعدة في حل المسائل وشرح القوانين.",
-              format: "رابط الذكاء الاصطناعي",
+              type: "WORKSHEETS",
+              target: "UAE_12_ADV",
+              title: "مذكرة التمارين والمسائل الوزارية على التفاضل",
+              unit: "الوحدة الأولى: التفاضل وتطبيقاته",
+              fileUrl: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf",
+              sampleContent: "مذكرة شاملة لكافة قوانين وتمارين الوحدة الأولى معدة بواسطة الأستاذ عمر.",
+              format: "مذكرة PDF",
+              assignedStudentUids: []
+            },
+            {
+              id: "mat_demo_3",
+              type: "PODCASTS",
+              target: "UAE_12_ADV",
+              title: "بودكاست مفاهيم التكامل الأساسية",
+              unit: "الوحدة الثانية: التكامل وتطبيقاته",
+              fileUrl: "https://actions.google.com/sounds/v1/science/ambient_space.ogg",
+              sampleContent: "شرح صوتي مركز لتبسيط قواعد التكامل غير المحدود.",
+              format: "بودكاست صوتي",
               assignedStudentUids: []
             }
           ];
@@ -1971,7 +2104,6 @@
         }
 
         if (db) {
-          // استماع لحظي لأي تحديث في إعدادات المشرف عبر السحابة
           db.collection("omer_system").doc("admin_config").onSnapshot(doc => {
             if (doc.exists) {
               const cloudData = doc.data();
@@ -1989,7 +2121,7 @@
               }
               UI.render();
             }
-          }, err => console.warn("Admin config sync warning:", err));
+          }, err => console.warn(err));
 
           db.collection("omer_materials").onSnapshot(snapshot => {
             if (!snapshot.empty) {
@@ -2087,8 +2219,7 @@
           case 'PODCASTS': return `<span class="badge badge-podcast"><i class="fa-solid fa-podcast"></i> بودكاست صوتي</span>`;
           case 'ARTICLES': return `<span class="badge badge-article"><i class="fa-solid fa-file-lines"></i> شرح كتابي مباشر</span>`;
           case 'IMAGES': return `<span class="badge badge-img"><i class="fa-solid fa-image"></i> صورة / مخطط</span>`;
-          case 'HTML_EMBED': return `<span class="badge badge-html"><i class="fa-solid fa-code"></i> تفاعلي HTML</span>`;
-          case 'AI_PROMPT_LINK': return `<span class="badge badge-ai"><i class="fa-solid fa-robot"></i> ذكاء اصطناعي AI</span>`;
+          case 'HTML_EMBED': return `<span class="badge badge-html"><i class="fa-solid fa-code"></i> تفاعلي HTML / لعبة</span>`;
           case 'POWERPOINTS': return `<span class="badge badge-ppt"><i class="fa-solid fa-file-powerpoint"></i> عرض PPT</span>`;
           case 'WORD_DOCS': return `<span class="badge badge-word"><i class="fa-solid fa-file-word"></i> مستند Word</span>`;
           case 'WORKSHEETS': return `<span class="badge badge-curriculum"><i class="fa-solid fa-file-pdf"></i> مذكرة PDF</span>`;
@@ -2209,6 +2340,8 @@
             </div>
           `;
         },
+
+        /* لوحة تحكم الطالب المنظمة بالوحدات الدراسية (Unit-Based Structure) */
         studentDashboard() {
           const user = State.currentUser;
           const now = Date.now();
@@ -2229,15 +2362,31 @@
           if (isTrial && user.trialEndTimestamp) {
             daysLeft = Math.max(1, Math.ceil((user.trialEndTimestamp - now) / (1000 * 60 * 60 * 24)));
           }
+          
           const q = State.studentSearchQuery.toLowerCase().trim();
-          const filteredMaterials = State.materials.filter(item => {
+          
+          // تصفية المواد لصف الطالب
+          const rawMaterials = State.materials.filter(item => {
             const matchTarget = item.target === user.target || item.target === 'ALL';
             const matchStudent = !item.assignedStudentUids || item.assignedStudentUids.length === 0 || item.assignedStudentUids.includes(user.uid);
-            const matchTab = item.type === State.activeContentTab;
+            const matchType = (State.activeContentTab === 'ALL_TYPES' || item.type === State.activeContentTab);
             const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
-            return matchTarget && matchStudent && matchTab && matchSearch;
+            return matchTarget && matchStudent && matchType && matchSearch;
           });
+
+          // تجميع الدروس حسب الوحدات الدراسية
+          const unitsMap = {};
+          rawMaterials.forEach(mat => {
+            const unitName = (mat.unit && mat.unit.trim()) ? mat.unit.trim() : "الوحدة العامة / الأساسيات";
+            if (!unitsMap[unitName]) unitsMap[unitName] = [];
+            unitsMap[unitName].push(mat);
+          });
+
+          const availableUnitsList = Object.keys(unitsMap);
+          
+          // الكويزات المتاحة
           const filteredQuizzes = State.quizzes.filter(item => (item.target === user.target || item.target === 'ALL') && (!q || item.title.toLowerCase().includes(q)));
+
           return `
             ${isTrial ? `
               <div class="countdown-widget">
@@ -2245,6 +2394,7 @@
                 <button class="btn btn-whatsapp" style="padding:6px 12px; font-size:0.78rem; min-height:34px;" onclick="App.sendWhatsAppOrder('TRIAL_CONVERT')"><i class="fa-brands fa-whatsapp"></i> تثبيت الاشتراك الدائم</button>
               </div>
             ` : ''}
+
             <div class="card" style="border-right: 5px solid var(--gold-orange);">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                 <div>
@@ -2258,6 +2408,7 @@
                 </div>
               </div>
             </div>
+
             ${user.recentEvaluation ? `
               <div class="card" style="background:#FFFDF5; border:1.5px solid var(--gold-orange);">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap;">
@@ -2275,26 +2426,31 @@
                 </div>
               </div>
             ` : ''}
+
+            <!-- شريط البحث السريع والفلترة -->
             <div class="search-box-wrapper">
               <i class="fa-solid fa-magnifying-glass"></i>
-              <input type="text" placeholder="🔍 ابحث في دروسك ومذكراتك الرياضية..." value="${escapeHTML(State.studentSearchQuery)}" oninput="App.handleStudentSearch(this.value)">
+              <input type="text" placeholder="🔍 ابحث في الدروس أو الوحدات أو المذكرات..." value="${escapeHTML(State.studentSearchQuery)}" oninput="App.handleStudentSearch(this.value)">
             </div>
+
+            <!-- أشرطة تصفية أنواع المحتوى داخل الوحدات -->
             <div class="nav-tabs-wrapper">
-              <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')"><i class="fa-solid fa-circle-play"></i> الفيديوهات</button>
-              <button class="btn ${State.activeContentTab === 'AI_PROMPT_LINK' ? 'btn-ai' : 'btn-secondary'}" onclick="App.setContentTab('AI_PROMPT_LINK')"><i class="fa-solid fa-robot"></i> الذكاء الاصطناعي</button>
-              <button class="btn ${State.activeContentTab === 'PODCASTS' ? 'btn-purple' : 'btn-secondary'}" onclick="App.setContentTab('PODCASTS')"><i class="fa-solid fa-podcast"></i> البودكاست 🎙️</button>
-              <button class="btn ${State.activeContentTab === 'IMAGES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('IMAGES')"><i class="fa-solid fa-image"></i> صور وسبورات 🖼️</button>
-              <button class="btn ${State.activeContentTab === 'HTML_EMBED' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('HTML_EMBED')"><i class="fa-solid fa-code"></i> تفاعلي HTML</button>
-              <button class="btn ${State.activeContentTab === 'ARTICLES' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('ARTICLES')"><i class="fa-solid fa-book-open"></i> شروحات كتابية 📝</button>
-              <button class="btn ${State.activeContentTab === 'POWERPOINTS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('POWERPOINTS')"><i class="fa-solid fa-file-powerpoint"></i> عروض PPT</button>
-              <button class="btn ${State.activeContentTab === 'WORD_DOCS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('WORD_DOCS')"><i class="fa-solid fa-file-word"></i> مستندات Word</button>
-              <button class="btn ${State.activeContentTab === 'WORKSHEETS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('WORKSHEETS')"><i class="fa-solid fa-file-pdf"></i> مذكرات PDF</button>
+              <button class="btn ${State.activeContentTab === 'ALL_TYPES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('ALL_TYPES')"><i class="fa-solid fa-layer-group"></i> كافة المواد في الوحدات</button>
+              <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')"><i class="fa-solid fa-circle-play"></i> فيديوهات</button>
+              <button class="btn ${State.activeContentTab === 'WORKSHEETS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('WORKSHEETS')"><i class="fa-solid fa-file-pdf"></i> مذكرات PDF</button>
+              <button class="btn ${State.activeContentTab === 'PODCASTS' ? 'btn-purple' : 'btn-secondary'}" onclick="App.setContentTab('PODCASTS')"><i class="fa-solid fa-podcast"></i> بودكاست 🎙️</button>
               <button class="btn ${State.activeContentTab === 'QUIZZES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('QUIZZES')"><i class="fa-solid fa-bolt"></i> الكويزات</button>
-              <button class="btn ${State.activeContentTab === 'EXAMS' ? 'btn-navy' : 'btn-secondary'}" onclick="App.setContentTab('EXAMS')"><i class="fa-solid fa-file-shield"></i> الاختبارات</button>
-              <button class="btn ${State.activeContentTab === 'REVISIONS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('REVISIONS')"><i class="fa-solid fa-star"></i> المراجعات</button>
+              <button class="btn ${State.activeContentTab === 'POWERPOINTS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('POWERPOINTS')"><i class="fa-solid fa-file-powerpoint"></i> بوربوينت PPT</button>
+              <button class="btn ${State.activeContentTab === 'WORD_DOCS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('WORD_DOCS')"><i class="fa-solid fa-file-word"></i> مستندات Word</button>
+              <button class="btn ${State.activeContentTab === 'IMAGES' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('IMAGES')"><i class="fa-solid fa-image"></i> سبورات ومخططات</button>
+              <button class="btn ${State.activeContentTab === 'HTML_EMBED' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('HTML_EMBED')"><i class="fa-solid fa-code"></i> تفاعلي HTML / ألعاب</button>
+              <button class="btn ${State.activeContentTab === 'EXAMS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('EXAMS')"><i class="fa-solid fa-file-shield"></i> امتحانات</button>
+              <button class="btn ${State.activeContentTab === 'REVISIONS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('REVISIONS')"><i class="fa-solid fa-star"></i> مراجعات</button>
             </div>
-            <div class="card">
-              ${State.activeContentTab === 'QUIZZES' ? `
+
+            <!-- عرض المحتوى منظم حسب الوحدات الدراسية بدقة تامة -->
+            ${State.activeContentTab === 'QUIZZES' ? `
+              <div class="card">
                 <h3 style="color: var(--navy-dark); margin-bottom: 14px;"><i class="fa-solid fa-bolt" style="color:var(--gold-orange);"></i> كويزات الرياضيات المخصصة لصفك</h3>
                 <div style="display:flex; flex-direction:column; gap:10px;">
                   ${filteredQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:25px;">لا توجد كويزات متاحة لصفك حالياً.</p>' : filteredQuizzes.map(qz => `
@@ -2304,34 +2460,91 @@
                     </div>
                   `).join('')}
                 </div>
-              ` : `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 14px;">
-                  <h3 style="color: var(--navy-dark);"><i class="fa-solid ${UI.getTabIcon(State.activeContentTab)}"></i> ${UI.getTabTitle(State.activeContentTab)}</h3>
-                  <span style="font-size:0.78rem; color:var(--text-muted);">المواد المتاحة: ${filteredMaterials.length}</span>
+              </div>
+            ` : `
+              ${availableUnitsList.length === 0 ? `
+                <div class="card" style="text-align:center; padding:45px;">
+                  <i class="fa-solid fa-folder-open" style="font-size:42px; color:var(--gold-orange); margin-bottom:12px;"></i>
+                  <h3 style="color:var(--navy-dark);">لا توجد دروس أو مذكرات منشورة في هذا القسم حالياً</h3>
+                  <p style="color:var(--text-muted); font-size:0.85rem;">سيقوم الأستاذ عمر برفع الدروس وتنظيمها في وحداتها قريباً.</p>
                 </div>
-                ${filteredMaterials.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:35px;">لم يقم الأستاذ عمر برفع محتويات في هذا القسم بعد.</p>' : `
-                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:14px;">
-                    ${filteredMaterials.map(item => `
-                      <div class="card" style="margin:0; border-top: 3px solid var(--gold-orange); display:flex; flex-direction:column; justify-content:space-between;">
-                        <div>
-                          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                            ${UI.getMediaTypeBadge(item)}
-                            <span style="font-size:0.72rem; color:var(--text-muted);">${escapeHTML(item.unit) || 'عام'}</span>
-                          </div>
-                          <h4 style="font-size:0.92rem; margin-bottom:6px; color:var(--navy-dark);">${escapeHTML(item.title)}</h4>
-                          <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:12px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">${escapeHTML(item.sampleContent ? item.sampleContent.substring(0, 80) + '...' : 'مادة دراسية معتمدة من الأستاذ عمر.')}</p>
+              ` : `
+                ${availableUnitsList.map((unitName, unitIndex) => {
+                  const unitLessons = unitsMap[unitName] || [];
+                  return `
+                    <div class="unit-container-block">
+                      <div class="unit-header-bar" onclick="App.toggleUnitCollapse('unit_body_${unitIndex}')">
+                        <div class="unit-header-title">
+                          <i class="fa-solid fa-folder-tree" style="color:var(--gold-orange);"></i>
+                          <span>${escapeHTML(unitName)}</span>
                         </div>
-                        <div>
-                          ${item.type === 'VIDEOS' ? `<button class="btn btn-gold" style="width:100%; font-size:0.8rem;" onclick="App.openVideoPlayer('${item.id}')"><i class="fa-solid fa-circle-play"></i> تشغيل الفيديو</button>` : item.type === 'PODCASTS' ? `<button class="btn btn-purple" style="width:100%; font-size:0.8rem;" onclick="App.openPodcastPlayer('${item.id}')"><i class="fa-solid fa-headphones"></i> استماع للبودكاست</button>` : item.type === 'IMAGES' ? `<button class="btn btn-gold" style="width:100%; font-size:0.8rem;" onclick="App.openImageViewer('${item.id}')"><i class="fa-solid fa-image"></i> عرض الصورة / السبورة</button>` : item.type === 'HTML_EMBED' ? `<button class="btn btn-navy" style="width:100%; font-size:0.8rem;" onclick="App.openHtmlViewer('${item.id}')"><i class="fa-solid fa-code"></i> فتح الأداة التفاعلية</button>` : item.type === 'AI_PROMPT_LINK' ? `<button class="btn btn-ai" style="width:100%; font-size:0.8rem;" onclick="App.openAiToolLink('${item.id}')"><i class="fa-solid fa-robot"></i> فتح رابط الذكاء الاصطناعي</button>` : item.type === 'ARTICLES' ? `<button class="btn btn-navy" style="width:100%; font-size:0.8rem;" onclick="App.openArticleViewer('${item.id}')"><i class="fa-solid fa-book-open-reader"></i> قراءة الدرس</button>` : item.type === 'POWERPOINTS' ? `<button class="btn btn-navy" style="width:100%; font-size:0.8rem; background:#C2410C;" onclick="App.openOfficeViewer('${item.id}', 'ppt')"><i class="fa-solid fa-file-powerpoint"></i> استعراض PPT</button>` : item.type === 'WORD_DOCS' ? `<button class="btn btn-navy" style="width:100%; font-size:0.8rem; background:#1D4ED8;" onclick="App.openOfficeViewer('${item.id}', 'doc')"><i class="fa-solid fa-file-word"></i> استعراض Word</button>` : `<button class="btn btn-gold" style="width:100%; font-size:0.8rem;" onclick="App.openDocumentViewer('${item.id}')"><i class="fa-solid fa-book-open-reader"></i> فتح المذكرة PDF</button>`}
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <span class="badge badge-curriculum" style="font-size:0.7rem;">${unitLessons.length} دروس ومواد</span>
+                          <i class="fa-solid fa-chevron-down" id="unit_chevron_unit_body_${unitIndex}"></i>
                         </div>
                       </div>
-                    `).join('')}
-                  </div>
-                `}
+                      
+                      <div class="unit-body-grid" id="unit_body_${unitIndex}">
+                        ${unitLessons.map(lesson => `
+                          <div class="lesson-item-card">
+                            <div>
+                              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                ${UI.getMediaTypeBadge(lesson)}
+                                <small style="color:var(--text-muted); font-size:0.7rem;"><i class="fa-regular fa-clock"></i> درس معتمد</small>
+                              </div>
+                              <h4 style="font-size:0.92rem; font-weight:800; color:var(--navy-dark); margin-bottom:6px; line-height:1.4;">${escapeHTML(lesson.title)}</h4>
+                              <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:14px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                                ${escapeHTML(lesson.sampleContent ? lesson.sampleContent.substring(0, 80) + '...' : 'شرح ومسائل مخصصة من الأستاذ عمر.')}
+                              </p>
+                            </div>
+
+                            <div>
+                              ${lesson.type === 'VIDEOS' ? `
+                                <button class="btn btn-gold" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openVideoPlayer('${lesson.id}')">
+                                  <i class="fa-solid fa-circle-play"></i> تشغيل الفيديو
+                                </button>
+                              ` : lesson.type === 'PODCASTS' ? `
+                                <button class="btn btn-purple" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openPodcastPlayer('${lesson.id}')">
+                                  <i class="fa-solid fa-headphones"></i> استماع للبودكاست
+                                </button>
+                              ` : lesson.type === 'WORKSHEETS' ? `
+                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openDocumentViewer('${lesson.id}')">
+                                  <i class="fa-solid fa-file-pdf"></i> فتح المذكرة PDF
+                                </button>
+                              ` : lesson.type === 'IMAGES' ? `
+                                <button class="btn btn-gold" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openImageViewer('${lesson.id}')">
+                                  <i class="fa-solid fa-image"></i> عرض السبورة / المخطط
+                                </button>
+                              ` : lesson.type === 'HTML_EMBED' ? `
+                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem
+; min-height:36px;" onclick="App.openHtmlViewer('${lesson.id}')">
+                                  <i class="fa-solid fa-code"></i> فتح الأداة التفاعلية / اللعبة
+                                </button>
+                              ` : lesson.type === 'POWERPOINTS' ? `
+                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px; background:#C2410C;" onclick="App.openOfficeViewer('${lesson.id}', 'ppt')">
+                                  <i class="fa-solid fa-file-powerpoint"></i> استعراض PPT
+                                </button>
+                              ` : lesson.type === 'WORD_DOCS' ? `
+                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px; background:#1D4ED8;" onclick="App.openOfficeViewer('${lesson.id}', 'doc')">
+                                  <i class="fa-solid fa-file-word"></i> استعراض Word
+                                </button>
+                              ` : `
+                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openArticleViewer('${lesson.id}')">
+                                  <i class="fa-solid fa-book-open-reader"></i> قراءة الشرح
+                                </button>
+                              `}
+                            </div>
+                          </div>
+                        `).join('')}
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
               `}
-            </div>
+            `}
           `;
         },
+
         arenaView() {
           const sortedStudents = [...State.students].sort((a,b) => (b.xp || 100) - (a.xp || 100));
           return `
@@ -2365,6 +2578,7 @@
             </div>
           `;
         },
+
         speedBattleView() {
           const q = MathArena.dailyQuestions[MathArena.currentQIndex];
           return `
@@ -2386,6 +2600,7 @@
             </div>
           `;
         },
+
         interactiveQuiz() {
           const quiz = State.activeQuiz;
           const q = quiz.questions[State.activeQuestionIndex];
@@ -2415,20 +2630,43 @@
             </div>
           `;
         },
+
+        /* صفحة تعبئة ومعاينة الاستبيان الأكاديمي مع زر الرجوع وقصر الإرسال على الطلاب */
         surveyFillPage() {
           const s = State.activePublicSurvey;
-          if (!s) return `<div class="card" style="text-align:center; padding:30px;"><p>الاستبيان غير متوفر أو تم إغلاقه.</p></div>`;
+          if (!s) return `<div class="card" style="text-align:center; padding:30px;"><p>الاستبيان غير متوفر أو تم إغلاقه.</p><button class="btn btn-gold" onclick="App.navigateHome()">العودة</button></div>`;
+          const isAdmin = (State.currentUser && State.currentUser.role === 'ADMIN');
+          const isStudent = (State.currentUser && State.currentUser.role === 'STUDENT');
+
           return `
             <div style="max-width:680px; margin:20px auto; padding: 0 10px;">
+              <!-- زر الرجوع المباشر في الأعلى -->
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <button type="button" class="btn btn-secondary" onclick="App.closeSurveyView()">
+                  <i class="fa-solid fa-arrow-right"></i> ${isAdmin ? 'إغلاق المعاينة والعودة للإدارة' : 'الرجوع للرئيسية'}
+                </button>
+                ${isAdmin ? `
+                  <span class="badge badge-trial" style="font-size:0.75rem;"><i class="fa-solid fa-eye"></i> وضع المعاينة (المشرف)</span>
+                ` : ''}
+              </div>
+
               <div class="card" style="border-top:4px solid var(--gold-orange); padding:20px 14px;">
                 <div style="text-align:center; margin-bottom:18px;">
                   <i class="fa-solid fa-square-poll-vertical" style="font-size:42px; color:var(--gold-orange); margin-bottom:8px;"></i>
                   <h2 style="color:var(--navy-dark); font-weight:900; font-size:1.35rem;">${escapeHTML(s.title)}</h2>
                   <p style="font-size:0.85rem; color:var(--text-muted);">منصة الأستاذ عمر قاسم – استطلاع الرأي الأكاديمي</p>
                 </div>
+
+                ${isAdmin ? `
+                  <div style="background:#FFFBEB; border:1.5px solid var(--gold-orange); border-radius:var(--radius-sm); padding:10px 14px; margin-bottom:16px; font-size:0.82rem; color:#92400E; display:flex; align-items:center; gap:8px;">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    <span>تنبيه: أنت الآن تستعرض الاستبيان بوضع <strong>المعاينة فقط</strong>. إرسال الإجابات مخصص لحسابات الطلاب لتسجيل تقييماتهم بدقة.</span>
+                  </div>
+                ` : ''}
+
                 <form onsubmit="App.handleSubmitDynamicSurveyResponse(event)">
                   <div class="form-group">
-                    <label>الاسم الكامل (أو كتابة "طالب"):</label>
+                    <label>الاسم الكامل للطالبـ(ـة):</label>
                     <input type="text" id="surveyRespName" required placeholder="أدخل اسمك الكريم" value="${State.currentUser ? escapeHTML(State.currentUser.name) : ''}">
                   </div>
                   <div style="display:flex; flex-direction:column; gap:14px; margin-top:14px;">
@@ -2462,12 +2700,25 @@
                       </div>
                     `).join('')}
                   </div>
-                  <button type="submit" class="btn btn-gold" style="width:100%; font-size:1rem; margin-top:18px;"><i class="fa-solid fa-paper-plane"></i> إرسال الاستبيان للأستاذ عمر</button>
+
+                  <div style="display:flex; gap:10px; margin-top:20px;">
+                    ${isAdmin ? `
+                      <button type="button" class="btn btn-secondary" style="flex:1; font-size:0.95rem;" onclick="App.closeSurveyView()">
+                        <i class="fa-solid fa-arrow-right"></i> إنهاء المعاينة والرجوع
+                      </button>
+                    ` : `
+                      <button type="submit" class="btn btn-gold" style="flex:2; font-size:1rem;">
+                        <i class="fa-solid fa-paper-plane"></i> إرسال الاستبيان للأستاذ عمر
+                      </button>
+                      <button type="button" class="btn btn-secondary" style="flex:1;" onclick="App.closeSurveyView()">إلغاء</button>
+                    `}
+                  </div>
                 </form>
               </div>
             </div>
           `;
         },
+
         subscribePage() {
           return `
             <div style="max-width: 760px; margin: 0 auto;">
@@ -2496,6 +2747,7 @@
             </div>
           `;
         },
+
         adminDashboard() {
           const total = State.students.length;
           const active = State.students.filter(s => s.status === 'ACTIVE').length;
@@ -2506,13 +2758,13 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; flex-wrap:wrap; gap:10px;">
               <div>
                 <h2 style="color: var(--navy-dark); font-weight: 900;">لوحة إدارة منصة الأستاذ عمر 📐</h2>
-                <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة المناهج الإماراتية والسودانية واشتراكات الطلاب والبيانات السحابية</p>
+                <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة المناهج الإماراتية والسودانية والوحدات التعليمية واشتراكات الطلاب</p>
               </div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
                 <button class="btn btn-purple" onclick="App.openVoiceModal()"><i class="fa-solid fa-headset"></i> اتصال صوتي</button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_SURVEYS')"><i class="fa-solid fa-square-poll-vertical"></i> الاستبيانات (${State.surveys.length})</button>
                 <button class="btn btn-gold" onclick="App.openSettingsModal()"><i class="fa-solid fa-gear"></i> الإعدادات والأمان</button>
-                <button class="btn btn-navy" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')"><i class="fa-solid fa-folder-plus"></i> المواد والدروس</button>
+                <button class="btn btn-navy" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')"><i class="fa-solid fa-folder-plus"></i> المواد والوحدات</button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_QUIZ_CREATOR')"><i class="fa-solid fa-bolt"></i> الكويزات</button>
                 <button class="btn btn-navy" onclick="App.setRoute('ADMIN_STUDENTS')"><i class="fa-solid fa-users"></i> الطلاب (${total})</button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_CREATE_STUDENT')"><i class="fa-solid fa-user-plus"></i> إضافة طالب</button>
@@ -2531,51 +2783,66 @@
             </div>
           `;
         },
+
+        /* شاشة الاستبيانات المتجاوبة 100% لكافة الهواتف */
         adminSurveys() {
           const selectedSurvey = State.selectedSurveyForResults ? State.surveys.find(s => s.id === State.selectedSurveyForResults) : State.surveys[0];
           const responses = selectedSurvey ? State.surveyResponses.filter(r => r.surveyId === selectedSurvey.id) : [];
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
               <div>
-                <h2 style="color: var(--navy-dark); font-weight: 800;">نظام الاستبيانات واستطلاعات الرأي الشامل</h2>
-                <p style="font-size:0.78rem; color:var(--text-muted);">متابعة التقييمات ومشاركتها مع أولياء الأمور والطلاب بسهولة</p>
+                <h2 style="color: var(--navy-dark); font-weight: 800;">نظام الاستبيانات واستطلاعات الرأي</h2>
+                <p style="font-size:0.78rem; color:var(--text-muted);">روابط مباشرة ومتجاوبة بالكامل على الهواتف والأجهزة اللوحية</p>
               </div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <button class="btn btn-gold" style="padding:6px 12px; font-size:0.78rem;" onclick="App.openCreateSurveyModal()"><i class="fa-solid fa-plus-circle"></i> إنشاء استبيان جديد<button class="btn btn-navy" style="padding:6px 12px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')"><i class="fa-solid fa-arrow-right"></i> الرئيسية</button>
+                <button class="btn btn-gold" style="padding:6px 12px; font-size:0.78rem;" onclick="App.openCreateSurveyModal()"><i class="fa-solid fa-plus-circle"></i> إنشاء استبيان جديد</button>
+                <button class="btn btn-navy" style="padding:6px 12px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')"><i class="fa-solid fa-arrow-right"></i> الرئيسية</button>
               </div>
             </div>
-            <div class="survey-mobile-grid">
+
+            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap:16px;">
               <div class="card" style="margin:0;">
                 <h4 style="color:var(--navy-dark); margin-bottom:12px; font-size:0.95rem;"><i class="fa-solid fa-list-check"></i> الاستبيانات المتاحة (${State.surveys.length})</h4>
                 <div style="display:flex; flex-direction:column; gap:10px;">
                   ${State.surveys.length === 0 ? '<p style="color:var(--text-muted); font-size:0.82rem; text-align:center; padding:20px;">لا توجد استبيانات حالياً.</p>' : State.surveys.map(s => `
-                    <div style="padding:12px; border-radius:var(--radius-sm); border:1.5px solid ${selectedSurvey && selectedSurvey.id === s.id ? 'var(--gold-orange)' : '#E2E8F0'}; background:${selectedSurvey && selectedSurvey.id === s.id ? 'var(--gold-light)' : '#FFF'}; cursor:pointer;" onclick="App.selectSurveyForResults('${s.id}')">
-                      <strong style="font-size:0.88rem; color:var(--navy-dark); display:block; margin-bottom:4px;">${escapeHTML(s.title)}</strong>
+                    <div class="survey-card-item" style="border-color:${selectedSurvey && selectedSurvey.id === s.id ? 'var(--gold-orange)' : '#E2E8F0'}; background:${selectedSurvey && selectedSurvey.id === s.id ? 'var(--gold-light)' : '#FFF'};" onclick="App.selectSurveyForResults('${s.id}')">
+                      <strong style="font-size:0.9rem; color:var(--navy-dark); display:block; margin-bottom:4px;">${escapeHTML(s.title)}</strong>
                       <div style="display:flex; justify-content:space-between; align-items:center; font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;">
                         <span>${escapeHTML(UI.getTargetLabel(s.target))}</span>
                         <span>${s.questions ? s.questions.length : 0} أسئلة • ${State.surveyResponses.filter(r => r.surveyId === s.id).length} ردود</span>
                       </div>
-                      <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                        <button class="btn btn-gold" style="padding:4px 8px; font-size:0.72rem; min-height:28px; flex:1;" onclick="event.stopPropagation(); App.copySurveyLink('${s.id}')"><i class="fa-solid fa-link"></i> نسخ</button>
-                        <button class="btn btn-navy" style="padding:4px 8px; font-size:0.72rem; min-height:28px;" onclick="event.stopPropagation(); App.previewSurvey('${s.id}')"><i class="fa-solid fa-eye"></i></button>
-                        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem; min-height:28px;" onclick="event.stopPropagation(); App.deleteSurvey('${s.id}')"><i class="fa-solid fa-trash"></i></button>
+                      
+                      <div class="survey-actions-flex">
+                        <button class="btn btn-gold" onclick="event.stopPropagation(); App.copySurveyLink('${s.id}')" title="نسخ رابط الاستبيان">
+                          <i class="fa-solid fa-copy"></i> نسخ الرابط
+                        </button>
+                        <button class="btn btn-whatsapp" onclick="event.stopPropagation(); App.shareSurveyWhatsApp('${s.id}')" title="مشاركة واتساب">
+                          <i class="fa-brands fa-whatsapp"></i> واتساب
+                        </button>
+                        <button class="btn btn-navy" onclick="event.stopPropagation(); App.previewSurvey('${s.id}')" title="معاينة">
+                          <i class="fa-solid fa-eye"></i> معاينة
+                        </button>
+                        <button class="btn btn-danger" onclick="event.stopPropagation(); App.deleteSurvey('${s.id}')" title="حذف">
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
                       </div>
                     </div>
                   `).join('')}
                 </div>
               </div>
+
               <div class="card" style="margin:0;">
                 ${selectedSurvey ? `
                   <div style="border-bottom:1.5px solid #E2E8F0; padding-bottom:12px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                     <div>
-                      <h3 style="color:var(--navy-dark); font-size:1.15rem; font-weight:800;">${escapeHTML(selectedSurvey.title)}</h3>
+                      <h3 style="color:var(--navy-dark); font-size:1.1rem; font-weight:800;">${escapeHTML(selectedSurvey.title)}</h3>
                       <span style="font-size:0.78rem; color:var(--text-muted);">إجمالي الردود المستلمة: <strong>${responses.length}</strong></span>
                     </div>
-                    <button class="btn btn-whatsapp" style="padding:6px 12px; font-size:0.76rem;" onclick="App.shareSurveyWhatsApp('${selectedSurvey.id}')"><i class="fa-brands fa-whatsapp"></i> مشاركة عبر واتساب</button>
+                    <button class="btn btn-whatsapp" style="padding:6px 12px; font-size:0.76rem;" onclick="App.shareSurveyWhatsApp('${selectedSurvey.id}')"><i class="fa-brands fa-whatsapp"></i> دعوة للمشاركة</button>
                   </div>
                   <div class="table-container">
                     <table>
-                      <thead><tr><th>اسم المشارك</th><th>تاريخ المشاركة</th><th>الإجابات والردود التفصيلية</th></tr></thead>
+                      <thead><tr><th>اسم الطالب المشارك</th><th>تاريخ المشاركة</th><th>الإجابات والردود التفصيلية</th></tr></thead>
                       <tbody>
                         ${responses.length === 0 ? `
                           <tr><td colspan="3" style="text-align:center; padding:22px; color:var(--text-muted);">لم يتم استلام أي ردود لهذا الاستبيان حتى الآن.</td></tr>
@@ -2607,6 +2874,7 @@
             </div>
           `;
         },
+
         adminQuizCreator() {
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
@@ -2646,6 +2914,8 @@
             </div>
           `;
         },
+
+        /* إدارة المواد وتعيين الوحدات يدوياً بدقة تامة */
         adminContentManager() {
           const q = State.adminSearchQuery.toLowerCase().trim();
           const filtered = State.materials.filter(item => {
@@ -2659,7 +2929,7 @@
                 <h2 style="color: var(--navy-dark); font-weight: 800;">إدارة محتوى ومقررات الرياضيات (الأستاذ عمر)</h2>
                 <div style="margin-top:4px; display:flex; gap:6px;">
                   <button class="btn ${State.adminContentTab === 'LIST' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 8px; font-size:0.75rem;" onclick="App.setAdminContentTab('LIST')">المواد المنشورة (${State.materials.length})</button>
-                  <button class="btn ${State.adminContentTab === 'ADD' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 8px; font-size:0.75rem;" onclick="App.setAdminContentTab('ADD')"><i class="fa-solid fa-plus-circle"></i> إضافة مادة / درس جديد</button>
+                  <button class="btn ${State.adminContentTab === 'ADD' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 8px; font-size:0.75rem;" onclick="App.setAdminContentTab('ADD')"><i class="fa-solid fa-plus-circle"></i> إضافة درس / وحدة جديدة</button>
                 </div>
               </div>
               <button class="btn btn-navy" style="padding:4px 10px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')"><i class="fa-solid fa-arrow-right"></i> الرئيسية</button>
@@ -2672,21 +2942,23 @@
                       <label>نوع المحتوى</label>
                       <select id="contentType" required onchange="App.toggleContentFields()">
                         <option value="VIDEOS">فيديو مسجل (YouTube / Drive / MP4 / HLS)</option>
-                        <option value="AI_PROMPT_LINK">رابط ذكاء اصطناعي (Claude / ChatGPT)</option>
+                        <option value="WORKSHEETS">أوراق عمل ومذكرات (PDF داخلي آمن)</option>
                         <option value="PODCASTS">بودكاست وشرح صوتي (MP3)</option>
-                        <option value="IMAGES">صورة / مخطط ومذكرة سبورة (JPG/PNG)</option>
-                        <option value="HTML_EMBED">ملف / أداة تفاعلية HTML (GeoGebra / Desmos)</option>
-                        <option value="ARTICLES">شرح كتابي مباشر (بدون روابط)</option>
                         <option value="POWERPOINTS">عرض باوربوينت (PPT / PPTX)</option>
                         <option value="WORD_DOCS">مستند وورد (DOC / DOCX داخلي)</option>
-                        <option value="WORKSHEETS">أوراق عمل ومذكرات (PDF داخلي)</option>
+                        <option value="IMAGES">صورة / مخطط ومذكرة سبورة (JPG/PNG)</option>
+                        <option value="HTML_EMBED">ملف / أداة تفاعلية / لعبة HTML (GeoGebra / Desmos)</option>
+                        <option value="ARTICLES">شرح كتابي مباشر (بدون روابط)</option>
                         <option value="EXAMS">اختبار شامل ونماذج امتحانات</option>
                         <option value="REVISIONS">مراجعة وملخصات</option>
                       </select>
                     </div>
                     <div class="form-group"><label>المنهاج والصف المستهدف</label><select id="contentTarget" required onchange="App.updateStudentAssignList()">${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}</select></div>
-                    <div class="form-group"><label>عنوان المادة التعليمية</label><input type="text" id="contentTitle" required></div>
-                    <div class="form-group"><label>الوحدة / الفصل</label><input type="text" id="contentUnit" required></div>
+                    <div class="form-group">
+                      <label>الوحدة التعليمية (كتابة يدوية)</label>
+                      <input type="text" id="contentUnit" required placeholder="اكتب اسم الوحدة التعليمية يدوياً (مثال: الوحدة الأولى: التفاضل وتطبيقاته)">
+                    </div>
+                    <div class="form-group"><label>عنوان الدرس / المحتوى</label><input type="text" id="contentTitle" required placeholder="مثال: مشتقة الدوال المثلثية"></div>
                   </div>
                   <div class="form-group" style="background:var(--bg-light); padding:10px; border-radius:var(--radius-sm); border:1px solid #CBD5E1;">
                     <label style="color:var(--gold-deep);"><i class="fa-solid fa-user-lock"></i> تخصيص الوصول والأمان (اختياري):</label>
@@ -2710,7 +2982,7 @@
                     <label id="textLabel">نصوص الشرح المباشر / الملاحظات المرفقة</label>
                     <textarea id="contentText" rows="5"></textarea>
                   </div>
-                  <button type="submit" class="btn btn-gold" style="width:100%; margin-top:8px;"><i class="fa-solid fa-cloud-arrow-up"></i> نشر المادة وحفظها سحابياً</button>
+                  <button type="submit" class="btn btn-gold" style="width:100%; margin-top:8px;"><i class="fa-solid fa-cloud-arrow-up"></i> نشر المادة وحفظها سحابياً في وحدتها</button>
                 </form>
               </div>
             ` : `
@@ -2721,12 +2993,12 @@
                 </div>
                 <div class="table-container">
                   <table>
-                    <thead><tr><th>عنوان المادة</th><th>النوع</th><th>الصف والمنهاج</th><th>التخصيص</th><th>الإجراءات</th></tr></thead>
-                    <tbody>${filtered.length === 0 ? `<tr><td colspan="5" style="text-align:center; padding:25px; color:var(--text-muted);">لم تقم بإضافة مواد بعد.</td></tr>` : filtered.map(item => {
+                    <thead><tr><th>عنوان الدرس</th><th>الوحدة</th><th>النوع</th><th>الصف والمنهاج</th><th>التخصيص</th><th>الإجراءات</th></tr></thead>
+                    <tbody>${filtered.length === 0 ? `<tr><td colspan="6" style="text-align:center; padding:25px; color:var(--text-muted);">لم تقم بإضافة مواد بعد.</td></tr>` : filtered.map(item => {
                       const studentName = item.assignedStudentUids && item.assignedStudentUids.length > 0 
                         ? State.students.find(s => s.uid === item.assignedStudentUids[0])?.name || 'طالب مخصص'
                         : 'عام لكافة طلاب الصف';
-                      return `<tr><td><strong>${escapeHTML(item.title)}</strong><br><small style="color:var(--text-muted);">${escapeHTML(item.unit) || 'عام'}</small></td><td>${UI.getMediaTypeBadge(item)}</td><td>${escapeHTML(UI.getTargetLabel(item.target))}</td><td><span class="badge ${item.assignedStudentUids && item.assignedStudentUids.length > 0 ? 'badge-trial' : 'badge-curriculum'}">${escapeHTML(studentName)}</span></td><td><div style="display:flex; gap:4px;"><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openEditModal('${item.id}', '${item.type}')"><i class="fa-solid fa-pen"></i> تعديل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteContent('${item.id}')"><i class="fa-solid fa-trash"></i> حذف</button></div></td></tr>`;
+                      return `<tr><td><strong>${escapeHTML(item.title)}</strong></td><td><span class="badge badge-curriculum">${escapeHTML(item.unit) || 'عام'}</span></td><td>${UI.getMediaTypeBadge(item)}</td><td>${escapeHTML(UI.getTargetLabel(item.target))}</td><td><span class="badge ${item.assignedStudentUids && item.assignedStudentUids.length > 0 ? 'badge-trial' : 'badge-curriculum'}">${escapeHTML(studentName)}</span></td><td><div style="display:flex; gap:4px;"><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openEditModal('${item.id}', '${item.type}')"><i class="fa-solid fa-pen"></i> تعديل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteContent('${item.id}')"><i class="fa-solid fa-trash"></i> حذف</button></div></td></tr>`;
                     }).join('')}</tbody>
                   </table>
                 </div>
@@ -2734,6 +3006,7 @@
             `}
           `;
         },
+
         adminStudents() {
           const filtered = State.adminTargetFilter === "ALL" ? State.students : State.students.filter(s => s.target === State.adminTargetFilter);
           return `
@@ -2751,6 +3024,7 @@
             </div>
           `;
         },
+
         adminCreateStudent() {
           return `
             <div style="max-width: 500px; margin: 16px auto;">
@@ -2769,6 +3043,7 @@
             </div>
           `;
         },
+
         adminActivity() {
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;"><h2 style="color: var(--navy-dark); font-weight: 800;">سجل النشاط والأمان المشفر</h2><button class="btn btn-gold" style="padding:4px 10px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">العودة للرئيسية</button></div>
@@ -2786,11 +3061,11 @@
 
       getTabTitle(tab) {
         const titles = {
+          'ALL_TYPES': 'كافة المواد في الوحدات',
           'VIDEOS': 'الشروحات المرئية',
-          'AI_PROMPT_LINK': 'منصات الذكاء الاصطناعي (Claude / ChatGPT)',
           'PODCASTS': 'البودكاست والشروحات الصوتية 🎙️',
           'IMAGES': 'الصور والمخططات ومذكرات السبورة 🖼️',
-          'HTML_EMBED': 'تطبيقات ومحاكيات HTML التفاعلية',
+          'HTML_EMBED': 'تطبيقات ومحاكيات HTML التفاعلية والألعاب',
           'ARTICLES': 'الشروحات الكتابية 📝',
           'POWERPOINTS': 'عروض الباوربوينت PPT',
           'WORD_DOCS': 'مستندات Word',
@@ -2804,8 +3079,8 @@
 
       getTabIcon(tab) {
         const icons = {
+          'ALL_TYPES': 'fa-layer-group',
           'VIDEOS': 'fa-circle-play',
-          'AI_PROMPT_LINK': 'fa-robot',
           'PODCASTS': 'fa-podcast',
           'IMAGES': 'fa-image',
           'HTML_EMBED': 'fa-code',
@@ -2852,6 +3127,13 @@
             State.currentRoute = "SURVEY_FILL_PAGE";
           }
         }
+
+        window.addEventListener("orientationchange", () => {
+          if (document.getElementById("mediaPlayerModal").classList.contains("active")) {
+            App.syncOrientationUI();
+          }
+        });
+
         UI.render();
       },
 
@@ -2859,6 +3141,19 @@
       setContentTab(tab) { State.activeContentTab = tab; UI.render(); },
       setAdminContentTab(tab) { State.adminContentTab = tab; UI.render(); },
       setAdminTargetFilter(target) { State.adminTargetFilter = target; UI.render(); },
+
+      toggleUnitCollapse(elementId) {
+        const body = document.getElementById(elementId);
+        const chevron = document.getElementById('unit_chevron_' + elementId);
+        if (!body) return;
+        if (body.style.display === 'none') {
+          body.style.display = 'grid';
+          if (chevron) chevron.className = 'fa-solid fa-chevron-down';
+        } else {
+          body.style.display = 'none';
+          if (chevron) chevron.className = 'fa-solid fa-chevron-left';
+        }
+      },
 
       openArenaView() { App.setRoute('ARENA_VIEW'); },
 
@@ -2931,7 +3226,7 @@
                 .then(function(result) {
                   const textInput = document.getElementById('contentText');
                   if (textInput) textInput.value = result.value;
-                  App.showSecurityAlert('تم تحويل مستند Word إلى محتوى تفاعلي داخلي بنجاح.');
+                  App.showSecurityAlert('تم تحويل مستند Word إلى محتوى داخلي بنجاح.');
                 })
                 .catch(function(err) {
                   NotificationEngine.alert('حدث خطأ أثناء معالجة ملف Word.', 'خطأ بالملف');
@@ -3030,10 +3325,6 @@
             cloudSaved = true;
           } catch (err) {
             console.error("خطأ في رفع بيانات الإدارة للسحابة:", err);
-            await NotificationEngine.alert(
-              "تنبيه: تعذر الحفظ في السحابة بسبب قواعد Firebase. تأكد من فتح Rules في Firestore.",
-              "فشل المزامنة السحابية"
-            );
           }
         }
         
@@ -3059,9 +3350,9 @@
         
         App.closeSettingsModal();
         if (cloudSaved) {
-          App.showSecurityAlert("☁️ تم تحديث بيانات المشرف سحابياً بنجاح وتعمل الآن على كافة الأجهزة فوراً!");
+          App.showSecurityAlert("☁️ تم تحديث بيانات المشرف سحابياً بنجاح!");
         } else {
-          App.showSecurityAlert("⚠️ تم الحفظ على هذا الجهاز فقط. يرجى تفعيل قواعد Firestore للمزامنة مع بقية الأجهزة.");
+          App.showSecurityAlert("⚠️ تم الحفظ على هذا الجهاز.");
         }
         UI.render();
       },
@@ -3093,9 +3384,7 @@
         document.getElementById('evaluationModal').classList.add('active');
       },
 
-      closeEvaluationModal() {
-        document.getElementById('evaluationModal').classList.remove('active');
-      },
+      closeEvaluationModal() { document.getElementById('evaluationModal').classList.remove('active'); },
 
       handleSaveEvaluation(e) {
         e.preventDefault();
@@ -3165,9 +3454,7 @@
         document.getElementById('studentResetModal').classList.add('active');
       },
 
-      closeStudentResetModal() {
-        document.getElementById('studentResetModal').classList.remove('active');
-      },
+      closeStudentResetModal() { document.getElementById('studentResetModal').classList.remove('active'); },
 
       handleExecuteStudentReset(e) {
         e.preventDefault();
@@ -3216,9 +3503,7 @@
         document.getElementById('createSurveyModal').classList.add('active');
       },
 
-      closeCreateSurveyModal() {
-        document.getElementById('createSurveyModal').classList.remove('active');
-      },
+      closeCreateSurveyModal() { document.getElementById('createSurveyModal').classList.remove('active'); },
 
       getOnlineSurveyUrl(surveyId) {
         const currentUrl = new URL(window.location.href);
@@ -3300,6 +3585,16 @@ ${link}
         }
       },
 
+      closeSurveyView() {
+        State.activePublicSurvey = null;
+        window.history.replaceState({}, document.title, window.location.pathname);
+        if (State.currentUser && State.currentUser.role === 'ADMIN') {
+          App.setRoute('ADMIN_SURVEYS');
+        } else {
+          App.navigateHome();
+        }
+      },
+
       async deleteSurvey(surveyId) {
         const confirmDelete = await NotificationEngine.confirm('هل أنت متأكد من رغبتك في حذف هذا الاستبيان وكافة الاستجابات الواردة فيه؟', 'حذف الاستبيان');
         if (confirmDelete) {
@@ -3314,10 +3609,15 @@ ${link}
 
       handleSubmitDynamicSurveyResponse(e) {
         e.preventDefault();
+        if (State.currentUser && State.currentUser.role === 'ADMIN') {
+          NotificationEngine.alert('أنت في وضع المعاينة كمشرف المنصة. إرسال الإجابات والردود مخصص لحسابات الطلاب فقط.', 'وضع المعاينة');
+          return;
+        }
+
         const s = State.activePublicSurvey;
         if (!s) return;
 
-        const respondentName = document.getElementById('surveyRespName').value.trim() || 'طالب';
+        const respondentName = document.getElementById('surveyRespName').value.trim() || (State.currentUser ? State.currentUser.name : 'طالب');
         const questions = s.questions || [];
         const collectedAnswers = [];
 
@@ -3353,41 +3653,7 @@ ${link}
         DataStore.save('surveyResponses', State.surveyResponses);
 
         NotificationEngine.alert('🌟 شكرًا جزيلاً لك! تم استلام ردك وملاحظاتك بنجاح وسيقوم الأستاذ عمر بمراجعتها.', 'تم الاستلام بنجاح');
-        State.activePublicSurvey = null;
-        window.history.replaceState({}, document.title, window.location.pathname);
-        App.navigateHome();
-      },
-
-      // تشغيل روابط الذكاء الاصطناعي (Claude / ChatGPT) مباشرة داخل مشغل المنصة المدمج
-      openAiToolLink(materialId) {
-        document.getElementById('pdfControlsBar').style.display = 'none';
-        const item = State.materials.find(m => m.id === materialId);
-        if (!item) return;
-
-        const url = item.fileUrl && item.fileUrl.startsWith('http') ? item.fileUrl : 'https://chatgpt.com';
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-robot"></i> ${escapeHTML(item.title)}`;
-        const viewport = document.getElementById("playerViewport");
-
-        viewport.innerHTML = `
-          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
-            <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
-          </button>
-          <div style="width:100%; height:100%; display:flex; flex-direction:column; position:relative;">
-            <div style="background:var(--navy-dark); padding:8px 14px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E293B; font-size:0.75rem; flex-wrap:wrap; gap:6px;">
-              <span style="color:#38BDF8; font-family:'Fira Code', monospace; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:65%;">
-                <i class="fa-solid fa-link"></i> ${escapeHTML(url)}
-              </span>
-              <a href="${escapeHTML(url)}" target="_blank" rel="noopener noreferrer" class="btn btn-gold" style="padding:3px 10px; font-size:0.72rem; min-height:28px;">
-                <i class="fa-solid fa-arrow-up-right-from-square"></i> فتح في نافذة مستقلة
-              </a>
-            </div>
-            <iframe class="document-viewer-frame" style="flex:1; width:100%; height:100%; border:none; background:#FFF;" src="${escapeHTML(url)}" sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-modals"></iframe>
-          </div>
-          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
-        `;
-
-        document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetToNormalOrientation();
+        App.closeSurveyView();
       },
 
       openImageViewer(materialId) {
@@ -3399,9 +3665,6 @@ ${link}
         const viewport = document.getElementById('playerViewport');
 
         viewport.innerHTML = `
-          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
-            <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
-          </button>
           <div class="image-viewer-container">
             <img src="${item.fileUrl}" alt="${escapeHTML(item.title)}" id="targetZoomableImg" onerror="this.src='https://via.placeholder.com/800x600?text=تعذر+تحميل+الصورة';">
             <div style="margin-top:14px; display:flex; gap:8px; z-index:20;">
@@ -3410,11 +3673,11 @@ ${link}
               <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.resetImageZoom()"><i class="fa-solid fa-arrows-rotate"></i> ضبط الحجم</button>
             </div>
           </div>
-          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
 
         document.getElementById('mediaPlayerModal').classList.add('active');
-        App.resetToNormalOrientation();
+        App.resetUniversalFullscreen();
       },
 
       currentImgScale: 1,
@@ -3437,7 +3700,7 @@ ${link}
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-code"></i> أداة تفاعلية: ${escapeHTML(item.title)}`;
+        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-code"></i> أداة تفاعلية / لعبة: ${escapeHTML(item.title)}`;
         const viewport = document.getElementById('playerViewport');
 
         let srcContent = '';
@@ -3449,15 +3712,12 @@ ${link}
         }
 
         viewport.innerHTML = `
-          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()">
-            <i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي
-          </button>
           ${srcContent}
-          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
 
         document.getElementById('mediaPlayerModal').classList.add('active');
-        App.resetToNormalOrientation();
+        App.resetUniversalFullscreen();
       },
 
       openVideoPlayer(materialId) {
@@ -3471,13 +3731,12 @@ ${link}
 
         const playerHtml = VideoEngine.generatePlayerHtml(url);
         viewport.innerHTML = `
-          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()"><i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي</button>
           ${playerHtml}
-          <div class="floating-watermark" id="floatingVideoWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
 
         document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetToNormalOrientation();
+        App.resetUniversalFullscreen();
         VideoEngine.initDirectVideoFeatures(url);
       },
 
@@ -3506,11 +3765,11 @@ ${link}
               </div>
             </div>
           </div>
-          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
 
         document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetToNormalOrientation();
+        App.resetUniversalFullscreen();
 
         activeAudioElement = document.getElementById("activeAudioPlayer");
         if (activeAudioElement) {
@@ -3574,10 +3833,10 @@ ${link}
             </div>
             <div class="math-theorem-box"><strong>الشرح والمفهوم الرياضي:</strong><div style="margin-top:6px; font-size:1rem; line-height:1.9;">${item.sampleContent || 'لا يوجد نص للشرح بعد.'}</div></div>
           </div>
-          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
         document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetToNormalOrientation();
+        App.resetUniversalFullscreen();
         if (window.renderMathInElement) renderMathInElement(viewport);
       },
 
@@ -3598,26 +3857,24 @@ ${link}
         const officeViewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
 
         viewport.innerHTML = `
-          <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()"><i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي</button>
           <iframe class="document-viewer-frame" src="${officeViewerUrl}"></iframe>
-          <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
+          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
         `;
         document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetToNormalOrientation();
+        App.resetUniversalFullscreen();
       },
 
       openDocumentViewer(materialId) {
         const item = State.materials.find(m => m.id === materialId);
         if (!item) return;
 
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-book-open"></i> ${escapeHTML(item.title)}`;
+        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-file-pdf"></i> مذكرة: ${escapeHTML(item.title)}`;
         const viewport = document.getElementById("playerViewport");
 
-        if (item.fileUrl && item.fileUrl.startsWith("http")) {
+        if (item.fileUrl && (item.fileUrl.startsWith("http") || item.fileUrl.startsWith("data:application/pdf"))) {
           viewport.innerHTML = `
-            <button class="floating-reset-orientation-btn" onclick="App.resetToNormalOrientation()"><i class="fa-solid fa-mobile-screen"></i> الوضع الطبيعي</button>
             <div id="pdfCanvasWrapper" class="pdf-canvas-container"></div>
-            <div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
+            <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – مذكرات الأستاذ عمر المشفرة</div>
           `;
           document.getElementById("mediaPlayerModal").classList.add("active");
           const canvasWrap = document.getElementById("pdfCanvasWrapper");
@@ -3625,45 +3882,57 @@ ${link}
         } else {
           App.openArticleViewer(materialId);
         }
-        App.resetToNormalOrientation();
+        App.resetUniversalFullscreen();
       },
 
-      toggleDeviceRotation() {
-        if (State.isRotatedLandscape) App.resetToNormalOrientation();
-        else App.setLandscapeOrientation();
-      },
+      toggleUniversalFullscreen() {
+        const contentBox = document.getElementById("playerModalContent");
+        const exitBtn = document.getElementById("floatingExitFullscreenBtn");
+        const rotateBtnText = document.getElementById("rotateBtnText");
+        
+        State.isUniversalFullscreen = !State.isUniversalFullscreen;
 
-      setLandscapeOrientation() {
-        const viewport = document.getElementById("playerViewport");
-        const btnText = document.getElementById("rotateBtnText");
-        State.isRotatedLandscape = true;
-        if (viewport) viewport.classList.add("rotated-fullscreen");
-        if (btnText) btnText.innerText = "الوضع الطبيعي";
-        if (screen.orientation && screen.orientation.lock) {
-          screen.orientation.lock("landscape").catch(() => {});
+        if (State.isUniversalFullscreen) {
+          contentBox.classList.add("rotated-fullscreen-active");
+          if (exitBtn) exitBtn.style.display = "inline-flex";
+          if (rotateBtnText) rotateBtnText.innerText = "إنهاء ملء الشاشة";
+
+          if (screen.orientation && screen.orientation.lock) {
+            screen.orientation.lock("landscape").catch(() => {});
+          }
+
+          if (!document.fullscreenElement && contentBox.requestFullscreen) {
+            contentBox.requestFullscreen().catch(() => {});
+          }
+        } else {
+          App.resetUniversalFullscreen();
         }
       },
 
-      resetToNormalOrientation() {
-        const viewport = document.getElementById("playerViewport");
-        const btnText = document.getElementById("rotateBtnText");
-        State.isRotatedLandscape = false;
-        if (viewport) viewport.classList.remove("rotated-fullscreen");
-        if (btnText) btnText.innerText = "تدوير عرضي";
+      resetUniversalFullscreen() {
+        const contentBox = document.getElementById("playerModalContent");
+        const exitBtn = document.getElementById("floatingExitFullscreenBtn");
+        const rotateBtnText = document.getElementById("rotateBtnText");
+
+        State.isUniversalFullscreen = false;
+        if (contentBox) contentBox.classList.remove("rotated-fullscreen-active");
+        if (exitBtn) exitBtn.style.display = "none";
+        if (rotateBtnText) rotateBtnText.innerText = "ملء الشاشة وتدوير";
+
         if (screen.orientation && screen.orientation.unlock) {
           screen.orientation.unlock();
         }
+
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
       },
 
-      toggleNativeFullscreen() {
-        const video = document.getElementById("activeVideoPlayer");
-        if (video) {
-          if (!document.fullscreenElement) {
-            if (video.requestFullscreen) video.requestFullscreen();
-            else if (video.webkitRequestFullscreen) video.webkitRequestFullscreen();
-          } else {
-            if (document.exitFullscreen) document.exitFullscreen();
-          }
+      syncOrientationUI() {
+        const isLandscape = window.innerWidth > window.innerHeight;
+        const rotateBtnText = document.getElementById("rotateBtnText");
+        if (rotateBtnText) {
+          rotateBtnText.innerText = isLandscape ? "وضع الشاشة الكاملة" : "ملء الشاشة وتدوير";
         }
       },
 
@@ -3673,7 +3942,7 @@ ${link}
         if (activeAudioElement) activeAudioElement.pause();
         VideoEngine.cleanup();
         document.getElementById('pdfControlsBar').style.display = 'none';
-        App.resetToNormalOrientation();
+        App.resetUniversalFullscreen();
         document.getElementById("mediaPlayerModal").classList.remove("active");
       },
 
@@ -3705,7 +3974,7 @@ ${link}
         const id = document.getElementById('editContentId').value;
         const target = document.getElementById('editContentTarget').value;
         const title = document.getElementById('editContentTitle').value.trim();
-        const unit = document.getElementById('editContentUnit').value.trim();
+        const unit = document.getElementById('editContentUnit').value.trim() || 'الوحدة العامة';
         const url = document.getElementById('editContentUrl').value.trim();
         const text = document.getElementById('editContentText').value.trim();
 
@@ -3738,7 +4007,7 @@ ${link}
         const type = document.getElementById("contentType").value;
         const target = document.getElementById("contentTarget").value;
         const title = document.getElementById("contentTitle").value.trim();
-        const unit = document.getElementById("contentUnit").value.trim();
+        const unit = document.getElementById("contentUnit").value.trim() || 'الوحدة الأولى: الأساسيات';
         const url = document.getElementById("contentUrl") ? document.getElementById("contentUrl").value.trim() : "";
         const text = document.getElementById("contentText") ? document.getElementById("contentText").value.trim() : "";
         const assignedStudent = document.getElementById("contentAssignedStudent") ? document.getElementById("contentAssignedStudent").value : "";
@@ -3760,7 +4029,7 @@ ${link}
         State.materials.push(newMaterial);
         DataStore.save("materials", State.materials);
 
-        NotificationEngine.alert(`تم نشر مادة (${title}) بنجاح وتعيينها للمسار المحدد.`, 'تم النشر بنجاح');
+        NotificationEngine.alert(`تم نشر مادة (${title}) بنجاح وإضافتها إلى وحدة (${unit}).`, 'تم النشر بنجاح');
         App.setRoute("ADMIN_CONTENT_MANAGER");
       },
 
@@ -3791,17 +4060,17 @@ ${link}
           urlLabel.innerText = "رابط الصورة المباشر أو المخطط (أو الرفع من جهازك أعلاه)";
           textLabel.innerText = "شرح أو تعليق مختصر على الصورة الرياضية";
         } else if (type === "HTML_EMBED") {
-          urlLabel.innerText = "رابط الأداة التفاعلية (Desmos / GeoGebra URL)";
+          urlLabel.innerText = "رابط الأداة أو اللعبة التفاعلية (Desmos / GeoGebra URL)";
           textLabel.innerText = "أو الصق كود الـ HTML / JavaScript التفاعلي هنا";
-        } else if (type === "AI_PROMPT_LINK") {
-          urlLabel.innerText = "رابط الذكاء الاصطناعي (مثل: https://chatgpt.com أو https://claude.ai)";
-          textLabel.innerText = "تعليمات أو ملاحظات للطالب حول استخدام الرابط";
         } else if (type === "PODCASTS") {
           urlLabel.innerText = "رابط ملف الصوت المباشر (MP3)";
           textLabel.innerText = "ملاحظات وتفريغ نصي للبودكاست";
         } else if (type === "WORD_DOCS") {
           urlLabel.innerText = "رابط المستند (أو اختر ملف Word لتحويله داخلياً)";
           textLabel.innerText = "محتوى ونصوص المستند المعالجة داخلياً";
+        } else if (type === "WORKSHEETS") {
+          urlLabel.innerText = "رابط ملف الـ PDF المباشر (يحمى من التحميل التلقائي)";
+          textLabel.innerText = "ملاحظات وتوجيهات حول المذكرة";
         } else {
           urlLabel.innerText = "رابط الملف المباشر أو الفيديو أو المستند";
           textLabel.innerText = "نصوص الشرح والملاحظات المرفقة";
@@ -4209,3 +4478,4 @@ ${link}
   </script>
 </body>
 </html>
+

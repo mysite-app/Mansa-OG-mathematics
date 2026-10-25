@@ -107,7 +107,7 @@
     
     /* نظام الوحدات الدراسية المتقدم المنظم */
     .unit-container-block { margin-bottom: 22px; border-radius: var(--radius-md); border: 1.5px solid #E2E8F0; background: var(--white); overflow: hidden; box-shadow: var(--shadow-sm); }
-    .unit-header-bar { background: linear-gradient(90deg, #0A1424 0%, #162642 100%); color: #FFF; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-right: 5px solid var(--gold-orange); }
+    .unit-header-bar { background: linear-gradient(90deg, #0A1424 0%, #162642 100%); color: #FFF; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-right: 5px solid var(--gold-orange); user-select: none; }
     .unit-header-title { display: flex; align-items: center; gap: 10px; font-size: 1.05rem; font-weight: 800; }
     .unit-body-grid { padding: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; background: #F8FAFC; }
     .lesson-item-card { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between; transition: var(--transition); }
@@ -125,7 +125,7 @@
     .plan-badge-top { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--navy-dark); color: var(--gold-orange); padding: 3px 14px; border-radius: 50px; font-size: 0.72rem; font-weight: 800; border: 1px solid var(--gold-orange); }
     .plan-price { font-size: 2rem; font-weight: 900; color: var(--navy-dark); margin: 12px 0; }
     
-    /* المشغل الذكي الشامل والشاشة الكاملة المتطورة */
+    /* المشغل الذكي الشامل والشاشة الكاملة */
     .player-modal-content { position: relative; background: var(--navy-dark); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; color: #FFF; width: 100%; height: 100%; }
     .player-toolbar { display: flex; justify-content: space-between; align-items: center; background: var(--navy-dark); padding: 10px 16px; border-bottom: 1px solid rgba(245, 158, 11, 0.2); font-size: 0.82rem; }
     .player-viewport { position: relative; width: 100%; min-height: 480px; height: 75vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; background: #070D18; overflow-y: auto; }
@@ -199,7 +199,7 @@
     .rank-2 { background: #94A3B8; color: #FFF; }
     .rank-3 { background: #B45309; color: #FFF; }
     
-    /* فقاعة المكالمات الصوتية المطورة */
+    /* فقاعة المكالمات الصوتية */
     .voice-call-bubble { position: fixed; top: 75px; left: 15px; background: var(--navy-dark); border: 2px solid var(--gold-orange); border-radius: var(--radius-md); padding: 12px 16px; color: #FFF; z-index: 9999; display: none; flex-direction: column; gap: 10px; box-shadow: var(--shadow-lg); max-width: 380px; width: calc(100vw - 30px); animation: pulseGlow 2.5s infinite; }
     .voice-call-bubble.active { display: flex; }
     @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
@@ -274,7 +274,7 @@
     
     .security-toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: var(--danger); color: #FFF; padding: 10px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; display: none; align-items: center; gap: 8px; z-index: 99999; box-shadow: var(--shadow-lg); }
     
-    /* نظام الاستبيانات المتجاوب */
+    /* نظام الاستبيانات */
     .survey-responsive-layout { display: flex; flex-direction: column; gap: 16px; }
     .survey-card-item { background: #FFFFFF; border: 1.5px solid #E2E8F0; border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; transition: var(--transition); }
     .survey-card-item:hover { border-color: var(--gold-orange); }
@@ -359,7 +359,7 @@
     </div>
   </div>
 
-  <!-- فقاعة المكالمة الصوتية WebRTC المحدثة -->
+  <!-- فقاعة المكالمة الصوتية WebRTC -->
   <div class="voice-call-bubble" id="voiceCallBubble">
     <div class="voice-header">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -528,7 +528,7 @@
     </div>
   </div>
 
-  <!-- المشغل المدمج الشامل مع تدوير الشاشة الكاملة -->
+  <!-- المشغل المدمج الشامل -->
   <div class="modal-overlay" id="mediaPlayerModal">
     <div class="modal-card" id="mediaPlayerModalCard" style="max-width: 980px; padding: 0; background: #0A1424; border-color: var(--gold-orange);">
       <div class="player-modal-content" id="playerModalContent">
@@ -855,13 +855,23 @@
     </div>
   </div>
 
-  <!-- إعدادات المنصة وإدارة حساب المشرف -->
+  <!-- إعدادات المنصة وإدارة حساب المشرف والتحكم بالروابط -->
   <div class="modal-overlay" id="settingsModal">
-    <div class="modal-card" style="max-width: 520px;">
+    <div class="modal-card" style="max-width: 540px;">
       <h3 style="color: var(--navy-dark); margin-bottom: 14px;">
-        <i class="fa-solid fa-sliders"></i> إعدادات المنصة والأمان السحابي
+        <i class="fa-solid fa-sliders"></i> إعدادات المنصة والتحكم بروابط المناهج
       </h3>
       <form onsubmit="App.handleSaveSettings(event)">
+        
+        <!-- قسم التحكم في واجهة الطلاب والمناهج الاحترافية -->
+        <div style="background:var(--gold-light); padding:12px; border-radius:var(--radius-sm); border:1.5px solid var(--gold-orange); margin-bottom:14px;">
+          <h4 style="color:var(--navy-dark); font-size:0.9rem; margin-bottom:6px;"><i class="fa-solid fa-sliders"></i> خيارات ظهور عناصر لوحة الطلاب:</h4>
+          <label style="display:flex; align-items:center; gap:8px; font-size:0.84rem; cursor:pointer; color:var(--navy-dark); font-weight:700;">
+            <input type="checkbox" id="settingShowTabs"> إظهار شريط الفلاتر العلوية للطلاب (فيديوهات، مذكرات، بودكاست...)
+          </label>
+          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">(عند التعطيل، يرى الطالب فقط المقررات والمواد مقسمة بدقة حسب الوحدات الدراسية التي تحددها أنت).</p>
+        </div>
+
         <div class="form-group">
           <label>رابط صورة الشعار (Logo URL)</label>
           <div class="input-with-paste">
@@ -968,7 +978,7 @@
         </a>
       </div>
 
-      <button class="btn btn-navy" style="width: 100%;" onclick="App.closeEngineerModal()">إغلاق</button>
+      <button class="btn btn-navy" style="width: 100%;" onclick="App.closeEngineerModal()">إلغاء</button>
     </div>
   </div>
 
@@ -1266,7 +1276,7 @@
       }
     };
 
-    /* محرك الاتصال الصوتي المطور WebRTC */
+    /* محرك الاتصال الصوتي WebRTC */
     const VoiceEngine = {
       peer: null,
       localStream: null,
@@ -1669,7 +1679,7 @@
 
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    /* محرك الـ PDF الآمن الداخلي بنسبة 100% دون أي فتح خارجي */
+    /* محرك الـ PDF الآمن الداخلي */
     const PDFViewerEngine = {
       pdfDoc: null,
       pageNum: 1,
@@ -1932,7 +1942,8 @@
       activePublicSurvey: null,
       settings: {
         adminPhoneWhatsApp: localStorage.getItem("og_whatsapp_phone") || "971505144695",
-        logoUrl: localStorage.getItem("og_logo_url") || OFFICIAL_LOGO_URL
+        logoUrl: localStorage.getItem("og_logo_url") || OFFICIAL_LOGO_URL,
+        showContentTabsToStudents: localStorage.getItem("og_show_tabs") === "true" // افتراضياً مخفية تماماً
       },
       students: [],
       materials: [],
@@ -1982,7 +1993,8 @@
         return {
           username: "admin",
           passwordHash: "123456",
-          pinHash: "1234"
+          pinHash: "1234",
+          showContentTabsToStudents: false
         };
       },
       
@@ -2078,6 +2090,9 @@
         if (cachedVault) {
           if (cachedVault.logoUrl) State.settings.logoUrl = cachedVault.logoUrl;
           if (cachedVault.whatsappPhone) State.settings.adminPhoneWhatsApp = cachedVault.whatsappPhone;
+          if (cachedVault.showContentTabsToStudents !== undefined) {
+            State.settings.showContentTabsToStudents = !!cachedVault.showContentTabsToStudents;
+          }
         }
 
         const savedToken = localStorage.getItem("og_session_token");
@@ -2115,6 +2130,10 @@
               if (cloudData.whatsappPhone) {
                 State.settings.adminPhoneWhatsApp = cloudData.whatsappPhone;
                 localStorage.setItem("og_whatsapp_phone", cloudData.whatsappPhone);
+              }
+              if (cloudData.showContentTabsToStudents !== undefined) {
+                State.settings.showContentTabsToStudents = !!cloudData.showContentTabsToStudents;
+                localStorage.setItem("og_show_tabs", State.settings.showContentTabsToStudents ? "true" : "false");
               }
               if (State.currentUser && State.currentUser.role === "ADMIN") {
                 State.currentUser.username = cloudData.username;
@@ -2341,7 +2360,7 @@
           `;
         },
 
-        /* لوحة تحكم الطالب المنظمة بالوحدات الدراسية (Unit-Based Structure) */
+        /* لوحة تحكم الطالب المنظمة بالوحدات الدراسية (Unit-Based Structure) بعد إخفاء الشريط العلوي والتحكم به */
         studentDashboard() {
           const user = State.currentUser;
           const now = Date.now();
@@ -2369,12 +2388,12 @@
           const rawMaterials = State.materials.filter(item => {
             const matchTarget = item.target === user.target || item.target === 'ALL';
             const matchStudent = !item.assignedStudentUids || item.assignedStudentUids.length === 0 || item.assignedStudentUids.includes(user.uid);
-            const matchType = (State.activeContentTab === 'ALL_TYPES' || item.type === State.activeContentTab);
+            const matchType = (!State.settings.showContentTabsToStudents || State.activeContentTab === 'ALL_TYPES' || item.type === State.activeContentTab);
             const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
             return matchTarget && matchStudent && matchType && matchSearch;
           });
 
-          // تجميع الدروس حسب الوحدات الدراسية
+          // تجميع الدروس حسب الوحدات الدراسية التي حددها الأستاذ عمر
           const unitsMap = {};
           rawMaterials.forEach(mat => {
             const unitName = (mat.unit && mat.unit.trim()) ? mat.unit.trim() : "الوحدة العامة / الأساسيات";
@@ -2398,7 +2417,7 @@
             <div class="card" style="border-right: 5px solid var(--gold-orange);">
               <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
                 <div>
-                  <h2 style="color: var(--navy-dark); font-weight: 800;">أهلاً بك في منصة الأستاذ عمر 📐</h2>
+                  <h2 style="color: var(--navy-dark); font-weight: 800;">مقررات ومنهج الرياضيات 📐</h2>
                   <p style="color: var(--text-muted); font-size: 0.85rem;">الطالب: <strong>${escapeHTML(user.name)}</strong> | <span class="badge badge-curriculum">${UI.getTargetLabel(user.target)}</span></p>
                 </div>
                 <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
@@ -2427,33 +2446,115 @@
               </div>
             ` : ''}
 
-            <!-- شريط البحث السريع والفلترة -->
+            <!-- شريط البحث السريع في الوحدات والمحتوى -->
             <div class="search-box-wrapper">
               <i class="fa-solid fa-magnifying-glass"></i>
               <input type="text" placeholder="🔍 ابحث في الدروس أو الوحدات أو المذكرات..." value="${escapeHTML(State.studentSearchQuery)}" oninput="App.handleStudentSearch(this.value)">
             </div>
 
-            <!-- أشرطة تصفية أنواع المحتوى داخل الوحدات -->
-            <div class="nav-tabs-wrapper">
-              <button class="btn ${State.activeContentTab === 'ALL_TYPES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('ALL_TYPES')"><i class="fa-solid fa-layer-group"></i> كافة المواد في الوحدات</button>
-              <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')"><i class="fa-solid fa-circle-play"></i> فيديوهات</button>
-              <button class="btn ${State.activeContentTab === 'WORKSHEETS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('WORKSHEETS')"><i class="fa-solid fa-file-pdf"></i> مذكرات PDF</button>
-              <button class="btn ${State.activeContentTab === 'PODCASTS' ? 'btn-purple' : 'btn-secondary'}" onclick="App.setContentTab('PODCASTS')"><i class="fa-solid fa-podcast"></i> بودكاست 🎙️</button>
-              <button class="btn ${State.activeContentTab === 'QUIZZES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('QUIZZES')"><i class="fa-solid fa-bolt"></i> الكويزات</button>
-              <button class="btn ${State.activeContentTab === 'POWERPOINTS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('POWERPOINTS')"><i class="fa-solid fa-file-powerpoint"></i> بوربوينت PPT</button>
-              <button class="btn ${State.activeContentTab === 'WORD_DOCS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('WORD_DOCS')"><i class="fa-solid fa-file-word"></i> مستندات Word</button>
-              <button class="btn ${State.activeContentTab === 'IMAGES' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('IMAGES')"><i class="fa-solid fa-image"></i> سبورات ومخططات</button>
-              <button class="btn ${State.activeContentTab === 'HTML_EMBED' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('HTML_EMBED')"><i class="fa-solid fa-code"></i> تفاعلي HTML / ألعاب</button>
-              <button class="btn ${State.activeContentTab === 'EXAMS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('EXAMS')"><i class="fa-solid fa-file-shield"></i> امتحانات</button>
-              <button class="btn ${State.activeContentTab === 'REVISIONS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('REVISIONS')"><i class="fa-solid fa-star"></i> مراجعات</button>
-            </div>
+            <!-- أشرطة تصفية أنواع المحتوى (يتم إظهارها فقط إذا فعّلها الأدمن من الإعدادات للتحكم الاحترافي) -->
+            ${State.settings.showContentTabsToStudents ? `
+              <div class="nav-tabs-wrapper">
+                <button class="btn ${State.activeContentTab === 'ALL_TYPES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('ALL_TYPES')"><i class="fa-solid fa-layer-group"></i> كافة المواد في الوحدات</button>
+                <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')"><i class="fa-solid fa-circle-play"></i> فيديوهات</button>
+                <button class="btn ${State.activeContentTab === 'WORKSHEETS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('WORKSHEETS')"><i class="fa-solid fa-file-pdf"></i> مذكرات PDF</button>
+                <button class="btn ${State.activeContentTab === 'PODCASTS' ? 'btn-purple' : 'btn-secondary'}" onclick="App.setContentTab('PODCASTS')"><i class="fa-solid fa-podcast"></i> بودكاست 🎙️</button>
+                <button class="btn ${State.activeContentTab === 'QUIZZES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('QUIZZES')"><i class="fa-solid fa-bolt"></i> الكويزات</button>
+                <button class="btn ${State.activeContentTab === 'POWERPOINTS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('POWERPOINTS')"><i class="fa-solid fa-file-powerpoint"></i> بوربوينت PPT</button>
+                <button class="btn ${State.activeContentTab === 'WORD_DOCS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('WORD_DOCS')"><i class="fa-solid fa-file-word"></i> مستندات Word</button>
+                <button class="btn ${State.activeContentTab === 'IMAGES' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('IMAGES')"><i class="fa-solid fa-image"></i> سبورات ومخططات</button>
+                <button class="btn ${State.activeContentTab === 'HTML_EMBED' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('HTML_EMBED')"><i class="fa-solid fa-code"></i> تفاعلي HTML / ألعاب</button>
+                <button class="btn ${State.activeContentTab === 'EXAMS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('EXAMS')"><i class="fa-solid fa-file-shield"></i> امتحانات</button>
+                <button class="btn ${State.activeContentTab === 'REVISIONS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('REVISIONS')"><i class="fa-solid fa-star"></i> مراجعات</button>
+              </div>
+            ` : ''}
 
-            <!-- عرض المحتوى منظم حسب الوحدات الدراسية بدقة تامة -->
-            ${State.activeContentTab === 'QUIZZES' ? `
-              <div class="card">
-                <h3 style="color: var(--navy-dark); margin-bottom: 14px;"><i class="fa-solid fa-bolt" style="color:var(--gold-orange);"></i> كويزات الرياضيات المخصصة لصفك</h3>
+            <!-- عرض المواد مقسمة حسب الوحدات الدراسية مع كويزات كل مقرر -->
+            ${availableUnitsList.length === 0 ? `
+              <div class="card" style="text-align:center; padding:45px;">
+                <i class="fa-solid fa-folder-open" style="font-size:42px; color:var(--gold-orange); margin-bottom:12px;"></i>
+                <h3 style="color:var(--navy-dark);">لا توجد مواد دراسية منشورة في هذا القسم حالياً</h3>
+                <p style="color:var(--text-muted); font-size:0.85rem;">يقوم الأستاذ عمر برفع الدروس وتنظيمها في وحداتها باستمرار.</p>
+              </div>
+            ` : `
+              ${availableUnitsList.map((unitName, unitIndex) => {
+                const unitLessons = unitsMap[unitName] || [];
+                return `
+                  <div class="unit-container-block">
+                    <div class="unit-header-bar" onclick="App.toggleUnitCollapse('unit_body_${unitIndex}')">
+                      <div class="unit-header-title">
+                        <i class="fa-solid fa-folder-tree" style="color:var(--gold-orange);"></i>
+                        <span>${escapeHTML(unitName)}</span>
+                      </div>
+                      <div style="display:flex; align-items:center; gap:8px;">
+                        <span class="badge badge-curriculum" style="font-size:0.7rem;">${unitLessons.length} مواد ودروس</span>
+                        <i class="fa-solid fa-chevron-down" id="unit_chevron_unit_body_${unitIndex}"></i>
+                      </div>
+                    </div>
+                    
+                    <div class="unit-body-grid" id="unit_body_${unitIndex}">
+                      ${unitLessons.map(lesson => `
+                        <div class="lesson-item-card">
+                          <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                              ${UI.getMediaTypeBadge(lesson)}
+                              <small style="color:var(--text-muted); font-size:0.7rem;"><i class="fa-regular fa-clock"></i> درس معتمد</small>
+                            </div>
+                            <h4 style="font-size:0.92rem; font-weight:800; color:var(--navy-dark); margin-bottom:6px; line-height:1.4;">${escapeHTML(lesson.title)}</h4>
+                            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:14px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
+                              ${escapeHTML(lesson.sampleContent ? lesson.sampleContent.substring(0, 80) + '...' : 'شرح ومسائل مخصصة من الأستاذ عمر.')}
+                            </p>
+                          </div>
+
+                          <div>
+                            ${lesson.type === 'VIDEOS' ? `
+                              <button class="btn btn-gold" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openVideoPlayer('${lesson.id}')">
+                                <i class="fa-solid fa-circle-play"></i> تشغيل الفيديو
+                              </button>
+                            ` : lesson.type === 'PODCASTS' ? `
+                              <button class="btn btn-purple" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openPodcastPlayer('${lesson.id}')">
+                                <i class="fa-solid fa-headphones"></i> استماع للبودكاست
+                              </button>
+                            ` : lesson.type === 'WORKSHEETS' ? `
+                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openDocumentViewer('${lesson.id}')">
+                                <i class="fa-solid fa-file-pdf"></i> فتح المذكرة PDF
+                              </button>
+                            ` : lesson.type === 'IMAGES' ? `
+                              <button class="btn btn-gold" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openImageViewer('${lesson.id}')">
+                                <i class="fa-solid fa-image"></i> عرض السبورة / المخطط
+                              </button>
+                            ` : lesson.type === 'HTML_EMBED' ? `
+                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openHtmlViewer('${lesson.id}')">
+                                <i class="fa-solid fa-code"></i> فتح الأداة التفاعلية / اللعبة
+                              </button>
+                            ` : lesson.type === 'POWERPOINTS' ? `
+                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px; background:#C2410C;" onclick="App.openOfficeViewer('${lesson.id}', 'ppt')">
+                                <i class="fa-solid fa-file-powerpoint"></i> استعراض PPT
+                              </button>
+                            ` : lesson.type === 'WORD_DOCS' ? `
+                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px; background:#1D4ED8;" onclick="App.openOfficeViewer('${lesson.id}', 'doc')">
+                                <i class="fa-solid fa-file-word"></i> استعراض Word
+                              </button>
+                            ` : `
+                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openArticleViewer('${lesson.id}')">
+                                <i class="fa-solid fa-book-open-reader"></i> قراءة الشرح
+                              </button>
+                            `}
+                          </div>
+                        </div>
+                      `).join('')}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            `}
+
+            <!-- كويزات واختبارات المنهج التفاعلية -->
+            ${filteredQuizzes.length > 0 ? `
+              <div class="card" style="margin-top:20px;">
+                <h3 style="color: var(--navy-dark); margin-bottom: 14px; font-weight:800;"><i class="fa-solid fa-bolt" style="color:var(--gold-orange);"></i> كويزات واختبارات قياس الفهم</h3>
                 <div style="display:flex; flex-direction:column; gap:10px;">
-                  ${filteredQuizzes.length === 0 ? '<p style="color:var(--text-muted); text-align:center; padding:25px;">لا توجد كويزات متاحة لصفك حالياً.</p>' : filteredQuizzes.map(qz => `
+                  ${filteredQuizzes.map(qz => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--gold-light); border:1.5px solid var(--gold-subtle); border-radius:var(--radius-md); flex-wrap:wrap; gap:8px;">
                       <div><strong style="font-size:0.95rem; display:block; color:var(--navy-dark);">${escapeHTML(qz.title)}</strong><span style="font-size:0.78rem; color:var(--text-muted);">${qz.questions ? qz.questions.length : 0} أسئلة • تصحيح وشرح فوري</span></div>
                       <button class="btn btn-gold" style="padding:6px 14px; font-size:0.8rem; min-height:36px;" onclick="App.startInteractiveQuiz('${qz.id}')"><i class="fa-solid fa-play"></i> ابدأ الآن</button>
@@ -2461,87 +2562,7 @@
                   `).join('')}
                 </div>
               </div>
-            ` : `
-              ${availableUnitsList.length === 0 ? `
-                <div class="card" style="text-align:center; padding:45px;">
-                  <i class="fa-solid fa-folder-open" style="font-size:42px; color:var(--gold-orange); margin-bottom:12px;"></i>
-                  <h3 style="color:var(--navy-dark);">لا توجد دروس أو مذكرات منشورة في هذا القسم حالياً</h3>
-                  <p style="color:var(--text-muted); font-size:0.85rem;">سيقوم الأستاذ عمر برفع الدروس وتنظيمها في وحداتها قريباً.</p>
-                </div>
-              ` : `
-                ${availableUnitsList.map((unitName, unitIndex) => {
-                  const unitLessons = unitsMap[unitName] || [];
-                  return `
-                    <div class="unit-container-block">
-                      <div class="unit-header-bar" onclick="App.toggleUnitCollapse('unit_body_${unitIndex}')">
-                        <div class="unit-header-title">
-                          <i class="fa-solid fa-folder-tree" style="color:var(--gold-orange);"></i>
-                          <span>${escapeHTML(unitName)}</span>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:8px;">
-                          <span class="badge badge-curriculum" style="font-size:0.7rem;">${unitLessons.length} دروس ومواد</span>
-                          <i class="fa-solid fa-chevron-down" id="unit_chevron_unit_body_${unitIndex}"></i>
-                        </div>
-                      </div>
-                      
-                      <div class="unit-body-grid" id="unit_body_${unitIndex}">
-                        ${unitLessons.map(lesson => `
-                          <div class="lesson-item-card">
-                            <div>
-                              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                                ${UI.getMediaTypeBadge(lesson)}
-                                <small style="color:var(--text-muted); font-size:0.7rem;"><i class="fa-regular fa-clock"></i> درس معتمد</small>
-                              </div>
-                              <h4 style="font-size:0.92rem; font-weight:800; color:var(--navy-dark); margin-bottom:6px; line-height:1.4;">${escapeHTML(lesson.title)}</h4>
-                              <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:14px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
-                                ${escapeHTML(lesson.sampleContent ? lesson.sampleContent.substring(0, 80) + '...' : 'شرح ومسائل مخصصة من الأستاذ عمر.')}
-                              </p>
-                            </div>
-
-                            <div>
-                              ${lesson.type === 'VIDEOS' ? `
-                                <button class="btn btn-gold" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openVideoPlayer('${lesson.id}')">
-                                  <i class="fa-solid fa-circle-play"></i> تشغيل الفيديو
-                                </button>
-                              ` : lesson.type === 'PODCASTS' ? `
-                                <button class="btn btn-purple" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openPodcastPlayer('${lesson.id}')">
-                                  <i class="fa-solid fa-headphones"></i> استماع للبودكاست
-                                </button>
-                              ` : lesson.type === 'WORKSHEETS' ? `
-                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openDocumentViewer('${lesson.id}')">
-                                  <i class="fa-solid fa-file-pdf"></i> فتح المذكرة PDF
-                                </button>
-                              ` : lesson.type === 'IMAGES' ? `
-                                <button class="btn btn-gold" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openImageViewer('${lesson.id}')">
-                                  <i class="fa-solid fa-image"></i> عرض السبورة / المخطط
-                                </button>
-                              ` : lesson.type === 'HTML_EMBED' ? `
-                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem
-; min-height:36px;" onclick="App.openHtmlViewer('${lesson.id}')">
-                                  <i class="fa-solid fa-code"></i> فتح الأداة التفاعلية / اللعبة
-                                </button>
-                              ` : lesson.type === 'POWERPOINTS' ? `
-                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px; background:#C2410C;" onclick="App.openOfficeViewer('${lesson.id}', 'ppt')">
-                                  <i class="fa-solid fa-file-powerpoint"></i> استعراض PPT
-                                </button>
-                              ` : lesson.type === 'WORD_DOCS' ? `
-                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px; background:#1D4ED8;" onclick="App.openOfficeViewer('${lesson.id}', 'doc')">
-                                  <i class="fa-solid fa-file-word"></i> استعراض Word
-                                </button>
-                              ` : `
-                                <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openArticleViewer('${lesson.id}')">
-                                  <i class="fa-solid fa-book-open-reader"></i> قراءة الشرح
-                                </button>
-                              `}
-                            </div>
-                          </div>
-                        `).join('')}
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-              `}
-            `}
+            ` : ''}
           `;
         },
 
@@ -2631,16 +2652,14 @@
           `;
         },
 
-        /* صفحة تعبئة ومعاينة الاستبيان الأكاديمي مع زر الرجوع وقصر الإرسال على الطلاب */
+        /* صفحة تعبئة ومعاينة الاستبيان الأكاديمي */
         surveyFillPage() {
           const s = State.activePublicSurvey;
           if (!s) return `<div class="card" style="text-align:center; padding:30px;"><p>الاستبيان غير متوفر أو تم إغلاقه.</p><button class="btn btn-gold" onclick="App.navigateHome()">العودة</button></div>`;
           const isAdmin = (State.currentUser && State.currentUser.role === 'ADMIN');
-          const isStudent = (State.currentUser && State.currentUser.role === 'STUDENT');
 
           return `
             <div style="max-width:680px; margin:20px auto; padding: 0 10px;">
-              <!-- زر الرجوع المباشر في الأعلى -->
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                 <button type="button" class="btn btn-secondary" onclick="App.closeSurveyView()">
                   <i class="fa-solid fa-arrow-right"></i> ${isAdmin ? 'إغلاق المعاينة والعودة للإدارة' : 'الرجوع للرئيسية'}
@@ -2784,7 +2803,7 @@
           `;
         },
 
-        /* شاشة الاستبيانات المتجاوبة 100% لكافة الهواتف */
+        /* شاشة الاستبيانات المتجاوبة */
         adminSurveys() {
           const selectedSurvey = State.selectedSurveyForResults ? State.surveys.find(s => s.id === State.selectedSurveyForResults) : State.surveys[0];
           const responses = selectedSurvey ? State.surveyResponses.filter(r => r.surveyId === selectedSurvey.id) : [];
@@ -3272,6 +3291,9 @@
         document.getElementById("settingLogoUrl").value = State.settings.logoUrl || OFFICIAL_LOGO_URL;
         document.getElementById("settingWhatsAppPhone").value = State.settings.adminPhoneWhatsApp || "971505144695";
         
+        const showTabsChk = document.getElementById("settingShowTabs");
+        if (showTabsChk) showTabsChk.checked = !!State.settings.showContentTabsToStudents;
+
         const vault = await DataStore.getAdminVault();
         if (vault && vault.username) {
           document.getElementById("settingAdminUser").value = vault.username;
@@ -3301,10 +3323,14 @@
         const newAdminPass = normalizeInput(document.getElementById("settingAdminPass").value);
         const newAdminPin = normalizeInput(document.getElementById("settingAdminPin").value);
         
+        const showTabsChk = document.getElementById("settingShowTabs");
+        const showTabsVal = showTabsChk ? showTabsChk.checked : false;
+
         const currentVault = (await DataStore.getAdminVault()) || {
           username: "admin",
           passwordHash: "123456",
-          pinHash: "1234"
+          pinHash: "1234",
+          showContentTabsToStudents: false
         };
         
         const finalUsername = newAdminUser || currentVault.username || "admin";
@@ -3315,6 +3341,7 @@
           pinHash: newAdminPin ? CryptoSecurity.hashPassword(newAdminPin) : currentVault.pinHash,
           logoUrl: logo,
           whatsappPhone: phone || State.settings.adminPhoneWhatsApp,
+          showContentTabsToStudents: showTabsVal,
           updatedAt: new Date().toISOString()
         };
         
@@ -3331,6 +3358,9 @@
         localStorage.setItem("og_admin_vault_cache", JSON.stringify(updateObj));
         State.settings.logoUrl = logo;
         localStorage.setItem("og_logo_url", logo);
+        State.settings.showContentTabsToStudents = showTabsVal;
+        localStorage.setItem("og_show_tabs", showTabsVal ? "true" : "false");
+
         if (phone) {
           State.settings.adminPhoneWhatsApp = phone;
           localStorage.setItem("og_whatsapp_phone", phone);
@@ -3350,9 +3380,9 @@
         
         App.closeSettingsModal();
         if (cloudSaved) {
-          App.showSecurityAlert("☁️ تم تحديث بيانات المشرف سحابياً بنجاح!");
+          App.showSecurityAlert("☁️ تم تحديث إعدادات المنصة وروابط المناهج سحابياً!");
         } else {
-          App.showSecurityAlert("⚠️ تم الحفظ على هذا الجهاز.");
+          App.showSecurityAlert("⚠️ تم الحفظ محلياً على هذا الجهاز.");
         }
         UI.render();
       },
@@ -4478,4 +4508,3 @@ ${link}
   </script>
 </body>
 </html>
-

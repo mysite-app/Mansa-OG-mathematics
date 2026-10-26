@@ -33,8 +33,8 @@
   <!-- محرك البث Hls.js لمقاطع الفيديو المباشرة و m3u8 -->
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 
-  <!-- محرك الاتصال الصوتي الداخلي WebRTC PeerJS -->
-  <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+  <!-- محرك البث المباشر WebRTC PeerJS v1.5.4 -->
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
 
   <style>
     :root {
@@ -46,6 +46,7 @@
       --gold-gradient: linear-gradient(135deg, #F59E0B 0%, #EA580C 100%);
       --navy-gradient: linear-gradient(135deg, #0A1424 0%, #162642 100%);
       --purple-gradient: linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%);
+      --danger-gradient: linear-gradient(135deg, #EF4444 0%, #B91C1C 100%);
       --gold-light: #FFFBEB;
       --gold-subtle: #FEF3C7;
       --bg-light: #F8FAFC;
@@ -86,8 +87,8 @@
     .btn-gold { background: var(--gold-gradient); color: var(--navy-dark); }
     .btn-navy { background: var(--navy-gradient); color: var(--white); }
     .btn-purple { background: var(--purple-gradient); color: var(--white); }
+    .btn-danger { background: var(--danger-gradient); color: var(--white); }
     .btn-whatsapp { background: #25D366; color: var(--white); }
-    .btn-danger { background: var(--danger); color: var(--white); }
     .btn-secondary { background: #F1F5F9; color: var(--text-dark); border: 1px solid #CBD5E1; }
     .btn-disabled { background: #E2E8F0; color: #94A3B8; cursor: not-allowed; }
     
@@ -104,14 +105,54 @@
     .badge-img { background: #FEF3C7; color: #D97706; border: 1px solid #FDE68A; }
     .badge-html { background: #E0F2FE; color: #0284C7; border: 1px solid #BAE6FD; }
     .badge-xp { background: linear-gradient(135deg, #F59E0B, #D97706); color: #FFF; font-weight: 800; border-radius: 50px; padding: 2px 8px; font-size: 0.72rem; }
+
+    /* ========================================================
+       تصميمات البث المباشر التفاعلي Live Stream Engine
+    ======================================================== */
+    .live-top-banner {
+      background: linear-gradient(90deg, #991B1B 0%, #DC2626 50%, #991B1B 100%);
+      color: #FFF; padding: 12px 18px; border-radius: var(--radius-md); margin-bottom: 18px;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px;
+      box-shadow: 0 4px 16px rgba(220, 38, 38, 0.25); border: 1.5px solid #F87171;
+      animation: pulseGlowBanner 2s infinite alternate;
+    }
+    @keyframes pulseGlowBanner { 0% { border-color: #F87171; } 100% { border-color: #FEF08A; } }
+    .live-indicator-dot { width: 12px; height: 12px; border-radius: 50%; background: #FEF08A; display: inline-block; animation: blinkLive 1s infinite alternate; }
+    @keyframes blinkLive { 0% { opacity: 0.3; transform: scale(0.85); } 100% { opacity: 1; transform: scale(1.15); } }
+
+    .broadcaster-live-bar {
+      position: fixed; top: 70px; left: 16px; right: 16px; max-width: 720px; margin: 0 auto;
+      background: rgba(10, 20, 36, 0.97); backdrop-filter: blur(8px); border: 2px solid #EF4444;
+      border-radius: var(--radius-md); padding: 10px 18px; color: #FFF; z-index: 2500;
+      display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+      box-shadow: var(--shadow-lg);
+    }
+    .broadcaster-live-bar.active { display: flex; }
+
+    .student-live-widget {
+      position: fixed; bottom: 85px; right: 20px; width: 340px; max-width: calc(100vw - 40px);
+      background: var(--navy-dark); border-radius: var(--radius-lg); padding: 16px; border: 2px solid #EF4444;
+      box-shadow: var(--shadow-lg); z-index: 2500; display: none; flex-direction: column; gap: 10px; color: #FFF;
+    }
+    .student-live-widget.active { display: flex; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    .visualizer-canvas { width: 100%; height: 42px; background: rgba(0,0,0,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); }
+
+    /* ========================================================
+       الهيكلية المنظمة: الوحدات ⬅ الدروس ⬅ الموارد
+    ======================================================== */
+    .unit-container-block { margin-bottom: 22px; border-radius: var(--radius-md); border: 1.5px solid #CBD5E1; background: var(--white); overflow: hidden; box-shadow: var(--shadow-sm); }
+    .unit-header-bar { background: linear-gradient(90deg, #0A1424 0%, #162642 100%); color: #FFF; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-right: 5px solid var(--gold-orange); }
+    .unit-body-accordion { padding: 14px; background: #F8FAFC; display: flex; flex-direction: column; gap: 14px; }
     
-    /* نظام الوحدات الدراسية المتقدم المنظم */
-    .unit-container-block { margin-bottom: 22px; border-radius: var(--radius-md); border: 1.5px solid #E2E8F0; background: var(--white); overflow: hidden; box-shadow: var(--shadow-sm); }
-    .unit-header-bar { background: linear-gradient(90deg, #0A1424 0%, #162642 100%); color: #FFF; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-right: 5px solid var(--gold-orange); user-select: none; }
-    .unit-header-title { display: flex; align-items: center; gap: 10px; font-size: 1.05rem; font-weight: 800; }
-    .unit-body-grid { padding: 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; background: #F8FAFC; }
-    .lesson-item-card { background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: var(--radius-sm); padding: 14px; display: flex; flex-direction: column; justify-content: space-between; transition: var(--transition); }
-    .lesson-item-card:hover { transform: translateY(-2px); border-color: var(--gold-orange); box-shadow: var(--shadow-md); }
+    .lesson-item-wrapper { background: #FFFFFF; border: 1.5px solid #E2E8F0; border-radius: var(--radius-sm); padding: 14px; transition: var(--transition); }
+    .lesson-item-wrapper:hover { border-color: var(--gold-orange); box-shadow: var(--shadow-sm); }
+    .lesson-title-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
+    
+    .lesson-resources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed #E2E8F0; }
+    .resource-sub-card { background: var(--bg-light); border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px; display: flex; flex-direction: column; justify-content: space-between; gap: 8px; }
+    .resource-sub-card:hover { background: var(--gold-light); border-color: var(--gold-orange); }
 
     .grid-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
     .nav-tabs-wrapper { display: flex; gap: 8px; margin-bottom: 18px; overflow-x: auto; padding-bottom: 6px; -webkit-overflow-scrolling: touch; }
@@ -125,28 +166,16 @@
     .plan-badge-top { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--navy-dark); color: var(--gold-orange); padding: 3px 14px; border-radius: 50px; font-size: 0.72rem; font-weight: 800; border: 1px solid var(--gold-orange); }
     .plan-price { font-size: 2rem; font-weight: 900; color: var(--navy-dark); margin: 12px 0; }
     
-    /* المشغل الذكي الشامل والشاشة الكاملة */
     .player-modal-content { position: relative; background: var(--navy-dark); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; color: #FFF; width: 100%; height: 100%; }
     .player-toolbar { display: flex; justify-content: space-between; align-items: center; background: var(--navy-dark); padding: 10px 16px; border-bottom: 1px solid rgba(245, 158, 11, 0.2); font-size: 0.82rem; }
     .player-viewport { position: relative; width: 100%; min-height: 480px; height: 75vh; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; background: #070D18; overflow-y: auto; }
     
     .player-modal-content.rotated-fullscreen-active {
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      max-width: 100vw !important;
-      max-height: 100vh !important;
-      z-index: 9999999 !important;
-      border-radius: 0 !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      background: #000000 !important;
+      position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100vh !important;
+      max-width: 100vw !important; max-height: 100vh !important; z-index: 9999999 !important;
+      border-radius: 0 !important; margin: 0 !important; padding: 0 !important; background: #000000 !important;
     }
-    .player-modal-content.rotated-fullscreen-active .player-viewport {
-      height: calc(100vh - 50px) !important;
-      min-height: auto !important;
-    }
+    .player-modal-content.rotated-fullscreen-active .player-viewport { height: calc(100vh - 50px) !important; min-height: auto !important; }
     
     .floating-reset-orientation-btn {
       position: absolute; top: 12px; left: 12px; background: rgba(15, 30, 54, 0.85); backdrop-filter: blur(4px);
@@ -166,7 +195,6 @@
     .article-reading-container { width: 100%; height: 100%; background: #FFFFFF; color: var(--text-dark); padding: 26px 20px; overflow-y: auto; text-align: right; }
     .math-theorem-box { background: var(--gold-light); border-right: 4px solid var(--gold-orange); border-radius: var(--radius-sm); padding: 14px 16px; margin: 16px 0; }
     
-    /* حاوية الـ PDF الآمنة */
     .pdf-canvas-container { width: 100%; display: flex; flex-direction: column; align-items: center; padding: 14px; background: #0E1726; gap: 14px; overflow-y: auto; }
     .pdf-canvas-container canvas { max-width: 100%; border-radius: 4px; background: #FFFFFF; box-shadow: 0 4px 12px rgba(0,0,0,0.5); pointer-events: none; }
     .pdf-controls-bar { display: flex; align-items: center; justify-content: center; gap: 8px; padding: 8px 14px; background: #0A1424; border-bottom: 1px solid rgba(245, 158, 11, 0.2); color: #FFF; font-size: 0.8rem; width: 100%; flex-wrap: wrap; }
@@ -199,21 +227,6 @@
     .rank-2 { background: #94A3B8; color: #FFF; }
     .rank-3 { background: #B45309; color: #FFF; }
     
-    /* فقاعة المكالمات الصوتية */
-    .voice-call-bubble { position: fixed; top: 75px; left: 15px; background: var(--navy-dark); border: 2px solid var(--gold-orange); border-radius: var(--radius-md); padding: 12px 16px; color: #FFF; z-index: 9999; display: none; flex-direction: column; gap: 10px; box-shadow: var(--shadow-lg); max-width: 380px; width: calc(100vw - 30px); animation: pulseGlow 2.5s infinite; }
-    .voice-call-bubble.active { display: flex; }
-    @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
-    .voice-header { display: flex; align-items: center; justify-content: space-between; }
-    .voice-wave { display: flex; align-items: center; gap: 3px; height: 18px; }
-    .voice-wave span { display: block; width: 3px; background: var(--gold-orange); border-radius: 3px; animation: waveAnim 0.8s ease-in-out infinite alternate; }
-    .voice-wave span:nth-child(2) { animation-delay: 0.2s; height: 16px; }
-    .voice-wave span:nth-child(3) { animation-delay: 0.4s; height: 22px; }
-    @keyframes waveAnim { 0% { height: 4px; } 100% { height: 20px; } }
-    .voice-participants-box { max-height: 160px; overflow-y: auto; background: rgba(15, 30, 54, 0.85); border-radius: var(--radius-sm); padding: 6px; display: flex; flex-direction: column; gap: 6px; font-size: 0.78rem; }
-    .voice-peer-row { display: flex; align-items: center; justify-content: space-between; padding: 4px 8px; background: rgba(255,255,255,0.06); border-radius: 4px; }
-    .voice-btn-sm { padding: 3px 8px; font-size: 0.7rem; border-radius: 4px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
-    
-    /* أدوات الطلاب العائمة */
     .floating-tools-container { position: fixed; bottom: 20px; left: 20px; display: flex; flex-direction: column; gap: 10px; z-index: 1500; }
     .floating-tool-btn { width: 46px; height: 46px; border-radius: 50%; color: #FFF; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: var(--shadow-md); cursor: pointer; border: 2px solid var(--white); transition: transform 0.2s; }
     .floating-tool-btn:hover { transform: scale(1.1); }
@@ -274,7 +287,6 @@
     
     .security-toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: var(--danger); color: #FFF; padding: 10px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; display: none; align-items: center; gap: 8px; z-index: 99999; box-shadow: var(--shadow-lg); }
     
-    /* نظام الاستبيانات */
     .survey-responsive-layout { display: flex; flex-direction: column; gap: 16px; }
     .survey-card-item { background: #FFFFFF; border: 1.5px solid #E2E8F0; border-radius: var(--radius-md); padding: 14px; margin-bottom: 12px; transition: var(--transition); }
     .survey-card-item:hover { border-color: var(--gold-orange); }
@@ -290,7 +302,8 @@
     .survey-star-rating label:hover ~ label { color: #F59E0B; }
     
     @media (max-width: 860px) {
-      .voice-call-bubble { left: 8px; right: 8px; width: auto; top: 65px; }
+      .broadcaster-live-bar { left: 8px; right: 8px; top: 60px; }
+      .student-live-widget { left: 10px; right: 10px; width: auto; bottom: 70px; }
       .modal-card { padding: 14px; max-height: 94vh; width: 100%; }
       .plans-container { grid-template-columns: 1fr; }
       .floating-tools-container { bottom: 12px; left: 10px; gap: 6px; }
@@ -302,7 +315,6 @@
       .player-viewport { height: 60vh; min-height: 320px; }
       .main-wrapper { padding: 12px 8px; }
       .card { padding: 14px 12px; }
-      .unit-body-grid { grid-template-columns: 1fr; padding: 10px; }
     }
     
     footer.app-footer { background: var(--navy-gradient); color: var(--white); padding: 18px 20px; margin-top: auto; text-align: center; border-top: 2px solid var(--gold-orange); }
@@ -359,41 +371,55 @@
     </div>
   </div>
 
-  <!-- فقاعة المكالمة الصوتية WebRTC -->
-  <div class="voice-call-bubble" id="voiceCallBubble">
-    <div class="voice-header">
+  <!-- ========================================================
+       شريط المعلم العائم أثناء البث الصوتي المباشر (Admin Studio Bar)
+  ======================================================== -->
+  <div class="broadcaster-live-bar" id="broadcasterLiveBar">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span class="live-indicator-dot"></span>
+      <div>
+        <strong style="color:#FEF08A; font-size:0.85rem; display:block;" id="broadcasterBarTitle">البث الصوتي المباشر قيد التشغيل</strong>
+        <span style="font-size:0.72rem; color:#E2E8F0;" id="broadcasterBarTarget">الجمهور: كافة الطلاب</span>
+      </div>
+    </div>
+    <div style="flex:1; max-width:200px; margin:0 10px;">
+      <canvas id="broadcasterVisualizerCanvas" class="visualizer-canvas" width="200" height="42"></canvas>
+    </div>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <button class="btn btn-gold" id="btnBroadcasterMute" style="padding:4px 10px; font-size:0.75rem; min-height:32px;" onclick="LiveAudio.toggleBroadcasterMute()">
+        <i class="fa-solid fa-microphone"></i> كتم
+      </button>
+      <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:32px;" onclick="LiveAudio.stopBroadcast()">
+        <i class="fa-solid fa-power-off"></i> إنهاء البث
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       شريط استماع الطالب العائم (Student Audio Receiver Widget)
+  ======================================================== -->
+  <div class="student-live-widget" id="studentLiveWidget">
+    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E293B; padding-bottom:6px;">
       <div style="display:flex; align-items:center; gap:8px;">
-        <div class="voice-wave">
-          <span></span><span></span><span></span>
-        </div>
-        <div>
-          <strong id="voiceCallStatusTitle" style="font-size:0.82rem; color:var(--gold-orange); display:block;">المحادثة الصوتية</strong>
-          <span id="voiceCallPeerName" style="font-size:0.75rem; color:#E2E8F0;">الأستاذ عمر</span>
-        </div>
+        <span class="live-indicator-dot"></span>
+        <strong style="font-size:0.82rem; color:#FEF08A;" id="studentWidgetTitle">بث مباشر: الأستاذ عمر</strong>
       </div>
-      <div style="display:flex; align-items:center; gap:4px;">
-        <button class="voice-btn-sm" id="btnToggleAudioOutput" style="background:#334155; color:#FFF;" onclick="VoiceEngine.cycleAudioOutput()" title="تبديل مخرج الصوت">
-          <i class="fa-solid fa-volume-high"></i>
-        </button>
-        <button class="btn btn-danger" style="padding:3px 8px; font-size:0.72rem; min-height:28px;" onclick="VoiceEngine.endCall()">
-          <i class="fa-solid fa-phone-slash"></i> إنهاء
-        </button>
-      </div>
+      <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="LiveAudio.leaveStudentSession()"></i>
+    </div>
+    
+    <canvas id="studentVisualizerCanvas" class="visualizer-canvas" width="300" height="42"></canvas>
+
+    <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
+      <i class="fa-solid fa-volume-high" style="color:var(--gold-orange);"></i>
+      <input type="range" id="studentLiveVolumeSlider" min="0" max="1" step="0.05" value="1" style="width:100%; accent-color:var(--gold-orange); cursor:pointer;" oninput="LiveAudio.setStudentVolume(this.value)">
     </div>
 
-    <div style="display:flex; gap:6px; align-items:center; justify-content:space-between; border-top:1px solid #1E293B; padding-top:6px;">
-      <button class="btn btn-gold" id="btnToggleMic" style="flex:1; padding:4px 8px; font-size:0.74rem; min-height:30px;" onclick="VoiceEngine.toggleMute()">
-        <i class="fa-solid fa-microphone"></i> كتم الصوت
-      </button>
-      <button class="btn btn-purple" id="btnRaiseHand" style="padding:4px 10px; font-size:0.74rem; min-height:30px; display:none;" onclick="VoiceEngine.studentRaiseHand()">
-        <i class="fa-solid fa-hand"></i> استئذان
-      </button>
-      <button class="btn btn-danger" id="btnAdminMuteAll" style="padding:4px 10px; font-size:0.74rem; min-height:30px; display:none;" onclick="VoiceEngine.adminMuteAll()">
-        <i class="fa-solid fa-microphone-slash"></i> كتم الجميع
-      </button>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
+      <select id="studentAudioOutputSelect" class="form-group" style="margin-bottom:0; padding:4px 6px; font-size:0.72rem; background:#162642; color:#FFF; border-color:#334155;" onchange="LiveAudio.setAudioOutput(this.value)">
+        <option value="">سماعة الجهاز الافتراضية</option>
+      </select>
+      <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem; min-height:28px;" onclick="LiveAudio.leaveStudentSession()">مغادرة</button>
     </div>
-
-    <div id="voiceParticipantsList" class="voice-participants-box" style="display:none;"></div>
   </div>
 
   <header class="app-header">
@@ -544,7 +570,6 @@
           </div>
         </div>
 
-        <!-- شريط تحكم الـ PDF الآمن -->
         <div id="pdfControlsBar" class="pdf-controls-bar" style="display:none;">
           <button class="btn btn-secondary" style="padding:3px 8px; min-height:28px;" onclick="PDFViewerEngine.prevPage()"><i class="fa-solid fa-chevron-right"></i> السابق</button>
           <span>الصفحة: <strong id="pdfPageNum" style="color:var(--gold-orange);">1</strong> / <strong id="pdfPageCount">--</strong></span>
@@ -555,7 +580,6 @@
         </div>
 
         <div class="player-viewport" id="playerViewport">
-          <!-- زر الخروج العائم في وضع الشاشة الكاملة -->
           <button class="floating-reset-orientation-btn" id="floatingExitFullscreenBtn" style="display:none;" onclick="App.toggleUniversalFullscreen()">
             <i class="fa-solid fa-compress"></i> استعادة الوضع الطبيعي
           </button>
@@ -568,6 +592,60 @@
           <button class="pro-video-btn" onclick="VideoEngine.togglePiP()"><i class="fa-solid fa-clone"></i> مصغر (PiP)</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       مودال استوديو البث المباشر للمعلم (Teacher Broadcast Studio)
+  ======================================================== -->
+  <div class="modal-overlay" id="broadcastStudioModal">
+    <div class="modal-card" style="max-width: 620px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="color:var(--navy-dark); font-weight:900;">
+          <i class="fa-solid fa-tower-broadcast" style="color:var(--danger);"></i> استوديو البث الصوتي المباشر (الأستاذ عمر)
+        </h3>
+        <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.closeBroadcastModal()"></i>
+      </div>
+      <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:16px;">
+        بث صوتي مباشر للطلاب فائق النقاوة مستوحى من نظام منصة الأستاذ جمال باستخدام WebRTC و PeerJS مع معالجة الصدى والضوضاء.
+      </p>
+
+      <form onsubmit="LiveAudio.handleStartBroadcastForm(event)">
+        <div class="form-group">
+          <label>عنوان جلسة البث المباشر</label>
+          <input type="text" id="liveBroadcastTitle" required placeholder="مثال: مراجعة وحل مسائل وزارية هامة على التفاضل">
+        </div>
+
+        <div class="form-group">
+          <label>تحديد الفئة المستهدفة من البث (Audience Targeting)</label>
+          <select id="liveTargetType" onchange="LiveAudio.toggleTargetAudienceFields(this.value)">
+            <option value="ALL">كافة الطلاب والصفوف المشتركة (عام)</option>
+            <option value="CURRICULUM">صف / منهاج دراسي محدد</option>
+            <option value="CUSTOM">تحديد طلاب مخصصين بالاسم</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="liveCurriculumSelectGroup" style="display:none;">
+          <label>اختر المنهاج والصف المستهدف</label>
+          <select id="liveTargetCurriculum"></select>
+        </div>
+
+        <div class="form-group" id="liveStudentsSelectGroup" style="display:none; max-height:160px; overflow-y:auto; border:1px solid #CBD5E1; padding:8px; border-radius:var(--radius-sm); background:var(--bg-light);">
+          <label style="font-size:0.8rem; font-weight:800; color:var(--gold-deep); display:block; margin-bottom:6px;">اختر الطلاب المسموح لهم بالاستماع:</label>
+          <div id="liveCustomStudentsList"></div>
+        </div>
+
+        <div style="background:#FFFBEB; border:1px solid var(--gold-orange); border-radius:var(--radius-sm); padding:10px; font-size:0.8rem; color:#92400E; margin-bottom:16px;">
+          <i class="fa-solid fa-circle-check"></i> يتم تفعيل خاصية إلغاء الصدى والضوضاء التلقائية (Acoustic Echo Cancellation) لضمان وضوح الشرح الرياضي.
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button type="submit" class="btn btn-danger" style="flex:1;">
+            <i class="fa-solid fa-tower-broadcast"></i> إطلاق البث المباشر فوراً
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="App.closeBroadcastModal()">إلغاء</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -598,6 +676,114 @@
       </div>
 
       <button class="btn btn-navy" style="width:100%; margin-top:14px;" onclick="App.closeFormulaSheetModal()">إغلاق اللوحة</button>
+    </div>
+  </div>
+
+  <!-- مودال إضافة وحدة تعليمية جديدة -->
+  <div class="modal-overlay" id="addUnitModal">
+    <div class="modal-card" style="max-width: 520px;">
+      <h3 style="color: var(--navy-dark); margin-bottom: 14px;"><i class="fa-solid fa-folder-plus"></i> إضافة وحدة تعليمية جديدة</h3>
+      <form onsubmit="App.handleSaveUnit(event)">
+        <div class="form-group">
+          <label>المنهاج والصف المستهدف</label>
+          <select id="newUnitTarget" required></select>
+        </div>
+        <div class="form-group">
+          <label>اسم الوحدة التعليمية</label>
+          <input type="text" id="newUnitTitle" required placeholder="مثال: الوحدة الأولى: التفاضل وتطبيقاته">
+        </div>
+        <div style="display:flex; gap:8px; margin-top:16px;">
+          <button type="submit" class="btn btn-gold" style="flex:1;">حفظ الوحدة</button>
+          <button type="button" class="btn btn-secondary" onclick="App.closeAddUnitModal()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- مودال إضافة درس جديد داخل وحدة -->
+  <div class="modal-overlay" id="addLessonModal">
+    <div class="modal-card" style="max-width: 560px;">
+      <h3 style="color: var(--navy-dark); margin-bottom: 14px;"><i class="fa-solid fa-book"></i> إضافة درس جديد داخل الوحدة</h3>
+      <form onsubmit="App.handleSaveLesson(event)">
+        <div class="form-group">
+          <label>اختر الوحدة التابع لها الدرس</label>
+          <select id="lessonParentUnitSelect" required></select>
+        </div>
+        <div class="form-group">
+          <label>عنوان الدرس</label>
+          <input type="text" id="newLessonTitle" required placeholder="مثال: الدرس الأول: قواعد الاشتقاق الأساسية">
+        </div>
+        <div class="form-group">
+          <label>وصف مختصر للدرس</label>
+          <textarea id="newLessonDesc" rows="2" placeholder="وصف للأهداف والمسائل المشروحة..."></textarea>
+        </div>
+        <div class="form-group" style="background:var(--bg-light); padding:10px; border-radius:var(--radius-sm); border:1px solid #CBD5E1;">
+          <label style="color:var(--gold-deep);"><i class="fa-solid fa-user-lock"></i> تخصيص الدرس لطالب محدد (اختياري):</label>
+          <select id="lessonAssignedStudent" style="margin-top:4px;">
+            <option value="">متاح لكافة طلاب هذا الصف ✓</option>
+          </select>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:16px;">
+          <button type="submit" class="btn btn-gold" style="flex:1;">حفظ الدرس</button>
+          <button type="button" class="btn btn-secondary" onclick="App.closeAddLessonModal()">إلغاء</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- مودال إضافة مورد (فيديو، صوت، مذكرة، PPT، إلخ) داخل درس -->
+  <div class="modal-overlay" id="addResourceModal">
+    <div class="modal-card" style="max-width: 600px;">
+      <h3 style="color: var(--navy-dark); margin-bottom: 14px;"><i class="fa-solid fa-link"></i> إضافة مورد تعليمي داخل الدرس</h3>
+      <form onsubmit="App.handleSaveResource(event)">
+        <input type="hidden" id="resourceLessonId">
+        <div class="form-group">
+          <label>الدرس المستهدف</label>
+          <input type="text" id="resourceLessonTitleDisplay" disabled style="background:#F1F5F9; font-weight:700;">
+        </div>
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+          <div class="form-group">
+            <label>نوع المورد</label>
+            <select id="resType" required onchange="App.toggleResourceFields()">
+              <option value="VIDEOS">فيديو مسجل (YouTube / Drive / MP4)</option>
+              <option value="WORKSHEETS">مذكرة وأوراق عمل (PDF آمن داخلي)</option>
+              <option value="PODCASTS">بودكاست وشرح صوتي (MP3)</option>
+              <option value="POWERPOINTS">عرض باوربوينت (PPT / PPTX)</option>
+              <option value="WORD_DOCS">مستند Word (DOCX داخلي)</option>
+              <option value="HTML_EMBED">أداة تفاعلية / محاكاة HTML (Desmos / GeoGebra)</option>
+              <option value="IMAGES">صورة / سبورة وشرح (JPG / PNG)</option>
+              <option value="ARTICLES">شرح كتابي مباشر</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>عنوان المورد</label>
+            <input type="text" id="resTitle" required placeholder="مثال: فيديو شرح الدرس أو مذكرة التمارين">
+          </div>
+        </div>
+
+        <div class="form-group" id="resFileUploadGroup">
+          <label><i class="fa-solid fa-upload"></i> رفع ملف من جهازك (اختياري للصور و Word و HTML):</label>
+          <input type="file" id="resFileInput" accept="image/*,.html,.htm,.docx,.doc" onchange="App.handleResourceFileUpload(event)">
+        </div>
+
+        <div class="form-group" id="resUrlGroup">
+          <label id="resUrlLabel">رابط المورد المباشر (YouTube / PDF / MP3 / Drive):</label>
+          <div style="display:flex; gap:6px;">
+            <input type="text" id="resUrl" placeholder="https://...">
+            <button type="button" class="btn btn-gold" style="padding:8px 12px;" onclick="App.pasteToInput('resUrl')"><i class="fa-solid fa-paste"></i> لصق</button>
+          </div>
+        </div>
+
+        <div class="form-group" id="resTextGroup">
+          <label id="resTextLabel">محتوى الشرح الكتابي أو كود الـ HTML المدمج:</label>
+          <textarea id="resText" rows="4"></textarea>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:16px;">
+          <button type="submit" class="btn btn-gold" style="flex:1;">إضافة المورد للدرس</button>
+          <button type="button" class="btn btn-secondary" onclick="App.closeAddResourceModal()">إلغاء</button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -773,88 +959,6 @@
     </div>
   </div>
 
-  <!-- الاتصال الصوتي للأدمن -->
-  <div class="modal-overlay" id="voiceCallModal">
-    <div class="modal-card" style="max-width: 520px; text-align: center;">
-      <div style="width:70px; height:70px; border-radius:50%; background:var(--gold-subtle); border:2px solid var(--gold-orange); display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
-        <i class="fa-solid fa-headset" style="font-size:32px; color:var(--navy-dark);"></i>
-      </div>
-      <h3 style="color:var(--navy-dark); font-weight:800; margin-bottom:6px;">غرفة الاتصال الصوتي المباشر (الأستاذ عمر)</h3>
-      <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:16px;">
-        تواصل فائق الوضوح عبر أحدث بروتوكولات WebRTC بدون تقطيع.
-      </p>
-
-      <div style="background:var(--bg-light); padding:14px; border-radius:var(--radius-md); margin-bottom:16px; text-align:right;">
-        <label style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px; color:var(--navy-dark);">
-          1. اتصال فردي مباشر مع طالب:
-        </label>
-        <select id="voiceStudentSelect" class="form-group" style="margin-bottom:8px;"></select>
-        <button class="btn btn-gold" style="width:100%; font-size:0.8rem;" onclick="VoiceEngine.callSelectedStudent()">
-          <i class="fa-solid fa-phone"></i> بدء مكالمة فردية مباشرة
-        </button>
-      </div>
-
-      <div style="background:#F5F3FF; padding:14px; border-radius:var(--radius-md); margin-bottom:16px; border:1px solid #DDD6FE; text-align:right;">
-        <label style="display:block; font-size:0.8rem; font-weight:700; margin-bottom:6px; color:#6D28D9;">
-          2. غرفة نقاش صوتي جماعية:
-        </label>
-        <button class="btn btn-purple" style="width:100%; font-size:0.8rem;" onclick="VoiceEngine.startBroadcastRoom()">
-          <i class="fa-solid fa-tower-broadcast"></i> فتح وإطلاق الغرفة الجماعية
-        </button>
-      </div>
-
-      <button class="btn btn-secondary" style="width:100%;" onclick="App.closeVoiceModal()">إغلاق النافذة</button>
-    </div>
-  </div>
-
-  <!-- تعديل المحتوى والوحدات -->
-  <div class="modal-overlay" id="editContentModal">
-    <div class="modal-card">
-      <h3 style="color: var(--navy-dark); margin-bottom: 14px;">
-        <i class="fa-solid fa-pen-to-square"></i> تعديل المادة التعليمية والوحدة
-      </h3>
-      <form onsubmit="App.handleSaveEditContent(event)">
-        <input type="hidden" id="editContentId">
-        <input type="hidden" id="editContentType">
-        
-        <div class="form-group">
-          <label>المنهاج والصف المستهدف</label>
-          <select id="editContentTarget" required></select>
-        </div>
-
-        <div class="form-group">
-          <label>الوحدة التعليمية (كتابة يدوية)</label>
-          <input type="text" id="editContentUnit" required placeholder="اكتب اسم الوحدة التعليمية يدوياً هنا...">
-        </div>
-
-        <div class="form-group">
-          <label>عنوان الدرس / المحتوى</label>
-          <input type="text" id="editContentTitle" required>
-        </div>
-
-        <div class="form-group" id="editUrlGroup">
-          <label>رابط الملف أو الفيديو أو المذكرة أو الصورة</label>
-          <div class="input-with-paste">
-            <input type="text" id="editContentUrl">
-            <button type="button" class="btn btn-gold" style="padding:8px 12px;" onclick="App.pasteToInput('editContentUrl')">
-              <i class="fa-solid fa-paste"></i>
-            </button>
-          </div>
-        </div>
-
-        <div class="form-group" id="editTextGroup">
-          <label>نصوص الشرح المباشر / المحتوى الكتابي / كود HTML</label>
-          <textarea id="editContentText" rows="5"></textarea>
-        </div>
-
-        <div style="display:flex; gap:8px; margin-top:14px;">
-          <button type="submit" class="btn btn-gold" style="flex:1;">حفظ التعديلات سحابياً</button>
-          <button type="button" class="btn btn-secondary" onclick="App.closeEditModal()">إلغاء</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
   <!-- إعدادات المنصة وإدارة حساب المشرف والتحكم بالروابط -->
   <div class="modal-overlay" id="settingsModal">
     <div class="modal-card" style="max-width: 540px;">
@@ -863,13 +967,11 @@
       </h3>
       <form onsubmit="App.handleSaveSettings(event)">
         
-        <!-- قسم التحكم في واجهة الطلاب والمناهج الاحترافية -->
         <div style="background:var(--gold-light); padding:12px; border-radius:var(--radius-sm); border:1.5px solid var(--gold-orange); margin-bottom:14px;">
           <h4 style="color:var(--navy-dark); font-size:0.9rem; margin-bottom:6px;"><i class="fa-solid fa-sliders"></i> خيارات ظهور عناصر لوحة الطلاب:</h4>
           <label style="display:flex; align-items:center; gap:8px; font-size:0.84rem; cursor:pointer; color:var(--navy-dark); font-weight:700;">
             <input type="checkbox" id="settingShowTabs"> إظهار شريط الفلاتر العلوية للطلاب (فيديوهات، مذكرات، بودكاست...)
           </label>
-          <p style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">(عند التعطيل، يرى الطالب فقط المقررات والمواد مقسمة بدقة حسب الوحدات الدراسية التي تحددها أنت).</p>
         </div>
 
         <div class="form-group">
@@ -1276,469 +1378,359 @@
       }
     };
 
-    /* محرك الاتصال الصوتي WebRTC */
-    const VoiceEngine = {
-      peer: null,
-      localStream: null,
+    /* ========================================================
+       محرك البث المباشر التفاعلي المتقدم (Live Audio Stream Engine)
+    ======================================================== */
+    const LiveAudio = {
+      BROADCASTER_PEER_ID: "omer_live_stream_channel_2026",
+      STUN_SERVERS: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' },
+          { urls: 'stun:stun.services.mozilla.com' }
+        ]
+      },
+
+      broadcasterPeer: null,
+      broadcasterStream: null,
+      broadcasterAudioCtx: null,
+      broadcasterAnalyser: null,
+      broadcasterAnimId: null,
+      activeStudentCalls: new Set(),
       isMuted: false,
-      isRoomCall: false,
-      activeCalls: new Map(),
-      dataConnections: new Map(),
-      participants: new Map(),
-      audioOutputs: [],
-      currentAudioOutputIdx: 0,
-      
-      async getOptimizedMediaStream() {
-        return await navigator.mediaDevices.getUserMedia({
-          audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1, sampleRate: 48000 },
-          video: false
-        });
+
+      listenerPeer: null,
+      listenerCall: null,
+      listenerAudioCtx: null,
+      listenerGainNode: null,
+      listenerAnalyser: null,
+      listenerAnimId: null,
+      listenerAudioEl: null,
+      availableOutputs: [],
+
+      initSessionWatcher() {
+        if (db) {
+          db.collection("live_sessions").doc("active_broadcast").onSnapshot(doc => {
+            if (doc.exists) {
+              const data = doc.data();
+              State.activeLiveSession = (data && data.isActive) ? data : null;
+            } else {
+              State.activeLiveSession = null;
+            }
+            this.updateLiveBannerUI();
+          }, err => console.warn("Live session watcher err:", err));
+        }
       },
 
-      init(userUid) {
-        if (this.peer && !this.peer.destroyed) return;
+      toggleTargetAudienceFields(type) {
+        document.getElementById('liveCurriculumSelectGroup').style.display = (type === 'CURRICULUM') ? 'block' : 'none';
+        document.getElementById('liveStudentsSelectGroup').style.display = (type === 'CUSTOM') ? 'block' : 'none';
+      },
+
+      async handleStartBroadcastForm(e) {
+        e.preventDefault();
+        const title = document.getElementById('liveBroadcastTitle').value.trim();
+        const targetType = document.getElementById('liveTargetType').value;
+        const targetCurriculum = document.getElementById('liveTargetCurriculum').value;
+
+        let selectedStudentUids = [];
+        if (targetType === 'CUSTOM') {
+          document.querySelectorAll('.chk-live-student:checked').forEach(c => selectedStudentUids.push(c.value));
+          if (selectedStudentUids.length === 0) {
+            NotificationEngine.alert('يرجى اختيار طالب واحد على الأقل.', 'تنبيه');
+            return;
+          }
+        }
+
+        App.closeBroadcastModal();
+
         try {
-          const cleanId = 'og_voice_' + userUid.replace(/[^a-zA-Z0-9]/g, '_');
-          this.peer = new Peer(cleanId, {
+          this.broadcasterStream = await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true, channelCount: 1 },
+            video: false
+          });
+
+          this.setupBroadcasterAudioVisualizer(this.broadcasterStream);
+
+          if (this.broadcasterPeer && !this.broadcasterPeer.destroyed) {
+            this.broadcasterPeer.destroy();
+          }
+
+          this.broadcasterPeer = new Peer(this.BROADCASTER_PEER_ID, {
             debug: 0,
-            config: {
-              iceServers: [
-                { urls: 'stun:stun.l.google.com:19302' },
-                { urls: 'stun:stun1.l.google.com:19302' },
-                { urls: 'stun:stun2.l.google.com:19302' },
-                { urls: 'stun:stun.services.mozilla.com' }
-              ]
+            config: this.STUN_SERVERS
+          });
+
+          this.broadcasterPeer.on('open', async () => {
+            const broadcastPayload = {
+              isActive: true,
+              title: title,
+              broadcasterName: "الأستاذ عمر قاسم",
+              broadcasterPeerId: this.BROADCASTER_PEER_ID,
+              targetType: targetType,
+              targetCurriculum: targetType === 'CURRICULUM' ? targetCurriculum : null,
+              targetStudentUids: selectedStudentUids,
+              startedAt: Date.now()
+            };
+
+            if (db) {
+              await db.collection("live_sessions").doc("active_broadcast").set(broadcastPayload, { merge: true });
+            }
+            State.activeLiveSession = broadcastPayload;
+
+            document.getElementById('broadcasterBarTitle').innerText = title;
+            document.getElementById('broadcasterBarTarget').innerText = targetType === 'ALL' ? 'الجمهور: كافة الطلاب' : (targetType === 'CURRICULUM' ? `الجمهور: ${UI.getTargetLabel(targetCurriculum)}` : `الجمهور: ${selectedStudentUids.length} طلاب محددين`);
+            document.getElementById('broadcasterLiveBar').classList.add('active');
+            App.showSecurityAlert("🔴 تم بدء البث الصوتي المباشر بنجاح!");
+          });
+
+          this.broadcasterPeer.on('call', call => {
+            this.activeStudentCalls.add(call);
+            call.answer(this.broadcasterStream);
+            call.on('close', () => this.activeStudentCalls.delete(call));
+            call.on('error', () => this.activeStudentCalls.delete(call));
+          });
+
+          this.broadcasterPeer.on('error', err => {
+            console.error("Broadcaster Peer Error:", err);
+            if (err.type === 'unavailable-id') {
+              NotificationEngine.alert("هناك جلسة بث مفتوحة بالفعل باسم المعلم أو جاري إعادة تنشيط القناة.", "تنبيه البث");
             }
           });
 
-          this.peer.on('open', () => {
-            console.log('Voice Peer ready:', cleanId);
-          });
-
-          this.peer.on('disconnected', () => {
-            if (this.peer && !this.peer.destroyed) this.peer.reconnect();
-          });
-
-          this.peer.on('call', async call => {
-            const callerName = call.metadata?.callerName || 'الأستاذ عمر قاسم';
-            const isGroup = !!call.metadata?.isGroup;
-            AudioFX.celebrate();
-            const accept = await NotificationEngine.confirm(`📞 اتصال صوتي وارد ${isGroup ? 'في غرفة نقاش جماعية' : 'مباشر'} من (${callerName})!\nهل تود الرد والمشاركة؟`, 'مكالمة واردة');
-            if (accept) {
-              try {
-                this.localStream = await this.getOptimizedMediaStream();
-                call.answer(this.localStream);
-                this.isRoomCall = isGroup;
-                this.setupCallEvents(call, callerName);
-              } catch (err) {
-                NotificationEngine.alert('يرجى منح المتصفح إذن الوصول إلى الميكروفون للمشاركة.', 'تنبيه الميكروفون');
-              }
-            }
-          });
-
-          this.peer.on('connection', conn => this.setupDataConnection(conn));
-          this.detectAudioOutputs();
-        } catch (e) { console.warn('Voice Engine init error:', e); }
-      },
-
-      async detectAudioOutputs() {
-        if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
-          try {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            this.audioOutputs = devices.filter(d => d.kind === 'audiooutput');
-          } catch(e){}
-        }
-      },
-
-      async cycleAudioOutput() {
-        if (this.audioOutputs.length === 0) {
-          await this.detectAudioOutputs();
-          if (this.audioOutputs.length === 0) { App.showSecurityAlert('يتم توجيه الصوت تلقائياً عبر سماعة جهازك الحالية.'); return; }
-        }
-        this.currentAudioOutputIdx = (this.currentAudioOutputIdx + 1) % this.audioOutputs.length;
-        const targetDevice = this.audioOutputs[this.currentAudioOutputIdx];
-        document.querySelectorAll('audio.voice-remote-audio').forEach(async el => {
-          if (el.setSinkId) try { await el.setSinkId(targetDevice.deviceId); } catch(e){}
-        });
-        App.showSecurityAlert(`تم تحويل الصوت إلى: ${targetDevice.label || 'مخرج صوت آخر'}`);
-      },
-
-      setupDataConnection(conn) {
-        this.dataConnections.set(conn.peer, conn);
-        conn.on('data', data => {
-          if (!data) return;
-          if (data.type === 'FORCE_MUTE' && this.localStream) {
-            this.localStream.getAudioTracks().forEach(t => t.enabled = false);
-            this.isMuted = true;
-            this.updateMicButtonUI();
-            NotificationEngine.alert('قام الأستاذ عمر بتصميت الميكروفون لتنظيم الجلسة.', 'تنبيه تنظيمي');
-          }
-          if (data.type === 'ALLOW_SPEAK' && this.localStream) {
-            NotificationEngine.alert('منحك الأستاذ عمر الإذن بالحديث الآن! يمكنك تشغيل المايك.', 'إذن الحديث');
-            this.localStream.getAudioTracks().forEach(t => t.enabled = true);
-            this.isMuted = false;
-            this.updateMicButtonUI();
-          }
-          if (data.type === 'HAND_RAISE' && State.currentUser?.role === 'ADMIN') {
-            App.showSecurityAlert(`✋ الطالب (${data.studentName || 'طالب'}) يطلب الإذن بالحديث.`);
-            const p = this.participants.get(conn.peer);
-            if (p) { p.handRaised = true; this.renderParticipantsList(); }
-          }
-        });
-        conn.on('close', () => this.dataConnections.delete(conn.peer));
-      },
-
-      async callSelectedStudent() {
-        const studentUid = document.getElementById('voiceStudentSelect').value;
-        const student = State.students.find(s => s.uid === studentUid);
-        if (!student) { NotificationEngine.alert('يرجى تحديد طالب للاتصال به.'); return; }
-        App.closeVoiceModal();
-        try {
-          this.localStream = await this.getOptimizedMediaStream();
-          const targetPeerId = 'og_voice_' + student.uid.replace(/[^a-zA-Z0-9]/g, '_');
-          const conn = this.peer.connect(targetPeerId);
-          this.setupDataConnection(conn);
-          const call = this.peer.call(targetPeerId, this.localStream, { metadata: { callerName: 'الأستاذ عمر قاسم', isGroup: false } });
-          this.isRoomCall = false;
-          this.setupCallEvents(call, student.name);
-          App.showSecurityAlert(`جاري الاتصال المباشر بـ ${student.name}...`);
         } catch (err) {
-          NotificationEngine.alert('تعذر فتح الميكروفون. تأكد من منح الإذن للمتصفح.', 'خطأ الميكروفون');
+          console.error("Mic Error:", err);
+          NotificationEngine.alert("تعذر الوصول إلى المايكروفون. يرجى منح المتصفح الصلاحية لبدء البث.", "خطأ المايكروفون");
         }
       },
 
-      async startBroadcastRoom() {
-        App.closeVoiceModal();
-        try {
-          this.localStream = await this.getOptimizedMediaStream();
-          this.isRoomCall = true;
-          document.getElementById('voiceCallStatusTitle').innerText = 'غرفة نقاش جماعية نشطة';
-          document.getElementById('voiceCallPeerName').innerText = 'الأستاذ عمر (المشرف)';
-          document.getElementById('voiceCallBubble').classList.add('active');
-          document.getElementById('voiceParticipantsList').style.display = 'flex';
-          document.getElementById('btnAdminMuteAll').style.display = 'inline-flex';
-          document.getElementById('btnRaiseHand').style.display = 'none';
-          
-          State.students.forEach(st => {
-            const targetPeerId = 'og_voice_' + st.uid.replace(/[^a-zA-Z0-9]/g, '_');
-            const conn = this.peer.connect(targetPeerId);
-            this.setupDataConnection(conn);
-            const call = this.peer.call(targetPeerId, this.localStream, { metadata: { callerName: 'الأستاذ عمر (غرفة نقاش جماعية)', isGroup: true } });
-            this.setupCallEvents(call, st.name);
-          });
-          this.renderParticipantsList();
-          App.showSecurityAlert('تم إطلاق غرفة البث الجماعية ودعوة كافة الطلاب للانضمام.');
-        } catch (err) {
-          NotificationEngine.alert('تعذر الوصول للميكروفون لبدء الغرفة الجماعية.', 'خطأ في الصوت');
-        }
+      setupBroadcasterAudioVisualizer(stream) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.broadcasterAudioCtx = new AudioContext();
+        const source = this.broadcasterAudioCtx.createMediaStreamSource(stream);
+        this.broadcasterAnalyser = this.broadcasterAudioCtx.createAnalyser();
+        this.broadcasterAnalyser.fftSize = 64;
+        source.connect(this.broadcasterAnalyser);
+        this.renderCanvasLoop(this.broadcasterAnalyser, 'broadcasterVisualizerCanvas', '#FEF08A');
       },
 
-      setupCallEvents(call, peerName) {
-        this.activeCalls.set(call.peer, call);
-        let audioEl = document.getElementById('remoteVoiceAudio_' + call.peer);
-        if (!audioEl) {
-          audioEl = document.createElement('audio');
-          audioEl.id = 'remoteVoiceAudio_' + call.peer;
-          audioEl.className = 'voice-remote-audio';
-          audioEl.autoplay = true;
-          audioEl.setAttribute('playsinline', '');
-          document.body.appendChild(audioEl);
-        }
-        this.participants.set(call.peer, { name: peerName, isMuted: false, canSpeak: true, handRaised: false, audioEl });
-        document.getElementById('voiceCallStatusTitle').innerText = this.isRoomCall ? 'غرفة نقاش جماعية' : 'مكالمة صوتية نشطة';
-        document.getElementById('voiceCallPeerName').innerText = peerName;
-        document.getElementById('voiceCallBubble').classList.add('active');
-        if (State.currentUser?.role === 'STUDENT') {
-          document.getElementById('btnRaiseHand').style.display = 'inline-flex';
-          document.getElementById('btnAdminMuteAll').style.display = 'none';
-        } else {
-          document.getElementById('btnAdminMuteAll').style.display = 'inline-flex';
-          document.getElementById('btnRaiseHand').style.display = 'none';
-        }
-        call.on('stream', remoteStream => {
-          audioEl.srcObject = remoteStream;
-          audioEl.play().catch(()=>{
-            console.log('Autoplay handled by user interaction');
-          });
-          this.renderParticipantsList();
-        });
-        call.on('close', () => this.removeParticipant(call.peer));
-        call.on('error', () => this.removeParticipant(call.peer));
-        this.renderParticipantsList();
+      renderCanvasLoop(analyser, canvasId, color) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas || !analyser) return;
+        const ctx = canvas.getContext('2d');
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        const draw = () => {
+          const animId = requestAnimationFrame(draw);
+          if (canvasId === 'broadcasterVisualizerCanvas') this.broadcasterAnimId = animId;
+          else this.listenerAnimId = animId;
+
+          analyser.getByteFrequencyData(dataArray);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const barWidth = (canvas.width / bufferLength) * 1.6;
+          let x = 0;
+          for (let i = 0; i < bufferLength; i++) {
+            const barHeight = (dataArray[i] / 255) * canvas.height;
+            ctx.fillStyle = color;
+            ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+            x += barWidth;
+          }
+        };
+        draw();
       },
 
-      removeParticipant(peerId) {
-        if (this.activeCalls.has(peerId)) this.activeCalls.delete(peerId);
-        const p = this.participants.get(peerId);
-        if (p && p.audioEl) p.audioEl.remove();
-        this.participants.delete(peerId);
-        this.renderParticipantsList();
-        if (this.activeCalls.size === 0 && !this.isRoomCall) this.endCall();
-      },
-
-      renderParticipantsList() {
-        const listEl = document.getElementById('voiceParticipantsList');
-        if (!listEl) return;
-        if (this.participants.size === 0) {
-          listEl.innerHTML = '<span style="color:#94A3B8; text-align:center;">بانتظار انضمام الطلاب...</span>';
-          return;
-        }
-        listEl.style.display = 'flex';
-        listEl.innerHTML = '';
-        this.participants.forEach((data, pId) => {
-          const row = document.createElement('div');
-          row.className = 'voice-peer-row';
-          const isAdmin = (State.currentUser?.role === 'ADMIN');
-          row.innerHTML = `
-            <div>
-              <strong>${escapeHTML(data.name)}</strong>
-              ${data.handRaised ? '<span class="badge badge-trial" style="font-size:0.65rem; padding:1px 6px;">✋ استئذان</span>' : ''}
-            </div>
-            <div style="display:flex; gap:4px;">
-              ${isAdmin ? `
-                <button class="voice-btn-sm btn-gold" onclick="VoiceEngine.adminAllowSpeak('${pId}')" title="السماح بالحديث"><i class="fa-solid fa-microphone"></i></button>
-                <button class="voice-btn-sm btn-danger" onclick="VoiceEngine.adminMuteStudent('${pId}')" title="كتم الصوت"><i class="fa-solid fa-microphone-slash"></i></button>
-              ` : ''}
-            </div>
-          `;
-          listEl.appendChild(row);
-        });
-      },
-
-      toggleMute() {
-        if (!this.localStream) return;
+      toggleBroadcasterMute() {
+        if (!this.broadcasterStream) return;
         this.isMuted = !this.isMuted;
-        this.localStream.getAudioTracks().forEach(track => track.enabled = !this.isMuted);
-        this.updateMicButtonUI();
-      },
-
-      updateMicButtonUI() {
-        const btn = document.getElementById('btnToggleMic');
-        if (!btn) return;
+        this.broadcasterStream.getAudioTracks().forEach(t => t.enabled = !this.isMuted);
+        const btn = document.getElementById('btnBroadcasterMute');
         if (this.isMuted) {
-          btn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> مكتوم';
+          btn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> تم الكتم';
           btn.classList.add('btn-danger'); btn.classList.remove('btn-gold');
         } else {
-          btn.innerHTML = '<i class="fa-solid fa-microphone"></i> كتم الصوت';
+          btn.innerHTML = '<i class="fa-solid fa-microphone"></i> كتم';
           btn.classList.remove('btn-danger'); btn.classList.add('btn-gold');
         }
       },
 
-      studentRaiseHand() {
+      async stopBroadcast() {
+        const confirmStop = await NotificationEngine.confirm("هل تريد إنهاء جلسة البث الصوتي المباشر الحالية؟", "إنهاء البث");
+        if (!confirmStop) return;
+
+        if (this.broadcasterAnimId) cancelAnimationFrame(this.broadcasterAnimId);
+        if (this.broadcasterStream) {
+          this.broadcasterStream.getTracks().forEach(t => t.stop());
+          this.broadcasterStream = null;
+        }
+        if (this.broadcasterAudioCtx) {
+          this.broadcasterAudioCtx.close().catch(()=>{});
+        }
+        if (this.broadcasterPeer) {
+          this.broadcasterPeer.destroy();
+          this.broadcasterPeer = null;
+        }
+
+        if (db) {
+          await db.collection("live_sessions").doc("active_broadcast").set({ isActive: false }, { merge: true });
+        }
+        State.activeLiveSession = null;
+        document.getElementById('broadcasterLiveBar').classList.remove('active');
+        App.showSecurityAlert("تم إنهاء جلسة البث وإغلاق القناة.");
+      },
+
+      updateLiveBannerUI() {
+        const bannerContainer = document.getElementById('studentLiveBannerContainer');
+        if (!bannerContainer) return;
+        const session = State.activeLiveSession;
         const user = State.currentUser;
-        this.dataConnections.forEach(conn => {
-          if (conn.open) conn.send({ type: 'HAND_RAISE', studentName: user ? user.name : 'طالب' });
-        });
-        App.showSecurityAlert('تم رفع اليد وإشعار الأستاذ برغبتك في التحدث.');
-      },
 
-      adminMuteStudent(peerId) {
-        const conn = this.dataConnections.get(peerId);
-        if (conn && conn.open) conn.send({ type: 'FORCE_MUTE' });
-        const p = this.participants.get(peerId);
-        if (p && p.audioEl) p.audioEl.muted = true;
-        App.showSecurityAlert(`تم كتم صوت الطالب.`);
-      },
-
-      adminAllowSpeak(peerId) {
-        const conn = this.dataConnections.get(peerId);
-        if (conn && conn.open) conn.send({ type: 'ALLOW_SPEAK' });
-        const p = this.participants.get(peerId);
-        if (p) { p.handRaised = false; if (p.audioEl) p.audioEl.muted = false; }
-        this.renderParticipantsList();
-        App.showSecurityAlert(`تم منح إذن الحديث.`);
-      },
-
-      adminMuteAll() {
-        this.dataConnections.forEach(conn => { if (conn.open) conn.send({ type: 'FORCE_MUTE' }); });
-        this.participants.forEach(p => { if (p.audioEl) p.audioEl.muted = true; });
-        App.showSecurityAlert('تم كتم صوت جميع الطلاب داخل الغرفة.');
-      },
-
-      endCall() {
-        this.activeCalls.forEach(call => call.close());
-        this.activeCalls.clear();
-        this.dataConnections.forEach(conn => conn.close());
-        this.dataConnections.clear();
-        this.participants.forEach(p => { if (p.audioEl) p.audioEl.remove(); });
-        this.participants.clear();
-        if (this.localStream) {
-          this.localStream.getTracks().forEach(t => t.stop());
-          this.localStream = null;
+        if (!session || !session.isActive || !user || user.role !== 'STUDENT') {
+          bannerContainer.innerHTML = '';
+          return;
         }
-        document.getElementById('voiceCallBubble').classList.remove('active');
-        document.getElementById('voiceParticipantsList').style.display = 'none';
-      }
-    };
 
-    /* منشئ الاستبيانات الأكاديمية */
-    const SurveyBuilder = {
-      questions: [],
-      reset() {
-        this.questions = [
-          { id: 'q_' + Date.now() + '_1', text: 'ما مدى وضوح واستيعاب المفاهيم الرياضية المشروحة من الأستاذ عمر؟', type: 'RATING', options: [] },
-          { id: 'q_' + Date.now() + '_2', text: 'ما هو مستوى صعوبة المسائل والواجبات المرفقة بالمنصة؟', type: 'CHOICE', options: ['مباشرة وسهلة', 'متوسطة ومناسبة للامتحانات', 'تحتاج لتحدي وتفكير رياضي عميق'] },
-          { id: 'q_' + Date.now() + '_3', text: 'ما هي الموضوعات أو الدروس التي ترغب في تكثيف مراجعتها؟', type: 'TEXT', options: [] }
-        ];
-        this.renderQuestionsList();
-      },
-      addNewQuestion() {
-        this.questions.push({ id: 'q_' + Date.now() + '_' + (this.questions.length + 1), text: '', type: 'RATING', options: ['خيار أ', 'خيار ب'] });
-        this.renderQuestionsList();
-        const container = document.getElementById('surveyQuestionsDynamicContainer');
-        if (container) container.scrollTop = container.scrollHeight;
-      },
-      removeQuestion(index) {
-        if (this.questions.length <= 1) { NotificationEngine.alert('يجب أن يحتوي الاستبيان على سؤال واحد على الأقل.', 'تنبيه'); return; }
-        this.questions.splice(index, 1);
-        this.renderQuestionsList();
-      },
-      changeQType(index, type) {
-        this.questions[index].type = type;
-        if (type === 'CHOICE' && (!this.questions[index].options || this.questions[index].options.length === 0)) {
-          this.questions[index].options = ['خيار أ', 'خيار ب'];
-        }
-        this.renderQuestionsList();
-      },
-      addChoiceOption(qIndex) {
-        this.questions[qIndex].options.push('خيار إضافي');
-        this.renderQuestionsList();
-      },
-      removeChoiceOption(qIndex, optIndex) {
-        if (this.questions[qIndex].options.length <= 2) { NotificationEngine.alert('يجب وضع خيارين على الأقل لسؤال الاختيارات.', 'تنبيه'); return; }
-        this.questions[qIndex].options.splice(optIndex, 1);
-        this.renderQuestionsList();
-      },
-      renderQuestionsList() {
-        const container = document.getElementById('surveyQuestionsDynamicContainer');
-        if (!container) return;
-        container.innerHTML = this.questions.map((q, idx) => `
-          <div style="background:#FFF; border:1px solid #CBD5E1; border-radius:var(--radius-sm); padding:12px; margin-bottom:10px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:6px;">
-              <strong style="color:var(--navy-dark); font-size:0.85rem;">السؤال (${idx + 1}):</strong>
-              <button type="button" class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem; min-height:26px;" onclick="SurveyBuilder.removeQuestion(${idx})"><i class="fa-solid fa-trash"></i> حذف</button>
-            </div>
-            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:8px;">
-              <input type="text" value="${escapeHTML(q.text)}" placeholder="اكتب نص السؤال هنا..." oninput="SurveyBuilder.questions[${idx}].text = this.value" required>
-              <select onchange="SurveyBuilder.changeQType(${idx}, this.value)">
-                <option value="RATING" ${q.type === 'RATING' ? 'selected' : ''}>⭐ تقييم نجوم (1 إلى 5)</option>
-                <option value="CHOICE" ${q.type === 'CHOICE' ? 'selected' : ''}>🔘 اختيار من متعدد</option>
-                <option value="TEXT" ${q.type === 'TEXT' ? 'selected' : ''}>📝 إجابة نصية / مقترحات</option>
-                <option value="BOOLEAN" ${q.type === 'BOOLEAN' ? 'selected' : ''}>⚖️ نعم / لا</option>
-              </select>
-            </div>
-            ${q.type === 'CHOICE' ? `
-              <div style="background:var(--bg-light); padding:10px; border-radius:6px; border:1px dashed var(--gold-orange); margin-top:6px;">
-                <label style="font-size:0.75rem; font-weight:700; color:var(--gold-deep); display:block; margin-bottom:6px;">خيارات الإجابة:</label>
-                <div style="display:flex; flex-direction:column; gap:6px;">
-                  ${q.options.map((opt, optIdx) => `
-                    <div style="display:flex; gap:6px;">
-                      <input type="text" value="${escapeHTML(opt)}" placeholder="الخيار ${optIdx + 1}" oninput="SurveyBuilder.questions[${idx}].options[${optIdx}] = this.value" required>
-                      <button type="button" class="btn btn-secondary" style="padding:2px 6px; min-height:30px;" onclick="SurveyBuilder.removeChoiceOption(${idx}, ${optIdx})"><i class="fa-solid fa-xmark"></i></button>
-                    </div>
-                  `).join('')}
+        let isEligible = false;
+        if (session.targetType === 'ALL') isEligible = true;
+        else if (session.targetType === 'CURRICULUM' && session.targetCurriculum === user.target) isEligible = true;
+        else if (session.targetType === 'CUSTOM' && session.targetStudentUids && session.targetStudentUids.includes(user.uid)) isEligible = true;
+
+        if (isEligible) {
+          bannerContainer.innerHTML = `
+            <div class="live-top-banner">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span class="live-indicator-dot"></span>
+                <div>
+                  <strong style="font-size:0.95rem; display:block;">🎙️ بث صوتي مباشر قيد التشغيل: ${escapeHTML(session.title)}</strong>
+                  <span style="font-size:0.75rem; opacity:0.9;">بإشراف الأستاذ عمر قاسم – انضم الآن لمتابعة الشرح والتوجيهات</span>
                 </div>
-                <button type="button" class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem; min-height:28px; margin-top:8px; width:100%;" onclick="SurveyBuilder.addChoiceOption(${idx})"><i class="fa-solid fa-plus"></i> إضافة خيار إضافي</button>
               </div>
-            ` : ''}
-          </div>
-        `).join('');
-      }
-    };
-
-    const MathArena = {
-      dailyQuestions: [
-        { q: "ما هي مشتقة دالة \\( f(x) = 3x^2 + 5x - 7 \\)؟", opts: ["\\( 6x + 5 \\)", "\\( 3x + 5 \\)", "\\( 6x^2 + 5 \\)"], correct: 0 },
-        { q: "قيمة التكامل \\( \\int 4x^3 dx \\) هي:", opts: ["\\( x^4 + C \\)", "\\( 12x^2 + C \\)", "\\( 4x^4 + C \\)"], correct: 0 },
-        { q: "حل المعادلة الأسية: \\( 2^x = 16 \\) هو:", opts: ["\\( x = 4 \\)", "\\( x = 3 \\)", "\\( x = 8 \\)"], correct: 0 },
-        { q: "المتطابقة \\( \\sin^2\\theta + \\cos^2\\theta \\) تساوي:", opts: ["\\( 1 \\)", "\\( 0 \\)", "\\( 2 \\)"], correct: 0 }
-      ],
-      currentQIndex: 0,
-      score: 0,
-      startSpeedBattle() { this.currentQIndex = 0; this.score = 0; App.setRoute('SPEED_BATTLE_VIEW'); },
-      answerSpeed(optIdx) {
-        const q = this.dailyQuestions[this.currentQIndex];
-        if (optIdx === q.correct) { this.score += 50; AudioFX.correct(); } else { AudioFX.wrong(); }
-        this.currentQIndex++;
-        if (this.currentQIndex < this.dailyQuestions.length) {
-          UI.render();
-        } else {
-          AudioFX.celebrate();
-          ConfettiFX.fire();
-          const user = State.currentUser;
-          if (user && user.role === 'STUDENT') {
-            user.xp = (user.xp || 100) + this.score;
-            user.trophies = (user.trophies || 1) + 1;
-            DataStore.save('students', State.students);
-          }
-          NotificationEngine.alert(`انتهت جولة التحدي بنجاح!\nأحرزت: ${this.score} نقطة خبرة (XP) مضافة إلى رصيدك!`, 'فرسان الرياضيات');
-          App.openArenaView();
-        }
-      }
-    };
-
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-    /* محرك الـ PDF الآمن الداخلي */
-    const PDFViewerEngine = {
-      pdfDoc: null,
-      pageNum: 1,
-      scale: 1.25,
-      canvasContainer: null,
-      
-      async loadPDF(url, containerEl) {
-        this.canvasContainer = containerEl;
-        this.canvasContainer.innerHTML = `
-          <div style="color:#FFF; padding:40px; text-align:center;">
-            <i class="fa-solid fa-spinner fa-spin" style="font-size:32px; color:var(--gold-orange); margin-bottom:12px;"></i>
-            <p style="font-size:0.9rem;">جاري تشفير وتهيئة ملف الـ PDF للعرض الآمن داخل المنصة...</p>
-          </div>
-        `;
-        try {
-          const loadingTask = pdfjsLib.getDocument({
-            url: url,
-            cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
-            cMapPacked: true,
-            enableXfa: true
-          });
-          this.pdfDoc = await loadingTask.promise;
-          document.getElementById('pdfPageCount').innerText = this.pdfDoc.numPages;
-          this.pageNum = 1;
-          document.getElementById('pdfControlsBar').style.display = 'flex';
-          this.renderPage(this.pageNum);
-        } catch (error) {
-          console.error("PDF Load Error:", error);
-          this.canvasContainer.innerHTML = `
-            <div style="background:#0A1424; padding:35px; color:#FFF; text-align:center; border-radius:var(--radius-md);">
-              <i class="fa-solid fa-triangle-exclamation" style="font-size:42px; color:var(--danger); margin-bottom:12px;"></i>
-              <h3 style="color:#FFF; font-size:1.1rem; margin-bottom:8px;">تعذر عرض ملف الـ PDF مباشرة</h3>
-              <p style="font-size:0.85rem; color:#94A3B8; max-width:440px; margin:0 auto 16px;">
-                ملف الـ PDF محمي ومحفوظ على السحابة، يرجى التأكد من صلاحية رابط المذكرة أو إشعار الأستاذ عمر.
-              </p>
+              <button class="btn btn-gold" style="padding:6px 16px; font-size:0.85rem; font-weight:800; min-height:36px;" onclick="LiveAudio.joinStudentSession()">
+                <i class="fa-solid fa-headphones"></i> استماع للبث الآن
+              </button>
             </div>
           `;
-          document.getElementById('pdfControlsBar').style.display = 'none';
+        } else {
+          bannerContainer.innerHTML = '';
         }
       },
 
-      async renderPage(num) {
-        if (!this.pdfDoc) return;
-        this.canvasContainer.innerHTML = '';
-        const page = await this.pdfDoc.getPage(num);
-        const viewport = page.getViewport({ scale: this.scale });
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        canvas.height = viewport.height;
-        canvas.width = viewport.width;
-        this.canvasContainer.appendChild(canvas);
-        document.getElementById('pdfPageNum').innerText = num;
-        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+      async joinStudentSession() {
+        const session = State.activeLiveSession;
+        if (!session || !session.isActive) {
+          NotificationEngine.alert("عذراً، جلسة البث المباشر انتهت أو غير متاحة.", "البث المباشر");
+          return;
+        }
+
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.listenerAudioCtx = new AudioContext();
+          if (this.listenerAudioCtx.state === 'suspended') {
+            await this.listenerAudioCtx.resume();
+          }
+
+          const silentBuffer = this.listenerAudioCtx.createBuffer(1, 1, 22050);
+          const silentSource = this.listenerAudioCtx.createBufferSource();
+          silentSource.buffer = silentBuffer;
+          silentSource.connect(this.listenerAudioCtx.destination);
+          silentSource.start(0);
+
+          const dummyStream = this.createDummyAudioStream(this.listenerAudioCtx);
+
+          const studentPeerId = "st_live_" + State.currentUser.uid + "_" + Math.floor(Math.random() * 1000);
+          if (this.listenerPeer && !this.listenerPeer.destroyed) this.listenerPeer.destroy();
+
+          this.listenerPeer = new Peer(studentPeerId, { debug: 0, config: this.STUN_SERVERS });
+
+          this.listenerPeer.on('open', () => {
+            const call = this.listenerPeer.call(this.BROADCASTER_PEER_ID, dummyStream);
+            this.listenerCall = call;
+
+            call.on('stream', remoteAudioStream => {
+              this.setupStudentAudioPipeline(remoteAudioStream);
+            });
+
+            call.on('close', () => this.leaveStudentSession());
+            call.on('error', () => this.leaveStudentSession());
+          });
+
+          document.getElementById('studentWidgetTitle').innerText = session.title;
+          document.getElementById('studentLiveWidget').classList.add('active');
+          this.populateAudioOutputDevices();
+
+        } catch (err) {
+          console.error("Join Live Error:", err);
+          NotificationEngine.alert("تعذر الاتصال بالبث المباشر. تأكد من اتصال الإنترنت.", "خطأ في الاتصال");
+        }
       },
 
-      prevPage() { if (this.pageNum <= 1) return; this.pageNum--; this.renderPage(this.pageNum); },
-      nextPage() { if (!this.pdfDoc || this.pageNum >= this.pdfDoc.numPages) return; this.pageNum++; this.renderPage(this.pageNum); },
-      zoomIn() { this.scale += 0.2; this.renderPage(this.pageNum); },
-      zoomOut() { if (this.scale <= 0.8) return; this.scale -= 0.2; this.renderPage(this.pageNum); }
+      createDummyAudioStream(ctx) {
+        const osc = ctx.createOscillator();
+        const dst = ctx.createMediaStreamDestination();
+        const gain = ctx.createGain();
+        gain.gain.value = 0;
+        osc.connect(gain);
+        gain.connect(dst);
+        osc.start();
+        return dst.stream;
+      },
+
+      setupStudentAudioPipeline(remoteStream) {
+        if (!this.listenerAudioEl) {
+          this.listenerAudioEl = new Audio();
+          this.listenerAudioEl.autoplay = true;
+          this.listenerAudioEl.setAttribute('playsinline', '');
+        }
+        this.listenerAudioEl.srcObject = remoteStream;
+
+        const source = this.listenerAudioCtx.createMediaStreamSource(remoteStream);
+        this.listenerGainNode = this.listenerAudioCtx.createGain();
+        this.listenerAnalyser = this.listenerAudioCtx.createAnalyser();
+        this.listenerAnalyser.fftSize = 64;
+
+        source.connect(this.listenerGainNode);
+        this.listenerGainNode.connect(this.listenerAnalyser);
+        this.listenerAnalyser.connect(this.listenerAudioCtx.destination);
+
+        this.renderCanvasLoop(this.listenerAnalyser, 'studentVisualizerCanvas', '#10B981');
+      },
+
+      setStudentVolume(val) {
+        if (this.listenerGainNode) {
+          this.listenerGainNode.gain.value = parseFloat(val);
+        }
+      },
+
+      async populateAudioOutputDevices() {
+        const select = document.getElementById('studentAudioOutputSelect');
+        if (!select || !navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const outputs = devices.filter(d => d.kind === 'audiooutput');
+          select.innerHTML = outputs.length > 0 ? '' : '<option value="">السماعة الافتراضية</option>';
+          outputs.forEach(d => {
+            select.innerHTML += `<option value="${d.deviceId}">${escapeHTML(d.label || 'سماعة خارجية / بلوتوث')}</option>`;
+          });
+        } catch(e){}
+      },
+
+      async setAudioOutput(deviceId) {
+        if (this.listenerAudioEl && this.listenerAudioEl.setSinkId) {
+          try {
+            await this.listenerAudioEl.setSinkId(deviceId);
+            App.showSecurityAlert("تم تبديل مخرج الصوت بنجاح.");
+          } catch(e){}
+        }
+      },
+
+      leaveStudentSession() {
+        if (this.listenerAnimId) cancelAnimationFrame(this.listenerAnimId);
+        if (this.listenerCall) { this.listenerCall.close(); this.listenerCall = null; }
+        if (this.listenerPeer) { this.listenerPeer.destroy(); this.listenerPeer = null; }
+        if (this.listenerAudioCtx) { this.listenerAudioCtx.close().catch(()=>{}); }
+        document.getElementById('studentLiveWidget').classList.remove('active');
+      }
     };
 
     const PomodoroTimer = {
@@ -1922,15 +1914,180 @@
       }
     };
 
+    const SurveyBuilder = {
+      questions: [],
+      reset() {
+        this.questions = [
+          { id: 'q_' + Date.now() + '_1', text: 'ما مدى وضوح واستيعاب المفاهيم الرياضية المشروحة من الأستاذ عمر؟', type: 'RATING', options: [] },
+          { id: 'q_' + Date.now() + '_2', text: 'ما هو مستوى صعوبة المسائل والواجبات المرفقة بالمنصة؟', type: 'CHOICE', options: ['مباشرة وسهلة', 'متوسطة ومناسبة للامتحانات', 'تحتاج لتحدي وتفكير رياضي عميق'] },
+          { id: 'q_' + Date.now() + '_3', text: 'ما هي الموضوعات أو الدروس التي ترغب في تكثيف مراجعتها؟', type: 'TEXT', options: [] }
+        ];
+        this.renderQuestionsList();
+      },
+      addNewQuestion() {
+        this.questions.push({ id: 'q_' + Date.now() + '_' + (this.questions.length + 1), text: '', type: 'RATING', options: ['خيار أ', 'خيار ب'] });
+        this.renderQuestionsList();
+        const container = document.getElementById('surveyQuestionsDynamicContainer');
+        if (container) container.scrollTop = container.scrollHeight;
+      },
+      removeQuestion(index) {
+        if (this.questions.length <= 1) { NotificationEngine.alert('يجب أن يحتوي الاستبيان على سؤال واحد على الأقل.', 'تنبيه'); return; }
+        this.questions.splice(index, 1);
+        this.renderQuestionsList();
+      },
+      changeQType(index, type) {
+        this.questions[index].type = type;
+        if (type === 'CHOICE' && (!this.questions[index].options || this.questions[index].options.length === 0)) {
+          this.questions[index].options = ['خيار أ', 'خيار ب'];
+        }
+        this.renderQuestionsList();
+      },
+      addChoiceOption(qIndex) {
+        this.questions[qIndex].options.push('خيار إضافي');
+        this.renderQuestionsList();
+      },
+      removeChoiceOption(qIndex, optIndex) {
+        if (this.questions[qIndex].options.length <= 2) { NotificationEngine.alert('يجب وضع خيارين على الأقل لسؤال الاختيارات.', 'تنبيه'); return; }
+        this.questions[qIndex].options.splice(optIndex, 1);
+        this.renderQuestionsList();
+      },
+      renderQuestionsList() {
+        const container = document.getElementById('surveyQuestionsDynamicContainer');
+        if (!container) return;
+        container.innerHTML = this.questions.map((q, idx) => `
+          <div style="background:#FFF; border:1px solid #CBD5E1; border-radius:var(--radius-sm); padding:12px; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:6px;">
+              <strong style="color:var(--navy-dark); font-size:0.85rem;">السؤال (${idx + 1}):</strong>
+              <button type="button" class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem; min-height:26px;" onclick="SurveyBuilder.removeQuestion(${idx})"><i class="fa-solid fa-trash"></i> حذف</button>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:8px;">
+              <input type="text" value="${escapeHTML(q.text)}" placeholder="اكتب نص السؤال هنا..." oninput="SurveyBuilder.questions[${idx}].text = this.value" required>
+              <select onchange="SurveyBuilder.changeQType(${idx}, this.value)">
+                <option value="RATING" ${q.type === 'RATING' ? 'selected' : ''}>⭐ تقييم نجوم (1 إلى 5)</option>
+                <option value="CHOICE" ${q.type === 'CHOICE' ? 'selected' : ''}>🔘 اختيار من متعدد</option>
+                <option value="TEXT" ${q.type === 'TEXT' ? 'selected' : ''}>📝 إجابة نصية / مقترحات</option>
+                <option value="BOOLEAN" ${q.type === 'BOOLEAN' ? 'selected' : ''}>⚖️ نعم / لا</option>
+              </select>
+            </div>
+            ${q.type === 'CHOICE' ? `
+              <div style="background:var(--bg-light); padding:10px; border-radius:6px; border:1px dashed var(--gold-orange); margin-top:6px;">
+                <label style="font-size:0.75rem; font-weight:700; color:var(--gold-deep); display:block; margin-bottom:6px;">خيارات الإجابة:</label>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                  ${q.options.map((opt, optIdx) => `
+                    <div style="display:flex; gap:6px;">
+                      <input type="text" value="${escapeHTML(opt)}" placeholder="الخيار ${optIdx + 1}" oninput="SurveyBuilder.questions[${idx}].options[${optIdx}] = this.value" required>
+                      <button type="button" class="btn btn-secondary" style="padding:2px 6px; min-height:30px;" onclick="SurveyBuilder.removeChoiceOption(${idx}, ${optIdx})"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                  `).join('')}
+                </div>
+                <button type="button" class="btn btn-secondary" style="padding:4px 8px; font-size:0.72rem; min-height:28px; margin-top:8px; width:100%;" onclick="SurveyBuilder.addChoiceOption(${idx})"><i class="fa-solid fa-plus"></i> إضافة خيار إضافي</button>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      }
+    };
+
+    const MathArena = {
+      dailyQuestions: [
+        { q: "ما هي مشتقة دالة \\( f(x) = 3x^2 + 5x - 7 \\)؟", opts: ["\\( 6x + 5 \\)", "\\( 3x + 5 \\)", "\\( 6x^2 + 5 \\)"], correct: 0 },
+        { q: "قيمة التكامل \\( \\int 4x^3 dx \\) هي:", opts: ["\\( x^4 + C \\)", "\\( 12x^2 + C \\)", "\\( 4x^4 + C \\)"], correct: 0 },
+        { q: "حل المعادلة الأسية: \\( 2^x = 16 \\) هو:", opts: ["\\( x = 4 \\)", "\\( x = 3 \\)", "\\( x = 8 \\)"], correct: 0 },
+        { q: "المتطابقة \\( \\sin^2\\theta + \\cos^2\\theta \\) تساوي:", opts: ["\\( 1 \\)", "\\( 0 \\)", "\\( 2 \\)"], correct: 0 }
+      ],
+      currentQIndex: 0,
+      score: 0,
+      startSpeedBattle() { this.currentQIndex = 0; this.score = 0; App.setRoute('SPEED_BATTLE_VIEW'); },
+      answerSpeed(optIdx) {
+        const q = this.dailyQuestions[this.currentQIndex];
+        if (optIdx === q.correct) { this.score += 50; AudioFX.correct(); } else { AudioFX.wrong(); }
+        this.currentQIndex++;
+        if (this.currentQIndex < this.dailyQuestions.length) {
+          UI.render();
+        } else {
+          AudioFX.celebrate();
+          ConfettiFX.fire();
+          const user = State.currentUser;
+          if (user && user.role === 'STUDENT') {
+            user.xp = (user.xp || 100) + this.score;
+            user.trophies = (user.trophies || 1) + 1;
+            DataStore.save('students', State.students);
+          }
+          NotificationEngine.alert(`انتهت جولة التحدي بنجاح!\nأحرزت: ${this.score} نقطة خبرة (XP) مضافة إلى رصيدك!`, 'فرسان الرياضيات');
+          App.openArenaView();
+        }
+      }
+    };
+
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const PDFViewerEngine = {
+      pdfDoc: null,
+      pageNum: 1,
+      scale: 1.25,
+      canvasContainer: null,
+      
+      async loadPDF(url, containerEl) {
+        this.canvasContainer = containerEl;
+        this.canvasContainer.innerHTML = `
+          <div style="color:#FFF; padding:40px; text-align:center;">
+            <i class="fa-solid fa-spinner fa-spin" style="font-size:32px; color:var(--gold-orange); margin-bottom:12px;"></i>
+            <p style="font-size:0.9rem;">جاري تشفير وتهيئة ملف الـ PDF للعرض الآمن داخل المنصة...</p>
+          </div>
+        `;
+        try {
+          const loadingTask = pdfjsLib.getDocument({
+            url: url,
+            cMapUrl: 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',
+            cMapPacked: true,
+            enableXfa: true
+          });
+          this.pdfDoc = await loadingTask.promise;
+          document.getElementById('pdfPageCount').innerText = this.pdfDoc.numPages;
+          this.pageNum = 1;
+          document.getElementById('pdfControlsBar').style.display = 'flex';
+          this.renderPage(this.pageNum);
+        } catch (error) {
+          console.error("PDF Load Error:", error);
+          this.canvasContainer.innerHTML = `
+            <div style="background:#0A1424; padding:35px; color:#FFF; text-align:center; border-radius:var(--radius-md);">
+              <i class="fa-solid fa-triangle-exclamation" style="font-size:42px; color:var(--danger); margin-bottom:12px;"></i>
+              <h3 style="color:#FFF; font-size:1.1rem; margin-bottom:8px;">تعذر عرض ملف الـ PDF مباشرة</h3>
+              <p style="font-size:0.85rem; color:#94A3B8; max-width:440px; margin:0 auto 16px;">
+                ملف الـ PDF محمي ومحفوظ على السحابة، يرجى التأكد من صلاحية رابط المذكرة أو إشعار الأستاذ عمر.
+              </p>
+            </div>
+          `;
+          document.getElementById('pdfControlsBar').style.display = 'none';
+        }
+      },
+
+      async renderPage(num) {
+        if (!this.pdfDoc) return;
+        this.canvasContainer.innerHTML = '';
+        const page = await this.pdfDoc.getPage(num);
+        const viewport = page.getViewport({ scale: this.scale });
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        this.canvasContainer.appendChild(canvas);
+        document.getElementById('pdfPageNum').innerText = num;
+        await page.render({ canvasContext: ctx, viewport: viewport }).promise;
+      },
+
+      prevPage() { if (this.pageNum <= 1) return; this.pageNum--; this.renderPage(this.pageNum); },
+      nextPage() { if (!this.pdfDoc || this.pageNum >= this.pdfDoc.numPages) return; this.pageNum++; this.renderPage(this.pageNum); },
+      zoomIn() { this.scale += 0.2; this.renderPage(this.pageNum); },
+      zoomOut() { if (this.scale <= 0.8) return; this.scale -= 0.2; this.renderPage(this.pageNum); }
+    };
+
     const State = {
       currentUser: null,
       currentRoute: "LOGIN",
       activeContentTab: "ALL_TYPES",
-      selectedStudentUnit: "ALL_UNITS",
       adminTargetFilter: "ALL",
-      adminContentTab: "LIST",
       studentSearchQuery: "",
-      adminSearchQuery: "",
       loginStage: "CREDENTIALS",
       pendingAdminUsername: null,
       activeQuiz: null,
@@ -1940,13 +2097,15 @@
       isUniversalFullscreen: false,
       selectedSurveyForResults: null,
       activePublicSurvey: null,
+      activeLiveSession: null,
       settings: {
         adminPhoneWhatsApp: localStorage.getItem("og_whatsapp_phone") || "971505144695",
         logoUrl: localStorage.getItem("og_logo_url") || OFFICIAL_LOGO_URL,
-        showContentTabsToStudents: localStorage.getItem("og_show_tabs") === "true" // افتراضياً مخفية تماماً
+        showContentTabsToStudents: localStorage.getItem("og_show_tabs") === "true"
       },
       students: [],
-      materials: [],
+      units: [],
+      lessons: [],
       quizzes: [],
       activityLogs: [],
       surveys: [],
@@ -1997,45 +2156,57 @@
           showContentTabsToStudents: false
         };
       },
-      
+
       seedInitialSampleData() {
-        if (State.materials.length === 0) {
-          State.materials = [
+        if (State.units.length === 0) {
+          State.units = [
+            { id: "unit_1", title: "الوحدة الأولى: التفاضل وتطبيقاته", target: "UAE_12_ADV", order: 1 },
+            { id: "unit_2", title: "الوحدة الثانية: التكامل وحساب المساحات", target: "UAE_12_ADV", order: 2 },
+            { id: "unit_3", title: "الوحدة الأولى: حساب التفاضل والتكامل", target: "SUD_12_SCI", order: 1 }
+          ];
+          localStorage.setItem("og_units", JSON.stringify(State.units));
+        }
+
+        if (State.lessons.length === 0) {
+          State.lessons = [
             {
-              id: "mat_demo_1",
-              type: "VIDEOS",
+              id: "les_1",
+              unitId: "unit_1",
+              title: "الدرس الأول: قاعدة السلسلة وتفاضل الدوال المركبة",
+              description: "شرح مفصل لكيفية اشتقاق الدوال المركبة وتطبيق قاعدة السلسلة في المسائل الوزارية",
               target: "UAE_12_ADV",
-              title: "شرح قاعدة السلسلة وتطبيقات التفاضل",
-              unit: "الوحدة الأولى: التفاضل وتطبيقاته",
-              fileUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-              sampleContent: "مقدمة شاملة لحساب مشتقة الدوال المركبة باستخدام قاعدة السلسلة.",
-              format: "فيديو مسجل",
-              assignedStudentUids: []
+              assignedStudentUids: [],
+              resources: [
+                { id: "res_1_1", type: "VIDEOS", title: "فيديو شرح قاعدة السلسلة وتطبيقاتها", fileUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", sampleContent: "" },
+                { id: "res_1_2", type: "WORKSHEETS", title: "مذكرة التمارين والمسائل الوزارية PDF", fileUrl: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf", sampleContent: "" },
+                { id: "res_1_3", type: "PODCASTS", title: "بودكاست مراجعة المفاهيم الأساسية", fileUrl: "https://actions.google.com/sounds/v1/science/ambient_space.ogg", sampleContent: "" }
+              ]
             },
             {
-              id: "mat_demo_2",
-              type: "WORKSHEETS",
+              id: "les_2",
+              unitId: "unit_1",
+              title: "الدرس الثاني: الاشتقاق الضمني والمعدلات الزمنية المرتبطة",
+              description: "خطوات حل مسائل الاشتقاق الضمني وربط المتغيرات بالزمن",
               target: "UAE_12_ADV",
-              title: "مذكرة التمارين والمسائل الوزارية على التفاضل",
-              unit: "الوحدة الأولى: التفاضل وتطبيقاته",
-              fileUrl: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf",
-              sampleContent: "مذكرة شاملة لكافة قوانين وتمارين الوحدة الأولى معدة بواسطة الأستاذ عمر.",
-              format: "مذكرة PDF",
-              assignedStudentUids: []
-            },
-            {
-              id: "mat_demo_3",
-              type: "PODCASTS",
-              target: "UAE_12_ADV",
-              title: "بودكاست مفاهيم التكامل الأساسية",
-              unit: "الوحدة الثانية: التكامل وتطبيقاته",
-              fileUrl: "https://actions.google.com/sounds/v1/science/ambient_space.ogg",
-              sampleContent: "شرح صوتي مركز لتبسيط قواعد التكامل غير المحدود.",
-              format: "بودكاست صوتي",
-              assignedStudentUids: []
+              assignedStudentUids: [],
+              resources: [
+                { id: "res_2_1", type: "WORKSHEETS", title: "أوراق عمل وتدريبات وزارية PDF", fileUrl: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf", sampleContent: "" }
+              ]
             }
           ];
-          localStorage.setItem("og_materials", JSON.stringify(State.materials));
+          localStorage.setItem("og_lessons", JSON.stringify(State.lessons));
+        }
+
+        if (State.quizzes.length === 0) {
+          State.quizzes = [{
+            id: "quiz_1",
+            title: "كويز قياس الفهم: قاعدة السلسلة والتفاضل",
+            target: "UAE_12_ADV",
+            questions: [
+              { id: "q1", text: "ما هي مشتقة الدالة \\( f(x) = (3x^2 + 1)^4 \\)؟", option1: "\\( 24x(3x^2+1)^3 \\)", option2: "\\( 12x(3x^2+1)^3 \\)", option3: "\\( 4(3x^2+1)^3 \\)", correctOption: 1, aiExplanation: "بتطبيق قاعدة السلسلة: ننزل الأس ثم نطرح 1 ونضرب في مشتقة ما بداخل القوس \\( 4(3x^2+1)^3 \\cdot 6x = 24x(3x^2+1)^3 \\)." }
+            ]
+          }];
+          localStorage.setItem("og_quizzes", JSON.stringify(State.quizzes));
         }
 
         if (State.surveys.length === 0) {
@@ -2077,7 +2248,8 @@
       },
 
       async syncAll() {
-        State.materials = JSON.parse(localStorage.getItem("og_materials") || "[]");
+        State.units = JSON.parse(localStorage.getItem("og_units") || "[]");
+        State.lessons = JSON.parse(localStorage.getItem("og_lessons") || "[]");
         State.quizzes = JSON.parse(localStorage.getItem("og_quizzes") || "[]");
         State.activityLogs = JSON.parse(localStorage.getItem("og_logs") || "[]");
         State.surveys = JSON.parse(localStorage.getItem("og_surveys") || "[]");
@@ -2104,12 +2276,10 @@
             if (validated.role === "ADMIN") {
               State.currentUser = { uid: "admin_omer", name: "الأستاذ عمر (المشرف)", username: validated.username, role: "ADMIN" };
               State.currentRoute = "ADMIN_DASHBOARD";
-              VoiceEngine.init("admin_omer");
               this.listenToAllStudents();
             } else {
               State.currentUser = { uid: validated.uid, username: validated.username, role: "STUDENT", target: validated.target, name: validated.username };
               State.currentRoute = "STUDENT_DASHBOARD";
-              VoiceEngine.init(validated.uid);
               this.fetchCurrentStudentProfile(validated.uid);
             }
           } else {
@@ -2142,10 +2312,18 @@
             }
           }, err => console.warn(err));
 
-          db.collection("omer_materials").onSnapshot(snapshot => {
+          db.collection("omer_units").onSnapshot(snapshot => {
             if (!snapshot.empty) {
-              State.materials = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-              localStorage.setItem("og_materials", JSON.stringify(State.materials));
+              State.units = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+              localStorage.setItem("og_units", JSON.stringify(State.units));
+              if (["STUDENT_DASHBOARD", "ADMIN_CONTENT_MANAGER"].includes(State.currentRoute)) UI.render();
+            }
+          }, err => console.warn(err));
+
+          db.collection("omer_lessons").onSnapshot(snapshot => {
+            if (!snapshot.empty) {
+              State.lessons = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+              localStorage.setItem("og_lessons", JSON.stringify(State.lessons));
               if (["STUDENT_DASHBOARD", "ADMIN_CONTENT_MANAGER"].includes(State.currentRoute)) UI.render();
             }
           }, err => console.warn(err));
@@ -2203,9 +2381,12 @@
         if (key === "students") {
           localStorage.setItem("og_students", JSON.stringify(data));
           if (db) data.forEach(st => db.collection("omer_students").doc(st.uid).set(st, { merge: true }).catch(console.error));
-        } else if (key === "materials") {
-          localStorage.setItem("og_materials", JSON.stringify(data));
-          if (db) data.forEach(m => db.collection("omer_materials").doc(m.id).set(m, { merge: true }).catch(console.error));
+        } else if (key === "units") {
+          localStorage.setItem("og_units", JSON.stringify(data));
+          if (db) data.forEach(u => db.collection("omer_units").doc(u.id).set(u, { merge: true }).catch(console.error));
+        } else if (key === "lessons") {
+          localStorage.setItem("og_lessons", JSON.stringify(data));
+          if (db) data.forEach(l => db.collection("omer_lessons").doc(l.id).set(l, { merge: true }).catch(console.error));
         } else if (key === "quizzes") {
           localStorage.setItem("og_quizzes", JSON.stringify(data));
           if (db) data.forEach(q => db.collection("omer_quizzes").doc(q.id).set(q, { merge: true }).catch(console.error));
@@ -2232,19 +2413,16 @@
         const item = CURRICULUM_DEFINITIONS.find(c => c.id === target);
         return item ? item.full : 'المنهاج المخصص';
       },
-      getMediaTypeBadge(item) {
-        switch (item.type) {
+      getResourceBadge(type) {
+        switch(type) {
           case 'VIDEOS': return `<span class="badge badge-curriculum"><i class="fa-solid fa-circle-play"></i> فيديو مسجل</span>`;
+          case 'WORKSHEETS': return `<span class="badge badge-curriculum"><i class="fa-solid fa-file-pdf"></i> مذكرة PDF</span>`;
           case 'PODCASTS': return `<span class="badge badge-podcast"><i class="fa-solid fa-podcast"></i> بودكاست صوتي</span>`;
-          case 'ARTICLES': return `<span class="badge badge-article"><i class="fa-solid fa-file-lines"></i> شرح كتابي مباشر</span>`;
-          case 'IMAGES': return `<span class="badge badge-img"><i class="fa-solid fa-image"></i> صورة / مخطط</span>`;
-          case 'HTML_EMBED': return `<span class="badge badge-html"><i class="fa-solid fa-code"></i> تفاعلي HTML / لعبة</span>`;
           case 'POWERPOINTS': return `<span class="badge badge-ppt"><i class="fa-solid fa-file-powerpoint"></i> عرض PPT</span>`;
           case 'WORD_DOCS': return `<span class="badge badge-word"><i class="fa-solid fa-file-word"></i> مستند Word</span>`;
-          case 'WORKSHEETS': return `<span class="badge badge-curriculum"><i class="fa-solid fa-file-pdf"></i> مذكرة PDF</span>`;
-          case 'EXAMS': return `<span class="badge badge-tag"><i class="fa-solid fa-file-shield"></i> نموذج امتحاني</span>`;
-          case 'REVISIONS': return `<span class="badge badge-trial"><i class="fa-solid fa-star"></i> مراجعة نهائية</span>`;
-          default: return `<span class="badge badge-tag">${escapeHTML(item.format) || 'مادة تعليمية'}</span>`;
+          case 'HTML_EMBED': return `<span class="badge badge-html"><i class="fa-solid fa-code"></i> تفاعلي HTML</span>`;
+          case 'IMAGES': return `<span class="badge badge-img"><i class="fa-solid fa-image"></i> صورة / مخطط</span>`;
+          default: return `<span class="badge badge-article"><i class="fa-solid fa-file-lines"></i> شرح كتابي</span>`;
         }
       },
       render() {
@@ -2257,7 +2435,9 @@
           nav.innerHTML = `
             <div style="display:flex; align-items:center; gap:8px;">
               ${State.currentUser.role === 'ADMIN' ? `
-                <button class="btn btn-gold" style="padding:4px 10px; font-size:0.75rem; min-height:34px;" onclick="App.openVoiceModal()"><i class="fa-solid fa-headset"></i> مكالمة صوتية</button>
+                <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:34px;" onclick="App.openBroadcastModal()">
+                  <i class="fa-solid fa-tower-broadcast"></i> استوديو البث الصوتي
+                </button>
               ` : `
                 <span class="badge badge-xp"><i class="fa-solid fa-trophy"></i> XP ${State.currentUser.xp || 100}</span>
               `}
@@ -2286,6 +2466,8 @@
           case "ADMIN_ACTIVITY": root.innerHTML = UI.templates.adminActivity(); break;
           default: root.innerHTML = UI.templates.login();
         }
+
+        LiveAudio.updateLiveBannerUI();
 
         if (window.renderMathInElement && root) {
           renderMathInElement(root, { delimiters: [{ left: '$$', right: '$$', display: true }, { left: '\\(', right: '\\)', display: false }], throwOnError: false });
@@ -2360,7 +2542,7 @@
           `;
         },
 
-        /* لوحة تحكم الطالب المنظمة بالوحدات الدراسية (Unit-Based Structure) بعد إخفاء الشريط العلوي والتحكم به */
+        /* لوحة تحكم الطالب المنظمة بالوحدات والدروس والموارد (Unit ➔ Lesson ➔ Resources) */
         studentDashboard() {
           const user = State.currentUser;
           const now = Date.now();
@@ -2384,29 +2566,13 @@
           
           const q = State.studentSearchQuery.toLowerCase().trim();
           
-          // تصفية المواد لصف الطالب
-          const rawMaterials = State.materials.filter(item => {
-            const matchTarget = item.target === user.target || item.target === 'ALL';
-            const matchStudent = !item.assignedStudentUids || item.assignedStudentUids.length === 0 || item.assignedStudentUids.includes(user.uid);
-            const matchType = (!State.settings.showContentTabsToStudents || State.activeContentTab === 'ALL_TYPES' || item.type === State.activeContentTab);
-            const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
-            return matchTarget && matchStudent && matchType && matchSearch;
-          });
-
-          // تجميع الدروس حسب الوحدات الدراسية التي حددها الأستاذ عمر
-          const unitsMap = {};
-          rawMaterials.forEach(mat => {
-            const unitName = (mat.unit && mat.unit.trim()) ? mat.unit.trim() : "الوحدة العامة / الأساسيات";
-            if (!unitsMap[unitName]) unitsMap[unitName] = [];
-            unitsMap[unitName].push(mat);
-          });
-
-          const availableUnitsList = Object.keys(unitsMap);
-          
-          // الكويزات المتاحة
+          const myUnits = State.units.filter(u => u.target === user.target || u.target === 'ALL');
           const filteredQuizzes = State.quizzes.filter(item => (item.target === user.target || item.target === 'ALL') && (!q || item.title.toLowerCase().includes(q)));
 
           return `
+            <!-- حاوية شريط البث المباشر التفاعلي اللحظي -->
+            <div id="studentLiveBannerContainer"></div>
+
             ${isTrial ? `
               <div class="countdown-widget">
                 <div><i class="fa-solid fa-hourglass-half"></i> فترة تجريبية مجانية: متبقي <strong>${daysLeft} أيام</strong> للاشتراك الدائم.</div>
@@ -2446,100 +2612,68 @@
               </div>
             ` : ''}
 
-            <!-- شريط البحث السريع في الوحدات والمحتوى -->
+            <!-- شريط البحث السريع في الوحدات والدروس والمذكرات -->
             <div class="search-box-wrapper">
               <i class="fa-solid fa-magnifying-glass"></i>
               <input type="text" placeholder="🔍 ابحث في الدروس أو الوحدات أو المذكرات..." value="${escapeHTML(State.studentSearchQuery)}" oninput="App.handleStudentSearch(this.value)">
             </div>
 
-            <!-- أشرطة تصفية أنواع المحتوى (يتم إظهارها فقط إذا فعّلها الأدمن من الإعدادات للتحكم الاحترافي) -->
-            ${State.settings.showContentTabsToStudents ? `
-              <div class="nav-tabs-wrapper">
-                <button class="btn ${State.activeContentTab === 'ALL_TYPES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('ALL_TYPES')"><i class="fa-solid fa-layer-group"></i> كافة المواد في الوحدات</button>
-                <button class="btn ${State.activeContentTab === 'VIDEOS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('VIDEOS')"><i class="fa-solid fa-circle-play"></i> فيديوهات</button>
-                <button class="btn ${State.activeContentTab === 'WORKSHEETS' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('WORKSHEETS')"><i class="fa-solid fa-file-pdf"></i> مذكرات PDF</button>
-                <button class="btn ${State.activeContentTab === 'PODCASTS' ? 'btn-purple' : 'btn-secondary'}" onclick="App.setContentTab('PODCASTS')"><i class="fa-solid fa-podcast"></i> بودكاست 🎙️</button>
-                <button class="btn ${State.activeContentTab === 'QUIZZES' ? 'btn-gold' : 'btn-secondary'}" onclick="App.setContentTab('QUIZZES')"><i class="fa-solid fa-bolt"></i> الكويزات</button>
-                <button class="btn ${State.activeContentTab === 'POWERPOINTS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('POWERPOINTS')"><i class="fa-solid fa-file-powerpoint"></i> بوربوينت PPT</button>
-                <button class="btn ${State.activeContentTab === 'WORD_DOCS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('WORD_DOCS')"><i class="fa-solid fa-file-word"></i> مستندات Word</button>
-                <button class="btn ${State.activeContentTab === 'IMAGES' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('IMAGES')"><i class="fa-solid fa-image"></i> سبورات ومخططات</button>
-                <button class="btn ${State.activeContentTab === 'HTML_EMBED' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('HTML_EMBED')"><i class="fa-solid fa-code"></i> تفاعلي HTML / ألعاب</button>
-                <button class="btn ${State.activeContentTab === 'EXAMS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('EXAMS')"><i class="fa-solid fa-file-shield"></i> امتحانات</button>
-                <button class="btn ${State.activeContentTab === 'REVISIONS' ? 'btn-secondary' : 'btn-secondary'}" onclick="App.setContentTab('REVISIONS')"><i class="fa-solid fa-star"></i> مراجعات</button>
-              </div>
-            ` : ''}
-
-            <!-- عرض المواد مقسمة حسب الوحدات الدراسية مع كويزات كل مقرر -->
-            ${availableUnitsList.length === 0 ? `
+            <!-- عرض المنهج الهيكلي المنظم: الوحدات ⬅ الدروس ⬅ الموارد -->
+            ${myUnits.length === 0 ? `
               <div class="card" style="text-align:center; padding:45px;">
                 <i class="fa-solid fa-folder-open" style="font-size:42px; color:var(--gold-orange); margin-bottom:12px;"></i>
-                <h3 style="color:var(--navy-dark);">لا توجد مواد دراسية منشورة في هذا القسم حالياً</h3>
-                <p style="color:var(--text-muted); font-size:0.85rem;">يقوم الأستاذ عمر برفع الدروس وتنظيمها في وحداتها باستمرار.</p>
+                <h3 style="color:var(--navy-dark);">لا توجد وحدات دراسية منشورة لصفك حالياً</h3>
+                <p style="color:var(--text-muted); font-size:0.85rem;">يقوم الأستاذ عمر بإضافة الدروس والمذكرات بانتظام.</p>
               </div>
             ` : `
-              ${availableUnitsList.map((unitName, unitIndex) => {
-                const unitLessons = unitsMap[unitName] || [];
+              ${myUnits.map(unit => {
+                const unitLessons = State.lessons.filter(les => {
+                  const matchUnit = les.unitId === unit.id;
+                  const matchTarget = les.target === user.target || les.target === 'ALL';
+                  const matchSpecific = !les.assignedStudentUids || les.assignedStudentUids.length === 0 || les.assignedStudentUids.includes(user.uid);
+                  const matchSearch = !q || les.title.toLowerCase().includes(q) || (les.description && les.description.toLowerCase().includes(q));
+                  return matchUnit && matchTarget && matchSpecific && matchSearch;
+                });
+
                 return `
                   <div class="unit-container-block">
-                    <div class="unit-header-bar" onclick="App.toggleUnitCollapse('unit_body_${unitIndex}')">
-                      <div class="unit-header-title">
-                        <i class="fa-solid fa-folder-tree" style="color:var(--gold-orange);"></i>
-                        <span>${escapeHTML(unitName)}</span>
+                    <div class="unit-header-bar" onclick="App.toggleAccordion('unit_acc_${unit.id}')">
+                      <div style="display:flex; align-items:center; gap:10px; font-size:1.05rem; font-weight:800;">
+                        <i class="fa-solid fa-folder-open" style="color:var(--gold-orange);"></i>
+                        <span>${escapeHTML(unit.title)}</span>
                       </div>
                       <div style="display:flex; align-items:center; gap:8px;">
-                        <span class="badge badge-curriculum" style="font-size:0.7rem;">${unitLessons.length} مواد ودروس</span>
-                        <i class="fa-solid fa-chevron-down" id="unit_chevron_unit_body_${unitIndex}"></i>
+                        <span class="badge badge-curriculum" style="font-size:0.7rem;">${unitLessons.length} دروس</span>
+                        <i class="fa-solid fa-chevron-down" id="chevron_unit_acc_${unit.id}"></i>
                       </div>
                     </div>
                     
-                    <div class="unit-body-grid" id="unit_body_${unitIndex}">
-                      ${unitLessons.map(lesson => `
-                        <div class="lesson-item-card">
-                          <div>
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                              ${UI.getMediaTypeBadge(lesson)}
-                              <small style="color:var(--text-muted); font-size:0.7rem;"><i class="fa-regular fa-clock"></i> درس معتمد</small>
-                            </div>
-                            <h4 style="font-size:0.92rem; font-weight:800; color:var(--navy-dark); margin-bottom:6px; line-height:1.4;">${escapeHTML(lesson.title)}</h4>
-                            <p style="font-size:0.78rem; color:var(--text-muted); margin-bottom:14px; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;">
-                              ${escapeHTML(lesson.sampleContent ? lesson.sampleContent.substring(0, 80) + '...' : 'شرح ومسائل مخصصة من الأستاذ عمر.')}
-                            </p>
+                    <div class="unit-body-accordion" id="unit_acc_${unit.id}">
+                      ${unitLessons.length === 0 ? `
+                        <p style="color:var(--text-muted); font-size:0.82rem; padding:10px;">لا توجد دروس متاحة في هذه الوحدة حالياً.</p>
+                      ` : unitLessons.map(lesson => `
+                        <div class="lesson-item-wrapper">
+                          <div class="lesson-title-head">
+                            <strong style="color:var(--navy-dark); font-size:0.98rem;">
+                              <i class="fa-solid fa-book-open" style="color:var(--gold-orange); margin-left:6px;"></i> ${escapeHTML(lesson.title)}
+                            </strong>
+                            <span style="font-size:0.75rem; color:var(--text-muted);">(${lesson.resources ? lesson.resources.length : 0} مواد تعليمية)</span>
                           </div>
+                          <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:10px;">${escapeHTML(lesson.description || 'شرح وتدريبات الدرس مع الأستاذ عمر.')}</p>
 
-                          <div>
-                            ${lesson.type === 'VIDEOS' ? `
-                              <button class="btn btn-gold" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openVideoPlayer('${lesson.id}')">
-                                <i class="fa-solid fa-circle-play"></i> تشغيل الفيديو
-                              </button>
-                            ` : lesson.type === 'PODCASTS' ? `
-                              <button class="btn btn-purple" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openPodcastPlayer('${lesson.id}')">
-                                <i class="fa-solid fa-headphones"></i> استماع للبودكاست
-                              </button>
-                            ` : lesson.type === 'WORKSHEETS' ? `
-                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openDocumentViewer('${lesson.id}')">
-                                <i class="fa-solid fa-file-pdf"></i> فتح المذكرة PDF
-                              </button>
-                            ` : lesson.type === 'IMAGES' ? `
-                              <button class="btn btn-gold" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openImageViewer('${lesson.id}')">
-                                <i class="fa-solid fa-image"></i> عرض السبورة / المخطط
-                              </button>
-                            ` : lesson.type === 'HTML_EMBED' ? `
-                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openHtmlViewer('${lesson.id}')">
-                                <i class="fa-solid fa-code"></i> فتح الأداة التفاعلية / اللعبة
-                              </button>
-                            ` : lesson.type === 'POWERPOINTS' ? `
-                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px; background:#C2410C;" onclick="App.openOfficeViewer('${lesson.id}', 'ppt')">
-                                <i class="fa-solid fa-file-powerpoint"></i> استعراض PPT
-                              </button>
-                            ` : lesson.type === 'WORD_DOCS' ? `
-                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px; background:#1D4ED8;" onclick="App.openOfficeViewer('${lesson.id}', 'doc')">
-                                <i class="fa-solid fa-file-word"></i> استعراض Word
-                              </button>
-                            ` : `
-                              <button class="btn btn-navy" style="width:100%; font-size:0.8rem; min-height:36px;" onclick="App.openArticleViewer('${lesson.id}')">
-                                <i class="fa-solid fa-book-open-reader"></i> قراءة الشرح
-                              </button>
-                            `}
+                          <!-- شبكة الموارد والوسائط التابعة للدرس -->
+                          <div class="lesson-resources-grid">
+                            ${(lesson.resources || []).map(res => `
+                              <div class="resource-sub-card">
+                                <div>
+                                  ${UI.getResourceBadge(res.type)}
+                                  <strong style="font-size:0.85rem; color:var(--navy-dark); display:block; margin-top:6px; line-height:1.4;">${escapeHTML(res.title)}</strong>
+                                </div>
+                                <button class="btn btn-navy" style="width:100%; font-size:0.78rem; min-height:34px; padding:4px 8px;" onclick="App.openMediaResource('${lesson.id}', '${res.id}')">
+                                  <i class="fa-solid fa-play"></i> فتح واستعراض
+                                </button>
+                              </div>
+                            `).join('')}
                           </div>
                         </div>
                       `).join('')}
@@ -2556,8 +2690,13 @@
                 <div style="display:flex; flex-direction:column; gap:10px;">
                   ${filteredQuizzes.map(qz => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--gold-light); border:1.5px solid var(--gold-subtle); border-radius:var(--radius-md); flex-wrap:wrap; gap:8px;">
-                      <div><strong style="font-size:0.95rem; display:block; color:var(--navy-dark);">${escapeHTML(qz.title)}</strong><span style="font-size:0.78rem; color:var(--text-muted);">${qz.questions ? qz.questions.length : 0} أسئلة • تصحيح وشرح فوري</span></div>
-                      <button class="btn btn-gold" style="padding:6px 14px; font-size:0.8rem; min-height:36px;" onclick="App.startInteractiveQuiz('${qz.id}')"><i class="fa-solid fa-play"></i> ابدأ الآن</button>
+                      <div>
+                        <strong style="font-size:0.95rem; display:block; color:var(--navy-dark);">${escapeHTML(qz.title)}</strong>
+                        <span style="font-size:0.78rem; color:var(--text-muted);">${qz.questions ? qz.questions.length : 0} أسئلة • تصحيح وشرح فوري</span>
+                      </div>
+                      <button class="btn btn-gold" style="padding:6px 14px; font-size:0.8rem; min-height:36px;" onclick="App.startInteractiveQuiz('${qz.id}')">
+                        <i class="fa-solid fa-play"></i> ابدأ الآن
+                      </button>
                     </div>
                   `).join('')}
                 </div>
@@ -2573,20 +2712,27 @@
               <div class="arena-hero-card">
                 <i class="fa-solid fa-trophy" style="font-size:48px; color:var(--gold-orange); margin-bottom:10px;"></i>
                 <h2 style="font-size:1.6rem; font-weight:900;">حلبة فرسان الرياضيات ⚔️</h2>
-                <p style="font-size:0.88rem; color:var(--gold-subtle); max-width:520px; margin:6px auto 16px;">تنافس مع زملائك في حل المسائل الرياضية، احصد نقاط الخبرة (XP)، واعتلِ صدارة لوحة الشرف لمنصة الأستاذ عمر.</p>
+                <p style="font-size:0.88rem; color:var(--gold-subtle); max-width:520px; margin:6px auto 16px;">
+                  تنافس مع زملائك في حل المسائل الرياضية، احصد نقاط الخبرة (XP)، واعتلِ صدارة لوحة الشرف لمنصة الأستاذ عمر.
+                </p>
                 <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap;">
                   <button class="btn btn-gold" onclick="MathArena.startSpeedBattle()"><i class="fa-solid fa-bolt"></i> بدء تحدي السرعة اليومي (+50 XP)</button>
                   <button class="btn btn-secondary" onclick="App.navigateHome()">العودة للدروس</button>
                 </div>
               </div>
               <div class="card">
-                <h3 style="color:var(--navy-dark); font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px;"><i class="fa-solid fa-ranking-star" style="color:var(--gold-orange);"></i> لوحة شرف أوائل الطلاب (Leaderboard)</h3>
+                <h3 style="color:var(--navy-dark); font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+                  <i class="fa-solid fa-ranking-star" style="color:var(--gold-orange);"></i> لوحة شرف أوائل الطلاب (Leaderboard)
+                </h3>
                 <div class="leaderboard-list">
                   ${sortedStudents.length === 0 ? '<p style="text-align:center; padding:20px; color:var(--text-muted);">لا يوجد متسابقين حتى الآن.</p>' : sortedStudents.slice(0, 10).map((st, idx) => `
                     <div class="leaderboard-item ${idx === 0 ? 'top-1' : (idx === 1 ? 'top-2' : (idx === 2 ? 'top-3' : ''))}">
                       <div style="display:flex; align-items:center; gap:12px;">
                         <div class="rank-badge ${idx === 0 ? 'rank-1' : (idx === 1 ? 'rank-2' : (idx === 2 ? 'rank-3' : ''))}">${idx + 1}</div>
-                        <div><strong style="color:var(--navy-dark); font-size:0.95rem; display:block;">${escapeHTML(st.name)}</strong><span style="font-size:0.75rem; color:var(--text-muted);">${UI.getTargetLabel(st.target)}</span></div>
+                        <div>
+                          <strong style="color:var(--navy-dark); font-size:0.95rem; display:block;">${escapeHTML(st.name)}</strong>
+                          <span style="font-size:0.75rem; color:var(--text-muted);">${UI.getTargetLabel(st.target)}</span>
+                        </div>
                       </div>
                       <div style="display:flex; align-items:center; gap:8px;">
                         <span class="badge badge-xp">⚡ ${st.xp || 100} XP</span>
@@ -2652,7 +2798,6 @@
           `;
         },
 
-        /* صفحة تعبئة ومعاينة الاستبيان الأكاديمي */
         surveyFillPage() {
           const s = State.activePublicSurvey;
           if (!s) return `<div class="card" style="text-align:center; padding:30px;"><p>الاستبيان غير متوفر أو تم إغلاقه.</p><button class="btn btn-gold" onclick="App.navigateHome()">العودة</button></div>`;
@@ -2780,10 +2925,10 @@
                 <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة المناهج الإماراتية والسودانية والوحدات التعليمية واشتراكات الطلاب</p>
               </div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <button class="btn btn-purple" onclick="App.openVoiceModal()"><i class="fa-solid fa-headset"></i> اتصال صوتي</button>
+                <button class="btn btn-danger" onclick="App.openBroadcastModal()"><i class="fa-solid fa-tower-broadcast"></i> استوديو البث الصوتي</button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_SURVEYS')"><i class="fa-solid fa-square-poll-vertical"></i> الاستبيانات (${State.surveys.length})</button>
                 <button class="btn btn-gold" onclick="App.openSettingsModal()"><i class="fa-solid fa-gear"></i> الإعدادات والأمان</button>
-                <button class="btn btn-navy" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')"><i class="fa-solid fa-folder-plus"></i> المواد والوحدات</button>
+                <button class="btn btn-navy" onclick="App.setRoute('ADMIN_CONTENT_MANAGER')"><i class="fa-solid fa-folder-plus"></i> المناهج والوحدات</button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_QUIZ_CREATOR')"><i class="fa-solid fa-bolt"></i> الكويزات</button>
                 <button class="btn btn-navy" onclick="App.setRoute('ADMIN_STUDENTS')"><i class="fa-solid fa-users"></i> الطلاب (${total})</button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_CREATE_STUDENT')"><i class="fa-solid fa-user-plus"></i> إضافة طالب</button>
@@ -2793,8 +2938,8 @@
             <div class="grid-dashboard">
               <div class="card" style="margin:0; border-right: 4px solid var(--navy-dark);"><span style="font-size:0.75rem; color:var(--text-muted);">إجمالي الطلاب</span><h3 style="font-size:1.5rem; color:var(--navy-dark);">${total}</h3></div>
               <div class="card" style="margin:0; border-right: 4px solid var(--success);"><span style="font-size:0.75rem; color:var(--text-muted);">الاشتراكات النشطة</span><h3 style="font-size:1.5rem; color:var(--success);">${active}</h3></div>
-              <div class="card" style="margin:0; border-right: 4px solid var(--gold-orange);"><span style="font-size:0.75rem; color:var(--text-muted);">الفترة التجريبية</span><h3 style="font-size:1.5rem; color:var(--gold-deep);">${trial}</h3></div>
-              <div class="card" style="margin:0; border-right: 4px solid var(--danger);"><span style="font-size:0.75rem; color:var(--text-muted);">اشتراكات منتهية</span><h3 style="font-size:1.5rem; color:var(--danger);">${expired}</h3></div>
+              <div class="card" style="margin:0; border-right: 4px solid var(--gold-orange);"><span style="font-size:0.75rem; color:var(--text-muted);">الوحدات الدراسية</span><h3 style="font-size:1.5rem; color:var(--gold-deep);">${State.units.length}</h3></div>
+              <div class="card" style="margin:0; border-right: 4px solid var(--purple-gradient);"><span style="font-size:0.75rem; color:var(--text-muted);">إجمالي الدروس</span><h3 style="font-size:1.5rem; color:#7C3AED;">${State.lessons.length}</h3></div>
             </div>
             <div class="card">
               <h3 style="color: var(--navy-dark); font-size: 0.95rem; margin-bottom: 12px;">📈 معدل تفاعل الطلاب في المنهاجين</h3>
@@ -2803,7 +2948,6 @@
           `;
         },
 
-        /* شاشة الاستبيانات المتجاوبة */
         adminSurveys() {
           const selectedSurvey = State.selectedSurveyForResults ? State.surveys.find(s => s.id === State.selectedSurveyForResults) : State.surveys[0];
           const responses = selectedSurvey ? State.surveyResponses.filter(r => r.surveyId === selectedSurvey.id) : [];
@@ -2934,95 +3078,71 @@
           `;
         },
 
-        /* إدارة المواد وتعيين الوحدات يدوياً بدقة تامة */
+        /* إدارة المناهج والوحدات والدروس والموارد (شجري متطور) */
         adminContentManager() {
-          const q = State.adminSearchQuery.toLowerCase().trim();
-          const filtered = State.materials.filter(item => {
-            const matchTarget = State.adminTargetFilter === 'ALL' || item.target === State.adminTargetFilter;
-            const matchSearch = !q || item.title.toLowerCase().includes(q) || (item.unit && item.unit.toLowerCase().includes(q));
-            return matchTarget && matchSearch;
-          });
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
               <div>
-                <h2 style="color: var(--navy-dark); font-weight: 800;">إدارة محتوى ومقررات الرياضيات (الأستاذ عمر)</h2>
-                <div style="margin-top:4px; display:flex; gap:6px;">
-                  <button class="btn ${State.adminContentTab === 'LIST' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 8px; font-size:0.75rem;" onclick="App.setAdminContentTab('LIST')">المواد المنشورة (${State.materials.length})</button>
-                  <button class="btn ${State.adminContentTab === 'ADD' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 8px; font-size:0.75rem;" onclick="App.setAdminContentTab('ADD')"><i class="fa-solid fa-plus-circle"></i> إضافة درس / وحدة جديدة</button>
-                </div>
+                <h2 style="color: var(--navy-dark); font-weight: 800;">إدارة الوحدات والدروس والمحتوى</h2>
+                <p style="font-size:0.78rem; color:var(--text-muted);">نظام هيكلي متطور (الوحدة ⬅ الدرس ⬅ كافة الموارد والروابط)</p>
               </div>
-              <button class="btn btn-navy" style="padding:4px 10px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')"><i class="fa-solid fa-arrow-right"></i> الرئيسية</button>
+              <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                <button class="btn btn-gold" style="font-size:0.78rem; padding:4px 10px;" onclick="App.openAddUnitModal()"><i class="fa-solid fa-plus-circle"></i> إضافة وحدة جديدة</button>
+                <button class="btn btn-navy" style="font-size:0.78rem; padding:4px 10px;" onclick="App.openAddLessonModal()"><i class="fa-solid fa-book-medical"></i> إضافة درس داخل وحدة</button>
+                <button class="btn btn-secondary" style="font-size:0.78rem; padding:4px 10px;" onclick="App.setRoute('ADMIN_DASHBOARD')">الرئيسية</button>
+              </div>
             </div>
-            ${State.adminContentTab === 'ADD' ? `
-              <div class="card">
-                <form onsubmit="App.handleCreateContent(event)">
-                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
-                    <div class="form-group">
-                      <label>نوع المحتوى</label>
-                      <select id="contentType" required onchange="App.toggleContentFields()">
-                        <option value="VIDEOS">فيديو مسجل (YouTube / Drive / MP4 / HLS)</option>
-                        <option value="WORKSHEETS">أوراق عمل ومذكرات (PDF داخلي آمن)</option>
-                        <option value="PODCASTS">بودكاست وشرح صوتي (MP3)</option>
-                        <option value="POWERPOINTS">عرض باوربوينت (PPT / PPTX)</option>
-                        <option value="WORD_DOCS">مستند وورد (DOC / DOCX داخلي)</option>
-                        <option value="IMAGES">صورة / مخطط ومذكرة سبورة (JPG/PNG)</option>
-                        <option value="HTML_EMBED">ملف / أداة تفاعلية / لعبة HTML (GeoGebra / Desmos)</option>
-                        <option value="ARTICLES">شرح كتابي مباشر (بدون روابط)</option>
-                        <option value="EXAMS">اختبار شامل ونماذج امتحانات</option>
-                        <option value="REVISIONS">مراجعة وملخصات</option>
-                      </select>
+
+            <!-- قائمة الوحدات والدروس -->
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              ${State.units.length === 0 ? '<p style="text-align:center; padding:30px; color:var(--text-muted);">لم تقم بإضافة أي وحدة تعليمية بعد.</p>' : State.units.map(unit => {
+                const lessonsInUnit = State.lessons.filter(l => l.unitId === unit.id);
+                return `
+                  <div class="card" style="margin:0; border:1.5px solid #CBD5E1;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #E2E8F0; padding-bottom:10px; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                      <div>
+                        <strong style="color:var(--navy-dark); font-size:1.1rem;"><i class="fa-solid fa-folder" style="color:var(--gold-orange);"></i> ${escapeHTML(unit.title)}</strong>
+                        <span class="badge badge-curriculum" style="margin-right:8px;">${UI.getTargetLabel(unit.target)}</span>
+                      </div>
+                      <div style="display:flex; gap:4px;">
+                        <button class="btn btn-gold" style="padding:4px 8px; font-size:0.72rem;" onclick="App.openAddLessonForUnit('${unit.id}')"><i class="fa-solid fa-plus"></i> إضافة درس هنا</button>
+                        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem;" onclick="App.deleteUnit('${unit.id}')"><i class="fa-solid fa-trash"></i> حذف الوحدة</button>
+                      </div>
                     </div>
-                    <div class="form-group"><label>المنهاج والصف المستهدف</label><select id="contentTarget" required onchange="App.updateStudentAssignList()">${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}</select></div>
-                    <div class="form-group">
-                      <label>الوحدة التعليمية (كتابة يدوية)</label>
-                      <input type="text" id="contentUnit" required placeholder="اكتب اسم الوحدة التعليمية يدوياً (مثال: الوحدة الأولى: التفاضل وتطبيقاته)">
+
+                    <!-- دروس الوحدة -->
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                      ${lessonsInUnit.length === 0 ? '<p style="color:var(--text-muted); font-size:0.8rem;">لا توجد دروس داخل هذه الوحدة حتى الآن.</p>' : lessonsInUnit.map(les => `
+                        <div style="background:var(--bg-light); border:1px solid #E2E8F0; border-radius:var(--radius-sm); padding:10px 14px;">
+                          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                            <div>
+                              <strong style="color:var(--navy-dark); font-size:0.92rem;"><i class="fa-solid fa-file-lines" style="color:var(--gold-deep);"></i> ${escapeHTML(les.title)}</strong>
+                              <span style="font-size:0.72rem; color:var(--text-muted); margin-right:6px;">(${les.resources ? les.resources.length : 0} مواد تعليمية)</span>
+                            </div>
+                            <div style="display:flex; gap:4px;">
+                              <button class="btn btn-navy" style="padding:3px 8px; font-size:0.7rem;" onclick="App.openAddResourceModal('${les.id}', '${escapeHTML(les.title)}')"><i class="fa-solid fa-link"></i> إضافة مورد للدرس</button>
+                              <button class="btn btn-danger" style="padding:3px 8px; font-size:0.7rem;" onclick="App.deleteLesson('${les.id}')"><i class="fa-solid fa-trash"></i> حذف الدرس</button>
+                            </div>
+                          </div>
+
+                          <!-- الموارد المضافة داخل الدرس -->
+                          ${les.resources && les.resources.length > 0 ? `
+                            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
+                              ${les.resources.map(r => `
+                                <span class="badge badge-tag" style="font-size:0.7rem; padding:3px 8px; background:#FFF;">
+                                  ${UI.getResourceBadge(r.type)} ${escapeHTML(r.title)}
+                                  <i class="fa-solid fa-xmark" style="cursor:pointer; color:var(--danger); margin-right:4px;" onclick="App.deleteResource('${les.id}', '${r.id}')"></i>
+                                </span>
+                              `).join('')}
+                            </div>
+                          ` : ''}
+                        </div>
+                      `).join('')}
                     </div>
-                    <div class="form-group"><label>عنوان الدرس / المحتوى</label><input type="text" id="contentTitle" required placeholder="مثال: مشتقة الدوال المثلثية"></div>
                   </div>
-                  <div class="form-group" style="background:var(--bg-light); padding:10px; border-radius:var(--radius-sm); border:1px solid #CBD5E1;">
-                    <label style="color:var(--gold-deep);"><i class="fa-solid fa-user-lock"></i> تخصيص الوصول والأمان (اختياري):</label>
-                    <select id="contentAssignedStudent" style="margin-top:4px;">
-                      <option value="">متاح لكافة طلاب الصف المختار ✓</option>
-                      ${State.students.map(s => `<option value="${s.uid}">${escapeHTML(s.name)} (${escapeHTML(s.username)})</option>`).join('')}
-                    </select>
-                  </div>
-                  <div class="form-group" id="fileUploadHelperGroup">
-                    <label><i class="fa-solid fa-cloud-arrow-up"></i> رفع صورة أو مستند Word أو ملف HTML من جهازك مباشرة</label>
-                    <input type="file" id="contentFileInput" accept="image/*,.html,.htm,.docx,.doc" onchange="App.handleFileUpload(event)" style="padding:6px; background:var(--bg-light);">
-                  </div>
-                  <div class="form-group" id="urlFieldGroup">
-                    <label id="urlLabel">رابط الملف المباشر أو الفيديو أو الصورة</label>
-                    <div class="input-with-paste">
-                      <input type="text" id="contentUrl" placeholder="https://...">
-                      <button type="button" class="btn btn-gold" style="padding:8px 12px;" onclick="App.pasteToInput('contentUrl')"><i class="fa-solid fa-paste"></i> لصق</button>
-                    </div>
-                  </div>
-                  <div class="form-group" id="textFieldGroup">
-                    <label id="textLabel">نصوص الشرح المباشر / الملاحظات المرفقة</label>
-                    <textarea id="contentText" rows="5"></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-gold" style="width:100%; margin-top:8px;"><i class="fa-solid fa-cloud-arrow-up"></i> نشر المادة وحفظها سحابياً في وحدتها</button>
-                </form>
-              </div>
-            ` : `
-              <div class="card">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
-                  <div class="search-box-wrapper" style="flex:1; min-width:200px; margin-bottom:0;"><i class="fa-solid fa-magnifying-glass"></i><input type="text" placeholder="🔍 ابحث في المحتويات..." value="${escapeHTML(State.adminSearchQuery)}" oninput="App.handleAdminSearch(this.value)"></div>
-                  <div style="display:flex; gap:4px; flex-wrap:wrap;"><button class="btn ${State.adminTargetFilter === 'ALL' ? 'btn-gold' : 'btn-secondary'}" style="padding:4px 8px; font-size:0.72rem;" onclick="App.setAdminTargetFilter('ALL')">الكل</button>${CURRICULUM_DEFINITIONS.map(c => `<button class="btn ${State.adminTargetFilter === c.id ? 'btn-gold' : 'btn-secondary'}" style="padding:3px 6px; font-size:0.7rem;" onclick="App.setAdminTargetFilter('${c.id}')">${c.name}</button>`).join('')}</div>
-                </div>
-                <div class="table-container">
-                  <table>
-                    <thead><tr><th>عنوان الدرس</th><th>الوحدة</th><th>النوع</th><th>الصف والمنهاج</th><th>التخصيص</th><th>الإجراءات</th></tr></thead>
-                    <tbody>${filtered.length === 0 ? `<tr><td colspan="6" style="text-align:center; padding:25px; color:var(--text-muted);">لم تقم بإضافة مواد بعد.</td></tr>` : filtered.map(item => {
-                      const studentName = item.assignedStudentUids && item.assignedStudentUids.length > 0 
-                        ? State.students.find(s => s.uid === item.assignedStudentUids[0])?.name || 'طالب مخصص'
-                        : 'عام لكافة طلاب الصف';
-                      return `<tr><td><strong>${escapeHTML(item.title)}</strong></td><td><span class="badge badge-curriculum">${escapeHTML(item.unit) || 'عام'}</span></td><td>${UI.getMediaTypeBadge(item)}</td><td>${escapeHTML(UI.getTargetLabel(item.target))}</td><td><span class="badge ${item.assignedStudentUids && item.assignedStudentUids.length > 0 ? 'badge-trial' : 'badge-curriculum'}">${escapeHTML(studentName)}</span></td><td><div style="display:flex; gap:4px;"><button class="btn btn-navy" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openEditModal('${item.id}', '${item.type}')"><i class="fa-solid fa-pen"></i> تعديل</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteContent('${item.id}')"><i class="fa-solid fa-trash"></i> حذف</button></div></td></tr>`;
-                    }).join('')}</tbody>
-                  </table>
-                </div>
-              </div>
-            `}
+                `;
+              }).join('')}
+            </div>
           `;
         },
 
@@ -3078,42 +3198,6 @@
         }
       },
 
-      getTabTitle(tab) {
-        const titles = {
-          'ALL_TYPES': 'كافة المواد في الوحدات',
-          'VIDEOS': 'الشروحات المرئية',
-          'PODCASTS': 'البودكاست والشروحات الصوتية 🎙️',
-          'IMAGES': 'الصور والمخططات ومذكرات السبورة 🖼️',
-          'HTML_EMBED': 'تطبيقات ومحاكيات HTML التفاعلية والألعاب',
-          'ARTICLES': 'الشروحات الكتابية 📝',
-          'POWERPOINTS': 'عروض الباوربوينت PPT',
-          'WORD_DOCS': 'مستندات Word',
-          'WORKSHEETS': 'مذكرات PDF',
-          'QUIZZES': 'الكويزات التفاعلية',
-          'EXAMS': 'الاختبارات والامتحانات',
-          'REVISIONS': 'مراجعات ليلة الامتحان'
-        };
-        return titles[tab] || tab;
-      },
-
-      getTabIcon(tab) {
-        const icons = {
-          'ALL_TYPES': 'fa-layer-group',
-          'VIDEOS': 'fa-circle-play',
-          'PODCASTS': 'fa-podcast',
-          'IMAGES': 'fa-image',
-          'HTML_EMBED': 'fa-code',
-          'ARTICLES': 'fa-book-open',
-          'POWERPOINTS': 'fa-file-powerpoint',
-          'WORD_DOCS': 'fa-file-word',
-          'WORKSHEETS': 'fa-file-pdf',
-          'QUIZZES': 'fa-bolt',
-          'EXAMS': 'fa-file-shield',
-          'REVISIONS': 'fa-star'
-        };
-        return icons[tab] || 'fa-folder';
-      },
-
       initTrafficChart() {
         const ctx = document.getElementById('trafficChart');
         if (!ctx) return;
@@ -3128,7 +3212,6 @@
       }
     };
 
-    let activeAudioElement = null;
     let searchDebounceTimer = null;
 
     const App = {
@@ -3136,6 +3219,7 @@
         AntiTamperGuard.init();
         CryptoSecurity.resetFailedAttempts();
         await DataStore.syncAll();
+        LiveAudio.initSessionWatcher();
 
         const urlParams = new URLSearchParams(window.location.search);
         const surveyId = urlParams.get('survey');
@@ -3157,16 +3241,14 @@
       },
 
       setRoute(route) { State.currentRoute = route; UI.render(); },
-      setContentTab(tab) { State.activeContentTab = tab; UI.render(); },
-      setAdminContentTab(tab) { State.adminContentTab = tab; UI.render(); },
       setAdminTargetFilter(target) { State.adminTargetFilter = target; UI.render(); },
 
-      toggleUnitCollapse(elementId) {
+      toggleAccordion(elementId) {
         const body = document.getElementById(elementId);
-        const chevron = document.getElementById('unit_chevron_' + elementId);
+        const chevron = document.getElementById('chevron_' + elementId);
         if (!body) return;
         if (body.style.display === 'none') {
-          body.style.display = 'grid';
+          body.style.display = 'flex';
           if (chevron) chevron.className = 'fa-solid fa-chevron-down';
         } else {
           body.style.display = 'none';
@@ -3179,11 +3261,6 @@
       handleStudentSearch(query) {
         clearTimeout(searchDebounceTimer);
         searchDebounceTimer = setTimeout(() => { State.studentSearchQuery = query; UI.render(); }, 150);
-      },
-
-      handleAdminSearch(query) {
-        clearTimeout(searchDebounceTimer);
-        searchDebounceTimer = setTimeout(() => { State.adminSearchQuery = query; UI.render(); }, 150);
       },
 
       navigateHome() {
@@ -3221,52 +3298,6 @@
         } catch (e) {
           const promptVal = await NotificationEngine.prompt("الصق الرابط هنا:");
           if (promptVal) document.getElementById(inputId).value = promptVal.trim();
-        }
-      },
-
-      handleFileUpload(event) {
-        const file = event.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-
-        if (file.type.startsWith('image/')) {
-          reader.onload = (e) => {
-            const urlInput = document.getElementById('contentUrl');
-            if (urlInput) urlInput.value = e.target.result;
-            App.showSecurityAlert('تم تحميل ومعالجة الصورة بنجاح.');
-          };
-          reader.readAsDataURL(file);
-        } else if (file.name.endsWith('.docx') || file.name.endsWith('.doc')) {
-          reader.onload = function(e) {
-            const arrayBuffer = e.target.result;
-            if (window.mammoth) {
-              mammoth.convertToHtml({ arrayBuffer: arrayBuffer })
-                .then(function(result) {
-                  const textInput = document.getElementById('contentText');
-                  if (textInput) textInput.value = result.value;
-                  App.showSecurityAlert('تم تحويل مستند Word إلى محتوى داخلي بنجاح.');
-                })
-                .catch(function(err) {
-                  NotificationEngine.alert('حدث خطأ أثناء معالجة ملف Word.', 'خطأ بالملف');
-                });
-            }
-          };
-          reader.readAsArrayBuffer(file);
-        } else if (file.name.endsWith('.html') || file.name.endsWith('.htm')) {
-          reader.onload = (e) => {
-            const textInput = document.getElementById('contentText');
-            if (textInput) textInput.value = e.target.result;
-            App.showSecurityAlert('تم قراءة كود الـ HTML بنجاح.');
-          };
-          reader.readAsText(file);
-        } else {
-          reader.onload = (e) => {
-            const urlInput = document.getElementById('contentUrl');
-            if (urlInput) urlInput.value = e.target.result;
-            App.showSecurityAlert('تم تجهيز الملف.');
-          };
-          reader.readAsDataURL(file);
         }
       },
 
@@ -3310,27 +3341,15 @@
 
       async handleSaveSettings(e) {
         e.preventDefault();
-        const saveBtn = e.target.querySelector('button[type="submit"]');
-        const originalBtnText = saveBtn ? saveBtn.innerHTML : "";
-        if (saveBtn) {
-          saveBtn.disabled = true;
-          saveBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري الحفظ السحابي...';
-        }
-        
         const logo = document.getElementById("settingLogoUrl").value.trim() || OFFICIAL_LOGO_URL;
         const phone = normalizeInput(document.getElementById("settingWhatsAppPhone").value);
         const newAdminUser = normalizeInput(document.getElementById("settingAdminUser").value).toLowerCase();
         const newAdminPass = normalizeInput(document.getElementById("settingAdminPass").value);
         const newAdminPin = normalizeInput(document.getElementById("settingAdminPin").value);
-        
-        const showTabsChk = document.getElementById("settingShowTabs");
-        const showTabsVal = showTabsChk ? showTabsChk.checked : false;
+        const showTabsVal = document.getElementById("settingShowTabs").checked;
 
         const currentVault = (await DataStore.getAdminVault()) || {
-          username: "admin",
-          passwordHash: "123456",
-          pinHash: "1234",
-          showContentTabsToStudents: false
+          username: "admin", passwordHash: "123456", pinHash: "1234", showContentTabsToStudents: false
         };
         
         const finalUsername = newAdminUser || currentVault.username || "admin";
@@ -3345,14 +3364,8 @@
           updatedAt: new Date().toISOString()
         };
         
-        let cloudSaved = false;
         if (db) {
-          try {
-            await db.collection("omer_system").doc("admin_config").set(updateObj, { merge: true });
-            cloudSaved = true;
-          } catch (err) {
-            console.error("خطأ في رفع بيانات الإدارة للسحابة:", err);
-          }
+          await db.collection("omer_system").doc("admin_config").set(updateObj, { merge: true }).catch(console.error);
         }
         
         localStorage.setItem("og_admin_vault_cache", JSON.stringify(updateObj));
@@ -3369,32 +3382,294 @@
         if (State.currentUser && State.currentUser.role === "ADMIN") {
           State.currentUser.username = finalUsername;
           localStorage.setItem("og_session_user", finalUsername);
-          const newToken = CryptoSecurity.createSessionToken(State.currentUser);
-          localStorage.setItem("og_session_token", newToken);
-        }
-        
-        if (saveBtn) {
-          saveBtn.disabled = false;
-          saveBtn.innerHTML = originalBtnText;
         }
         
         App.closeSettingsModal();
-        if (cloudSaved) {
-          App.showSecurityAlert("☁️ تم تحديث إعدادات المنصة وروابط المناهج سحابياً!");
-        } else {
-          App.showSecurityAlert("⚠️ تم الحفظ محلياً على هذا الجهاز.");
-        }
+        App.showSecurityAlert("تم حفظ وتحديث إعدادات المنصة بنجاح.");
         UI.render();
       },
 
-      openVoiceModal() {
-        const sel = document.getElementById('voiceStudentSelect');
-        if (sel) {
-          sel.innerHTML = State.students.map(s => `<option value="${s.uid}">${escapeHTML(s.name)} (${UI.getTargetLabel(s.target)})</option>`).join('');
+      openBroadcastModal() {
+        const curSel = document.getElementById('liveTargetCurriculum');
+        if (curSel) {
+          curSel.innerHTML = CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('');
         }
-        document.getElementById('voiceCallModal').classList.add('active');
+        const stuBox = document.getElementById('liveCustomStudentsList');
+        if (stuBox) {
+          stuBox.innerHTML = State.students.map(s => `
+            <label style="display:flex; align-items:center; gap:8px; font-size:0.8rem; cursor:pointer; margin-bottom:4px;">
+              <input type="checkbox" class="chk-live-student" value="${s.uid}"> ${escapeHTML(s.name)} (${UI.getTargetLabel(s.target)})
+            </label>
+          `).join('');
+        }
+        document.getElementById('broadcastStudioModal').classList.add('active');
       },
-      closeVoiceModal() { document.getElementById('voiceCallModal').classList.remove('active'); },
+      closeBroadcastModal() { document.getElementById('broadcastStudioModal').classList.remove('active'); },
+
+      openAddUnitModal() {
+        const sel = document.getElementById('newUnitTarget');
+        sel.innerHTML = `<option value="ALL">كافة الصفوف والمناهج</option>` + CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('');
+        document.getElementById('addUnitModal').classList.add('active');
+      },
+      closeAddUnitModal() { document.getElementById('addUnitModal').classList.remove('active'); },
+
+      handleSaveUnit(e) {
+        e.preventDefault();
+        const target = document.getElementById('newUnitTarget').value;
+        const title = document.getElementById('newUnitTitle').value.trim();
+        const newUnit = { id: "unit_" + Date.now(), title, target, order: State.units.length + 1 };
+        State.units.push(newUnit);
+        DataStore.save("units", State.units);
+        App.closeAddUnitModal();
+        App.showSecurityAlert("تمت إضافة الوحدة التعليمية بنجاح.");
+        UI.render();
+      },
+
+      openAddLessonModal() {
+        const unitSel = document.getElementById('lessonParentUnitSelect');
+        unitSel.innerHTML = State.units.map(u => `<option value="${u.id}">${escapeHTML(u.title)} (${UI.getTargetLabel(u.target)})</option>`).join('');
+        const stuSel = document.getElementById('lessonAssignedStudent');
+        stuSel.innerHTML = `<option value="">متاح لكافة طلاب هذا الصف ✓</option>` + State.students.map(s => `<option value="${s.uid}">${escapeHTML(s.name)}</option>`).join('');
+        document.getElementById('addLessonModal').classList.add('active');
+      },
+      openAddLessonForUnit(unitId) {
+        this.openAddLessonModal();
+        document.getElementById('lessonParentUnitSelect').value = unitId;
+      },
+      closeAddLessonModal() { document.getElementById('addLessonModal').classList.remove('active'); },
+
+      handleSaveLesson(e) {
+        e.preventDefault();
+        const unitId = document.getElementById('lessonParentUnitSelect').value;
+        const title = document.getElementById('newLessonTitle').value.trim();
+        const desc = document.getElementById('newLessonDesc').value.trim();
+        const studentUid = document.getElementById('lessonAssignedStudent').value;
+        const unit = State.units.find(u => u.id === unitId);
+
+        const newLesson = {
+          id: "les_" + Date.now(),
+          unitId,
+          title,
+          description: desc,
+          target: unit ? unit.target : 'ALL',
+          assignedStudentUids: studentUid ? [studentUid] : [],
+          resources: []
+        };
+
+        State.lessons.push(newLesson);
+        DataStore.save("lessons", State.lessons);
+        App.closeAddLessonModal();
+        App.showSecurityAlert("تمت إضافة الدرس بنجاح داخل الوحدة.");
+        UI.render();
+      },
+
+      openAddResourceModal(lessonId, lessonTitle) {
+        document.getElementById('resourceLessonId').value = lessonId;
+        document.getElementById('resourceLessonTitleDisplay').value = lessonTitle;
+        document.getElementById('resTitle').value = '';
+        document.getElementById('resUrl').value = '';
+        document.getElementById('resText').value = '';
+        this.toggleResourceFields();
+        document.getElementById('addResourceModal').classList.add('active');
+      },
+      closeAddResourceModal() { document.getElementById('addResourceModal').classList.remove('active'); },
+
+      toggleResourceFields() {
+        const type = document.getElementById('resType').value;
+        const urlGroup = document.getElementById('resUrlGroup');
+        const textGroup = document.getElementById('resTextGroup');
+        const fileGroup = document.getElementById('resFileUploadGroup');
+
+        urlGroup.style.display = (type === 'ARTICLES') ? 'none' : 'block';
+        textGroup.style.display = (type === 'ARTICLES' || type === 'HTML_EMBED') ? 'block' : 'none';
+        fileGroup.style.display = (['IMAGES', 'WORD_DOCS', 'HTML_EMBED'].includes(type)) ? 'block' : 'none';
+      },
+
+      handleResourceFileUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        if (file.type.startsWith('image/')) {
+          reader.onload = ev => document.getElementById('resUrl').value = ev.target.result;
+          reader.readAsDataURL(file);
+        } else if (file.name.endsWith('.docx') && window.mammoth) {
+          reader.onload = ev => {
+            mammoth.convertToHtml({ arrayBuffer: ev.target.result }).then(res => {
+              document.getElementById('resText').value = res.value;
+            });
+          };
+          reader.readAsArrayBuffer(file);
+        } else {
+          reader.onload = ev => document.getElementById('resText').value = ev.target.result;
+          reader.readAsText(file);
+        }
+      },
+
+      handleSaveResource(e) {
+        e.preventDefault();
+        const lessonId = document.getElementById('resourceLessonId').value;
+        const type = document.getElementById('resType').value;
+        const title = document.getElementById('resTitle').value.trim();
+        const url = document.getElementById('resUrl').value.trim();
+        const text = document.getElementById('resText').value.trim();
+
+        const lesson = State.lessons.find(l => l.id === lessonId);
+        if (!lesson) return;
+
+        if (!lesson.resources) lesson.resources = [];
+        lesson.resources.push({
+          id: "res_" + Date.now(),
+          type,
+          title,
+          fileUrl: url,
+          sampleContent: text
+        });
+
+        DataStore.save("lessons", State.lessons);
+        App.closeAddResourceModal();
+        App.showSecurityAlert("تمت إضافة المورد للدرس بنجاح.");
+        UI.render();
+      },
+
+      async deleteUnit(unitId) {
+        const confirmDel = await NotificationEngine.confirm("هل أنت متأكد من حذف هذه الوحدة وكافة دروسها؟", "حذف الوحدة");
+        if (confirmDel) {
+          State.units = State.units.filter(u => u.id !== unitId);
+          State.lessons = State.lessons.filter(l => l.unitId !== unitId);
+          DataStore.save("units", State.units);
+          DataStore.save("lessons", State.lessons);
+          if (db) db.collection("omer_units").doc(unitId).delete().catch(()=>{});
+          UI.render();
+        }
+      },
+
+      async deleteLesson(lessonId) {
+        const confirmDel = await NotificationEngine.confirm("هل تريد حذف هذا الدرس؟", "حذف الدرس");
+        if (confirmDel) {
+          State.lessons = State.lessons.filter(l => l.id !== lessonId);
+          DataStore.save("lessons", State.lessons);
+          if (db) db.collection("omer_lessons").doc(lessonId).delete().catch(()=>{});
+          UI.render();
+        }
+      },
+
+      deleteResource(lessonId, resId) {
+        const lesson = State.lessons.find(l => l.id === lessonId);
+        if (lesson && lesson.resources) {
+          lesson.resources = lesson.resources.filter(r => r.id !== resId);
+          DataStore.save("lessons", State.lessons);
+          UI.render();
+        }
+      },
+
+      openMediaResource(lessonId, resId) {
+        const lesson = State.lessons.find(l => l.id === lessonId);
+        if (!lesson || !lesson.resources) return;
+        const res = lesson.resources.find(r => r.id === resId);
+        if (!res) return;
+
+        document.getElementById('playerMediaTitle').innerText = `${lesson.title} – ${res.title}`;
+        const viewport = document.getElementById('playerViewport');
+        document.getElementById('pdfControlsBar').style.display = 'none';
+        document.getElementById('proVideoControlsBar').style.display = 'none';
+
+        if (res.type === 'VIDEOS') {
+          viewport.innerHTML = VideoEngine.generatePlayerHtml(res.fileUrl);
+          if (res.fileUrl.endsWith('.mp4') || res.fileUrl.endsWith('.m3u8')) {
+            document.getElementById('proVideoControlsBar').style.display = 'flex';
+            VideoEngine.initDirectVideoFeatures(res.fileUrl);
+          }
+        } else if (res.type === 'WORKSHEETS') {
+          viewport.innerHTML = `<div id="pdfCanvasWrapper" class="pdf-canvas-container"></div>`;
+          PDFViewerEngine.loadPDF(res.fileUrl, document.getElementById('pdfCanvasWrapper'));
+        } else if (res.type === 'PODCASTS') {
+          viewport.innerHTML = `
+            <div class="podcast-player-box">
+              <div class="podcast-cover-art"><i class="fa-solid fa-podcast"></i></div>
+              <h3 style="color:#FFF; margin-bottom:12px;">${escapeHTML(res.title)}</h3>
+              <audio controls src="${res.fileUrl}" autoplay style="width:100%; max-width:440px;"></audio>
+            </div>
+          `;
+        } else if (res.type === 'POWERPOINTS' || res.type === 'WORD_DOCS') {
+          const officeViewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(res.fileUrl)}`;
+          viewport.innerHTML = `<iframe class="document-viewer-frame" src="${officeViewerUrl}"></iframe>`;
+        } else if (res.type === 'IMAGES') {
+          viewport.innerHTML = `
+            <div class="image-viewer-container">
+              <img src="${res.fileUrl}" id="targetZoomableImg" style="max-width:95%; max-height:85%; object-fit:contain;">
+              <div style="margin-top:14px; display:flex; gap:8px;">
+                <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.zoomImage(1.2)"><i class="fa-solid fa-magnifying-glass-plus"></i> تكبير</button>
+                <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.zoomImage(0.8)"><i class="fa-solid fa-magnifying-glass-minus"></i> تصغير</button>
+                <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.resetImageZoom()"><i class="fa-solid fa-arrows-rotate"></i> ضبط الحجم</button>
+              </div>
+            </div>
+          `;
+        } else if (res.type === 'HTML_EMBED') {
+          let srcContent = (res.fileUrl && res.fileUrl.startsWith('http')) 
+            ? `<iframe class="document-viewer-frame" src="${res.fileUrl}"></iframe>`
+            : `<iframe class="document-viewer-frame" srcdoc="${escapeHTML(res.sampleContent || '<h3>أداة تفاعلية</h3>')}"></iframe>`;
+          viewport.innerHTML = srcContent;
+        } else {
+          viewport.innerHTML = `
+            <div class="article-reading-container">
+              <h2>${escapeHTML(res.title)}</h2>
+              <div class="math-theorem-box">${res.sampleContent || 'لا يوجد نص متاح'}</div>
+            </div>
+          `;
+        }
+
+        viewport.innerHTML += `<div class="floating-watermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>`;
+        document.getElementById('mediaPlayerModal').classList.add('active');
+        App.resetUniversalFullscreen();
+      },
+
+      currentImgScale: 1,
+      zoomImage(factor) {
+        const img = document.getElementById('targetZoomableImg');
+        if (!img) return;
+        this.currentImgScale = Math.min(Math.max(0.5, this.currentImgScale * factor), 3.5);
+        img.style.transform = `scale(${this.currentImgScale})`;
+      },
+
+      resetImageZoom() {
+        const img = document.getElementById('targetZoomableImg');
+        if (!img) return;
+        this.currentImgScale = 1;
+        img.style.transform = 'scale(1)';
+      },
+
+      closeMediaPlayer() {
+        document.getElementById('mediaPlayerModal').classList.remove('active');
+        document.getElementById('playerViewport').innerHTML = '';
+        VideoEngine.cleanup();
+      },
+
+      toggleUniversalFullscreen() {
+        const c = document.getElementById("playerModalContent");
+        State.isUniversalFullscreen = !State.isUniversalFullscreen;
+        if (State.isUniversalFullscreen) {
+          c.classList.add("rotated-fullscreen-active");
+          document.getElementById("floatingExitFullscreenBtn").style.display = "inline-flex";
+          if (c.requestFullscreen) c.requestFullscreen().catch(()=>{});
+        } else {
+          App.resetUniversalFullscreen();
+        }
+      },
+
+      resetUniversalFullscreen() {
+        const c = document.getElementById("playerModalContent");
+        State.isUniversalFullscreen = false;
+        if (c) c.classList.remove("rotated-fullscreen-active");
+        const btn = document.getElementById("floatingExitFullscreenBtn");
+        if (btn) btn.style.display = "none";
+        if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(()=>{});
+      },
+
+      syncOrientationUI() {
+        const isLandscape = window.innerWidth > window.innerHeight;
+        const rotateBtnText = document.getElementById("rotateBtnText");
+        if (rotateBtnText) rotateBtnText.innerText = isLandscape ? "وضع الشاشة الكاملة" : "ملء الشاشة وتدوير";
+      },
 
       openEvaluationModal(studentUid) {
         const student = State.students.find(s => s.uid === studentUid);
@@ -3433,12 +3708,7 @@
         student.parentPhone = parentPhone;
         student.recentEvaluation = {
           date: new Date().toLocaleDateString('ar-AE'),
-          score,
-          grade,
-          homeworkStatus,
-          attendanceStatus,
-          period,
-          notes
+          score, grade, homeworkStatus, attendanceStatus, period, notes
         };
 
         DataStore.save('students', State.students);
@@ -3465,8 +3735,7 @@
 *منصة الأستاذ عمر قاسم للرياضيات والعلوم الرياضية*
 هاتف / واتساب: ${State.settings.adminPhoneWhatsApp}`;
 
-        const waUrl = `https://wa.me/${parentPhone}?text=${encodeURIComponent(message)}`;
-        window.open(waUrl, '_blank');
+        window.open(`https://wa.me/${parentPhone}?text=${encodeURIComponent(message)}`, '_blank');
         UI.render();
       },
 
@@ -3498,25 +3767,21 @@
         if (!student) return;
 
         let actionsDone = [];
-
         if (newPass) {
           student.passwordHash = CryptoSecurity.hashPassword(newPass);
           actionsDone.push('تغيير كلمة المرور');
         }
-
         if (resetTrial) {
           student.status = 'TRIAL';
           student.plan = '3_DAYS_TRIAL';
           student.trialEndTimestamp = Date.now() + (3 * 24 * 60 * 60 * 1000);
           actionsDone.push('تمديد الفترة التجريبية 3 أيام جديدة');
         }
-
         if (resetProgress) {
           student.xp = 100;
           student.trophies = 1;
           actionsDone.push('تصفير النقاط والكؤوس');
         }
-
         if (revokeCert) {
           student.certificateApproved = false;
           actionsDone.push('إلغاء اعتماد الشهادة');
@@ -3532,7 +3797,6 @@
         SurveyBuilder.reset();
         document.getElementById('createSurveyModal').classList.add('active');
       },
-
       closeCreateSurveyModal() { document.getElementById('createSurveyModal').classList.remove('active'); },
 
       getOnlineSurveyUrl(surveyId) {
@@ -3560,8 +3824,7 @@
 
         const newSurvey = {
           id: 'srv_' + Date.now(),
-          title,
-          target,
+          title, target,
           questions: JSON.parse(JSON.stringify(SurveyBuilder.questions)),
           createdAt: new Date().toLocaleDateString('ar-AE'),
           active: true
@@ -3664,11 +3927,7 @@ ${link}
             val = txt ? txt.value.trim() : '';
           }
 
-          collectedAnswers.push({
-            questionId: q.id,
-            questionText: q.text,
-            value: val
-          });
+          collectedAnswers.push({ questionId: q.id, questionText: q.text, value: val });
         });
 
         const responseObj = {
@@ -3684,427 +3943,6 @@ ${link}
 
         NotificationEngine.alert('🌟 شكرًا جزيلاً لك! تم استلام ردك وملاحظاتك بنجاح وسيقوم الأستاذ عمر بمراجعتها.', 'تم الاستلام بنجاح');
         App.closeSurveyView();
-      },
-
-      openImageViewer(materialId) {
-        document.getElementById('pdfControlsBar').style.display = 'none';
-        const item = State.materials.find(m => m.id === materialId);
-        if (!item) return;
-
-        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-image"></i> ${escapeHTML(item.title)}`;
-        const viewport = document.getElementById('playerViewport');
-
-        viewport.innerHTML = `
-          <div class="image-viewer-container">
-            <img src="${item.fileUrl}" alt="${escapeHTML(item.title)}" id="targetZoomableImg" onerror="this.src='https://via.placeholder.com/800x600?text=تعذر+تحميل+الصورة';">
-            <div style="margin-top:14px; display:flex; gap:8px; z-index:20;">
-              <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.zoomImage(1.2)"><i class="fa-solid fa-magnifying-glass-plus"></i> تكبير</button>
-              <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.zoomImage(0.8)"><i class="fa-solid fa-magnifying-glass-minus"></i> تصغير</button>
-              <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="App.resetImageZoom()"><i class="fa-solid fa-arrows-rotate"></i> ضبط الحجم</button>
-            </div>
-          </div>
-          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
-        `;
-
-        document.getElementById('mediaPlayerModal').classList.add('active');
-        App.resetUniversalFullscreen();
-      },
-
-      currentImgScale: 1,
-      zoomImage(factor) {
-        const img = document.getElementById('targetZoomableImg');
-        if (!img) return;
-        this.currentImgScale = Math.min(Math.max(0.5, this.currentImgScale * factor), 3.5);
-        img.style.transform = `scale(${this.currentImgScale})`;
-      },
-
-      resetImageZoom() {
-        const img = document.getElementById('targetZoomableImg');
-        if (!img) return;
-        this.currentImgScale = 1;
-        img.style.transform = 'scale(1)';
-      },
-
-      openHtmlViewer(materialId) {
-        document.getElementById('pdfControlsBar').style.display = 'none';
-        const item = State.materials.find(m => m.id === materialId);
-        if (!item) return;
-
-        document.getElementById('playerMediaTitle').innerHTML = `<i class="fa-solid fa-code"></i> أداة تفاعلية / لعبة: ${escapeHTML(item.title)}`;
-        const viewport = document.getElementById('playerViewport');
-
-        let srcContent = '';
-        if (item.fileUrl && item.fileUrl.startsWith('http')) {
-          srcContent = `<iframe class="document-viewer-frame" src="${item.fileUrl}" sandbox="allow-scripts allow-forms allow-popups"></iframe>`;
-        } else {
-          const cleanHtml = (item.sampleContent || '<h3>لا يوجد كود تفاعلي</h3>').replace(/"/g, '&quot;');
-          srcContent = `<iframe class="document-viewer-frame" srcdoc="${cleanHtml}" sandbox="allow-scripts allow-forms allow-popups"></iframe>`;
-        }
-
-        viewport.innerHTML = `
-          ${srcContent}
-          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
-        `;
-
-        document.getElementById('mediaPlayerModal').classList.add('active');
-        App.resetUniversalFullscreen();
-      },
-
-      openVideoPlayer(materialId) {
-        document.getElementById('pdfControlsBar').style.display = 'none';
-        const item = State.materials.find(m => m.id === materialId);
-        if (!item) return;
-
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-circle-play"></i> ${escapeHTML(item.title)}`;
-        const viewport = document.getElementById("playerViewport");
-        const url = item.fileUrl || "";
-
-        const playerHtml = VideoEngine.generatePlayerHtml(url);
-        viewport.innerHTML = `
-          ${playerHtml}
-          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
-        `;
-
-        document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetUniversalFullscreen();
-        VideoEngine.initDirectVideoFeatures(url);
-      },
-
-      openPodcastPlayer(materialId) {
-        document.getElementById('pdfControlsBar').style.display = 'none';
-        const item = State.materials.find(m => m.id === materialId);
-        if (!item) return;
-
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-podcast"></i> بودكاست: ${escapeHTML(item.title)}`;
-        const viewport = document.getElementById("playerViewport");
-
-        viewport.innerHTML = `
-          <div class="podcast-player-box">
-            <div class="podcast-cover-art"><i class="fa-solid fa-headphones"></i></div>
-            <h3 style="color:#FFF; font-size:1.15rem; margin-bottom:4px;">${escapeHTML(item.title)}</h3>
-            <p style="color:var(--gold-orange); font-size:0.82rem; margin-bottom:16px;">${escapeHTML(item.unit) || 'بودكاست الأستاذ عمر التعليمي'}</p>
-            <audio id="activeAudioPlayer" src="${item.fileUrl}" preload="metadata"></audio>
-            <div class="audio-controls-panel">
-              <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:#94A3B8;"><span id="audioCurrentTime">00:00</span><span id="audioDuration">--:--</span></div>
-              <input type="range" id="audioSeekBar" class="audio-progress-slider" value="0" min="0" max="100" oninput="App.seekPodcast(this.value)">
-              <div style="display:flex; justify-content:center; align-items:center; gap:14px; margin-top:12px;">
-                <button class="btn btn-secondary" style="border-radius:50%; width:38px; height:38px; padding:0;" onclick="App.skipPodcast(-10)"><i class="fa-solid fa-rotate-left"></i></button>
-                <button class="btn btn-gold" id="audioPlayPauseBtn" style="border-radius:50%; width:50px; height:50px; padding:0;" onclick="App.togglePodcastPlay()"><i class="fa-solid fa-play"></i></button>
-                <button class="btn btn-secondary" style="border-radius:50%; width:38px; height:38px; padding:0;" onclick="App.skipPodcast(10)"><i class="fa-solid fa-rotate-right"></i></button>
-                <button class="btn btn-secondary" id="audioSpeedBtn" style="font-size:0.72rem; padding:4px 8px; min-height:30px;" onclick="App.cyclePodcastSpeed()">1.0x</button>
-              </div>
-            </div>
-          </div>
-          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
-        `;
-
-        document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetUniversalFullscreen();
-
-        activeAudioElement = document.getElementById("activeAudioPlayer");
-        if (activeAudioElement) {
-          activeAudioElement.addEventListener("timeupdate", App.updatePodcastProgress);
-          activeAudioElement.addEventListener("loadedmetadata", () => {
-            document.getElementById("audioDuration").innerText = App.formatTime(activeAudioElement.duration);
-          });
-        }
-      },
-
-      togglePodcastPlay() {
-        if (!activeAudioElement) return;
-        const btn = document.getElementById("audioPlayPauseBtn");
-        if (activeAudioElement.paused) {
-          activeAudioElement.play();
-          if (btn) btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-        } else {
-          activeAudioElement.pause();
-          if (btn) btn.innerHTML = '<i class="fa-solid fa-play"></i>';
-        }
-      },
-
-      skipPodcast(sec) { if (activeAudioElement) activeAudioElement.currentTime += sec; },
-      seekPodcast(percent) { if (activeAudioElement && activeAudioElement.duration) activeAudioElement.currentTime = (percent / 100) * activeAudioElement.duration; },
-      updatePodcastProgress() {
-        if (!activeAudioElement) return;
-        const current = activeAudioElement.currentTime;
-        const total = activeAudioElement.duration || 1;
-        const bar = document.getElementById("audioSeekBar");
-        const timeEl = document.getElementById("audioCurrentTime");
-        if (bar) bar.value = (current / total) * 100;
-        if (timeEl) timeEl.innerText = App.formatTime(current);
-      },
-
-      cyclePodcastSpeed() {
-        if (!activeAudioElement) return;
-        const speeds = [1.0, 1.25, 1.5, 2.0];
-        let idx = (speeds.indexOf(activeAudioElement.playbackRate) + 1) % speeds.length;
-        activeAudioElement.playbackRate = speeds[idx];
-        document.getElementById("audioSpeedBtn").innerText = `${speeds[idx]}x`;
-      },
-
-      formatTime(sec) {
-        const m = Math.floor(sec / 60).toString().padStart(2, '0');
-        const s = Math.floor(sec % 60).toString().padStart(2, '0');
-        return `${m}:${s}`;
-      },
-
-      openArticleViewer(materialId) {
-        document.getElementById('pdfControlsBar').style.display = 'none';
-        const item = State.materials.find(m => m.id === materialId);
-        if (!item) return;
-
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-book-open"></i> ${escapeHTML(item.title)}`;
-        const viewport = document.getElementById("playerViewport");
-        viewport.innerHTML = `
-          <div class="article-reading-container">
-            <div style="border-bottom:2px solid var(--gold-subtle); padding-bottom:10px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
-              <div><h2>${escapeHTML(item.title)}</h2><span class="badge badge-curriculum">${escapeHTML(item.unit) || 'مقرر الرياضيات'}</span></div>
-              <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;" onclick="window.print()"><i class="fa-solid fa-print"></i> طباعة</button>
-            </div>
-            <div class="math-theorem-box"><strong>الشرح والمفهوم الرياضي:</strong><div style="margin-top:6px; font-size:1rem; line-height:1.9;">${item.sampleContent || 'لا يوجد نص للشرح بعد.'}</div></div>
-          </div>
-          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
-        `;
-        document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetUniversalFullscreen();
-        if (window.renderMathInElement) renderMathInElement(viewport);
-      },
-
-      openOfficeViewer(materialId, type) {
-        document.getElementById('pdfControlsBar').style.display = 'none';
-        const item = State.materials.find(m => m.id === materialId);
-        if (!item) return;
-
-        if (item.sampleContent && item.sampleContent.includes('<p>')) {
-          App.openArticleViewer(materialId);
-          return;
-        }
-
-        const icon = type === 'ppt' ? 'fa-file-powerpoint' : 'fa-file-word';
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid ${icon}"></i> ${escapeHTML(item.title)}`;
-        const viewport = document.getElementById("playerViewport");
-        const url = item.fileUrl || "";
-        const officeViewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(url)}`;
-
-        viewport.innerHTML = `
-          <iframe class="document-viewer-frame" src="${officeViewerUrl}"></iframe>
-          <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – منصة الأستاذ عمر</div>
-        `;
-        document.getElementById("mediaPlayerModal").classList.add("active");
-        App.resetUniversalFullscreen();
-      },
-
-      openDocumentViewer(materialId) {
-        const item = State.materials.find(m => m.id === materialId);
-        if (!item) return;
-
-        document.getElementById("playerMediaTitle").innerHTML = `<i class="fa-solid fa-file-pdf"></i> مذكرة: ${escapeHTML(item.title)}`;
-        const viewport = document.getElementById("playerViewport");
-
-        if (item.fileUrl && (item.fileUrl.startsWith("http") || item.fileUrl.startsWith("data:application/pdf"))) {
-          viewport.innerHTML = `
-            <div id="pdfCanvasWrapper" class="pdf-canvas-container"></div>
-            <div class="floating-watermark" id="floatingGlobalWatermark">${escapeHTML(State.currentUser ? State.currentUser.name : 'طالب')} – مذكرات الأستاذ عمر المشفرة</div>
-          `;
-          document.getElementById("mediaPlayerModal").classList.add("active");
-          const canvasWrap = document.getElementById("pdfCanvasWrapper");
-          PDFViewerEngine.loadPDF(item.fileUrl, canvasWrap);
-        } else {
-          App.openArticleViewer(materialId);
-        }
-        App.resetUniversalFullscreen();
-      },
-
-      toggleUniversalFullscreen() {
-        const contentBox = document.getElementById("playerModalContent");
-        const exitBtn = document.getElementById("floatingExitFullscreenBtn");
-        const rotateBtnText = document.getElementById("rotateBtnText");
-        
-        State.isUniversalFullscreen = !State.isUniversalFullscreen;
-
-        if (State.isUniversalFullscreen) {
-          contentBox.classList.add("rotated-fullscreen-active");
-          if (exitBtn) exitBtn.style.display = "inline-flex";
-          if (rotateBtnText) rotateBtnText.innerText = "إنهاء ملء الشاشة";
-
-          if (screen.orientation && screen.orientation.lock) {
-            screen.orientation.lock("landscape").catch(() => {});
-          }
-
-          if (!document.fullscreenElement && contentBox.requestFullscreen) {
-            contentBox.requestFullscreen().catch(() => {});
-          }
-        } else {
-          App.resetUniversalFullscreen();
-        }
-      },
-
-      resetUniversalFullscreen() {
-        const contentBox = document.getElementById("playerModalContent");
-        const exitBtn = document.getElementById("floatingExitFullscreenBtn");
-        const rotateBtnText = document.getElementById("rotateBtnText");
-
-        State.isUniversalFullscreen = false;
-        if (contentBox) contentBox.classList.remove("rotated-fullscreen-active");
-        if (exitBtn) exitBtn.style.display = "none";
-        if (rotateBtnText) rotateBtnText.innerText = "ملء الشاشة وتدوير";
-
-        if (screen.orientation && screen.orientation.unlock) {
-          screen.orientation.unlock();
-        }
-
-        if (document.fullscreenElement && document.exitFullscreen) {
-          document.exitFullscreen().catch(() => {});
-        }
-      },
-
-      syncOrientationUI() {
-        const isLandscape = window.innerWidth > window.innerHeight;
-        const rotateBtnText = document.getElementById("rotateBtnText");
-        if (rotateBtnText) {
-          rotateBtnText.innerText = isLandscape ? "وضع الشاشة الكاملة" : "ملء الشاشة وتدوير";
-        }
-      },
-
-      closeMediaPlayer() {
-        const video = document.getElementById("activeVideoPlayer");
-        if (video) video.pause();
-        if (activeAudioElement) activeAudioElement.pause();
-        VideoEngine.cleanup();
-        document.getElementById('pdfControlsBar').style.display = 'none';
-        App.resetUniversalFullscreen();
-        document.getElementById("mediaPlayerModal").classList.remove("active");
-      },
-
-      openEditModal(contentId, type) {
-        const item = State.materials.find(m => m.id === contentId);
-        if (!item) return;
-
-        const targetSelect = document.getElementById('editContentTarget');
-        targetSelect.innerHTML = `<option value="ALL">كافة الصفوف والمناهج</option>` + CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}" ${item.target === c.id ? 'selected' : ''}>${c.full}</option>`).join('');
-
-        document.getElementById('editContentId').value = item.id;
-        document.getElementById('editContentType').value = type;
-        document.getElementById('editContentTitle').value = item.title;
-        document.getElementById('editContentUnit').value = item.unit || '';
-        document.getElementById('editContentUrl').value = item.fileUrl || '';
-        document.getElementById('editContentText').value = item.sampleContent || '';
-
-        const urlGroup = document.getElementById('editUrlGroup');
-        if (type === 'ARTICLES') urlGroup.style.display = 'none';
-        else urlGroup.style.display = 'block';
-
-        document.getElementById('editContentModal').classList.add('active');
-      },
-
-      closeEditModal() { document.getElementById('editContentModal').classList.remove('active'); },
-
-      handleSaveEditContent(e) {
-        e.preventDefault();
-        const id = document.getElementById('editContentId').value;
-        const target = document.getElementById('editContentTarget').value;
-        const title = document.getElementById('editContentTitle').value.trim();
-        const unit = document.getElementById('editContentUnit').value.trim() || 'الوحدة العامة';
-        const url = document.getElementById('editContentUrl').value.trim();
-        const text = document.getElementById('editContentText').value.trim();
-
-        const item = State.materials.find(m => m.id === id);
-        if (item) {
-          item.target = target;
-          item.title = title;
-          item.unit = unit;
-          item.fileUrl = url;
-          item.sampleContent = text;
-          DataStore.save('materials', State.materials);
-        }
-        App.closeEditModal();
-        App.showSecurityAlert('تم حفظ التعديلات سحابياً بنجاح.');
-        UI.render();
-      },
-
-      async promptDeleteContent(contentId) {
-        const confirmDelete = await NotificationEngine.confirm('هل أنت متأكد من رغبتك في حذف هذا المحتوى التعليمي نهائياً؟', 'حذف المحتوى');
-        if (confirmDelete) {
-          State.materials = State.materials.filter(m => m.id !== contentId);
-          if (db) db.collection("omer_materials").doc(contentId).delete().catch(console.error);
-          DataStore.save('materials', State.materials);
-          UI.render();
-        }
-      },
-
-      handleCreateContent(e) {
-        e.preventDefault();
-        const type = document.getElementById("contentType").value;
-        const target = document.getElementById("contentTarget").value;
-        const title = document.getElementById("contentTitle").value.trim();
-        const unit = document.getElementById("contentUnit").value.trim() || 'الوحدة الأولى: الأساسيات';
-        const url = document.getElementById("contentUrl") ? document.getElementById("contentUrl").value.trim() : "";
-        const text = document.getElementById("contentText") ? document.getElementById("contentText").value.trim() : "";
-        const assignedStudent = document.getElementById("contentAssignedStudent") ? document.getElementById("contentAssignedStudent").value : "";
-
-        const assignedList = assignedStudent ? [assignedStudent] : [];
-
-        const newMaterial = {
-          id: "mat_" + Date.now(),
-          type,
-          target,
-          title,
-          unit,
-          fileUrl: url,
-          sampleContent: text,
-          format: UI.getTabTitle(type),
-          assignedStudentUids: assignedList
-        };
-
-        State.materials.push(newMaterial);
-        DataStore.save("materials", State.materials);
-
-        NotificationEngine.alert(`تم نشر مادة (${title}) بنجاح وإضافتها إلى وحدة (${unit}).`, 'تم النشر بنجاح');
-        App.setRoute("ADMIN_CONTENT_MANAGER");
-      },
-
-      updateStudentAssignList() {
-        const selTarget = document.getElementById('contentTarget').value;
-        const studentSel = document.getElementById('contentAssignedStudent');
-        if (!studentSel) return;
-
-        const filtered = State.students.filter(s => s.target === selTarget);
-        studentSel.innerHTML = `<option value="">متاح لكافة طلاب الصف المختار ✓</option>` +
-          filtered.map(s => `<option value="${s.uid}">${escapeHTML(s.name)} (${escapeHTML(s.username)})</option>`).join('');
-      },
-
-      toggleContentFields() {
-        const type = document.getElementById("contentType").value;
-        const urlGroup = document.getElementById("urlFieldGroup");
-        const textGroup = document.getElementById("textFieldGroup");
-        const urlLabel = document.getElementById("urlLabel");
-        const textLabel = document.getElementById("textLabel");
-
-        urlGroup.style.display = "block";
-        textGroup.style.display = "block";
-
-        if (type === "ARTICLES") {
-          urlGroup.style.display = "none";
-          textLabel.innerText = "نصوص ومحتوى الشرح الكتابي المباشر";
-        } else if (type === "IMAGES") {
-          urlLabel.innerText = "رابط الصورة المباشر أو المخطط (أو الرفع من جهازك أعلاه)";
-          textLabel.innerText = "شرح أو تعليق مختصر على الصورة الرياضية";
-        } else if (type === "HTML_EMBED") {
-          urlLabel.innerText = "رابط الأداة أو اللعبة التفاعلية (Desmos / GeoGebra URL)";
-          textLabel.innerText = "أو الصق كود الـ HTML / JavaScript التفاعلي هنا";
-        } else if (type === "PODCASTS") {
-          urlLabel.innerText = "رابط ملف الصوت المباشر (MP3)";
-          textLabel.innerText = "ملاحظات وتفريغ نصي للبودكاست";
-        } else if (type === "WORD_DOCS") {
-          urlLabel.innerText = "رابط المستند (أو اختر ملف Word لتحويله داخلياً)";
-          textLabel.innerText = "محتوى ونصوص المستند المعالجة داخلياً";
-        } else if (type === "WORKSHEETS") {
-          urlLabel.innerText = "رابط ملف الـ PDF المباشر (يحمى من التحميل التلقائي)";
-          textLabel.innerText = "ملاحظات وتوجيهات حول المذكرة";
-        } else {
-          urlLabel.innerText = "رابط الملف المباشر أو الفيديو أو المستند";
-          textLabel.innerText = "نصوص الشرح والملاحظات المرفقة";
-        }
       },
 
       startInteractiveQuiz(quizId) {
@@ -4333,7 +4171,6 @@ ${link}
               const token = CryptoSecurity.createSessionToken(State.currentUser);
               localStorage.setItem("og_session_token", token);
               localStorage.setItem("og_session_user", username);
-              VoiceEngine.init(student.uid);
               App.setRoute("STUDENT_DASHBOARD");
               return;
             }
@@ -4384,7 +4221,6 @@ ${link}
               State.pendingAdminUsername = null;
               State.loginStage = "CREDENTIALS";
               DataStore.listenToAllStudents();
-              VoiceEngine.init("admin_omer");
               App.setRoute("ADMIN_DASHBOARD");
               return;
             }
@@ -4423,20 +4259,14 @@ ${link}
 
         const newStudent = {
           uid: "st_" + Date.now(),
-          name,
-          username,
-          passwordHash,
-          target,
+          name, username, passwordHash, target,
           phone: phone || "غير محدد",
           parentPhone: parentPhone || phone || "غير محدد",
-          status: "TRIAL",
-          plan: "3_DAYS_TRIAL",
+          status: "TRIAL", plan: "3_DAYS_TRIAL",
           trialEndTimestamp: trialEndTimestamp,
           expiresAt: "تجربة (3 أيام)",
           certificateApproved: false,
-          xp: 100,
-          trophies: 1,
-          recentEvaluation: null
+          xp: 100, trophies: 1, recentEvaluation: null
         };
 
         State.students.push(newStudent);
@@ -4494,7 +4324,7 @@ ${link}
       logout() {
         localStorage.removeItem("og_session_token");
         localStorage.removeItem("og_session_user");
-        if (VoiceEngine.activeCalls && VoiceEngine.activeCalls.size > 0) VoiceEngine.endCall();
+        LiveAudio.leaveStudentSession();
         State.currentUser = null;
         State.pendingAdminUsername = null;
         State.loginStage = "CREDENTIALS";

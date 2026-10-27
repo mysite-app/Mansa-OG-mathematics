@@ -147,23 +147,38 @@
     @keyframes blinkLive { 0% { opacity: 0.3; transform: scale(0.85); } 100% { opacity: 1; transform: scale(1.15); } }
 
     .broadcaster-live-bar {
-      position: fixed; top: 70px; left: 16px; right: 16px; max-width: 760px; margin: 0 auto;
-      background: rgba(10, 20, 36, 0.98); backdrop-filter: blur(8px); border: 2px solid #EF4444;
-      border-radius: var(--radius-md); padding: 10px 18px; color: #FFF; z-index: 2500;
+      position: fixed; top: 70px; left: 14px; right: 14px; max-width: 980px; margin: 0 auto;
+      background: rgba(10, 20, 36, 0.98); backdrop-filter: blur(10px); border: 2px solid #EF4444;
+      border-radius: var(--radius-md); padding: 10px 16px; color: #FFF; z-index: 2500;
       display: none; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;
       box-shadow: var(--shadow-lg);
     }
-    .broadcaster-live-bar.active { display: flex; }
+    .broadcaster-live-bar.active { display: flex; animation: slideDownBar 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes slideDownBar { from { transform: translateY(-20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
     .student-live-widget {
-      position: fixed; bottom: 85px; right: 20px; width: 340px; max-width: calc(100vw - 40px);
+      position: fixed; bottom: 85px; right: 16px; width: 360px; max-width: calc(100vw - 32px);
       background: var(--navy-dark); border-radius: var(--radius-lg); padding: 16px; border: 2px solid #EF4444;
       box-shadow: var(--shadow-lg); z-index: 2500; display: none; flex-direction: column; gap: 10px; color: #FFF;
     }
     .student-live-widget.active { display: flex; animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
     @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-    .visualizer-canvas { width: 100%; height: 42px; background: rgba(0,0,0,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); }
+    .visualizer-canvas { width: 100%; height: 40px; background: rgba(0,0,0,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); }
+
+    .hand-raised-pulse {
+      animation: pulseHand 1.5s infinite;
+      background: #F59E0B !important; color: #0A1424 !important; font-weight: 800;
+    }
+    @keyframes pulseHand { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
+
+    .screen-video-container {
+      width: 100%; height: 60vh; min-height: 350px; background: #000; border-radius: var(--radius-sm);
+      overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center;
+    }
+    .screen-video-container video { width: 100%; height: 100%; object-fit: contain; }
+
+    .participant-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--bg-light); border: 1px solid #E2E8F0; border-radius: var(--radius-sm); margin-bottom: 6px; }
 
     .unit-container-block { margin-bottom: 22px; border-radius: var(--radius-md); border: 1.5px solid #CBD5E1; background: var(--white); overflow: hidden; box-shadow: var(--shadow-sm); }
     .unit-header-bar { background: linear-gradient(90deg, #0A1424 0%, #162642 100%); color: #FFF; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-right: 5px solid var(--gold-orange); }
@@ -270,8 +285,8 @@
     .resource-field-box.active { border-color: var(--gold-orange); background: var(--gold-light); }
 
     @media (max-width: 860px) {
-      .broadcaster-live-bar { left: 8px; right: 8px; top: 60px; }
-      .student-live-widget { left: 10px; right: 10px; width: auto; bottom: 70px; }
+      .broadcaster-live-bar { left: 8px; right: 8px; top: 60px; padding: 8px 10px; }
+      .student-live-widget { left: 8px; right: 8px; width: auto; bottom: 70px; }
       .modal-card { padding: 14px; max-height: 94vh; width: 100%; }
       .plans-container { grid-template-columns: 1fr; }
       .floating-tools-container { bottom: 12px; left: 10px; gap: 6px; }
@@ -283,6 +298,7 @@
       .player-viewport { height: 60vh; min-height: 320px; }
       .main-wrapper { padding: 12px 8px; }
       .card { padding: 14px 12px; }
+      .screen-video-container { height: 45vh; min-height: 240px; }
     }
     
     footer.app-footer { background: var(--navy-gradient); color: var(--white); padding: 18px 20px; margin-top: auto; text-align: center; border-top: 2px solid var(--gold-orange); }
@@ -319,7 +335,7 @@
     <span id="securityToastText">تنبيه أمني: محتويات منصة الأستاذ عمر محمية.</span>
   </div>
 
-  <!-- النافذة التفاعلية العامة -->
+  <!-- النافذة التفاعلية العامة للرسائل والتأكيدات -->
   <div class="modal-overlay" id="customDialogOverlay" style="z-index: 100000;">
     <div class="modal-card" style="max-width: 440px; text-align: center; border-width: 2px;">
       <div id="customDialogIcon" style="font-size: 40px; margin-bottom: 12px; color: var(--gold-orange);">
@@ -339,29 +355,73 @@
     </div>
   </div>
 
-  <!-- شريط المعلم العائم أثناء البث الصوتي المباشر -->
+  <!-- شريط المعلم المطور أثناء البث الصوتي ومشاركة الشاشة -->
   <div class="broadcaster-live-bar" id="broadcasterLiveBar">
-    <div style="display:flex; align-items:center; gap:10px;">
+    <div style="display:flex; align-items:center; gap:8px;">
       <span class="live-indicator-dot"></span>
       <div>
-        <strong style="color:#FEF08A; font-size:0.85rem; display:block;" id="broadcasterBarTitle">البث الصوتي المباشر قيد التشغيل (جودة عالية)</strong>
+        <strong style="color:#FEF08A; font-size:0.85rem; display:block;" id="broadcasterBarTitle">البث الصوتي والشاشة قيد التشغيل</strong>
         <span style="font-size:0.72rem; color:#E2E8F0;" id="broadcasterBarTarget">الجمهور: كافة الطلاب</span>
       </div>
     </div>
-    <div style="flex:1; max-width:200px; margin:0 10px;">
-      <canvas id="broadcasterVisualizerCanvas" class="visualizer-canvas" width="200" height="42"></canvas>
+    
+    <div style="flex:1; max-width:180px; margin:0 6px;">
+      <canvas id="broadcasterVisualizerCanvas" class="visualizer-canvas" width="180" height="40"></canvas>
     </div>
-    <div style="display:flex; align-items:center; gap:6px;">
+
+    <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+      <button class="btn btn-purple" id="btnToggleScreenShare" style="padding:4px 10px; font-size:0.75rem; min-height:32px;" onclick="LiveAudio.toggleScreenShare()">
+        <i class="fa-solid fa-desktop"></i> <span id="btnScreenShareText">مشاركة الشاشة</span>
+      </button>
+
       <button class="btn btn-gold" id="btnBroadcasterMute" style="padding:4px 10px; font-size:0.75rem; min-height:32px;" onclick="LiveAudio.toggleBroadcasterMute()">
         <i class="fa-solid fa-microphone"></i> كتم
       </button>
+
+      <button class="btn btn-navy" id="btnManageParticipants" style="padding:4px 10px; font-size:0.75rem; min-height:32px; position:relative;" onclick="LiveAudio.openModerationModal()">
+        <i class="fa-solid fa-hand"></i> المداخلات
+        <span id="handRaiseBadge" style="display:none; position:absolute; top:-5px; right:-5px; background:var(--gold-orange); color:var(--navy-dark); border-radius:50%; width:18px; height:18px; font-size:0.68rem; font-weight:900; align-items:center; justify-content:center;">0</span>
+      </button>
+
       <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:32px;" onclick="LiveAudio.stopBroadcast()">
-        <i class="fa-solid fa-power-off"></i> إنهاء وحفظ البث
+        <i class="fa-solid fa-power-off"></i> إنهاء البث
       </button>
     </div>
   </div>
 
-  <!-- شريط استماع الطالب العائم للبث المباشر -->
+  <!-- نافذة المعلم للتحكم الكامل بالمشاركين والمداخلات -->
+  <div class="modal-overlay" id="moderationModal">
+    <div class="modal-card" style="max-width: 580px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h3 style="color:var(--navy-dark); font-weight:900;">
+          <i class="fa-solid fa-users-gear" style="color:var(--gold-orange);"></i> إدارة المداخلات ومشاركات الطلاب
+        </h3>
+        <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="document.getElementById('moderationModal').classList.remove('active')"></i>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <h4 style="font-size:0.9rem; color:var(--navy-dark); margin-bottom:8px; border-bottom:1px solid #CBD5E1; padding-bottom:4px;">
+          ✋ طلبات رفع اليد للتحدث (<span id="handRaiseCountText">0</span>)
+        </h4>
+        <div id="handRaiseListContainer" style="max-height:160px; overflow-y:auto;">
+          <p style="color:var(--text-muted); font-size:0.8rem; padding:8px;">لا توجد طلبات مداخلة حالياً.</p>
+        </div>
+      </div>
+
+      <div style="margin-bottom:14px;">
+        <h4 style="font-size:0.9rem; color:var(--navy-dark); margin-bottom:8px; border-bottom:1px solid #CBD5E1; padding-bottom:4px;">
+          🎤 الطلاب المصرح لهم بالتحدث حالياً (<span id="activeSpeakersCountText">0</span>)
+        </h4>
+        <div id="activeSpeakersListContainer" style="max-height:160px; overflow-y:auto;">
+          <p style="color:var(--text-muted); font-size:0.8rem; padding:8px;">لا يوجد طالب يتحدث حالياً.</p>
+        </div>
+      </div>
+
+      <button class="btn btn-secondary" style="width:100%;" onclick="document.getElementById('moderationModal').classList.remove('active')">إغلاق</button>
+    </div>
+  </div>
+
+  <!-- شريط استماع الطالب للبث المباشر -->
   <div class="student-live-widget" id="studentLiveWidget">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E293B; padding-bottom:6px;">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -371,18 +431,90 @@
       <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="LiveAudio.leaveStudentSession()"></i>
     </div>
     
-    <canvas id="studentVisualizerCanvas" class="visualizer-canvas" width="300" height="42"></canvas>
+    <canvas id="studentVisualizerCanvas" class="visualizer-canvas" width="300" height="40"></canvas>
+
+    <div id="studentMicActiveNotice" style="display:none; background:#065F46; color:#D1FAE5; padding:6px 10px; border-radius:var(--radius-sm); font-size:0.75rem; align-items:center; justify-content:space-between;">
+      <span><i class="fa-solid fa-microphone"></i> المايكروفون قيد البث (أنت تتحدث الآن)</span>
+      <button class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem; min-height:24px;" onclick="LiveAudio.stopStudentSpeaking()">إنهاء المداخلة</button>
+    </div>
 
     <div style="display:flex; align-items:center; gap:8px; font-size:0.78rem;">
       <i class="fa-solid fa-volume-high" style="color:var(--gold-orange);"></i>
       <input type="range" id="studentLiveVolumeSlider" min="0" max="1" step="0.05" value="1" style="width:100%; accent-color:var(--gold-orange); cursor:pointer;" oninput="LiveAudio.setStudentVolume(this.value)">
     </div>
 
-    <div style="display:flex; align-items:center; justify-content:space-between; gap:6px;">
-      <select id="studentAudioOutputSelect" class="form-group" style="margin-bottom:0; padding:4px 6px; font-size:0.72rem; background:#162642; color:#FFF; border-color:#334155;" onchange="LiveAudio.setAudioOutput(this.value)">
-        <option value="">سماعة الجهاز الافتراضية</option>
-      </select>
-      <button class="btn btn-danger" style="padding:4px 8px; font-size:0.72rem; min-height:28px;" onclick="LiveAudio.leaveStudentSession()">مغادرة</button>
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:6px; flex-wrap:wrap;">
+      <button class="btn btn-gold" id="btnStudentRaiseHand" style="flex:1; padding:4px 8px; font-size:0.75rem; min-height:30px;" onclick="LiveAudio.toggleStudentHandRaise()">
+        <i class="fa-solid fa-hand"></i> أريد المداخلة
+      </button>
+
+      <button class="btn btn-purple" id="btnOpenScreenShareViewer" style="display:none; padding:4px 8px; font-size:0.75rem; min-height:30px;" onclick="LiveAudio.openStudentScreenModal()">
+        <i class="fa-solid fa-desktop"></i> شاشة الأستاذ
+      </button>
+
+      <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem; min-height:30px;" onclick="LiveAudio.leaveStudentSession()">مغادرة</button>
+    </div>
+  </div>
+
+  <!-- مودال عرض شاشة الأستاذ للطلاب -->
+  <div class="modal-overlay" id="studentScreenShareModal">
+    <div class="modal-card" style="max-width: 980px; padding: 0; background: #000; border-color: var(--gold-orange);">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:var(--navy-dark); border-bottom:1px solid #1E293B;">
+        <span style="color:#FEF08A; font-weight:800; font-size:0.9rem;">
+          <i class="fa-solid fa-desktop"></i> شاشة شرح الأستاذ عمر قاسم (مباشر)
+        </span>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-secondary" style="padding:3px 8px; font-size:0.75rem;" onclick="LiveAudio.toggleScreenFullscreen()"><i class="fa-solid fa-expand"></i> شاشة كاملة</button>
+          <button class="btn btn-danger" style="padding:3px 8px; font-size:0.75rem;" onclick="document.getElementById('studentScreenShareModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div class="screen-video-container" id="screenViewerBox">
+        <video id="studentScreenVideo" autoplay playsinline controls></video>
+      </div>
+    </div>
+  </div>
+
+  <!-- مودال خيارات حفظ تسجيل شاشة الفيديو -->
+  <div class="modal-overlay" id="saveScreenRecordingModal">
+    <div class="modal-card" style="max-width: 650px;">
+      <div style="text-align:center; margin-bottom:14px;">
+        <div style="width:56px; height:56px; border-radius:50%; background:#ECFDF5; color:var(--success); display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:24px;">
+          <i class="fa-solid fa-video"></i>
+        </div>
+        <h3 style="color:var(--navy-dark); font-weight:900;">تم إنهاء وتسجيل الشرح بنجاح!</h3>
+        <p style="font-size:0.82rem; color:var(--text-muted);">يمكنك مراجعة فيديو الحصة وحفظه كدرس في المنصة أو تنزيله أو حذفه.</p>
+      </div>
+
+      <div style="margin-bottom:14px; background:#000; border-radius:var(--radius-sm); overflow:hidden;">
+        <video id="recordedVideoPreview" controls style="width:100%; max-height:260px;"></video>
+      </div>
+
+      <form onsubmit="LiveAudio.confirmSaveRecordedVideoAsLesson(event)">
+        <div class="form-group">
+          <label>الوحدة التعليمية لحفظ الدرس المسجل فيها</label>
+          <select id="saveVideoUnitSelect" required></select>
+        </div>
+        <div class="form-group">
+          <label>عنوان الدرس المسجل</label>
+          <input type="text" id="saveVideoLessonTitle" required>
+        </div>
+        <div class="form-group">
+          <label>شرح وتفاصيل محتوى الحصة</label>
+          <textarea id="saveVideoLessonDesc" rows="2" placeholder="وصف المسائل والنقاط التي تم شرحها في هذا التسجيل..."></textarea>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
+          <button type="submit" class="btn btn-gold" style="flex:1;">
+            <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر كفيديو في المنصة
+          </button>
+          <button type="button" class="btn btn-navy" onclick="LiveAudio.downloadVideoRecording()">
+            <i class="fa-solid fa-download"></i> تنزيل الفيديو (MP4/WebM)
+          </button>
+          <button type="button" class="btn btn-danger" onclick="LiveAudio.discardVideoRecording()">
+            <i class="fa-solid fa-trash"></i> حذف الفيديو
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -418,7 +550,7 @@
     </div>
   </div>
 
-  <!-- مؤقت التركيز Pomodoro -->
+  <!-- مؤقت Pomodoro -->
   <div class="timer-widget" id="timerWidget">
     <div style="display:flex; justify-content:space-between; width:100%; align-items:center; border-bottom:1px solid #334155; padding-bottom:6px;">
       <span style="font-weight:700; font-size:0.82rem; color:#F472B6;"><i class="fa-solid fa-stopwatch"></i> جلسة تركيز الرياضيات</span>
@@ -564,22 +696,22 @@
     <div class="modal-card" style="max-width: 620px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 style="color:var(--navy-dark); font-weight:900;">
-          <i class="fa-solid fa-tower-broadcast" style="color:var(--danger);"></i> استوديو البث الصوتي المباشر (الأستاذ عمر)
+          <i class="fa-solid fa-tower-broadcast" style="color:var(--danger);"></i> استوديو البث الصوتي المباشر والشاشة
         </h3>
         <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.closeBroadcastModal()"></i>
       </div>
       <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:16px;">
-        بث صوتي مباشر فائق الوضوح يعمل على جميع الشبكات والهواتف الذكية مع خاصية التسجيل التلقائي لحفظ البث كدرس للطلاب.
+        بث صوتي وتفاعلي فائق الوضوح مع إمكانية مشاركة الشاشة والسماح بمداخلات الطلاب الصوتية برفع اليد.
       </p>
 
       <form onsubmit="LiveAudio.handleStartBroadcastForm(event)">
         <div class="form-group">
-          <label>عنوان جلسة البث المباشر</label>
+          <label>عنوان جلسة الشرح المباشرة</label>
           <input type="text" id="liveBroadcastTitle" required placeholder="مثال: مراجعة وحل مسائل وزارية هامة على التفاضل">
         </div>
 
         <div class="form-group">
-          <label>تحديد الفئة المستهدفة من البث (Audience Targeting)</label>
+          <label>الفئة المستهدفة من البث (Audience Targeting)</label>
           <select id="liveTargetType" onchange="LiveAudio.toggleTargetAudienceFields(this.value)">
             <option value="ALL">كافة الطلاب والصفوف المشتركة (عام)</option>
             <option value="CURRICULUM">صف / منهاج دراسي محدد</option>
@@ -593,12 +725,12 @@
         </div>
 
         <div class="form-group" id="liveStudentsSelectGroup" style="display:none; max-height:160px; overflow-y:auto; border:1px solid #CBD5E1; padding:8px; border-radius:var(--radius-sm); background:var(--bg-light);">
-          <label style="font-size:0.8rem; font-weight:800; color:var(--gold-deep); display:block; margin-bottom:6px;">اختر الطلاب المسموح لهم بالاستماع:</label>
+          <label style="font-size:0.8rem; font-weight:800; color:var(--gold-deep); display:block; margin-bottom:6px;">اختر الطلاب المسموح لهم بالانضمام:</label>
           <div id="liveCustomStudentsList"></div>
         </div>
 
         <div style="background:#FFFBEB; border:1px solid var(--gold-orange); border-radius:var(--radius-sm); padding:10px; font-size:0.8rem; color:#92400E; margin-bottom:16px;">
-          <i class="fa-solid fa-circle-check"></i> اتصال WebRTC مدعوم بخوادم STUN متعددة للتكيف التلقائي مع شبكات 3G/4G/5G والواي فاي مع إلغاء الصدى والضجيج.
+          <i class="fa-solid fa-circle-check"></i> اتصال WebRTC مدعوم بمشاركة الشاشة، كتم المداخلات، والتسجيل التلقائي للشاشة والصوت لحفظ الدرس.
         </div>
 
         <div style="display:flex; gap:8px;">
@@ -606,50 +738,6 @@
             <i class="fa-solid fa-tower-broadcast"></i> إطلاق البث المباشر فوراً
           </button>
           <button type="button" class="btn btn-secondary" onclick="App.closeBroadcastModal()">إلغاء</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- مودال خيارات حفظ تسجيل البث المباشر بعد انتهائه -->
-  <div class="modal-overlay" id="saveBroadcastModal">
-    <div class="modal-card" style="max-width: 580px;">
-      <div style="text-align:center; margin-bottom:14px;">
-        <div style="width:56px; height:56px; border-radius:50%; background:#ECFDF5; color:var(--success); display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:24px;">
-          <i class="fa-solid fa-circle-check"></i>
-        </div>
-        <h3 style="color:var(--navy-dark); font-weight:900;">تم انتهاء البث وتسجيل الشرح بنجاح!</h3>
-        <p style="font-size:0.82rem; color:var(--text-muted);">هل ترغب في حفظ تسجيل هذا البث كدرس ومورد صوتي دائم في المنصة أو حذفه؟</p>
-      </div>
-
-      <div style="margin-bottom:16px; background:var(--gold-light); padding:12px; border-radius:var(--radius-sm); border:1px solid var(--gold-orange);">
-        <audio id="recordedAudioPreview" controls style="width:100%; margin-bottom:8px;"></audio>
-      </div>
-
-      <form onsubmit="LiveAudio.confirmSaveBroadcastAsLesson(event)">
-        <div class="form-group">
-          <label>الوحدة التعليمية لإدراج تسجيل البث فيها</label>
-          <select id="saveBroadcastUnitSelect" required></select>
-        </div>
-        <div class="form-group">
-          <label>عنوان الدرس المولد للبث</label>
-          <input type="text" id="saveBroadcastLessonTitle" required>
-        </div>
-        <div class="form-group">
-          <label>شرح أو ملخص محتوى البث</label>
-          <textarea id="saveBroadcastLessonDesc" rows="2" placeholder="وصف المسائل والنقاط التي تم شرحها في هذا البث..."></textarea>
-        </div>
-
-        <div style="display:flex; gap:8px; margin-top:14px; flex-wrap:wrap;">
-          <button type="submit" class="btn btn-gold" style="flex:1;">
-            <i class="fa-solid fa-cloud-arrow-up"></i> حفظ ونشر كدرس للطلاب
-          </button>
-          <button type="button" class="btn btn-navy" onclick="LiveAudio.downloadRecordingFile()">
-            <i class="fa-solid fa-download"></i> تنزيل التسجيل
-          </button>
-          <button type="button" class="btn btn-danger" onclick="LiveAudio.discardRecording()">
-            <i class="fa-solid fa-trash"></i> حذف التسجيل
-          </button>
         </div>
       </form>
     </div>
@@ -706,7 +794,7 @@
     </div>
   </div>
 
-  <!-- مودال متكامل: إضافة وتعديل الدرس وكافة موارده دفعة واحدة -->
+  <!-- مودال إضافة وتعديل الدرس وكافة موارده -->
   <div class="modal-overlay" id="unifiedLessonModal">
     <div class="modal-card" style="max-width: 780px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -716,7 +804,7 @@
         <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.closeUnifiedLessonModal()"></i>
       </div>
       <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:14px;">
-        أدخل عنوان الدرس وشرحه المختصر، وضع الروابط المتاحة (يمكن الحفظ برابط واحد أو تعديل الدرس لاحقاً لإضافة وتعديل باقي الروابط).
+        أدخل عنوان الدرس وشرحه المختصر، وضع الروابط المتاحة (يمكن الحفظ برابط واحد أو تعديل الدرس لاحقاً).
       </p>
 
       <form onsubmit="App.handleSaveUnifiedLesson(event)">
@@ -748,7 +836,7 @@
         </div>
 
         <h4 style="color:var(--navy-dark); font-size:0.92rem; margin:14px 0 8px; border-bottom:1px solid #E2E8F0; padding-bottom:4px;">
-          <i class="fa-solid fa-link" style="color:var(--gold-orange);"></i> قائمة روابط وموارد الدرس (املأ الروابط المتوفرة):
+          <i class="fa-solid fa-link" style="color:var(--gold-orange);"></i> قائمة روابط وموارد الدرس:
         </h4>
 
         <div style="display:flex; flex-direction:column; gap:8px;">
@@ -822,7 +910,7 @@
         <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.closeAddCompetitionModal()"></i>
       </div>
       <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:14px;">
-        أضف مسابقة تفاعلية برابط صفحة HTML أو منصة ألعاب تفاعلية (GeoGebra, Quizizz, Wordwall...)، وحدد الطلاب المتنافسين.
+        أضف مسابقة تفاعلية برابط صفحة HTML أو منصة ألعاب تفاعلية، وحدد الطلاب المتنافسين.
       </p>
 
       <form onsubmit="App.handleSaveCompetition(event)">
@@ -854,7 +942,7 @@
 
         <div class="form-group" style="border:1px solid #CBD5E1; padding:10px; border-radius:var(--radius-sm); background:var(--bg-light);">
           <label style="color:var(--gold-deep); font-size:0.82rem; font-weight:800; display:block; margin-bottom:6px;">
-            تحديد طلاب محددين للمسابقة (اختياري - اترك فارغاً لاختيار كل الصف):
+            تحديد طلاب محددين للمسابقة (اختياري):
           </label>
           <div id="compTargetStudentsList" style="max-height:140px; overflow-y:auto; display:flex; flex-direction:column; gap:4px;"></div>
         </div>
@@ -869,7 +957,7 @@
     </div>
   </div>
 
-  <!-- مودال تشغيل مسابقة الطالب التفاعلية (HTML Iframe) -->
+  <!-- مودال تشغيل مسابقة الطالب التفاعلية -->
   <div class="modal-overlay" id="competitionPlayerModal">
     <div class="modal-card" style="max-width: 950px; height: 90vh; padding: 0; display:flex; flex-direction:column; background:#0B1424;">
       <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:var(--navy-gradient); color:#FFF; border-bottom:2px solid var(--gold-orange);">
@@ -1061,7 +1149,7 @@
     </div>
   </div>
 
-  <!-- إعدادات المنصة -->
+  <!-- إعدادات المنصة والأمان -->
   <div class="modal-overlay" id="settingsModal">
     <div class="modal-card" style="max-width: 540px;">
       <h3 style="color: var(--navy-dark); margin-bottom: 14px;">
@@ -1331,6 +1419,746 @@
       { id: 'SUD_12_LIT', name: 'الثالث ثانوي (أدبي)', system: 'سوداني', full: 'الصف الثالث ثانوي (المساق الأدبي) – الشهادة السودانية' }
     ];
 
+    /* محرك البث المباشر المطور */
+    const LiveAudio = {
+      BROADCASTER_PEER_ID: "omer_live_stream_channel_2026",
+      SCREEN_BROADCASTER_PEER_ID: "omer_live_screen_channel_2026",
+      STUN_SERVERS: {
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' },
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' },
+          { urls: 'stun:stun.cloudflare.com:3478' }
+        ]
+      },
+
+      broadcasterPeer: null,
+      broadcasterStream: null,
+      broadcasterAudioCtx: null,
+      broadcasterAnalyser: null,
+      broadcasterAnimId: null,
+      activeStudentCalls: new Set(),
+      isMuted: false,
+
+      isScreenSharing: false,
+      screenStream: null,
+      screenPeer: null,
+      screenRecorder: null,
+      recordedVideoChunks: [],
+      lastRecordedVideoBlob: null,
+      lastRecordedVideoUrl: null,
+
+      studentMicStream: null,
+      studentMicCall: null,
+      isStudentSpeaking: false,
+      hasRaisedHand: false,
+
+      listenerPeer: null,
+      listenerCall: null,
+      listenerScreenCall: null,
+      listenerAudioCtx: null,
+      listenerGainNode: null,
+      listenerAnalyser: null,
+      listenerAnimId: null,
+      listenerAudioEl: null,
+
+      initSessionWatcher() {
+        if (db) {
+          db.collection("live_sessions").doc("active_broadcast").onSnapshot(doc => {
+            if (doc.exists) {
+              const data = doc.data();
+              State.activeLiveSession = (data && data.isActive) ? data : null;
+            } else {
+              State.activeLiveSession = null;
+            }
+            this.handleSessionStateChange();
+          }, err => console.warn("Live watcher err:", err));
+        }
+      },
+
+      handleSessionStateChange() {
+        const session = State.activeLiveSession;
+        this.updateLiveBannerUI();
+
+        if (State.currentUser && State.currentUser.role === 'ADMIN' && session) {
+          const handRaises = session.handRaises || [];
+          const activeSpeakers = session.activeSpeakers || [];
+          
+          const badge = document.getElementById('handRaiseBadge');
+          if (badge) {
+            badge.innerText = handRaises.length;
+            badge.style.display = handRaises.length > 0 ? 'flex' : 'none';
+          }
+          this.renderModerationLists(handRaises, activeSpeakers);
+        }
+
+        if (State.currentUser && State.currentUser.role === 'STUDENT' && session) {
+          const uid = State.currentUser.uid;
+          const isAllowed = (session.activeSpeakers || []).some(s => s.uid === uid);
+
+          if (isAllowed && !this.isStudentSpeaking) {
+            this.startStudentSpeaking();
+          } else if (!isAllowed && this.isStudentSpeaking) {
+            this.stopStudentSpeaking(false);
+          }
+
+          const screenBtn = document.getElementById('btnOpenScreenShareViewer');
+          if (screenBtn) {
+            screenBtn.style.display = session.isScreenSharing ? 'inline-flex' : 'none';
+          }
+        }
+      },
+
+      toggleTargetAudienceFields(type) {
+        document.getElementById('liveCurriculumSelectGroup').style.display = (type === 'CURRICULUM') ? 'block' : 'none';
+        document.getElementById('liveStudentsSelectGroup').style.display = (type === 'CUSTOM') ? 'block' : 'none';
+      },
+
+      async handleStartBroadcastForm(e) {
+        e.preventDefault();
+        const title = document.getElementById('liveBroadcastTitle').value.trim();
+        const targetType = document.getElementById('liveTargetType').value;
+        const targetCurriculum = document.getElementById('liveTargetCurriculum').value;
+
+        let selectedStudentUids = [];
+        if (targetType === 'CUSTOM') {
+          document.querySelectorAll('.chk-live-student:checked').forEach(c => selectedStudentUids.push(c.value));
+          if (selectedStudentUids.length === 0) {
+            NotificationEngine.alert('يرجى اختيار طالب واحد على الأقل.', 'تنبيه');
+            return;
+          }
+        }
+
+        App.closeBroadcastModal();
+
+        try {
+          this.broadcasterStream = await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+            video: false
+          });
+
+          this.setupBroadcasterAudioVisualizer(this.broadcasterStream);
+
+          if (this.broadcasterPeer && !this.broadcasterPeer.destroyed) {
+            this.broadcasterPeer.destroy();
+          }
+
+          this.broadcasterPeer = new Peer(this.BROADCASTER_PEER_ID, { config: this.STUN_SERVERS });
+
+          this.broadcasterPeer.on('open', async () => {
+            const broadcastPayload = {
+              isActive: true,
+              title: title,
+              broadcasterName: "الأستاذ عمر قاسم",
+              targetType: targetType,
+              targetCurriculum: targetType === 'CURRICULUM' ? targetCurriculum : null,
+              targetStudentUids: selectedStudentUids,
+              isScreenSharing: false,
+              handRaises: [],
+              activeSpeakers: [],
+              startedAt: Date.now()
+            };
+
+            if (db) {
+              await db.collection("live_sessions").doc("active_broadcast").set(broadcastPayload, { merge: true });
+            }
+            State.activeLiveSession = broadcastPayload;
+
+            document.getElementById('broadcasterBarTitle').innerText = title;
+            document.getElementById('broadcasterBarTarget').innerText = targetType === 'ALL' ? 'الجمهور: كافة الطلاب' : (targetType === 'CURRICULUM' ? `الجمهور: ${UI.getTargetLabel(targetCurriculum)}` : `الجمهور: طلاب محددين`);
+            document.getElementById('broadcasterLiveBar').classList.add('active');
+            App.showSecurityAlert("🔴 تم بدء البث الصوتي المباشر بنجاح.");
+          });
+
+          this.broadcasterPeer.on('call', call => {
+            this.activeStudentCalls.add(call);
+            call.answer(this.broadcasterStream);
+
+            call.on('stream', remoteStream => {
+              const studentAudio = new Audio();
+              studentAudio.srcObject = remoteStream;
+              studentAudio.play().catch(()=>{});
+            });
+
+            call.on('close', () => this.activeStudentCalls.delete(call));
+            call.on('error', () => this.activeStudentCalls.delete(call));
+          });
+
+        } catch (err) {
+          console.error("Broadcaster Mic Error:", err);
+          NotificationEngine.alert("تعذر الوصول إلى المايكروفون. يرجى التأكد من صلاحيات المتصفح.", "خطأ المايكروفون");
+        }
+      },
+
+      setupBroadcasterAudioVisualizer(stream) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.broadcasterAudioCtx = new AudioContext();
+        const source = this.broadcasterAudioCtx.createMediaStreamSource(stream);
+        this.broadcasterAnalyser = this.broadcasterAudioCtx.createAnalyser();
+        this.broadcasterAnalyser.fftSize = 64;
+        source.connect(this.broadcasterAnalyser);
+        this.renderCanvasLoop(this.broadcasterAnalyser, 'broadcasterVisualizerCanvas', '#FEF08A');
+      },
+
+      renderCanvasLoop(analyser, canvasId, color) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas || !analyser) return;
+        const ctx = canvas.getContext('2d');
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        const draw = () => {
+          const animId = requestAnimationFrame(draw);
+          if (canvasId === 'broadcasterVisualizerCanvas') this.broadcasterAnimId = animId;
+          else this.listenerAnimId = animId;
+
+          analyser.getByteFrequencyData(dataArray);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          const barWidth = (canvas.width / bufferLength) * 1.6;
+          let x = 0;
+          for (let i = 0; i < bufferLength; i++) {
+            const barHeight = (dataArray[i] / 255) * canvas.height;
+            ctx.fillStyle = color;
+            ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+            x += barWidth;
+          }
+        };
+        draw();
+      },
+
+      toggleBroadcasterMute() {
+        if (!this.broadcasterStream) return;
+        this.isMuted = !this.isMuted;
+        this.broadcasterStream.getAudioTracks().forEach(t => t.enabled = !this.isMuted);
+        const btn = document.getElementById('btnBroadcasterMute');
+        if (this.isMuted) {
+          btn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> تم الكتم';
+          btn.classList.add('btn-danger'); btn.classList.remove('btn-gold');
+        } else {
+          btn.innerHTML = '<i class="fa-solid fa-microphone"></i> كتم';
+          btn.classList.remove('btn-danger'); btn.classList.add('btn-gold');
+        }
+      },
+
+      async toggleScreenShare() {
+        if (this.isScreenSharing) {
+          this.stopScreenShare();
+        } else {
+          try {
+            this.screenStream = await navigator.mediaDevices.getDisplayMedia({
+              video: { cursor: "always", frameRate: 30 },
+              audio: true
+            });
+
+            this.isScreenSharing = true;
+            document.getElementById('btnScreenShareText').innerText = "إيقاف مشاركة الشاشة";
+            document.getElementById('btnToggleScreenShare').classList.replace('btn-purple', 'btn-danger');
+
+            this.recordedVideoChunks = [];
+            const combinedStream = new MediaStream([
+              ...this.screenStream.getVideoTracks(),
+              ...(this.broadcasterStream ? this.broadcasterStream.getAudioTracks() : [])
+            ]);
+
+            try {
+              this.screenRecorder = new MediaRecorder(combinedStream, { mimeType: 'video/webm;codecs=vp9,opus' });
+            } catch(e) {
+              this.screenRecorder = new MediaRecorder(combinedStream);
+            }
+
+            this.screenRecorder.ondataavailable = e => { if (e.data.size > 0) this.recordedVideoChunks.push(e.data); };
+            this.screenRecorder.start(1000);
+
+            if (this.screenPeer && !this.screenPeer.destroyed) this.screenPeer.destroy();
+            this.screenPeer = new Peer(this.SCREEN_BROADCASTER_PEER_ID, { config: this.STUN_SERVERS });
+
+            this.screenPeer.on('call', call => {
+              call.answer(this.screenStream);
+            });
+
+            if (db) {
+              await db.collection("live_sessions").doc("active_broadcast").update({ isScreenSharing: true });
+            }
+
+            this.screenStream.getVideoTracks()[0].onended = () => {
+              this.stopScreenShare();
+            };
+
+            App.showSecurityAlert("📺 بدأت مشاركة الشاشة وجاري تسجيل الحصة تلقائياً...");
+
+          } catch (err) {
+            console.warn("Screen Share Cancelled / Error:", err);
+            this.isScreenSharing = false;
+          }
+        }
+      },
+
+      async stopScreenShare() {
+        if (!this.isScreenSharing) return;
+        this.isScreenSharing = false;
+
+        document.getElementById('btnScreenShareText').innerText = "مشاركة الشاشة";
+        document.getElementById('btnToggleScreenShare').classList.replace('btn-danger', 'btn-purple');
+
+        if (this.screenRecorder && this.screenRecorder.state !== 'inactive') {
+          this.screenRecorder.stop();
+        }
+
+        if (this.screenStream) {
+          this.screenStream.getTracks().forEach(t => t.stop());
+          this.screenStream = null;
+        }
+
+        if (this.screenPeer) {
+          this.screenPeer.destroy();
+          this.screenPeer = null;
+        }
+
+        if (db) {
+          await db.collection("live_sessions").doc("active_broadcast").update({ isScreenSharing: false }).catch(()=>{});
+        }
+
+        setTimeout(() => {
+          if (this.recordedVideoChunks.length > 0) {
+            this.lastRecordedVideoBlob = new Blob(this.recordedVideoChunks, { type: 'video/webm' });
+            this.lastRecordedVideoUrl = URL.createObjectURL(this.lastRecordedVideoBlob);
+
+            const preview = document.getElementById('recordedVideoPreview');
+            if (preview) preview.src = this.lastRecordedVideoUrl;
+
+            const uSel = document.getElementById('saveVideoUnitSelect');
+            if (uSel) {
+              uSel.innerHTML = State.units.map(u => `<option value="${u.id}">${escapeHTML(u.title)} (${UI.getTargetLabel(u.target)})</option>`).join('');
+            }
+
+            document.getElementById('saveVideoLessonTitle').value = `درس مسجل: ${State.activeLiveSession?.title || 'شرح رياضيات'}`;
+            document.getElementById('saveVideoLessonDesc').value = `تسجيل لحصة البث المباشر ومشاركة الشاشة مع الأستاذ عمر قاسم.`;
+            document.getElementById('saveScreenRecordingModal').classList.add('active');
+          }
+        }, 600);
+      },
+
+      confirmSaveRecordedVideoAsLesson(e) {
+        e.preventDefault();
+        const unitId = document.getElementById('saveVideoUnitSelect').value;
+        const title = document.getElementById('saveVideoLessonTitle').value.trim();
+        const desc = document.getElementById('saveVideoLessonDesc').value.trim();
+        const unit = State.units.find(u => u.id === unitId);
+
+        const newLesson = {
+          id: "les_video_" + Date.now(),
+          unitId: unitId,
+          title: title,
+          description: desc,
+          target: unit ? unit.target : 'ALL',
+          assignedStudentUids: [],
+          resources: [
+            {
+              id: "res_vid_" + Date.now(),
+              type: "VIDEOS",
+              title: "فيديو الحصة المسجلة",
+              fileUrl: this.lastRecordedVideoUrl
+            }
+          ]
+        };
+
+        State.lessons.push(newLesson);
+        DataStore.save("lessons", State.lessons);
+        document.getElementById('saveScreenRecordingModal').classList.remove('active');
+        NotificationEngine.alert(`تم حفظ ونشر فيديو الحصة بنجاح داخل (${unit?.title})!`, 'تم الحفظ');
+        UI.render();
+      },
+
+      downloadVideoRecording() {
+        if (!this.lastRecordedVideoUrl) return;
+        const a = document.createElement('a');
+        a.href = this.lastRecordedVideoUrl;
+        a.download = `حصة_رياضيات_الأستاذ_عمر_${Date.now()}.webm`;
+        a.click();
+      },
+
+      discardVideoRecording() {
+        document.getElementById('saveScreenRecordingModal').classList.remove('active');
+        this.lastRecordedVideoBlob = null;
+        this.lastRecordedVideoUrl = null;
+        App.showSecurityAlert("تم حذف التسجيل.");
+      },
+
+      openModerationModal() {
+        const session = State.activeLiveSession;
+        if (session) {
+          this.renderModerationLists(session.handRaises || [], session.activeSpeakers || []);
+        }
+        document.getElementById('moderationModal').classList.add('active');
+      },
+
+      renderModerationLists(handRaises, activeSpeakers) {
+        const handBox = document.getElementById('handRaiseListContainer');
+        const speakBox = document.getElementById('activeSpeakersListContainer');
+        document.getElementById('handRaiseCountText').innerText = handRaises.length;
+        document.getElementById('activeSpeakersCountText').innerText = activeSpeakers.length;
+
+        if (handBox) {
+          handBox.innerHTML = handRaises.length === 0 ? `<p style="color:var(--text-muted); font-size:0.8rem; padding:6px;">لا توجد طلبات رفع يد حالياً.</p>` : handRaises.map(s => `
+            <div class="participant-row">
+              <span style="font-weight:700; font-size:0.85rem;"><i class="fa-solid fa-hand" style="color:var(--gold-orange);"></i> ${escapeHTML(s.name)}</span>
+              <div style="display:flex; gap:4px;">
+                <button class="btn btn-gold" style="padding:2px 8px; font-size:0.72rem; min-height:28px;" onclick="LiveAudio.grantSpeakPermission('${s.uid}', '${escapeHTML(s.name)}')"><i class="fa-solid fa-check"></i> السماح بالتحدث</button>
+                <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.72rem; min-height:28px;" onclick="LiveAudio.rejectHandRaise('${s.uid}')"><i class="fa-solid fa-xmark"></i> رفض</button>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        if (speakBox) {
+          speakBox.innerHTML = activeSpeakers.length === 0 ? `<p style="color:var(--text-muted); font-size:0.8rem; padding:6px;">لا يوجد طالب يتحدث حالياً.</p>` : activeSpeakers.map(s => `
+            <div class="participant-row">
+              <span style="font-weight:700; font-size:0.85rem; color:var(--success);"><i class="fa-solid fa-microphone"></i> ${escapeHTML(s.name)} (يتحدث الآن)</span>
+              <div style="display:flex; gap:4px;">
+                <button class="btn btn-danger" style="padding:2px 8px; font-size:0.72rem; min-height:28px;" onclick="LiveAudio.revokeSpeakPermission('${s.uid}')"><i class="fa-solid fa-microphone-slash"></i> كتم وإنهاء</button>
+                <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.72rem; min-height:28px;" onclick="LiveAudio.kickParticipant('${s.uid}')"><i class="fa-solid fa-user-xmark"></i> قطع الاتصال</button>
+              </div>
+            </div>
+          `).join('');
+        }
+      },
+
+      async grantSpeakPermission(studentUid, studentName) {
+        if (!db) return;
+        const docRef = db.collection("live_sessions").doc("active_broadcast");
+        const doc = await docRef.get();
+        if (doc.exists) {
+          const data = doc.data();
+          let hands = (data.handRaises || []).filter(h => h.uid !== studentUid);
+          let speakers = data.activeSpeakers || [];
+          if (!speakers.some(s => s.uid === studentUid)) {
+            speakers.push({ uid: studentUid, name: studentName });
+          }
+          await docRef.update({ handRaises: hands, activeSpeakers: speakers });
+          App.showSecurityAlert(`تم السماح للطالب (${studentName}) بالتحدث.`);
+        }
+      },
+
+      async rejectHandRaise(studentUid) {
+        if (!db) return;
+        const docRef = db.collection("live_sessions").doc("active_broadcast");
+        const doc = await docRef.get();
+        if (doc.exists) {
+          let hands = (doc.data().handRaises || []).filter(h => h.uid !== studentUid);
+          await docRef.update({ handRaises: hands });
+        }
+      },
+
+      async revokeSpeakPermission(studentUid) {
+        if (!db) return;
+        const docRef = db.collection("live_sessions").doc("active_broadcast");
+        const doc = await docRef.get();
+        if (doc.exists) {
+          let speakers = (doc.data().activeSpeakers || []).filter(s => s.uid !== studentUid);
+          await docRef.update({ activeSpeakers: speakers });
+          App.showSecurityAlert("تم كتم صوت الطالب وإنهاء مداخلته.");
+        }
+      },
+
+      async kickParticipant(studentUid) {
+        const confirmKick = await NotificationEngine.confirm("هل تريد قطع الاتصال عن هذا الطالب وإخراجه؟", "قطع الاتصال");
+        if (confirmKick) {
+          await this.revokeSpeakPermission(studentUid);
+          await this.rejectHandRaise(studentUid);
+        }
+      },
+
+      async toggleStudentHandRaise() {
+        const user = State.currentUser;
+        if (!user || !db) return;
+        const docRef = db.collection("live_sessions").doc("active_broadcast");
+        const doc = await docRef.get();
+        if (!doc.exists) return;
+
+        let hands = doc.data().handRaises || [];
+        const btn = document.getElementById('btnStudentRaiseHand');
+
+        if (this.hasRaisedHand) {
+          hands = hands.filter(h => h.uid !== user.uid);
+          await docRef.update({ handRaises: hands });
+          this.hasRaisedHand = false;
+          btn.innerHTML = '<i class="fa-solid fa-hand"></i> أريد المداخلة';
+          btn.classList.remove('hand-raised-pulse');
+        } else {
+          hands.push({ uid: user.uid, name: user.name });
+          await docRef.update({ handRaises: hands });
+          this.hasRaisedHand = true;
+          btn.innerHTML = '<i class="fa-solid fa-clock"></i> بانتظار إذن الأستاذ...';
+          btn.classList.add('hand-raised-pulse');
+          App.showSecurityAlert("تم إرسال طلب المداخلة للأستاذ عمر بنجاح.");
+        }
+      },
+
+      async startStudentSpeaking() {
+        try {
+          this.studentMicStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+          this.isStudentSpeaking = true;
+
+          if (this.listenerPeer) {
+            this.studentMicCall = this.listenerPeer.call(this.BROADCASTER_PEER_ID, this.studentMicStream);
+          }
+
+          document.getElementById('studentMicActiveNotice').style.display = 'flex';
+          AudioFX.celebrate();
+          NotificationEngine.alert("لقد سمح لك الأستاذ عمر بالتحدث الآن! المايكروفون قيد التشغيل وتستطيع التحدث.", "إذن التحدث متاح 🎙️");
+
+        } catch(e) {
+          console.error("Mic Access Error:", e);
+          NotificationEngine.alert("يرجى منح الإذن للمايكروفون للمشاركة بالصوت.", "تنبيه");
+        }
+      },
+
+      stopStudentSpeaking(sync = true) {
+        if (this.studentMicStream) {
+          this.studentMicStream.getTracks().forEach(t => t.stop());
+          this.studentMicStream = null;
+        }
+        if (this.studentMicCall) {
+          this.studentMicCall.close();
+          this.studentMicCall = null;
+        }
+        this.isStudentSpeaking = false;
+        this.hasRaisedHand = false;
+
+        const notice = document.getElementById('studentMicActiveNotice');
+        if (notice) notice.style.display = 'none';
+
+        const handBtn = document.getElementById('btnStudentRaiseHand');
+        if (handBtn) {
+          handBtn.innerHTML = '<i class="fa-solid fa-hand"></i> أريد المداخلة';
+          handBtn.classList.remove('hand-raised-pulse');
+        }
+
+        if (sync && db && State.currentUser) {
+          this.revokeSpeakPermission(State.currentUser.uid);
+        }
+      },
+
+      openStudentScreenModal() {
+        document.getElementById('studentScreenShareModal').classList.add('active');
+        if (!this.listenerScreenCall && this.listenerPeer) {
+          const dummy = LiveAudio.createDummyAudioStream(this.listenerAudioCtx);
+          const screenCall = this.listenerPeer.call(this.SCREEN_BROADCASTER_PEER_ID, dummy);
+          this.listenerScreenCall = screenCall;
+
+          screenCall.on('stream', screenRemoteStream => {
+            const vid = document.getElementById('studentScreenVideo');
+            if (vid) {
+              vid.srcObject = screenRemoteStream;
+              vid.play().catch(()=>{});
+            }
+          });
+        }
+      },
+
+      toggleScreenFullscreen() {
+        const box = document.getElementById('screenViewerBox');
+        if (box) {
+          if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+          else box.requestFullscreen().catch(()=>{});
+        }
+      },
+
+      async stopBroadcast() {
+        const confirmStop = await NotificationEngine.confirm("هل تريد إنهاء جلسة البث الصوتي المباشر؟", "إنهاء البث");
+        if (!confirmStop) return;
+
+        if (this.isScreenSharing) {
+          await this.stopScreenShare();
+        }
+
+        if (this.broadcasterAnimId) cancelAnimationFrame(this.broadcasterAnimId);
+        if (this.broadcasterStream) {
+          this.broadcasterStream.getTracks().forEach(t => t.stop());
+          this.broadcasterStream = null;
+        }
+        if (this.broadcasterAudioCtx) {
+          this.broadcasterAudioCtx.close().catch(()=>{});
+        }
+        if (this.broadcasterPeer) {
+          this.broadcasterPeer.destroy();
+          this.broadcasterPeer = null;
+        }
+
+        if (db) {
+          await db.collection("live_sessions").doc("active_broadcast").set({ isActive: false }, { merge: true });
+        }
+        State.activeLiveSession = null;
+        document.getElementById('broadcasterLiveBar').classList.remove('active');
+      },
+
+      updateLiveBannerUI() {
+        const bannerContainer = document.getElementById('studentLiveBannerContainer');
+        if (!bannerContainer) return;
+        const session = State.activeLiveSession;
+        const user = State.currentUser;
+
+        if (!session || !session.isActive || !user || user.role !== 'STUDENT') {
+          bannerContainer.innerHTML = '';
+          return;
+        }
+
+        let isEligible = false;
+        if (session.targetType === 'ALL') isEligible = true;
+        else if (session.targetType === 'CURRICULUM' && session.targetCurriculum === user.target) isEligible = true;
+        else if (session.targetType === 'CUSTOM' && session.targetStudentUids && session.targetStudentUids.includes(user.uid)) isEligible = true;
+
+        if (isEligible) {
+          bannerContainer.innerHTML = `
+            <div class="live-top-banner">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <span class="live-indicator-dot"></span>
+                <div>
+                  <strong style="font-size:0.95rem; display:block;">🎙️ بث مباشر قيد التشغيل: ${escapeHTML(session.title)}</strong>
+                  <span style="font-size:0.75rem; opacity:0.9;">بإشراف الأستاذ عمر قاسم – انضم الآن لمتابعة الشرح والمشاركة</span>
+                </div>
+              </div>
+              <button class="btn btn-gold" style="padding:6px 16px; font-size:0.85rem; font-weight:800; min-height:36px;" onclick="LiveAudio.joinStudentSession()">
+                <i class="fa-solid fa-headphones"></i> انضم للبث الآن
+              </button>
+            </div>
+          `;
+        } else {
+          bannerContainer.innerHTML = '';
+        }
+      },
+
+      async joinStudentSession() {
+        const session = State.activeLiveSession;
+        if (!session || !session.isActive) {
+          NotificationEngine.alert("عذراً، جلسة البث المباشر انتهت أو غير متاحة.", "البث المباشر");
+          return;
+        }
+
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.listenerAudioCtx = new AudioContext();
+          if (this.listenerAudioCtx.state === 'suspended') {
+            await this.listenerAudioCtx.resume();
+          }
+
+          const dummyStream = this.createDummyAudioStream(this.listenerAudioCtx);
+          const studentPeerId = "st_live_" + State.currentUser.uid + "_" + Math.floor(Math.random() * 1000);
+          if (this.listenerPeer && !this.listenerPeer.destroyed) this.listenerPeer.destroy();
+
+          this.listenerPeer = new Peer(studentPeerId, { config: this.STUN_SERVERS });
+
+          this.listenerPeer.on('open', () => {
+            const call = this.listenerPeer.call(this.BROADCASTER_PEER_ID, dummyStream);
+            this.listenerCall = call;
+
+            call.on('stream', remoteAudioStream => {
+              this.setupStudentAudioPipeline(remoteAudioStream);
+            });
+
+            call.on('close', () => this.leaveStudentSession());
+            call.on('error', () => this.leaveStudentSession());
+          });
+
+          document.getElementById('studentWidgetTitle').innerText = session.title;
+          document.getElementById('studentLiveWidget').classList.add('active');
+
+          if (session.isScreenSharing) {
+            document.getElementById('btnOpenScreenShareViewer').style.display = 'inline-flex';
+          }
+
+        } catch (err) {
+          console.error("Join Live Error:", err);
+          NotificationEngine.alert("تعذر الاتصال بالبث المباشر.", "خطأ في الاتصال");
+        }
+      },
+
+      createDummyAudioStream(ctx) {
+        const osc = ctx.createOscillator();
+        const dst = ctx.createMediaStreamDestination();
+        const gain = ctx.createGain();
+        gain.gain.value = 0;
+        osc.connect(gain);
+        gain.connect(dst);
+        osc.start();
+        return dst.stream;
+      },
+
+      setupStudentAudioPipeline(remoteStream) {
+        if (!this.listenerAudioEl) {
+          this.listenerAudioEl = new Audio();
+          this.listenerAudioEl.autoplay = true;
+          this.listenerAudioEl.setAttribute('playsinline', '');
+        }
+        this.listenerAudioEl.srcObject = remoteStream;
+
+        const source = this.listenerAudioCtx.createMediaStreamSource(remoteStream);
+        this.listenerGainNode = this.listenerAudioCtx.createGain();
+        this.listenerAnalyser = this.listenerAudioCtx.createAnalyser();
+        this.listenerAnalyser.fftSize = 64;
+
+        source.connect(this.listenerGainNode);
+        this.listenerGainNode.connect(this.listenerAnalyser);
+        this.listenerAnalyser.connect(this.listenerAudioCtx.destination);
+
+        this.renderCanvasLoop(this.listenerAnalyser, 'studentVisualizerCanvas', '#10B981');
+      },
+
+      setStudentVolume(val) {
+        if (this.listenerGainNode) this.listenerGainNode.gain.value = parseFloat(val);
+      },
+
+      leaveStudentSession() {
+        this.stopStudentSpeaking(true);
+        if (this.listenerAnimId) cancelAnimationFrame(this.listenerAnimId);
+        if (this.listenerCall) { this.listenerCall.close(); this.listenerCall = null; }
+        if (this.listenerScreenCall) { this.listenerScreenCall.close(); this.listenerScreenCall = null; }
+        if (this.listenerPeer) { this.listenerPeer.destroy(); this.listenerPeer = null; }
+        if (this.listenerAudioCtx) { this.listenerAudioCtx.close().catch(()=>{}); }
+        document.getElementById('studentLiveWidget').classList.remove('active');
+        document.getElementById('studentScreenShareModal').classList.remove('active');
+      }
+    };
+
+    const PomodoroTimer = {
+      timeLeft: 25 * 60,
+      timerId: null,
+      isRunning: false,
+      toggle() { if (this.isRunning) this.pause(); else this.start(); },
+      start() {
+        this.isRunning = true;
+        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-pause"></i> إيقاف';
+        this.timerId = setInterval(() => {
+          if (this.timeLeft > 0) {
+            this.timeLeft--;
+            this.updateDisplay();
+          } else {
+            this.pause();
+            AudioFX.celebrate();
+            NotificationEngine.alert("⏰ انتهت جلسة التركيز! خذ استراحة لمدة 5 دقائق.", "جلسة التركيز");
+            this.reset();
+          }
+        }, 1000);
+      },
+      pause() {
+        this.isRunning = false;
+        clearInterval(this.timerId);
+        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-play"></i> استئناف';
+      },
+      reset() {
+        this.pause();
+        this.timeLeft = 25 * 60;
+        this.updateDisplay();
+        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-play"></i> بدء';
+      },
+      updateDisplay() {
+        const m = Math.floor(this.timeLeft / 60).toString().padStart(2, '0');
+        const s = (this.timeLeft % 60).toString().padStart(2, '0');
+        const el = document.getElementById("timerDisplay");
+        if (el) el.innerText = `${m}:${s}`;
+      }
+    };
+
     const SciCalc = {
       isDeg: true,
       lastAnswer: 0,
@@ -1404,19 +2232,15 @@
         const target = user ? user.target : 'UAE_12_ADV';
         const isUAE = target.startsWith('UAE');
         if (isUAE) {
-          if (q.includes('derivative') || q.includes('differentiat') || q.includes('مشتق') || q.includes('تفاضل')) {
-            return `<strong>📐 قواعد التفاضل (منهاج دولة الإمارات):</strong><br>• <strong>مشتقة القوة:</strong> \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>• <strong>مشتقة الضرب:</strong> \\( (u \\cdot v)' = u'v + u v' \\)<br>• <strong>مشتقة القسمة:</strong> \\( \\left(\\frac{u}{v}\\right)' = \\frac{u'v - u v'}{v^2} \\)<br>• <strong>قاعدة السلسلة:</strong> \\( \\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x) \\)`;
-          } else if (q.includes('integral') || q.includes('integration') || q.includes('تكامل')) {
-            return `<strong>∫ قواعد التكامل الأساسية:</strong><br>• <strong>تكامل القوة:</strong> \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\)<br>• <strong>الدالة الأسية:</strong> \\( \\int e^{kx} dx = \\frac{1}{k} e^{kx} + C \\)`;
+          if (q.includes('differentiat') || q.includes('مشتق') || q.includes('تفاضل')) {
+            return `<strong>📐 قواعد التفاضل (منهاج دولة الإمارات):</strong><br>• مشتقة القوة: \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>• مشتقة الضرب: \\( (u \\cdot v)' = u'v + u v' \\)<br>• مشتقة القسمة: \\( \\left(\\frac{u}{v}\\right)' = \\frac{u'v - u v'}{v^2} \\)<br>• قاعدة السلسلة: \\( \\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x) \\)`;
+          } else if (q.includes('تكامل')) {
+            return `<strong>∫ قواعد التكامل الأساسية:</strong><br>• تكامل القوة: \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\)<br>• الدالة الأسية: \\( \\int e^{kx} dx = \\frac{1}{k} e^{kx} + C \\)`;
           } else {
-            return `<strong>مرحباً بك! رفيقك الرياضي الذكي لمنهاج (${escapeHTML(UI.getTargetLabel(target))}).</strong><br>اكتب مسألتك الرياضية وسأساعدك في حلها خطوة بخطوة بالتفصيل.`;
+            return `<strong>مرحباً بك! رفيقك الرياضي لمنهاج (${escapeHTML(UI.getTargetLabel(target))}).</strong><br>اكتب مسألتك الرياضية وسأساعدك في حلها خطوة بخطوة.`;
           }
         } else {
-          if (q.includes('مشتق') || q.includes('تفاضل')) {
-            return `<strong>📐 قواعد التفاضل (الشهادة السودانية):</strong><br>• <strong>مشتقة القوة:</strong> \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>• <strong>مشتقة الضرب:</strong> (مشتقة الأولى × الثانية) + (الأولى × مشتقة الثانية)<br>• <strong>مشتقة القسمة:</strong> \\( \\frac{\\text{المقام} \\times \\text{مشتقة البسط} - \\text{البسط} \\times \\text{مشتقة المقام}}{(\\text{المقام})^2} \\)`;
-          } else {
-            return `<strong>مرحباً بك في منصة الأستاذ عمر قاسم!</strong><br>أنا هنا لمساعدتك في استيعاب مفاهيم ومسائل المنهج السوداني بدقة وتفوق.`;
-          }
+          return `<strong>مرحباً بك في منصة الأستاذ عمر قاسم!</strong><br>أنا هنا لمساعدتك في استيعاب مفاهيم ومسائل المنهج السوداني بدقة وتفوق.`;
         }
       }
     };
@@ -1425,7 +2249,6 @@
       activeHls: null,
       currentSpeedIdx: 1,
       speeds: [0.75, 1.0, 1.25, 1.5, 2.0],
-      watermarkInterval: null,
       skip(sec) { const video = document.getElementById('activeVideoPlayer'); if (video) video.currentTime += sec; },
       cycleSpeed() {
         const video = document.getElementById('activeVideoPlayer');
@@ -1444,506 +2267,13 @@
       },
       cleanup() {
         if (this.activeHls) { this.activeHls.destroy(); this.activeHls = null; }
-        if (this.watermarkInterval) { clearInterval(this.watermarkInterval); this.watermarkInterval = null; }
         const proControls = document.getElementById('proVideoControlsBar');
         if (proControls) proControls.style.display = 'none';
       }
     };
 
-    const LiveAudio = {
-      BROADCASTER_PEER_ID: "omer_live_stream_channel_2026",
-      STUN_SERVERS: {
-        iceServers: [
-          { urls: 'stun:stun.l.google.com:19302' },
-          { urls: 'stun:stun1.l.google.com:19302' },
-          { urls: 'stun:stun2.l.google.com:19302' },
-          { urls: 'stun:stun3.l.google.com:19302' },
-          { urls: 'stun:stun4.l.google.com:19302' },
-          { urls: 'stun:stun.cloudflare.com:3478' }
-        ]
-      },
-
-      broadcasterPeer: null,
-      broadcasterStream: null,
-      broadcasterAudioCtx: null,
-      broadcasterAnalyser: null,
-      broadcasterAnimId: null,
-      activeStudentCalls: new Set(),
-      isMuted: false,
-
-      mediaRecorder: null,
-      recordedChunks: [],
-      lastRecordedBlob: null,
-      lastRecordedUrl: null,
-      lastRecordedTitle: "",
-
-      listenerPeer: null,
-      listenerCall: null,
-      listenerAudioCtx: null,
-      listenerGainNode: null,
-      listenerAnalyser: null,
-      listenerAnimId: null,
-      listenerAudioEl: null,
-      availableOutputs: [],
-
-      initSessionWatcher() {
-        if (db) {
-          db.collection("live_sessions").doc("active_broadcast").onSnapshot(doc => {
-            if (doc.exists) {
-              const data = doc.data();
-              State.activeLiveSession = (data && data.isActive) ? data : null;
-            } else {
-              State.activeLiveSession = null;
-            }
-            this.updateLiveBannerUI();
-          }, err => console.warn("Live session watcher err:", err));
-        }
-      },
-
-      toggleTargetAudienceFields(type) {
-        document.getElementById('liveCurriculumSelectGroup').style.display = (type === 'CURRICULUM') ? 'block' : 'none';
-        document.getElementById('liveStudentsSelectGroup').style.display = (type === 'CUSTOM') ? 'block' : 'none';
-      },
-
-      async handleStartBroadcastForm(e) {
-        e.preventDefault();
-        const title = document.getElementById('liveBroadcastTitle').value.trim();
-        const targetType = document.getElementById('liveTargetType').value;
-        const targetCurriculum = document.getElementById('liveTargetCurriculum').value;
-
-        let selectedStudentUids = [];
-        if (targetType === 'CUSTOM') {
-          document.querySelectorAll('.chk-live-student:checked').forEach(c => selectedStudentUids.push(c.value));
-          if (selectedStudentUids.length === 0) {
-            NotificationEngine.alert('يرجى اختيار طالب واحد على الأقل.', 'تنبيه');
-            return;
-          }
-        }
-
-        App.closeBroadcastModal();
-
-        try {
-          this.broadcasterStream = await navigator.mediaDevices.getUserMedia({
-            audio: {
-              echoCancellation: true,
-              noiseSuppression: true,
-              autoGainControl: true,
-              channelCount: 1,
-              sampleRate: 48000
-            },
-            video: false
-          });
-
-          this.setupBroadcasterAudioVisualizer(this.broadcasterStream);
-
-          this.recordedChunks = [];
-          this.lastRecordedTitle = title;
-          
-          let mrOptions = {};
-          if (typeof MediaRecorder !== 'undefined') {
-            if (MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/webm;codecs=opus')) {
-              mrOptions = { mimeType: 'audio/webm;codecs=opus' };
-            } else if (MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported('audio/mp4')) {
-              mrOptions = { mimeType: 'audio/mp4' };
-            }
-            try {
-              this.mediaRecorder = new MediaRecorder(this.broadcasterStream, mrOptions);
-            } catch(e) {
-              this.mediaRecorder = new MediaRecorder(this.broadcasterStream);
-            }
-            this.mediaRecorder.ondataavailable = ev => { if (ev.data && ev.data.size > 0) this.recordedChunks.push(ev.data); };
-            this.mediaRecorder.start(1000);
-          }
-
-          if (this.broadcasterPeer && !this.broadcasterPeer.destroyed) {
-            this.broadcasterPeer.destroy();
-          }
-
-          this.broadcasterPeer = new Peer(this.BROADCASTER_PEER_ID, {
-            debug: 0,
-            config: this.STUN_SERVERS
-          });
-
-          this.broadcasterPeer.on('open', async () => {
-            const broadcastPayload = {
-              isActive: true,
-              title: title,
-              broadcasterName: "الأستاذ عمر قاسم",
-              broadcasterPeerId: this.BROADCASTER_PEER_ID,
-              targetType: targetType,
-              targetCurriculum: targetType === 'CURRICULUM' ? targetCurriculum : null,
-              targetStudentUids: selectedStudentUids,
-              startedAt: Date.now()
-            };
-
-            if (db) {
-              await db.collection("live_sessions").doc("active_broadcast").set(broadcastPayload, { merge: true });
-            }
-            State.activeLiveSession = broadcastPayload;
-
-            document.getElementById('broadcasterBarTitle').innerText = title;
-            document.getElementById('broadcasterBarTarget').innerText = targetType === 'ALL' ? 'الجمهور: كافة الطلاب' : (targetType === 'CURRICULUM' ? `الجمهور: ${UI.getTargetLabel(targetCurriculum)}` : `الجمهور: ${selectedStudentUids.length} طلاب محددين`);
-            document.getElementById('broadcasterLiveBar').classList.add('active');
-            App.showSecurityAlert("🔴 تم بدء البث الصوتي المباشر بنجاح والتسجيل جاري...");
-          });
-
-          this.broadcasterPeer.on('call', call => {
-            this.activeStudentCalls.add(call);
-            call.answer(this.broadcasterStream);
-            call.on('close', () => this.activeStudentCalls.delete(call));
-            call.on('error', () => this.activeStudentCalls.delete(call));
-          });
-
-          this.broadcasterPeer.on('error', err => {
-            console.error("Broadcaster Peer Error:", err);
-            if (err.type === 'unavailable-id') {
-              NotificationEngine.alert("هناك جلسة بث مفتوحة بالفعل باسم المعلم أو جاري إعادة تنشيط القناة.", "تنبيه البث");
-            }
-          });
-
-        } catch (err) {
-          console.error("Mic Error:", err);
-          NotificationEngine.alert("تعذر الوصول إلى المايكروفون. يرجى منح المتصفح الصلاحية لبدء البث.", "خطأ المايكروفون");
-        }
-      },
-
-      setupBroadcasterAudioVisualizer(stream) {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        this.broadcasterAudioCtx = new AudioContext();
-        const source = this.broadcasterAudioCtx.createMediaStreamSource(stream);
-        this.broadcasterAnalyser = this.broadcasterAudioCtx.createAnalyser();
-        this.broadcasterAnalyser.fftSize = 64;
-        source.connect(this.broadcasterAnalyser);
-        this.renderCanvasLoop(this.broadcasterAnalyser, 'broadcasterVisualizerCanvas', '#FEF08A');
-      },
-
-      renderCanvasLoop(analyser, canvasId, color) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas || !analyser) return;
-        const ctx = canvas.getContext('2d');
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-
-        const draw = () => {
-          const animId = requestAnimationFrame(draw);
-          if (canvasId === 'broadcasterVisualizerCanvas') this.broadcasterAnimId = animId;
-          else this.listenerAnimId = animId;
-
-          analyser.getByteFrequencyData(dataArray);
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          const barWidth = (canvas.width / bufferLength) * 1.6;
-          let x = 0;
-          for (let i = 0; i < bufferLength; i++) {
-            const barHeight = (dataArray[i] / 255) * canvas.height;
-            ctx.fillStyle = color;
-            ctx.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
-            x += barWidth;
-          }
-        };
-        draw();
-      },
-
-      toggleBroadcasterMute() {
-        if (!this.broadcasterStream) return;
-        this.isMuted = !this.isMuted;
-        this.broadcasterStream.getAudioTracks().forEach(t => t.enabled = !this.isMuted);
-        const btn = document.getElementById('btnBroadcasterMute');
-        if (this.isMuted) {
-          btn.innerHTML = '<i class="fa-solid fa-microphone-slash"></i> تم الكتم';
-          btn.classList.add('btn-danger'); btn.classList.remove('btn-gold');
-        } else {
-          btn.innerHTML = '<i class="fa-solid fa-microphone"></i> كتم';
-          btn.classList.remove('btn-danger'); btn.classList.add('btn-gold');
-        }
-      },
-
-      async stopBroadcast() {
-        const confirmStop = await NotificationEngine.confirm("هل تريد إنهاء جلسة البث الصوتي المباشر الحالية؟", "إنهاء البث");
-        if (!confirmStop) return;
-
-        if (this.mediaRecorder && this.mediaRecorder.state !== 'inactive') {
-          this.mediaRecorder.stop();
-        }
-
-        if (this.broadcasterAnimId) cancelAnimationFrame(this.broadcasterAnimId);
-        if (this.broadcasterStream) {
-          this.broadcasterStream.getTracks().forEach(t => t.stop());
-          this.broadcasterStream = null;
-        }
-        if (this.broadcasterAudioCtx) {
-          this.broadcasterAudioCtx.close().catch(()=>{});
-        }
-        if (this.broadcasterPeer) {
-          this.broadcasterPeer.destroy();
-          this.broadcasterPeer = null;
-        }
-
-        if (db) {
-          await db.collection("live_sessions").doc("active_broadcast").set({ isActive: false }, { merge: true });
-        }
-        State.activeLiveSession = null;
-        document.getElementById('broadcasterLiveBar').classList.remove('active');
-
-        setTimeout(() => {
-          this.lastRecordedBlob = new Blob(this.recordedChunks, { type: this.recordedChunks[0]?.type || 'audio/webm' });
-          this.lastRecordedUrl = URL.createObjectURL(this.lastRecordedBlob);
-
-          const audioPreview = document.getElementById('recordedAudioPreview');
-          if (audioPreview) audioPreview.src = this.lastRecordedUrl;
-
-          const unitSelect = document.getElementById('saveBroadcastUnitSelect');
-          if (unitSelect) {
-            unitSelect.innerHTML = State.units.map(u => `<option value="${u.id}">${escapeHTML(u.title)} (${UI.getTargetLabel(u.target)})</option>`).join('');
-          }
-
-          document.getElementById('saveBroadcastLessonTitle').value = `تسجيل بث: ${this.lastRecordedTitle}`;
-          document.getElementById('saveBroadcastLessonDesc').value = `تسجيل البث المباشر لشرح ومراجعة المسائل الرياضية الهامة مع الأستاذ عمر قاسم.`;
-          document.getElementById('saveBroadcastModal').classList.add('active');
-        }, 600);
-      },
-
-      confirmSaveBroadcastAsLesson(e) {
-        e.preventDefault();
-        const unitId = document.getElementById('saveBroadcastUnitSelect').value;
-        const title = document.getElementById('saveBroadcastLessonTitle').value.trim();
-        const desc = document.getElementById('saveBroadcastLessonDesc').value.trim();
-
-        const unit = State.units.find(u => u.id === unitId);
-        if (!unit) return;
-
-        const newLesson = {
-          id: "les_live_" + Date.now(),
-          unitId: unitId,
-          title: title,
-          description: desc,
-          target: unit.target,
-          assignedStudentUids: [],
-          resources: [
-            {
-              id: "res_audio_" + Date.now(),
-              type: "PODCASTS",
-              title: "تسجيل صوتي للبث المباشر كامل",
-              fileUrl: this.lastRecordedUrl
-            }
-          ]
-        };
-
-        State.lessons.push(newLesson);
-        DataStore.save("lessons", State.lessons);
-        document.getElementById('saveBroadcastModal').classList.remove('active');
-        NotificationEngine.alert(`تم حفظ البث المباشر كدرس تعليمي دائم داخل (${unit.title}) بنجاح!`, 'تم الحفظ');
-        UI.render();
-      },
-
-      downloadRecordingFile() {
-        if (!this.lastRecordedUrl) return;
-        const a = document.createElement('a');
-        a.href = this.lastRecordedUrl;
-        a.download = `تسجيل_بث_الأستاذ_عمر_${Date.now()}.webm`;
-        a.click();
-      },
-
-      discardRecording() {
-        document.getElementById('saveBroadcastModal').classList.remove('active');
-        App.showSecurityAlert("تم إلغاء وحذف تسجيل البث.");
-      },
-
-      updateLiveBannerUI() {
-        const bannerContainer = document.getElementById('studentLiveBannerContainer');
-        if (!bannerContainer) return;
-        const session = State.activeLiveSession;
-        const user = State.currentUser;
-
-        if (!session || !session.isActive || !user || user.role !== 'STUDENT') {
-          bannerContainer.innerHTML = '';
-          return;
-        }
-
-        let isEligible = false;
-        if (session.targetType === 'ALL') isEligible = true;
-        else if (session.targetType === 'CURRICULUM' && session.targetCurriculum === user.target) isEligible = true;
-        else if (session.targetType === 'CUSTOM' && session.targetStudentUids && session.targetStudentUids.includes(user.uid)) isEligible = true;
-
-        if (isEligible) {
-          bannerContainer.innerHTML = `
-            <div class="live-top-banner">
-              <div style="display:flex; align-items:center; gap:12px;">
-                <span class="live-indicator-dot"></span>
-                <div>
-                  <strong style="font-size:0.95rem; display:block;">🎙️ بث صوتي مباشر قيد التشغيل: ${escapeHTML(session.title)}</strong>
-                  <span style="font-size:0.75rem; opacity:0.9;">بإشراف الأستاذ عمر قاسم – انضم الآن لمتابعة الشرح والتوجيهات</span>
-                </div>
-              </div>
-              <button class="btn btn-gold" style="padding:6px 16px; font-size:0.85rem; font-weight:800; min-height:36px;" onclick="LiveAudio.joinStudentSession()">
-                <i class="fa-solid fa-headphones"></i> استماع للبث الآن
-              </button>
-            </div>
-          `;
-        } else {
-          bannerContainer.innerHTML = '';
-        }
-      },
-
-      async joinStudentSession() {
-        const session = State.activeLiveSession;
-        if (!session || !session.isActive) {
-          NotificationEngine.alert("عذراً، جلسة البث المباشر انتهت أو غير متاحة.", "البث المباشر");
-          return;
-        }
-
-        try {
-          const AudioContext = window.AudioContext || window.webkitAudioContext;
-          this.listenerAudioCtx = new AudioContext();
-          if (this.listenerAudioCtx.state === 'suspended') {
-            await this.listenerAudioCtx.resume();
-          }
-
-          const silentBuffer = this.listenerAudioCtx.createBuffer(1, 1, 22050);
-          const silentSource = this.listenerAudioCtx.createBufferSource();
-          silentSource.buffer = silentBuffer;
-          silentSource.connect(this.listenerAudioCtx.destination);
-          silentSource.start(0);
-
-          const dummyStream = this.createDummyAudioStream(this.listenerAudioCtx);
-
-          const studentPeerId = "st_live_" + State.currentUser.uid + "_" + Math.floor(Math.random() * 1000);
-          if (this.listenerPeer && !this.listenerPeer.destroyed) this.listenerPeer.destroy();
-
-          this.listenerPeer = new Peer(studentPeerId, { debug: 0, config: this.STUN_SERVERS });
-
-          this.listenerPeer.on('open', () => {
-            const call = this.listenerPeer.call(this.BROADCASTER_PEER_ID, dummyStream);
-            this.listenerCall = call;
-
-            call.on('stream', remoteAudioStream => {
-              this.setupStudentAudioPipeline(remoteAudioStream);
-            });
-
-            call.on('close', () => this.leaveStudentSession());
-            call.on('error', () => this.leaveStudentSession());
-          });
-
-          document.getElementById('studentWidgetTitle').innerText = session.title;
-          document.getElementById('studentLiveWidget').classList.add('active');
-          this.populateAudioOutputDevices();
-
-        } catch (err) {
-          console.error("Join Live Error:", err);
-          NotificationEngine.alert("تعذر الاتصال بالبث المباشر. تأكد من اتصال الإنترنت.", "خطأ في الاتصال");
-        }
-      },
-
-      createDummyAudioStream(ctx) {
-        const osc = ctx.createOscillator();
-        const dst = ctx.createMediaStreamDestination();
-        const gain = ctx.createGain();
-        gain.gain.value = 0;
-        osc.connect(gain);
-        gain.connect(dst);
-        osc.start();
-        return dst.stream;
-      },
-
-      setupStudentAudioPipeline(remoteStream) {
-        if (!this.listenerAudioEl) {
-          this.listenerAudioEl = new Audio();
-          this.listenerAudioEl.autoplay = true;
-          this.listenerAudioEl.setAttribute('playsinline', '');
-        }
-        this.listenerAudioEl.srcObject = remoteStream;
-
-        const source = this.listenerAudioCtx.createMediaStreamSource(remoteStream);
-        this.listenerGainNode = this.listenerAudioCtx.createGain();
-        this.listenerAnalyser = this.listenerAudioCtx.createAnalyser();
-        this.listenerAnalyser.fftSize = 64;
-
-        source.connect(this.listenerGainNode);
-        this.listenerGainNode.connect(this.listenerAnalyser);
-        this.listenerAnalyser.connect(this.listenerAudioCtx.destination);
-
-        this.renderCanvasLoop(this.listenerAnalyser, 'studentVisualizerCanvas', '#10B981');
-      },
-
-      setStudentVolume(val) {
-        if (this.listenerGainNode) {
-          this.listenerGainNode.gain.value = parseFloat(val);
-        }
-      },
-
-      async populateAudioOutputDevices() {
-        const select = document.getElementById('studentAudioOutputSelect');
-        if (!select || !navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
-        try {
-          const devices = await navigator.mediaDevices.enumerateDevices();
-          const outputs = devices.filter(d => d.kind === 'audiooutput');
-          select.innerHTML = outputs.length > 0 ? '' : '<option value="">السماعة الافتراضية</option>';
-          outputs.forEach(d => {
-            select.innerHTML += `<option value="${d.deviceId}">${escapeHTML(d.label || 'سماعة خارجية / بلوتوث')}</option>`;
-          });
-        } catch(e){}
-      },
-
-      async setAudioOutput(deviceId) {
-        if (this.listenerAudioEl && this.listenerAudioEl.setSinkId) {
-          try {
-            await this.listenerAudioEl.setSinkId(deviceId);
-            App.showSecurityAlert("تم تبديل مخرج الصوت بنجاح.");
-          } catch(e){}
-        }
-      },
-
-      leaveStudentSession() {
-        if (this.listenerAnimId) cancelAnimationFrame(this.listenerAnimId);
-        if (this.listenerCall) { this.listenerCall.close(); this.listenerCall = null; }
-        if (this.listenerPeer) { this.listenerPeer.destroy(); this.listenerPeer = null; }
-        if (this.listenerAudioCtx) { this.listenerAudioCtx.close().catch(()=>{}); }
-        document.getElementById('studentLiveWidget').classList.remove('active');
-      }
-    };
-
-    const PomodoroTimer = {
-      timeLeft: 25 * 60,
-      timerId: null,
-      isRunning: false,
-      toggle() { if (this.isRunning) this.pause(); else this.start(); },
-      start() {
-        this.isRunning = true;
-        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-pause"></i> إيقاف';
-        this.timerId = setInterval(() => {
-          if (this.timeLeft > 0) {
-            this.timeLeft--;
-            this.updateDisplay();
-          } else {
-            this.pause();
-            AudioFX.celebrate();
-            NotificationEngine.alert("⏰ انتهت جلسة التركيز! خذ استراحة لمدة 5 دقائق.", "جلسة التركيز");
-            this.reset();
-          }
-        }, 1000);
-      },
-      pause() {
-        this.isRunning = false;
-        clearInterval(this.timerId);
-        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-play"></i> استئناف';
-      },
-      reset() {
-        this.pause();
-        this.timeLeft = 25 * 60;
-        this.updateDisplay();
-        document.getElementById("timerStartBtn").innerHTML = '<i class="fa-solid fa-play"></i> بدء';
-      },
-      updateDisplay() {
-        const m = Math.floor(this.timeLeft / 60).toString().padStart(2, '0');
-        const s = (this.timeLeft % 60).toString().padStart(2, '0');
-        const el = document.getElementById("timerDisplay");
-        if (el) el.innerText = `${m}:${s}`;
-      }
-    };
-
     const CryptoSecurity = {
-      deriveSalt() {
-        return "SEC_GLOBAL_OMER_GASIM_VAULT_2026_MATH_SECURE";
-      },
+      deriveSalt() { return "SEC_GLOBAL_OMER_GASIM_VAULT_2026_MATH_SECURE"; },
       hashPassword(plainPassword) {
         if (!plainPassword) return "";
         const clean = normalizeInput(plainPassword);
@@ -1954,26 +2284,25 @@
       verify(inputPassword, storedHash, username = "") {
         if (!inputPassword || !storedHash) return false;
         const cleanInput = normalizeInput(inputPassword);
-        if (cleanInput === storedHash) return true;
+        const cleanStored = normalizeInput(String(storedHash));
+        
+        // 1. فحص المطابقة المباشرة إذا كانت القيمة المخزنة نصاً عادياً في فايربيز
+        if (cleanInput === cleanStored) return true;
+        if (cleanInput.toLowerCase() === cleanStored.toLowerCase()) return true;
+        
+        // 2. فحص المطابقة إذا كانت القيمة مشفرة بالهاش PBKDF2
         const hashedAttempt = this.hashPassword(cleanInput);
-        if (hashedAttempt === storedHash) return true;
-        if (username) {
-          const oldSalt = CryptoJS.SHA256("SEC_SYS_" + username.toLowerCase().trim()).toString();
-          const oldHash = CryptoJS.PBKDF2(cleanInput, oldSalt, { keySize: 256 / 32, iterations: 1500 }).toString(CryptoJS.enc.Hex);
-          if (oldHash === storedHash) return true;
-        }
-        if (CryptoJS.SHA256(cleanInput).toString() === storedHash) return true;
+        if (hashedAttempt === cleanStored || hashedAttempt === storedHash) return true;
+        
         return false;
       },
       createSessionToken(user) {
         const payload = { uid: user.uid, role: user.role, username: user.username, target: user.target, expiresAt: Date.now() + (12 * 60 * 60 * 1000) };
-        const dynamicSecret = this.deriveSalt();
-        return CryptoJS.AES.encrypt(JSON.stringify(payload), dynamicSecret).toString();
+        return CryptoJS.AES.encrypt(JSON.stringify(payload), this.deriveSalt()).toString();
       },
       validateSessionToken(token) {
         try {
-          const dynamicSecret = this.deriveSalt();
-          const bytes = CryptoJS.AES.decrypt(token, dynamicSecret);
+          const bytes = CryptoJS.AES.decrypt(token, this.deriveSalt());
           const decrypted = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
           if (decrypted && decrypted.expiresAt > Date.now()) return decrypted;
         } catch (e) { return null; }
@@ -1987,7 +2316,7 @@
       recordFailedAttempt() {
         let attempts = parseInt(localStorage.getItem("og_login_attempts") || "0") + 1;
         localStorage.setItem("og_login_attempts", attempts.toString());
-        if (attempts >= 5) {
+        if (attempts >= 6) {
           localStorage.setItem("og_lock_until", (Date.now() + 30000).toString());
           localStorage.setItem("og_login_attempts", "0");
         }
@@ -2006,7 +2335,7 @@
           App.showSecurityAlert("محتويات منصة الأستاذ عمر محمية ومسجلة بحقوق الملكية الفكرية.");
         });
         document.addEventListener('keydown', e => {
-          if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','i','J','j','C','c'].includes(e.key)) || (e.ctrlKey && ['U','u','S','s'].includes(e.key))) {
+          if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && ['I','i','J','j','C','c'].includes(e.key))) {
             e.preventDefault();
             document.getElementById('securityPrivacyShield').style.display = 'flex';
             App.recordSecurityViolation(`محاولة فحص أمني (${e.key})`);
@@ -2259,6 +2588,7 @@
       studentSearchQuery: "",
       loginStage: "CREDENTIALS",
       pendingAdminUsername: null,
+      pendingAdminVault: null,
       activeQuiz: null,
       activeQuestionIndex: 0,
       quizScore: 0,
@@ -2303,18 +2633,29 @@
     }
 
     const DataStore = {
-      async getAdminVault() {
+      // جلب بيانات المشرف مباشرة من فايربيز مع دعم السيرفر فوراً
+      async getAdminVault(forceRefresh = true) {
         if (db) {
           try {
             const docRef = db.collection("omer_system").doc("admin_config");
-            const snap = await docRef.get({ source: 'server' }).catch(() => docRef.get());
+            let snap = null;
+            if (forceRefresh) {
+              try {
+                snap = await docRef.get({ source: 'server' });
+              } catch (e) {
+                snap = await docRef.get();
+              }
+            } else {
+              snap = await docRef.get();
+            }
+
             if (snap && snap.exists) {
               const cloudVault = snap.data();
               localStorage.setItem("og_admin_vault_cache", JSON.stringify(cloudVault));
               return cloudVault;
             }
           } catch (e) {
-            console.warn("استخدام بيانات المشرف المخزنة محلياً:", e);
+            console.warn("استخدام بيانات المشرف المخزنة مسبقاً:", e);
           }
         }
         
@@ -2353,17 +2694,6 @@
                 { id: "res_1_2", type: "WORKSHEETS", title: "مذكرة التمارين والمسائل الوزارية PDF", fileUrl: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf" },
                 { id: "res_1_3", type: "PODCASTS", title: "بودكاست مراجعة المفاهيم الأساسية", fileUrl: "https://actions.google.com/sounds/v1/science/ambient_space.ogg" }
               ]
-            },
-            {
-              id: "les_2",
-              unitId: "unit_1",
-              title: "الدرس الثاني: الاشتقاق الضمني والمعدلات الزمنية المرتبطة",
-              description: "خطوات حل مسائل الاشتقاق الضمني وربط المتغيرات بالزمن",
-              target: "UAE_12_ADV",
-              assignedStudentUids: [],
-              resources: [
-                { id: "res_2_1", type: "WORKSHEETS", title: "أوراق عمل وتدريبات وزارية PDF", fileUrl: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf" }
-              ]
             }
           ];
           localStorage.setItem("og_lessons", JSON.stringify(State.lessons));
@@ -2391,7 +2721,7 @@
             title: "كويز قياس الفهم: قاعدة السلسلة والتفاضل",
             target: "UAE_12_ADV",
             questions: [
-              { id: "q1", text: "ما هي مشتقة الدالة \\( f(x) = (3x^2 + 1)^4 \\)؟", option1: "\\( 24x(3x^2+1)^3 \\)", option2: "\\( 12x(3x^2+1)^3 \\)", option3: "\\( 4(3x^2+1)^3 \\)", correctOption: 1, aiExplanation: "بتطبيق قاعدة السلسلة: ننزل الأس ثم نطرح 1 ونضرب في مشتقة ما بداخل القوس \\( 4(3x^2+1)^3 \\cdot 6x = 24x(3x^2+1)^3 \\)." }
+              { id: "q1", text: "ما هي مشتقة الدالة \\( f(x) = (3x^2 + 1)^4 \\)؟", option1: "\\( 24x(3x^2+1)^3 \\)", option2: "\\( 12x(3x^2+1)^3 \\)", option3: "\\( 4(3x^2+1)^3 \\)", correctOption: 1, aiExplanation: "بتطبيق قاعدة السلسلة: ننزل الأس ثم نطرح 1 ونضرب في مشتقة ما بداخل القوس." }
             ]
           }];
           localStorage.setItem("og_quizzes", JSON.stringify(State.quizzes));
@@ -2646,7 +2976,7 @@
             <div style="display:flex; align-items:center; gap:8px;">
               ${State.currentUser.role === 'ADMIN' ? `
                 <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:34px;" onclick="App.openBroadcastModal()">
-                  <i class="fa-solid fa-tower-broadcast"></i> استوديو البث الصوتي
+                  <i class="fa-solid fa-tower-broadcast"></i> استوديو البث والشاشة
                 </button>
               ` : `
                 <span class="badge badge-xp"><i class="fa-solid fa-trophy"></i> XP ${State.currentUser.xp || 100}</span>
@@ -2707,13 +3037,13 @@
                     <i class="fa-solid fa-key" style="font-size: 28px; color: var(--gold-deep);"></i>
                   </div>
                   <h2 style="color: var(--navy-dark); font-weight: 900; margin-bottom: 6px;">التحقق الأمني المزدوج (2FA)</h2>
-                  <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 18px;">يرجى إدخال رمز التحقق الأمني الخاص بالمشرف.</p>
+                  <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 18px;">يرجى إدخال رمز التحقق الأمني (PIN) الخاص بالمشرف المحدث في فايربيز.</p>
                   <form onsubmit="App.handle2FASubmit(event)">
                     <div class="form-group" style="margin-bottom: 18px;">
                       <label style="text-align:center;">رمز التحقق الأمني (PIN)</label>
                       <input type="password" id="twoFactorCode" maxlength="6" style="text-align:center; font-size:1.5rem; letter-spacing:8px; font-weight:800;" placeholder="••••" required autofocus>
                     </div>
-                    <button type="submit" id="btn2FASubmit" class="btn btn-gold" style="width: 100%; font-size:0.92rem;"><i class="fa-solid fa-lock-open"></i> تأكيد الدخول إلى الإدارة</button>
+                    <button type="submit" id="btn2FASubmit" class="btn btn-gold" style="width: 100%; font-size:0.92rem;"><i class="fa-solid fa-lock-open"></i> تأكيد الدخول إلى المنصة</button>
                     <button type="button" class="btn btn-secondary" style="width: 100%; margin-top: 8px;" onclick="App.cancel2FA()">إلغاء والعودة</button>
                   </form>
                 </div>
@@ -2729,7 +3059,7 @@
                 <h2 style="color: var(--navy-dark); font-weight: 900; margin-bottom: 2px;">منصة الأستاذ عمر</h2>
                 <p style="font-size:0.82rem; color:var(--text-muted); margin-bottom:12px;">مادة الرياضيات – المنهاج الإماراتي والمنهاج السوداني</p>
                 <div style="display:inline-flex; align-items:center; gap:6px; background:#ECFDF5; color:#047857; padding:4px 12px; border-radius:50px; font-size:0.72rem; font-weight:700; margin-bottom:18px;">
-                  <i class="fa-solid fa-shield-halved"></i> نظام سحابي مشفر ومعزول بالكامل
+                  <i class="fa-solid fa-shield-halved"></i> نظام سحابي مشفر ومتصل بقاعدة البيانات
                 </div>
                 <form onsubmit="App.handleLogin(event)">
                   <div class="form-group">
@@ -2775,7 +3105,6 @@
           }
           
           const q = State.studentSearchQuery.toLowerCase().trim();
-          
           const myUnits = State.units.filter(u => u.target === user.target || u.target === 'ALL');
           const myCompetitions = State.competitions.filter(c => (c.target === user.target || c.target === 'ALL') && (!c.targetStudentUids || c.targetStudentUids.length === 0 || c.targetStudentUids.includes(user.uid)));
           const filteredQuizzes = State.quizzes.filter(item => (item.target === user.target || item.target === 'ALL') && (!q || item.title.toLowerCase().includes(q)));
@@ -2804,7 +3133,6 @@
               </div>
             </div>
 
-            <!-- بطاقة المسابقات والتحديات التفاعلية HTML المخصصة للطلاب -->
             ${myCompetitions.length > 0 ? `
               <div class="card" style="background:linear-gradient(135deg, #FFFDF5 0%, #FAF5FF 100%); border:2px solid #8B5CF6;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
@@ -2831,13 +3159,11 @@
               </div>
             ` : ''}
 
-            <!-- شريط البحث السريع في الوحدات والدروس والمذكرات -->
             <div class="search-box-wrapper">
               <i class="fa-solid fa-magnifying-glass"></i>
               <input type="text" placeholder="🔍 ابحث في الدروس أو الوحدات أو المذكرات..." value="${escapeHTML(State.studentSearchQuery)}" oninput="App.handleStudentSearch(this.value)">
             </div>
 
-            <!-- عرض المنهج الهيكلي المنظم: الوحدات ⬅ الدروس ⬅ الموارد -->
             ${myUnits.length === 0 ? `
               <div class="card" style="text-align:center; padding:45px;">
                 <i class="fa-solid fa-folder-open" style="font-size:42px; color:var(--gold-orange); margin-bottom:12px;"></i>
@@ -2880,7 +3206,6 @@
                           </div>
                           <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:10px;">${escapeHTML(lesson.description || 'شرح وتدريبات الدرس مع الأستاذ عمر.')}</p>
 
-                          <!-- شبكة الموارد والوسائط التابعة للدرس -->
                           <div class="lesson-resources-grid">
                             ${(lesson.resources || []).map(res => `
                               <div class="resource-sub-card">
@@ -2902,7 +3227,6 @@
               }).join('')}
             `}
 
-            <!-- كويزات واختبارات المنهج التفاعلية -->
             ${filteredQuizzes.length > 0 ? `
               <div class="card" style="margin-top:20px;">
                 <h3 style="color: var(--navy-dark); margin-bottom: 14px; font-weight:800;"><i class="fa-solid fa-bolt" style="color:var(--gold-orange);"></i> كويزات واختبارات قياس الفهم</h3>
@@ -3142,7 +3466,7 @@
                 <p style="font-size: 0.82rem; color: var(--text-muted);">إدارة المناهج الإماراتية والسودانية والوحدات والمسابقات التفاعلية واشتراكات الطلاب</p>
               </div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <button class="btn btn-danger" onclick="App.openBroadcastModal()"><i class="fa-solid fa-tower-broadcast"></i> استوديو البث الصوتي</button>
+                <button class="btn btn-danger" onclick="App.openBroadcastModal()"><i class="fa-solid fa-tower-broadcast"></i> استوديو البث والشاشة</button>
                 <button class="btn btn-purple" onclick="App.setRoute('ADMIN_COMPETITIONS')"><i class="fa-solid fa-trophy"></i> المسابقات التفاعلية (${State.competitions.length})</button>
                 <button class="btn btn-gold" onclick="App.setRoute('ADMIN_SURVEYS')"><i class="fa-solid fa-square-poll-vertical"></i> الاستبيانات (${State.surveys.length})</button>
                 <button class="btn btn-gold" onclick="App.openSettingsModal()"><i class="fa-solid fa-gear"></i> الإعدادات والأمان</button>
@@ -3617,7 +3941,7 @@
         const showTabsChk = document.getElementById("settingShowTabs");
         if (showTabsChk) showTabsChk.checked = !!State.settings.showContentTabsToStudents;
 
-        const vault = await DataStore.getAdminVault();
+        const vault = await DataStore.getAdminVault(true);
         if (vault && vault.username) {
           document.getElementById("settingAdminUser").value = vault.username;
         } else {
@@ -3640,7 +3964,7 @@
         const newAdminPin = normalizeInput(document.getElementById("settingAdminPin").value);
         const showTabsVal = document.getElementById("settingShowTabs").checked;
 
-        const currentVault = (await DataStore.getAdminVault()) || {
+        const currentVault = (await DataStore.getAdminVault(true)) || {
           username: "admin", passwordHash: "123456", pinHash: "1234", showContentTabsToStudents: false
         };
         
@@ -3648,8 +3972,8 @@
         
         const updateObj = {
           username: finalUsername,
-          passwordHash: newAdminPass ? CryptoSecurity.hashPassword(newAdminPass) : currentVault.passwordHash,
-          pinHash: newAdminPin ? CryptoSecurity.hashPassword(newAdminPin) : currentVault.pinHash,
+          passwordHash: newAdminPass ? CryptoSecurity.hashPassword(newAdminPass) : (currentVault.passwordHash || currentVault.password || "123456"),
+          pinHash: newAdminPin ? CryptoSecurity.hashPassword(newAdminPin) : (currentVault.pinHash || currentVault.pin || "1234"),
           logoUrl: logo,
           whatsappPhone: phone || State.settings.adminPhoneWhatsApp,
           showContentTabsToStudents: showTabsVal,
@@ -3677,7 +4001,7 @@
         }
         
         App.closeSettingsModal();
-        App.showSecurityAlert("تم حفظ وتحديث إعدادات المنصة بنجاح.");
+        App.showSecurityAlert("تم حفظ وتحديث إعدادات المنصة في فايربيز بنجاح.");
         UI.render();
       },
 
@@ -4293,6 +4617,7 @@
       async copySurveyLink(surveyId) {
         const link = App.getOnlineSurveyUrl(surveyId);
         try {
+          await navigator.clipboard.readText();
           await navigator.clipboard.writeText(link);
           App.showSecurityAlert('تم نسخ رابط الاستبيان المباشر للحافظة.');
         } catch {
@@ -4538,12 +4863,13 @@ ${link}
         }, 450);
       },
 
+      /* نظام تسجيل الدخول الفوري والمحدث مع فايربيز */
       async handleLogin(e) {
         e.preventDefault();
         const submitBtn = document.getElementById("btnLoginSubmit");
         const originalText = submitBtn.innerHTML;
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق...';
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري التحقق من السحابة...';
 
         try {
           const rawUser = document.getElementById("loginUsername").value;
@@ -4552,16 +4878,19 @@ ${link}
           const username = normalizeInput(rawUser).toLowerCase();
           const passwordInput = normalizeInput(rawPass);
 
-          const adminVault = await DataStore.getAdminVault();
-          if (adminVault && adminVault.username) {
-            const expectedUser = normalizeInput(adminVault.username).toLowerCase();
+          // 1. جلب بيانات المشرف الحالية مباشرة من فايربيز سيرفر (تخطي الكاش)
+          const adminVault = await DataStore.getAdminVault(true);
+          if (adminVault && (adminVault.username || adminVault.user)) {
+            const expectedUser = normalizeInput(adminVault.username || adminVault.user || "admin").toLowerCase();
 
             if (username === expectedUser) {
-              const isPasswordCorrect = CryptoSecurity.verify(passwordInput, adminVault.passwordHash, username);
+              const storedPass = adminVault.passwordHash || adminVault.password || adminVault.pass;
+              const isPasswordCorrect = CryptoSecurity.verify(passwordInput, storedPass, username);
 
               if (isPasswordCorrect) {
                 CryptoSecurity.resetFailedAttempts();
                 State.pendingAdminUsername = username;
+                State.pendingAdminVault = adminVault; // حفظ بيانات المشرف المجلوبة من فايربيز لمرحلة 2FA
                 State.loginStage = "2FA";
                 UI.render();
                 return;
@@ -4576,11 +4905,12 @@ ${link}
             return;
           }
 
+          // 2. التحقق من حسابات الطلاب مباشرة من فايربيز
           let student = null;
           if (db) {
             try {
-              const snap = await db.collection("omer_students").where("username", "==", username).limit(1).get();
-              if (!snap.empty) {
+              const snap = await db.collection("omer_students").where("username", "==", username).limit(1).get({ source: 'server' }).catch(() => db.collection("omer_students").where("username", "==", username).limit(1).get());
+              if (snap && !snap.empty) {
                 student = { uid: snap.docs[0].id, ...snap.docs[0].data() };
               }
             } catch(e){}
@@ -4591,8 +4921,8 @@ ${link}
           }
 
           if (student) {
-            const sPassHash = student.passwordHash || "";
-            const isMatch = CryptoSecurity.verify(passwordInput, sPassHash, username);
+            const sPass = student.passwordHash || student.password;
+            const isMatch = CryptoSecurity.verify(passwordInput, sPass, username);
 
             if (isMatch) {
               CryptoSecurity.resetFailedAttempts();
@@ -4612,7 +4942,7 @@ ${link}
 
         } catch (error) {
           console.error("Login Error:", error);
-          App.showSecurityAlert("حدث خطأ أثناء الاتصال بالخادم.");
+          App.showSecurityAlert("حدث خطأ أثناء الاتصال بقاعدة البيانات.");
         } finally {
           if (submitBtn) {
             submitBtn.disabled = false;
@@ -4621,33 +4951,37 @@ ${link}
         }
       },
 
+      /* التحقق من رمز 2FA PIN المحدث في فايربيز والدخول للوحة المشرف */
       async handle2FASubmit(e) {
         e.preventDefault();
         const submitBtn = document.getElementById("btn2FASubmit");
         const originalText = submitBtn.innerHTML;
         submitBtn.disabled = true;
-        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> تأكيد...';
+        submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري تأكيد الرمز...';
 
         try {
           const rawCode = document.getElementById("twoFactorCode").value;
           const code = normalizeInput(rawCode);
 
-          const adminVault = await DataStore.getAdminVault();
+          // التأكد من جلب أحدث رمز من فايربيز سيرفر
+          const adminVault = State.pendingAdminVault || await DataStore.getAdminVault(true);
           if (adminVault && State.pendingAdminUsername) {
-            const isPinValid = CryptoSecurity.verify(code, adminVault.pinHash, State.pendingAdminUsername);
+            const storedPin = adminVault.pinHash || adminVault.pin || adminVault.code || "1234";
+            const isPinValid = CryptoSecurity.verify(code, storedPin, State.pendingAdminUsername);
 
             if (isPinValid) {
               CryptoSecurity.resetFailedAttempts();
               State.currentUser = {
                 uid: "admin_omer",
                 name: "الأستاذ عمر (المشرف)",
-                username: adminVault.username,
+                username: adminVault.username || State.pendingAdminUsername,
                 role: "ADMIN"
               };
               const token = CryptoSecurity.createSessionToken(State.currentUser);
               localStorage.setItem("og_session_token", token);
-              localStorage.setItem("og_session_user", adminVault.username);
+              localStorage.setItem("og_session_user", State.currentUser.username);
               State.pendingAdminUsername = null;
+              State.pendingAdminVault = null;
               State.loginStage = "CREDENTIALS";
               DataStore.listenToAllStudents();
               App.setRoute("ADMIN_DASHBOARD");
@@ -4656,7 +4990,7 @@ ${link}
           }
 
           App.recordSecurityViolation("إدخال رمز تحقق أمني خاطئ لحساب الأدمن");
-          NotificationEngine.alert("رمز التحقق الأمني (PIN) غير صحيح!", "خطأ بالأمان");
+          NotificationEngine.alert("رمز التحقق الأمني (PIN) غير صحيح! يرجى إدخال الرمز المعتمد في السحابة.", "خطأ بالأمان");
         } catch (error) {
           NotificationEngine.alert("حدث خطأ أثناء معالجة رمز الأمان.", "خطأ");
         } finally {
@@ -4669,6 +5003,7 @@ ${link}
 
       cancel2FA() {
         State.pendingAdminUsername = null;
+        State.pendingAdminVault = null;
         State.loginStage = "CREDENTIALS";
         UI.render();
       },
@@ -4756,6 +5091,7 @@ ${link}
         LiveAudio.leaveStudentSession();
         State.currentUser = null;
         State.pendingAdminUsername = null;
+        State.pendingAdminVault = null;
         State.loginStage = "CREDENTIALS";
         App.setRoute("LOGIN");
       }

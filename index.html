@@ -1648,10 +1648,10 @@
       { id: 'SUD_12_LIT', name: 'الثالث ثانوي (أدبي)', system: 'سوداني', full: 'الصف الثالث ثانوي (المساق الأدبي) – الشهادة السودانية' }
     ];
 
-    /* السبورة التفاعلية الذكية مع محرك الضخ المستمر للإطارات لضمان عدم توقف البث المباشر */
+    /* السبورة التفاعلية الذكية مع مضخة بكسلات تفاعلية تضمن تدفق الإطارات بسلاسة */
     const LiveWhiteboard = {
       canvas: null, ctx: null, isDrawing: false, currentColor: '#FFFFFF', currentLineWidth: 4, isEraser: false, showGrid: false,
-      heartbeatTimer: null, isStreaming: false,
+      heartbeatTimer: null, isStreaming: false, pixelToggle: false,
       init() {
         this.canvas = document.getElementById('interactiveWhiteboardCanvas');
         if (!this.canvas) return;
@@ -1687,15 +1687,16 @@
         
         this.startHeartbeat();
       },
-      /* مضخة الإطارات: تجبر المتصفح على إرسال حزم فيديو باستمرار حتى لو لم يكتب الأستاذ شيئاً */
+      /* مضخة الإطارات المحدثة: تغير بكسلاً دقيقاً باستمرار لمنع تجمد بث WebRTC */
       startHeartbeat() {
         this.stopHeartbeat();
         this.isStreaming = true;
         this.heartbeatTimer = setInterval(() => {
           if (!this.canvas || !this.ctx || !this.isStreaming) return;
-          this.ctx.fillStyle = 'rgba(7, 13, 24, 0.01)';
-          this.ctx.fillRect(0, 0, 1, 1);
-        }, 120);
+          this.pixelToggle = !this.pixelToggle;
+          this.ctx.fillStyle = this.pixelToggle ? '#070D18' : '#070D1A';
+          this.ctx.fillRect(0, 0, 2, 2);
+        }, 100);
       },
       stopHeartbeat() {
         if (this.heartbeatTimer) {
@@ -1748,7 +1749,7 @@
       getStream() {
         if (!this.canvas) return null;
         try {
-          return this.canvas.captureStream ? this.canvas.captureStream(30) : null;
+          return this.canvas.captureStream ? this.canvas.captureStream(25) : null;
         } catch(e) {
           return null;
         }
@@ -1770,15 +1771,16 @@
           { urls: 'stun:stun1.l.google.com:19302' },
           { urls: 'stun:stun2.l.google.com:19302' },
           { urls: 'stun:stun3.l.google.com:19302' },
-          { urls: 'stun:stun4.l.google.com:19302' }
+          { urls: 'stun:stun4.l.google.com:19302' },
+          { urls: 'stun:stun.services.mozilla.com' }
         ] 
       },
       broadcasterPeer: null, broadcasterStream: null, broadcasterAudioCtx: null, broadcasterAnalyser: null,
-      activeStudentCalls: new Set(), isMuted: false, isScreenSharing: false, screenStream: null, screenPeer: null, currentScreenPeerId: null,
+      activeStudentCalls: new Set(), incomingStudentAudios: {}, isMuted: false, isScreenSharing: false, screenStream: null, screenPeer: null, currentScreenPeerId: null,
       studentMicStream: null, studentMicCall: null, isStudentSpeaking: false, hasRaisedHand: false,
       listenerPeer: null, listenerScreenPeer: null, listenerCall: null, listenerScreenCall: null,
-      listenerAudioCtx: null, listenerGainNode: null, listenerAnalyser: null, listenerAudioEl: null, hasShownScreenInvite: false,
-      screenConnectionTimeout: null,
+      listenerAudioCtx: null, listenerAnalyser: null, listenerAudioEl: null, hasShownScreenInvite: false,
+      dummyVideoInterval: null,
 
       initSessionWatcher() {
         if (db) {
@@ -1808,7 +1810,16 @@
           this.renderModerationLists(handRaises, activeSpeakers);
         }
 
-        if (State.currentUser && State.currentUser.role === 'STUDENT' && session) {
+        if (State.currentUser && State.currentUser.role === 'STUDENT') {
+          if (!session) {
+            // المعلم أنهى البث كلياً
+            if (this.listenerPeer || this.listenerScreenPeer) {
+              this.leaveStudentSession();
+              App.showSecurityAlert("تم إنهاء جلسة البث المباشر من قبل الأستاذ عمر.");
+            }
+            return;
+          }
+
           const uid = State.currentUser.uid;
           const isAllowed = (session.activeSpeakers || []).some(s => s.uid === uid);
           if (isAllowed && !this.isStudentSpeaking) this.startStudentSpeaking();
@@ -1823,7 +1834,13 @@
           } else if (!session.isScreenSharing) {
             this.hasShownScreenInvite = false;
             document.getElementById('screenInvitationPromptModal').classList.remove('active');
-            document.getElementById('studentScreenShareModal').classList.remove('active');
+            const studentScrModal = document.getElementById('studentScreenShareModal');
+            if (studentScrModal.classList.contains('active')) {
+              studentScrModal.classList.remove('active');
+              App.showSecurityAlert("تم إيقاف مشاركة الشاشة من قبل الأستاذ.");
+            }
+            if (this.listenerScreenCall) { this.listenerScreenCall.close(); this.listenerScreenCall = null; }
+            if (this.listenerScreenPeer) { this.listenerScreenPeer.destroy(); this.listenerScreenPeer = null; }
           }
         }
       },
@@ -1873,11 +1890,44 @@
           this.broadcasterPeer.on('call', call => {
             this.activeStudentCalls.add(call);
             call.answer(this.broadcasterStream);
-            call.on('close', () => this.activeStudentCalls.delete(call));
-            call.on('error', () => this.activeStudentCalls.delete(call));
+
+            // تمكين المعلم من سماع صوت الطالب عندما يشارك
+            call.on('stream', incomingStream => {
+              LiveAudio.playIncomingStudentAudio(call.peer, incomingStream);
+            });
+
+            call.on('close', () => {
+              this.activeStudentCalls.delete(call);
+              LiveAudio.removeIncomingStudentAudio(call.peer);
+            });
+            call.on('error', () => {
+              this.activeStudentCalls.delete(call);
+              LiveAudio.removeIncomingStudentAudio(call.peer);
+            });
           });
         } catch (err) {
           NotificationEngine.alert("تعذر الوصول إلى المايكروفون. يرجى منح الإذن.", "خطأ");
+        }
+      },
+      playIncomingStudentAudio(peerId, stream) {
+        let aud = this.incomingStudentAudios[peerId];
+        if (!aud) {
+          aud = new Audio();
+          aud.autoplay = true;
+          aud.setAttribute('playsinline', '');
+          document.body.appendChild(aud);
+          this.incomingStudentAudios[peerId] = aud;
+        }
+        aud.srcObject = stream;
+        aud.play().catch(()=>{});
+      },
+      removeIncomingStudentAudio(peerId) {
+        const aud = this.incomingStudentAudios[peerId];
+        if (aud) {
+          aud.pause();
+          aud.srcObject = null;
+          if (aud.parentElement) aud.parentElement.removeChild(aud);
+          delete this.incomingStudentAudios[peerId];
         }
       },
       setupBroadcasterAudioVisualizer(stream) {
@@ -1890,6 +1940,7 @@
         this.broadcasterAnalyser = this.broadcasterAudioCtx.createAnalyser();
         this.broadcasterAnalyser.fftSize = 64;
         source.connect(this.broadcasterAnalyser);
+        // لا نربط المصدر بالمخرج المحلي destination لمنع ارتداد الصدى للأستاذ نفسه
         this.renderCanvasLoop(this.broadcasterAnalyser, 'broadcasterVisualizerCanvas', '#FEF08A');
       },
       renderCanvasLoop(analyser, canvasId, color) {
@@ -1984,6 +2035,7 @@
         if (this.screenPeer && !this.screenPeer.destroyed) this.screenPeer.destroy();
         this.screenPeer = new Peer(dynamicScreenPeerId, { config: this.STUN_SERVERS });
         
+        // لا نحدث السحابة إلا بعد جهوزية قناة PeerJS تماماً
         this.screenPeer.on('open', async () => {
           if (db) {
             await db.collection("live_sessions").doc("active_broadcast").update({ 
@@ -1994,7 +2046,9 @@
         });
 
         this.screenPeer.on('call', call => {
-          call.answer(this.screenStream);
+          if (this.screenStream && this.screenStream.active) {
+            call.answer(this.screenStream);
+          }
         });
 
         this.screenPeer.on('error', err => {
@@ -2015,8 +2069,17 @@
           this.screenStream.getTracks().forEach(t => t.stop());
           this.screenStream = null;
         }
-        if (this.screenPeer) { this.screenPeer.destroy(); this.screenPeer = null; }
-        if (db) await db.collection("live_sessions").doc("active_broadcast").update({ isScreenSharing: false, screenPeerId: null }).catch(()=>{});
+        if (this.screenPeer) { 
+          this.screenPeer.destroy(); 
+          this.screenPeer = null; 
+        }
+        if (db) {
+          await db.collection("live_sessions").doc("active_broadcast").update({ 
+            isScreenSharing: false, 
+            screenPeerId: null 
+          }).catch(()=>{});
+        }
+        App.showSecurityAlert("تم إيقاف مشاركة الشاشة.");
       },
       acceptScreenInvitation() {
         document.getElementById('screenInvitationPromptModal').classList.remove('active');
@@ -2156,22 +2219,36 @@
         if (notice) notice.style.display = 'flex';
         this.requestScreenStream();
       },
-      /* إنشاء تيار فيديو آمن لا ينقطع لضمان موافقة تفاوض WebRTC */
+      /* إنشاء تيار فيديو آمن نشط لتفادي مشاكل تفاوض SDP في كافة الأجهزة */
       createSafeDummyStream() {
+        if (this.dummyVideoInterval) clearInterval(this.dummyVideoInterval);
         const c = document.createElement('canvas');
-        c.width = 16;
-        c.height = 16;
+        c.width = 32;
+        c.height = 32;
         const ctx = c.getContext('2d');
-        ctx.fillStyle = '#050B14';
-        ctx.fillRect(0, 0, 16, 16);
+        let toggle = false;
+        this.dummyVideoInterval = setInterval(() => {
+          ctx.fillStyle = toggle ? '#050B14' : '#070D18';
+          ctx.fillRect(0, 0, 32, 32);
+          toggle = !toggle;
+        }, 300);
         if (c.captureStream) {
-          return c.captureStream(5);
+          return c.captureStream(10);
         }
         return new MediaStream();
       },
       requestScreenStream() {
         const session = State.activeLiveSession;
-        const targetPeerId = (session && session.screenPeerId) ? session.screenPeerId : this.SCREEN_BROADCASTER_PEER_ID;
+        if (!session || !session.isScreenSharing) {
+          App.showSecurityAlert("مشاركة الشاشة غير مفعلة حالياً.");
+          document.getElementById('studentScreenShareModal').classList.remove('active');
+          return;
+        }
+        const targetPeerId = session.screenPeerId;
+        if (!targetPeerId) {
+          setTimeout(() => this.requestScreenStream(), 600);
+          return;
+        }
 
         const sPeerId = "st_scr_" + (State.currentUser ? State.currentUser.uid : 'anon') + "_" + Math.floor(Math.random() * 100000);
         if (this.listenerScreenPeer && !this.listenerScreenPeer.destroyed) {
@@ -2179,7 +2256,11 @@
         }
 
         const notice = document.getElementById('screenLoadingNotice');
-        if (notice) notice.style.display = 'flex';
+        if (notice) {
+          notice.style.display = 'flex';
+          const text = document.getElementById('screenLoadingNoticeText');
+          if (text) text.innerText = "جاري الاتصال والتقاط بث شاشة الأستاذ...";
+        }
 
         this.listenerScreenPeer = new Peer(sPeerId, { config: this.STUN_SERVERS });
         
@@ -2218,8 +2299,16 @@
             }
           });
 
+          screenCall.on('close', () => {
+            if (notice) notice.style.display = 'none';
+          });
+
           screenCall.on('error', err => {
             console.warn("Screen call error:", err);
+            if (notice) {
+              const text = document.getElementById('screenLoadingNoticeText');
+              if (text) text.innerText = "تعذر ربط الفيديو، اضغط زر إعادة المحاولة.";
+            }
           });
         });
 
@@ -2228,15 +2317,13 @@
         });
       },
       toggleScreenViewerAudio() {
-        if (!this.listenerGainNode && !this.listenerAudioEl) {
-          NotificationEngine.alert("الصوت يعمل تلقائياً عبر البث الصوتي الرئيسي في الشريط المباشر بالأسفل.", "صوت الشرح");
+        if (!this.listenerAudioEl) {
+          NotificationEngine.alert("الصوت يعمل تلقائياً عبر البث الصوتي المباشر في الشريط بالأسفل.", "صوت الشرح");
           return;
         }
-        if (this.listenerGainNode) {
-          const isMuted = (this.listenerGainNode.gain.value === 0);
-          this.listenerGainNode.gain.value = isMuted ? 1 : 0;
-          document.getElementById('btnScreenAudioText').innerText = isMuted ? "صوت الشرح (يعمل)" : "صوت الشرح (مكتوم)";
-        }
+        const isMuted = this.listenerAudioEl.muted;
+        this.listenerAudioEl.muted = !isMuted;
+        document.getElementById('btnScreenAudioText').innerText = !isMuted ? "صوت الشرح (مكتوم)" : "صوت الشرح (يعمل)";
       },
       toggleScreenFullscreen() {
         const box = document.getElementById('screenViewerBox');
@@ -2246,14 +2333,48 @@
         }
       },
       async stopBroadcast() {
-        const confirmStop = await NotificationEngine.confirm("إنهاء جلسة البث الصوتي المباشر؟", "إنهاء البث");
+        const confirmStop = await NotificationEngine.confirm("هل أنت متأكد من إنهاء جلسة البث الصوتي ومشاركة الشاشة لكافة الطلاب؟", "إنهاء البث بالكامل");
         if (!confirmStop) return;
-        if (this.isScreenSharing) await this.stopScreenShare();
-        if (this.broadcasterStream) { this.broadcasterStream.getTracks().forEach(t => t.stop()); this.broadcasterStream = null; }
-        if (this.broadcasterPeer) { this.broadcasterPeer.destroy(); this.broadcasterPeer = null; }
-        if (db) await db.collection("live_sessions").doc("active_broadcast").set({ isActive: false, isScreenSharing: false }, { merge: true });
+
+        // إيقاف مشاركة الشاشة أولاً
+        if (this.isScreenSharing) {
+          await this.stopScreenShare();
+        }
+
+        // إيقاف مايك المعلم
+        if (this.broadcasterStream) { 
+          this.broadcasterStream.getTracks().forEach(t => t.stop()); 
+          this.broadcasterStream = null; 
+        }
+
+        // مسح أصوات الطلاب المتصلين
+        Object.keys(this.incomingStudentAudios).forEach(id => {
+          this.removeIncomingStudentAudio(id);
+        });
+
+        if (this.broadcasterPeer) { 
+          this.broadcasterPeer.destroy(); 
+          this.broadcasterPeer = null; 
+        }
+
+        if (this.broadcasterAudioCtx) {
+          this.broadcasterAudioCtx.close().catch(()=>{});
+          this.broadcasterAudioCtx = null;
+        }
+
+        // تحديث السحابة لإنهاء البث عند كافة الطلاب في اللحظة نفسها
+        if (db) {
+          await db.collection("live_sessions").doc("active_broadcast").set({ 
+            isActive: false, 
+            isScreenSharing: false,
+            screenPeerId: null,
+            activeSpeakers: [],
+            handRaises: []
+          }, { merge: true });
+        }
         State.activeLiveSession = null;
         document.getElementById('broadcasterLiveBar').classList.remove('active');
+        App.showSecurityAlert("تم إنهاء جلسة البث المباشر بنجاح.");
       },
       updateLiveBannerUI() {
         const bannerContainer = document.getElementById('studentLiveBannerContainer');
@@ -2334,6 +2455,7 @@
         return dst.stream;
       },
       setupStudentAudioPipeline(remoteStream) {
+        // مشغل الصوت المادي النقي: بدون خروج مكرر لمنع الصدى
         if (!this.listenerAudioEl) {
           this.listenerAudioEl = new Audio();
           this.listenerAudioEl.autoplay = true;
@@ -2341,29 +2463,45 @@
           document.body.appendChild(this.listenerAudioEl);
         }
         this.listenerAudioEl.srcObject = remoteStream;
+        this.listenerAudioEl.volume = parseFloat(document.getElementById('studentLiveVolumeSlider')?.value || 1);
         this.listenerAudioEl.play().catch(()=>{});
 
-        const source = this.listenerAudioCtx.createMediaStreamSource(remoteStream);
-        this.listenerGainNode = this.listenerAudioCtx.createGain();
-        this.listenerAnalyser = this.listenerAudioCtx.createAnalyser();
-        this.listenerAnalyser.fftSize = 64;
-        source.connect(this.listenerGainNode);
-        this.listenerGainNode.connect(this.listenerAnalyser);
-        this.listenerAnalyser.connect(this.listenerAudioCtx.destination);
-        this.renderCanvasLoop(this.listenerAnalyser, 'studentVisualizerCanvas', '#10B981');
+        // ربط المرئيات فقط دون تمرير الصوت مجدداً إلى destination
+        try {
+          const source = this.listenerAudioCtx.createMediaStreamSource(remoteStream);
+          this.listenerAnalyser = this.listenerAudioCtx.createAnalyser();
+          this.listenerAnalyser.fftSize = 64;
+          source.connect(this.listenerAnalyser);
+          this.renderCanvasLoop(this.listenerAnalyser, 'studentVisualizerCanvas', '#10B981');
+        } catch(e) {}
       },
       setStudentVolume(val) {
-        if (this.listenerGainNode) this.listenerGainNode.gain.value = parseFloat(val);
+        if (this.listenerAudioEl) {
+          this.listenerAudioEl.volume = parseFloat(val);
+        }
       },
       leaveStudentSession() {
         this.stopStudentSpeaking(true);
+        if (this.dummyVideoInterval) {
+          clearInterval(this.dummyVideoInterval);
+          this.dummyVideoInterval = null;
+        }
+        if (this.listenerAudioEl) {
+          this.listenerAudioEl.pause();
+          this.listenerAudioEl.srcObject = null;
+        }
         if (this.listenerCall) { this.listenerCall.close(); this.listenerCall = null; }
         if (this.listenerScreenCall) { this.listenerScreenCall.close(); this.listenerScreenCall = null; }
         if (this.listenerPeer) { this.listenerPeer.destroy(); this.listenerPeer = null; }
         if (this.listenerScreenPeer) { this.listenerScreenPeer.destroy(); this.listenerScreenPeer = null; }
-        if (this.listenerAudioCtx) { this.listenerAudioCtx.close().catch(()=>{}); }
+        if (this.listenerAudioCtx) { this.listenerAudioCtx.close().catch(()=>{}); this.listenerAudioCtx = null; }
+        
+        const vid = document.getElementById('studentScreenVideo');
+        if (vid) { vid.pause(); vid.srcObject = null; }
+
         document.getElementById('studentLiveWidget').classList.remove('active');
         document.getElementById('studentScreenShareModal').classList.remove('active');
+        document.getElementById('screenInvitationPromptModal').classList.remove('active');
       }
     };
 
@@ -4092,7 +4230,6 @@
             const ctx = canvas.getContext('2d');
             ctx.drawImage(img, 0, 0, width, height);
             
-            // ضغط الصورة إلى جودة ملائمة بحجم خفيف جداً (أقل من 60 كيلوبايت)
             State.tempQuizImageData = canvas.toDataURL('image/jpeg', 0.75);
             const prev = document.getElementById('quizImgPreviewContainer');
             const imgEl = document.getElementById('quizImgPreviewEl');
@@ -4912,7 +5049,6 @@
         expText.innerHTML = currentQ.aiExplanation || "خطوة صحيحة وفقاً للمفاهيم الرياضية للمنهاج.";
         expBox.style.display = "block";
 
-        // تصيير معادلات KaTeX داخل التوضيح النموذجي
         if (window.renderMathInElement) {
           renderMathInElement(expBox, {
             delimiters: [

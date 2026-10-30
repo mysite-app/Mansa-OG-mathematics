@@ -667,9 +667,12 @@
       </div>
       <div class="screen-video-container" id="screenViewerBox">
         <video id="studentScreenVideo" autoplay playsinline webkit-playsinline muted></video>
-        <div id="screenLoadingNotice" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#FFF; background:rgba(10,20,36,0.85); gap:12px;">
-          <i class="fa-solid fa-spinner fa-spin" style="font-size:36px; color:var(--gold-orange);"></i>
-          <span style="font-size:0.9rem; font-weight:700;">جاري الاتصال والتقاط بث شاشة الأستاذ...</span>
+        <div id="screenLoadingNotice" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#FFF; background:rgba(10,20,36,0.92); gap:14px; padding:20px; text-align:center;">
+          <i class="fa-solid fa-spinner fa-spin" style="font-size:42px; color:var(--gold-orange);"></i>
+          <span style="font-size:0.95rem; font-weight:800;" id="screenLoadingNoticeText">جاري الاتصال والتقاط بث شاشة الأستاذ...</span>
+          <button class="btn btn-gold" style="font-size:0.8rem; padding:6px 16px; margin-top:8px;" onclick="LiveAudio.retryScreenConnection()">
+            <i class="fa-solid fa-rotate-right"></i> إعادة المحاولة فوراً
+          </button>
         </div>
       </div>
     </div>
@@ -1645,12 +1648,14 @@
       { id: 'SUD_12_LIT', name: 'الثالث ثانوي (أدبي)', system: 'سوداني', full: 'الصف الثالث ثانوي (المساق الأدبي) – الشهادة السودانية' }
     ];
 
+    /* السبورة التفاعلية الذكية مع محرك الضخ المستمر للإطارات لضمان عدم توقف البث المباشر */
     const LiveWhiteboard = {
       canvas: null, ctx: null, isDrawing: false, currentColor: '#FFFFFF', currentLineWidth: 4, isEraser: false, showGrid: false,
+      heartbeatTimer: null, isStreaming: false,
       init() {
         this.canvas = document.getElementById('interactiveWhiteboardCanvas');
         if (!this.canvas) return;
-        this.ctx = this.canvas.getContext('2d');
+        this.ctx = this.canvas.getContext('2d', { alpha: false });
         this.resize();
         window.addEventListener('resize', () => this.resize());
 
@@ -1679,6 +1684,25 @@
         this.canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e.touches[0]); }, { passive: false });
         this.canvas.addEventListener('touchmove', (e) => { e.preventDefault(); move(e.touches[0]); }, { passive: false });
         this.canvas.addEventListener('touchend', end);
+        
+        this.startHeartbeat();
+      },
+      /* مضخة الإطارات: تجبر المتصفح على إرسال حزم فيديو باستمرار حتى لو لم يكتب الأستاذ شيئاً */
+      startHeartbeat() {
+        this.stopHeartbeat();
+        this.isStreaming = true;
+        this.heartbeatTimer = setInterval(() => {
+          if (!this.canvas || !this.ctx || !this.isStreaming) return;
+          this.ctx.fillStyle = 'rgba(7, 13, 24, 0.01)';
+          this.ctx.fillRect(0, 0, 1, 1);
+        }, 120);
+      },
+      stopHeartbeat() {
+        if (this.heartbeatTimer) {
+          clearInterval(this.heartbeatTimer);
+          this.heartbeatTimer = null;
+        }
+        this.isStreaming = false;
       },
       resize() {
         if (!this.canvas) return;
@@ -1721,21 +1745,40 @@
       clear() {
         this.drawBackground();
       },
-      getStream() { return this.canvas ? this.canvas.captureStream(30) : null; },
+      getStream() {
+        if (!this.canvas) return null;
+        try {
+          return this.canvas.captureStream ? this.canvas.captureStream(30) : null;
+        } catch(e) {
+          return null;
+        }
+      },
       close() {
+        this.stopHeartbeat();
         document.getElementById('whiteboardModal').classList.remove('active');
         LiveAudio.stopScreenShare();
       }
     };
 
+    /* محرك البث المباشر المطور والشامل WebRTC & Screen Share */
     const LiveAudio = {
       BROADCASTER_PEER_ID: "omer_live_stream_channel_2026",
       SCREEN_BROADCASTER_PEER_ID: "omer_live_screen_channel_2026",
-      STUN_SERVERS: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }] },
-      broadcasterPeer: null, broadcasterStream: null, broadcasterAudioCtx: null, broadcasterAnalyser: null, broadcasterAnimId: null,
-      activeStudentCalls: new Set(), isMuted: false, isScreenSharing: false, screenStream: null, screenPeer: null,
+      STUN_SERVERS: { 
+        iceServers: [
+          { urls: 'stun:stun.l.google.com:19302' }, 
+          { urls: 'stun:stun1.l.google.com:19302' },
+          { urls: 'stun:stun2.l.google.com:19302' },
+          { urls: 'stun:stun3.l.google.com:19302' },
+          { urls: 'stun:stun4.l.google.com:19302' }
+        ] 
+      },
+      broadcasterPeer: null, broadcasterStream: null, broadcasterAudioCtx: null, broadcasterAnalyser: null,
+      activeStudentCalls: new Set(), isMuted: false, isScreenSharing: false, screenStream: null, screenPeer: null, currentScreenPeerId: null,
       studentMicStream: null, studentMicCall: null, isStudentSpeaking: false, hasRaisedHand: false,
-      listenerPeer: null, listenerScreenPeer: null, listenerCall: null, listenerAudioCtx: null, listenerGainNode: null, listenerAnalyser: null, listenerAudioEl: null, hasShownScreenInvite: false,
+      listenerPeer: null, listenerScreenPeer: null, listenerCall: null, listenerScreenCall: null,
+      listenerAudioCtx: null, listenerGainNode: null, listenerAnalyser: null, listenerAudioEl: null, hasShownScreenInvite: false,
+      screenConnectionTimeout: null,
 
       initSessionWatcher() {
         if (db) {
@@ -1780,6 +1823,7 @@
           } else if (!session.isScreenSharing) {
             this.hasShownScreenInvite = false;
             document.getElementById('screenInvitationPromptModal').classList.remove('active');
+            document.getElementById('studentScreenShareModal').classList.remove('active');
           }
         }
       },
@@ -1816,7 +1860,7 @@
             const broadcastPayload = {
               isActive: true, title, broadcasterName: "الأستاذ عمر قاسم", targetType,
               targetCurriculum: targetType === 'CURRICULUM' ? targetCurriculum : null,
-              targetStudentUids: selectedStudentUids, isScreenSharing: false, handRaises: [], activeSpeakers: [], startedAt: Date.now()
+              targetStudentUids: selectedStudentUids, isScreenSharing: false, screenPeerId: null, handRaises: [], activeSpeakers: [], startedAt: Date.now()
             };
             if (db) await db.collection("live_sessions").doc("active_broadcast").set(broadcastPayload, { merge: true });
             State.activeLiveSession = broadcastPayload;
@@ -1839,6 +1883,9 @@
       setupBroadcasterAudioVisualizer(stream) {
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         this.broadcasterAudioCtx = new AudioContext();
+        if (this.broadcasterAudioCtx.state === 'suspended') {
+          this.broadcasterAudioCtx.resume().catch(()=>{});
+        }
         const source = this.broadcasterAudioCtx.createMediaStreamSource(stream);
         this.broadcasterAnalyser = this.broadcasterAudioCtx.createAnalyser();
         this.broadcasterAnalyser.fftSize = 64;
@@ -1890,7 +1937,7 @@
           this.finalizeAndPublishScreenStream(rawDisplayStream);
         } catch (err) {
           if (err.name === 'NotAllowedError') return;
-          NotificationEngine.alert("مشاركة الشاشة غير مدعومة مباشرة على هذا المتصفح، جاري تحويلك للسبورة الذكية.", "تنبيه");
+          NotificationEngine.alert("مشاركة الشاشة المباشرة غير مدعومة على هذا المتصفح، جاري تحويلك للسبورة الذكية.", "تنبيه");
           this.startWhiteboardShare();
         }
       },
@@ -1924,16 +1971,42 @@
         document.getElementById('btnScreenShareText').innerText = "إيقاف الشاشة";
         document.getElementById('btnToggleScreenShare').classList.replace('btn-purple', 'btn-danger');
 
-        if (this.screenPeer && !this.screenPeer.destroyed) this.screenPeer.destroy();
-        this.screenPeer = new Peer(this.SCREEN_BROADCASTER_PEER_ID, { config: this.STUN_SERVERS });
-        this.screenPeer.on('call', call => call.answer(this.screenStream));
+        const videoTrack = videoStream.getVideoTracks()[0];
+        if (videoTrack) {
+          videoTrack.onended = () => {
+            LiveAudio.stopScreenShare();
+          };
+        }
 
-        if (db) await db.collection("live_sessions").doc("active_broadcast").update({ isScreenSharing: true });
+        const dynamicScreenPeerId = "omer_scr_" + Date.now().toString().slice(-6);
+        this.currentScreenPeerId = dynamicScreenPeerId;
+
+        if (this.screenPeer && !this.screenPeer.destroyed) this.screenPeer.destroy();
+        this.screenPeer = new Peer(dynamicScreenPeerId, { config: this.STUN_SERVERS });
+        
+        this.screenPeer.on('open', async () => {
+          if (db) {
+            await db.collection("live_sessions").doc("active_broadcast").update({ 
+              isScreenSharing: true,
+              screenPeerId: dynamicScreenPeerId
+            }).catch(()=>{});
+          }
+        });
+
+        this.screenPeer.on('call', call => {
+          call.answer(this.screenStream);
+        });
+
+        this.screenPeer.on('error', err => {
+          console.warn("Screen peer err:", err);
+        });
+
         App.showSecurityAlert("📺 تم إطلاق بث الشاشة بنجاح.");
       },
       async stopScreenShare() {
         if (!this.isScreenSharing) return;
         this.isScreenSharing = false;
+        LiveWhiteboard.stopHeartbeat();
         document.getElementById('whiteboardModal').classList.remove('active');
         document.getElementById('btnScreenShareText').innerText = "مشاركة الشاشة / السبورة";
         document.getElementById('btnToggleScreenShare').classList.replace('btn-danger', 'btn-purple');
@@ -1943,7 +2016,7 @@
           this.screenStream = null;
         }
         if (this.screenPeer) { this.screenPeer.destroy(); this.screenPeer = null; }
-        if (db) await db.collection("live_sessions").doc("active_broadcast").update({ isScreenSharing: false }).catch(()=>{});
+        if (db) await db.collection("live_sessions").doc("active_broadcast").update({ isScreenSharing: false, screenPeerId: null }).catch(()=>{});
       },
       acceptScreenInvitation() {
         document.getElementById('screenInvitationPromptModal').classList.remove('active');
@@ -2076,32 +2149,94 @@
         document.getElementById('studentScreenShareModal').classList.add('active');
         this.requestScreenStream();
       },
+      retryScreenConnection() {
+        const notice = document.getElementById('screenLoadingNotice');
+        const text = document.getElementById('screenLoadingNoticeText');
+        if (text) text.innerText = "جاري إعادة الاتصال وتجديد القناة...";
+        if (notice) notice.style.display = 'flex';
+        this.requestScreenStream();
+      },
+      /* إنشاء تيار فيديو آمن لا ينقطع لضمان موافقة تفاوض WebRTC */
+      createSafeDummyStream() {
+        const c = document.createElement('canvas');
+        c.width = 16;
+        c.height = 16;
+        const ctx = c.getContext('2d');
+        ctx.fillStyle = '#050B14';
+        ctx.fillRect(0, 0, 16, 16);
+        if (c.captureStream) {
+          return c.captureStream(5);
+        }
+        return new MediaStream();
+      },
       requestScreenStream() {
-        const sPeerId = "st_screen_" + State.currentUser.uid + "_" + Math.floor(Math.random() * 10000);
-        if (this.listenerScreenPeer && !this.listenerScreenPeer.destroyed) this.listenerScreenPeer.destroy();
+        const session = State.activeLiveSession;
+        const targetPeerId = (session && session.screenPeerId) ? session.screenPeerId : this.SCREEN_BROADCASTER_PEER_ID;
+
+        const sPeerId = "st_scr_" + (State.currentUser ? State.currentUser.uid : 'anon') + "_" + Math.floor(Math.random() * 100000);
+        if (this.listenerScreenPeer && !this.listenerScreenPeer.destroyed) {
+          this.listenerScreenPeer.destroy();
+        }
+
+        const notice = document.getElementById('screenLoadingNotice');
+        if (notice) notice.style.display = 'flex';
+
         this.listenerScreenPeer = new Peer(sPeerId, { config: this.STUN_SERVERS });
+        
         this.listenerScreenPeer.on('open', () => {
-          const dummy = this.createDummyAudioStream(new (window.AudioContext || window.webkitAudioContext)());
-          const screenCall = this.listenerScreenPeer.call(this.SCREEN_BROADCASTER_PEER_ID, dummy);
+          const dummyVideo = this.createSafeDummyStream();
+          const screenCall = this.listenerScreenPeer.call(targetPeerId, dummyVideo);
+          this.listenerScreenCall = screenCall;
+
           screenCall.on('stream', screenRemoteStream => {
             const vid = document.getElementById('studentScreenVideo');
-            const notice = document.getElementById('screenLoadingNotice');
             if (vid) {
               vid.srcObject = screenRemoteStream;
               vid.muted = true;
-              vid.play().then(() => { if (notice) notice.style.display = 'none'; }).catch(() => {
-                if (notice) notice.innerHTML = `<button class="btn btn-gold" onclick="document.getElementById('studentScreenVideo').play(); this.parentElement.style.display='none';"><i class="fa-solid fa-play"></i> اضغط لتشغيل الشاشة المباشرة</button>`;
+              vid.setAttribute('playsinline', '');
+              vid.setAttribute('webkit-playsinline', '');
+
+              const hideNotice = () => {
+                if (notice) notice.style.display = 'none';
+              };
+
+              vid.onloadedmetadata = () => {
+                vid.play().then(hideNotice).catch(hideNotice);
+              };
+              vid.onplay = hideNotice;
+              vid.onplaying = hideNotice;
+
+              vid.play().then(hideNotice).catch(() => {
+                if (notice) {
+                  notice.innerHTML = `
+                    <button class="btn btn-gold" style="font-size:0.9rem;" onclick="document.getElementById('studentScreenVideo').play(); this.parentElement.style.display='none';">
+                      <i class="fa-solid fa-play"></i> اضغط لتشغيل شاشة الأستاذ الآن
+                    </button>
+                  `;
+                }
               });
             }
           });
+
+          screenCall.on('error', err => {
+            console.warn("Screen call error:", err);
+          });
+        });
+
+        this.listenerScreenPeer.on('error', err => {
+          console.warn("Listener screen peer err:", err);
         });
       },
       toggleScreenViewerAudio() {
-        const vid = document.getElementById('studentScreenVideo');
-        const text = document.getElementById('btnScreenAudioText');
-        if (!vid) return;
-        vid.muted = !vid.muted;
-        text.innerText = vid.muted ? "صوت الشرح (مكتوم)" : "صوت الشرح (يعمل)";
+        if (!this.listenerGainNode && !this.listenerAudioEl) {
+          NotificationEngine.alert("الصوت يعمل تلقائياً عبر البث الصوتي الرئيسي في الشريط المباشر بالأسفل.", "صوت الشرح");
+          return;
+        }
+        if (this.listenerGainNode) {
+          const isMuted = (this.listenerGainNode.gain.value === 0);
+          this.listenerGainNode.gain.value = isMuted ? 1 : 0;
+          document.getElementById('btnScreenAudioText').innerText = isMuted ? "صوت الشرح (يعمل)" : "صوت الشرح (مكتوم)";
+        }
       },
       toggleScreenFullscreen() {
         const box = document.getElementById('screenViewerBox');
@@ -2116,7 +2251,7 @@
         if (this.isScreenSharing) await this.stopScreenShare();
         if (this.broadcasterStream) { this.broadcasterStream.getTracks().forEach(t => t.stop()); this.broadcasterStream = null; }
         if (this.broadcasterPeer) { this.broadcasterPeer.destroy(); this.broadcasterPeer = null; }
-        if (db) await db.collection("live_sessions").doc("active_broadcast").set({ isActive: false }, { merge: true });
+        if (db) await db.collection("live_sessions").doc("active_broadcast").set({ isActive: false, isScreenSharing: false }, { merge: true });
         State.activeLiveSession = null;
         document.getElementById('broadcasterLiveBar').classList.remove('active');
       },
@@ -2167,6 +2302,9 @@
         try {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
           this.listenerAudioCtx = new AudioContext();
+          if (this.listenerAudioCtx.state === 'suspended') {
+            await this.listenerAudioCtx.resume();
+          }
           const dummyStream = this.createDummyAudioStream(this.listenerAudioCtx);
           const studentPeerId = "st_live_" + State.currentUser.uid + "_" + Math.floor(Math.random() * 1000);
           if (this.listenerPeer && !this.listenerPeer.destroyed) this.listenerPeer.destroy();
@@ -2200,8 +2338,11 @@
           this.listenerAudioEl = new Audio();
           this.listenerAudioEl.autoplay = true;
           this.listenerAudioEl.setAttribute('playsinline', '');
+          document.body.appendChild(this.listenerAudioEl);
         }
         this.listenerAudioEl.srcObject = remoteStream;
+        this.listenerAudioEl.play().catch(()=>{});
+
         const source = this.listenerAudioCtx.createMediaStreamSource(remoteStream);
         this.listenerGainNode = this.listenerAudioCtx.createGain();
         this.listenerAnalyser = this.listenerAudioCtx.createAnalyser();
@@ -2217,7 +2358,9 @@
       leaveStudentSession() {
         this.stopStudentSpeaking(true);
         if (this.listenerCall) { this.listenerCall.close(); this.listenerCall = null; }
+        if (this.listenerScreenCall) { this.listenerScreenCall.close(); this.listenerScreenCall = null; }
         if (this.listenerPeer) { this.listenerPeer.destroy(); this.listenerPeer = null; }
+        if (this.listenerScreenPeer) { this.listenerScreenPeer.destroy(); this.listenerScreenPeer = null; }
         if (this.listenerAudioCtx) { this.listenerAudioCtx.close().catch(()=>{}); }
         document.getElementById('studentLiveWidget').classList.remove('active');
         document.getElementById('studentScreenShareModal').classList.remove('active');
@@ -2287,17 +2430,20 @@
       safeMathEvaluate(expr) {
         let clean = expr.replace(/Ans/g, `(${this.lastAnswer})`).replace(/pi/g, Math.PI).replace(/\be\b/g, Math.E);
         let tokens = clean.replace(/\^/g, '**').replace(/fact\(([^)]+)\)/g, 'SciCalc.factorial($1)');
+        
+        // دعم الدوال المثلثية بالدرجات أو الراديان بشكل دقيق
+        tokens = tokens.replace(/\basin\(/g, this.isDeg ? '(180/Math.PI)*Math.asin(' : 'Math.asin(')
+                       .replace(/\bacos\(/g, this.isDeg ? '(180/Math.PI)*Math.acos(' : 'Math.acos(')
+                       .replace(/\batan\(/g, this.isDeg ? '(180/Math.PI)*Math.atan(' : 'Math.atan(');
+
         if (this.isDeg) {
-          tokens = tokens.replace(/\basin\(([^)]+)\)/g, '(Math.asin($1)*180/Math.PI)')
-                         .replace(/\bacos\(([^)]+)\)/g, '(Math.acos($1)*180/Math.PI)')
-                         .replace(/\batan\(([^)]+)\)/g, '(Math.atan($1)*180/Math.PI)')
-                         .replace(/\bsin\(([^)]+)\)/g, 'Math.sin(($1)*Math.PI/180)')
+          tokens = tokens.replace(/\bsin\(([^)]+)\)/g, 'Math.sin(($1)*Math.PI/180)')
                          .replace(/\bcos\(([^)]+)\)/g, 'Math.cos(($1)*Math.PI/180)')
                          .replace(/\btan\(([^)]+)\)/g, 'Math.tan(($1)*Math.PI/180)');
         } else {
-          tokens = tokens.replace(/\basin\(/g, 'Math.asin(').replace(/\bacos\(/g, 'Math.acos(').replace(/\batan\(/g, 'Math.atan(')
-                         .replace(/\bsin\(/g, 'Math.sin(').replace(/\bcos\(/g, 'Math.cos(').replace(/\btan\(/g, 'Math.tan(');
+          tokens = tokens.replace(/\bsin\(/g, 'Math.sin(').replace(/\bcos\(/g, 'Math.cos(').replace(/\btan\(/g, 'Math.tan(');
         }
+
         tokens = tokens.replace(/\blog\(/g, 'Math.log10(').replace(/\bln\(/g, 'Math.log(').replace(/\bsqrt\(/g, 'Math.sqrt(');
         const compute = new Function('SciCalc', 'return (' + tokens + ')');
         return compute(SciCalc);
@@ -2932,7 +3078,9 @@
           } else if (key === "logs") {
             localStorage.setItem("og_logs", JSON.stringify(data));
           }
-        } catch (e) {}
+        } catch (e) {
+          console.warn("Storage write warning:", e);
+        }
       }
     };
 
@@ -3253,7 +3401,7 @@
                                     ${UI.getResourceBadge(res.type)}
                                     <strong style="font-size:0.85rem; color:var(--navy-dark); display:block; margin-top:6px; line-height:1.4;">${escapeHTML(res.title)}</strong>
                                   </div>
-                                  <button class="btn btn-navy" style="width:100%; font-size:0.78rem; min-height:34px; padding:4px 8px;" onclick="App.openDirectResource('${escapeHTML(lesson.title)} – ${escapeHTML(res.title)}', '${res.type}', '${res.fileUrl}')">
+                                  <button class="btn btn-navy" style="width:100%; font-size:0.78rem; min-height:34px; padding:4px 8px;" onclick="App.openResourceById('${lesson.id}', '${res.id}')">
                                     <i class="fa-solid ${res.type === 'HTML_EMBED' ? 'fa-gamepad' : (res.type === 'VIDEOS' ? 'fa-play' : 'fa-folder-open')}"></i> 
                                     ${res.type === 'HTML_EMBED' ? 'تشغيل التطبيق التفاعلي 🎮' : 'فتح واستعراض'}
                                   </button>
@@ -3383,7 +3531,7 @@
                 
                 <div id="aiExplanationBox" style="display:none; margin-top:14px; padding:12px; background:var(--gold-light); border-right:3px solid var(--gold-orange); border-radius:var(--radius-sm); font-size:0.85rem;">
                   <strong>طريقة الحل الرياضية:</strong>
-                  <p id="aiExplanationText" style="margin-top:4px; color:var(--navy-dark); line-height:1.6;"></p>
+                  <div id="aiExplanationText" style="margin-top:4px; color:var(--navy-dark); line-height:1.6;"></div>
                 </div>
                 
                 <div style="display:flex; justify-content:space-between; margin-top:20px; border-top:1px solid #E2E8F0; padding-top:14px;">
@@ -3920,18 +4068,40 @@
         });
       },
 
+      /* ضغط وتصغير الصور أوتوماتيكياً لحماية سعة التخزين من الانهيار */
       handleQuizImageFile(input) {
         if (!input.files || !input.files[0]) return;
         const file = input.files[0];
         const reader = new FileReader();
         reader.onload = (e) => {
-          State.tempQuizImageData = e.target.result;
-          const prev = document.getElementById('quizImgPreviewContainer');
-          const imgEl = document.getElementById('quizImgPreviewEl');
-          if (prev && imgEl) {
-            imgEl.src = State.tempQuizImageData;
-            prev.style.display = 'block';
-          }
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxDim = 800;
+            let width = img.width;
+            let height = img.height;
+            if (width > height && width > maxDim) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else if (height > maxDim) {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            
+            // ضغط الصورة إلى جودة ملائمة بحجم خفيف جداً (أقل من 60 كيلوبايت)
+            State.tempQuizImageData = canvas.toDataURL('image/jpeg', 0.75);
+            const prev = document.getElementById('quizImgPreviewContainer');
+            const imgEl = document.getElementById('quizImgPreviewEl');
+            if (prev && imgEl) {
+              imgEl.src = State.tempQuizImageData;
+              prev.style.display = 'block';
+            }
+          };
+          img.src = e.target.result;
         };
         reader.readAsDataURL(file);
       },
@@ -4104,13 +4274,19 @@
       },
 
       async deleteUnit(unitId) {
-        const confirmDel = await NotificationEngine.confirm("حذف هذه الوحدة وكافة دروسها؟", "حذف الوحدة");
+        const confirmDel = await NotificationEngine.confirm("حذف هذه الوحدة وكافة دروسها من السحابة؟", "حذف الوحدة");
         if (confirmDel) {
+          const lessonsToDelete = State.lessons.filter(l => l.unitId === unitId);
           State.units = State.units.filter(u => u.id !== unitId);
           State.lessons = State.lessons.filter(l => l.unitId !== unitId);
           DataStore.save("units", State.units);
           DataStore.save("lessons", State.lessons);
-          if (db) db.collection("omer_units").doc(unitId).delete().catch(()=>{});
+          if (db) {
+            db.collection("omer_units").doc(unitId).delete().catch(()=>{});
+            lessonsToDelete.forEach(l => {
+              db.collection("omer_lessons").doc(l.id).delete().catch(()=>{});
+            });
+          }
           UI.render();
         }
       },
@@ -4264,6 +4440,19 @@
         }
       },
 
+      /* فتح الموارد بواسطة المعرفات لمنع أخطاء علامات التنصيص والرموز الرياضية */
+      openResourceById(lessonId, resId) {
+        const lesson = State.lessons.find(l => l.id === lessonId);
+        if (!lesson) return;
+        let res = (lesson.resources || []).find(r => r.id === resId);
+        if (!res && resId.startsWith('res_html_')) {
+          res = { title: "تطبيق ومحاكاة HTML تفاعلية", type: "HTML_EMBED", fileUrl: lesson.htmlUrl };
+        }
+        if (res) {
+          this.openDirectResource(`${lesson.title} – ${res.title}`, res.type, res.fileUrl);
+        }
+      },
+
       openDirectResource(title, type, url) {
         document.getElementById('playerMediaTitle').innerText = title;
         const v = document.getElementById('playerViewport');
@@ -4343,17 +4532,18 @@
           modalContent.classList.add("rotated-fullscreen-active");
           if (returnBtn) returnBtn.style.display = "inline-flex";
 
+          if (modalContent.requestFullscreen) {
+            try {
+              await modalContent.requestFullscreen();
+            } catch(e) {}
+          }
+
           if (screen.orientation && screen.orientation.lock) {
             try {
               await screen.orientation.lock("landscape");
-            } catch (err) {
-              console.log("Landscape lock not supported on this device.");
-            }
+            } catch (err) {}
           }
 
-          if (modalContent.requestFullscreen) {
-            modalContent.requestFullscreen().catch(()=>{});
-          }
           document.getElementById("rotateBtnText").innerText = "إنهاء ملء الشاشة";
         } else {
           this.exitPlayerFullscreen();
@@ -4719,8 +4909,19 @@
 
         const expBox = document.getElementById("aiExplanationBox");
         const expText = document.getElementById("aiExplanationText");
-        expText.innerText = currentQ.aiExplanation || "خطوة صحيحة وفقاً للمفاهيم الرياضية للمنهاج.";
+        expText.innerHTML = currentQ.aiExplanation || "خطوة صحيحة وفقاً للمفاهيم الرياضية للمنهاج.";
         expBox.style.display = "block";
+
+        // تصيير معادلات KaTeX داخل التوضيح النموذجي
+        if (window.renderMathInElement) {
+          renderMathInElement(expBox, {
+            delimiters: [
+              { left: '$$', right: '$$', display: true },
+              { left: '\\(', right: '\\)', display: false }
+            ],
+            throwOnError: false
+          });
+        }
 
         const nextBtn = document.getElementById("nextQuestionBtn");
         nextBtn.style.display = "inline-flex";
@@ -5072,4 +5273,3 @@
   </script>
 </body>
 </html>
-

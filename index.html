@@ -365,14 +365,68 @@
       min-height: 70vh; line-height: 1.8; font-size: 0.95rem; user-select: text;
     }
 
+    /* أنماط السبورة الاحترافية المحدثة */
     .whiteboard-container {
-      width: 100%; height: 65vh; min-height: 380px; background: #0A1424; position: relative;
-      touch-action: none; display: flex; flex-direction: column; border-radius: var(--radius-sm); overflow: hidden;
+      width: 100%; flex: 1; min-height: 480px; position: relative;
+      touch-action: none; display: flex; flex-direction: column; background: #070D18; overflow: hidden;
     }
-    #interactiveWhiteboardCanvas { background: #070D18; width: 100%; height: 100%; cursor: crosshair; touch-action: none; }
+    #interactiveWhiteboardCanvas {
+      width: 100%; height: 100%; cursor: crosshair; touch-action: none; display: block;
+    }
     .wb-controls-bar {
-      display: flex; gap: 8px; align-items: center; justify-content: center; padding: 8px;
-      background: #0F1E36; border-top: 1px solid #1E293B; flex-wrap: wrap;
+      display: flex; gap: 10px; align-items: center; justify-content: center; padding: 10px 14px;
+      background: #0C182C; border-top: 1.5px solid #1E2E4A; flex-wrap: wrap; user-select: none;
+    }
+    .wb-tool-group {
+      display: inline-flex; align-items: center; gap: 5px; background: #13223B; padding: 4px 8px;
+      border-radius: var(--radius-sm); border: 1px solid #233554;
+    }
+    .wb-tool-btn {
+      background: transparent; border: 1px solid transparent; color: #E2E8F0; padding: 6px 10px;
+      border-radius: 6px; font-size: 0.78rem; font-weight: 700; cursor: pointer; display: inline-flex;
+      align-items: center; gap: 5px; transition: var(--transition);
+    }
+    .wb-tool-btn:hover { background: rgba(245, 158, 11, 0.15); color: var(--gold-orange); border-color: rgba(245, 158, 11, 0.3); }
+    .wb-tool-btn.active { background: var(--gold-gradient); color: var(--navy-dark); font-weight: 900; }
+    
+    .wb-color-circle {
+      width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer;
+      display: inline-block; transition: transform 0.15s, border-color 0.15s; flex-shrink: 0;
+    }
+    .wb-color-circle:hover { transform: scale(1.2); }
+    .wb-color-circle.active { border-color: #FFFFFF; box-shadow: 0 0 8px rgba(255,255,255,0.8); transform: scale(1.15); }
+
+    .wb-size-slider-wrapper {
+      display: inline-flex; align-items: center; gap: 8px; color: #CBD5E1; font-size: 0.75rem; font-weight: 700;
+    }
+    .wb-size-slider-wrapper input[type="range"] {
+      width: 90px; accent-color: var(--gold-orange); cursor: pointer;
+    }
+
+    .wb-page-navigation-strip {
+      position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 100;
+      background: rgba(10, 20, 36, 0.92); border: 1.5px solid var(--gold-orange); border-radius: 50px;
+      padding: 5px 16px; display: none; align-items: center; gap: 10px; color: #FFF; font-size: 0.8rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5); backdrop-filter: blur(6px);
+    }
+
+    .whiteboard-fullscreen-mode {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: 100vw !important;
+      max-height: 100vh !important;
+      border-radius: 0 !important;
+      z-index: 100005 !important;
+      border: none !important;
+      display: flex !important;
+      flex-direction: column !important;
+      margin: 0 !important;
+    }
+    .whiteboard-fullscreen-mode .whiteboard-container {
+      height: calc(100vh - 120px) !important;
+      min-height: 0 !important;
     }
 
     @media (max-width: 860px) {
@@ -391,6 +445,8 @@
       .card { padding: 14px 12px; }
       .screen-video-container { height: 50vh; min-height: 280px; }
       .pro-floating-return-btn { top: 12px; right: 12px; padding: 8px 14px; font-size: 0.8rem; }
+      .wb-controls-bar { padding: 6px; gap: 6px; }
+      .wb-tool-group { padding: 3px 6px; }
     }
     
     footer.app-footer { background: var(--navy-gradient); color: var(--white); padding: 18px 20px; margin-top: auto; text-align: center; border-top: 2px solid var(--gold-orange); }
@@ -510,8 +566,8 @@
         <button class="btn btn-purple" style="padding: 12px 16px; justify-content: flex-start; gap: 12px;" onclick="LiveAudio.startWhiteboardShare()">
           <i class="fa-solid fa-pen-ruler" style="font-size: 1.3rem; color: #FCD34D;"></i>
           <div>
-            <strong style="display:block; font-size:0.92rem;">السبورة التفاعلية الذكية (قلم ورياضيات)</strong>
-            <span style="font-size:0.75rem; color:#DDD6FE;">مثالية للآيباد والتابلت مع القلم، مع دعم الشبكة البيانية لحل المسائل</span>
+            <strong style="display:block; font-size:0.92rem;">السبورة التفاعلية الذكية الاحترافية</strong>
+            <span style="font-size:0.75rem; color:#DDD6FE;">تغيير الخلفية (أبيض/أسود)، إرفاق PDF، باوربوينت، صور، ومتصفح مع البث المباشر</span>
           </div>
         </button>
 
@@ -566,30 +622,114 @@
     </div>
   </div>
 
-  <!-- سبورة المعلم التفاعلية مع دعم الشبكة البيانية والقلم -->
-  <div class="modal-overlay" id="whiteboardModal">
-    <div class="modal-card" style="max-width: 960px; padding: 0; background: #0A1424;">
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:#0F1E36; color:#FFF; border-bottom:1.5px solid var(--gold-orange);">
-        <strong style="color:var(--gold-orange); font-size:0.9rem;"><i class="fa-solid fa-pen-ruler"></i> سبورة الشرح التفاعلية المباشرة</strong>
-        <div style="display:flex; gap:6px;">
-          <button class="btn btn-gold" style="padding:2px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.clear()"><i class="fa-solid fa-rotate-left"></i> مسح الكل</button>
-          <button class="btn btn-danger" style="padding:2px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.close()"><i class="fa-solid fa-xmark"></i> إنهاء السبورة</button>
+  <!-- سبورة المعلم التفاعلية الذكية الاحترافية المطورة بالكامل -->
+  <div class="modal-overlay" id="whiteboardModal" style="z-index: 2700;">
+    <div class="modal-card" id="whiteboardModalCard" style="max-width: 1150px; width: 96vw; height: 92vh; padding: 0; background: #0A1424; display: flex; flex-direction: column; overflow: hidden; border-color: var(--gold-orange);">
+      
+      <!-- شريط رأس السبورة المتطور -->
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:#0F1E36; color:#FFF; border-bottom:1.5px solid var(--gold-orange); flex-wrap:wrap; gap:8px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <strong style="color:var(--gold-orange); font-size:0.95rem;">
+            <i class="fa-solid fa-chalkboard-user"></i> سبورة الأستاذ عمر التفاعلية الذكية
+          </strong>
+          <span class="badge badge-active" style="font-size:0.7rem;"><i class="fa-solid fa-broadcast-tower"></i> البث المباشر نشط للطلاب</span>
+        </div>
+
+        <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+          <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.undo()" title="تراجع"><i class="fa-solid fa-rotate-left"></i> تراجع</button>
+          <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.redo()" title="إعادة"><i class="fa-solid fa-rotate-right"></i> إعادة</button>
+          <button class="btn btn-gold" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.downloadSnapshot()" title="حفظ السبورة كصورة"><i class="fa-solid fa-download"></i> لقطة</button>
+          <button class="btn btn-purple" id="btnWbFullscreen" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.toggleFullscreen()"><i class="fa-solid fa-expand"></i> تكبير الشاشة</button>
+          <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.clear(true)"><i class="fa-solid fa-trash"></i> مسح الكل</button>
+          <button class="btn btn-danger" style="padding:4px 12px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.close()"><i class="fa-solid fa-xmark"></i> إنهاء</button>
         </div>
       </div>
-      <div class="whiteboard-container">
+
+      <!-- مساحة الرسم والكانفاس مع شريط تقليب صفحات الـ PDF / الشرائح المعروضة -->
+      <div class="whiteboard-container" id="whiteboardContainer">
+        <!-- شريط التنقل بين صفحات الـ PDF والشرائح المرفقة -->
+        <div class="wb-page-navigation-strip" id="wbPageNavStrip">
+          <button class="btn btn-secondary" style="padding:2px 8px; min-height:24px; font-size:0.75rem;" onclick="LiveWhiteboard.prevPage()"><i class="fa-solid fa-chevron-right"></i> السابق</button>
+          <span>صفحة: <strong id="wbCurrentPageNum" style="color:var(--gold-orange);">1</strong> من <strong id="wbTotalPagesCount">1</strong></span>
+          <button class="btn btn-secondary" style="padding:2px 8px; min-height:24px; font-size:0.75rem;" onclick="LiveWhiteboard.nextPage()">التالي <i class="fa-solid fa-chevron-left"></i></button>
+          <button class="btn btn-danger" style="padding:2px 6px; min-height:24px; font-size:0.7rem;" onclick="LiveWhiteboard.closeDocument()"><i class="fa-solid fa-xmark"></i> إغلاق الملف</button>
+        </div>
+
         <canvas id="interactiveWhiteboardCanvas"></canvas>
       </div>
+
+      <!-- شريط الأدوات المتقدم والسفلي للسبورة -->
       <div class="wb-controls-bar">
-        <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.toggleGrid()"><i class="fa-solid fa-border-all"></i> شبكة بيانية</button>
-        <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.setColor('#FFFFFF')"><span style="color:#FFF;">● أبيض</span></button>
-        <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.setColor('#F59E0B')"><span style="color:#F59E0B;">● أصفر</span></button>
-        <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.setColor('#38BDF8')"><span style="color:#38BDF8;">● أزرق</span></button>
-        <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.setColor('#10B981')"><span style="color:#10B981;">● أخضر</span></button>
-        <button class="btn btn-secondary" style="padding:4px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.setColor('#EF4444')"><span style="color:#EF4444;">● أحمر</span></button>
-        <button class="btn btn-gold" style="padding:4px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.setLineWidth(3)">قلم رفيع</button>
-        <button class="btn btn-gold" style="padding:4px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.setLineWidth(7)">قلم عريض</button>
-        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.75rem; min-height:28px;" onclick="LiveWhiteboard.setEraser()"><i class="fa-solid fa-eraser"></i> ممحاة</button>
+        <!-- خيارات نمط الأداة (قلم، تظليل، ممحاة، أشكال) -->
+        <div class="wb-tool-group">
+          <button class="wb-tool-btn active" id="wbToolPen" onclick="LiveWhiteboard.setTool('pen')" title="قلم كتابة وحل المسائل"><i class="fa-solid fa-pen"></i> قلم</button>
+          <button class="wb-tool-btn" id="wbToolHighlighter" onclick="LiveWhiteboard.setTool('highlighter')" title="قلم تظليل شفاف"><i class="fa-solid fa-highlighter"></i> تحديد</button>
+          <button class="wb-tool-btn" id="wbToolEraser" onclick="LiveWhiteboard.setTool('eraser')" title="ممحاة احترافية"><i class="fa-solid fa-eraser"></i> ممحاة</button>
+          <button class="wb-tool-btn" id="wbToolLine" onclick="LiveWhiteboard.setTool('line')" title="رسم خط مستقيم"><i class="fa-solid fa-slash"></i> خط</button>
+          <button class="wb-tool-btn" id="wbToolRect" onclick="LiveWhiteboard.setTool('rect')" title="رسم مستطيل/مربع"><i class="fa-regular fa-square"></i> مستطيل</button>
+          <button class="wb-tool-btn" id="wbToolCircle" onclick="LiveWhiteboard.setTool('circle')" title="رسم دائرة هندسية"><i class="fa-regular fa-circle"></i> دائرة</button>
+        </div>
+
+        <!-- ألوان القلم الاحترافية -->
+        <div class="wb-tool-group" style="gap:6px;">
+          <span style="font-size:0.7rem; color:#94A3B8;">الألوان:</span>
+          <div class="wb-color-circle active" style="background:#FFFFFF;" onclick="LiveWhiteboard.setColor('#FFFFFF', this)" title="أبيض"></div>
+          <div class="wb-color-circle" style="background:#F59E0B;" onclick="LiveWhiteboard.setColor('#F59E0B', this)" title="أصفر ذهبي"></div>
+          <div class="wb-color-circle" style="background:#38BDF8;" onclick="LiveWhiteboard.setColor('#38BDF8', this)" title="سماوي"></div>
+          <div class="wb-color-circle" style="background:#10B981;" onclick="LiveWhiteboard.setColor('#10B981', this)" title="أخضر زمردي"></div>
+          <div class="wb-color-circle" style="background:#EF4444;" onclick="LiveWhiteboard.setColor('#EF4444', this)" title="أحمر"></div>
+          <div class="wb-color-circle" style="background:#C084FC;" onclick="LiveWhiteboard.setColor('#C084FC', this)" title="بنفسجي"></div>
+          <div class="wb-color-circle" style="background:#0F172A;" onclick="LiveWhiteboard.setColor('#0F172A', this)" title="أسود كاحل"></div>
+          <input type="color" id="wbCustomColorPicker" value="#F59E0B" onchange="LiveWhiteboard.setColor(this.value, null)" style="width:24px; height:24px; border:none; border-radius:50%; cursor:pointer; background:transparent;" title="لون مخصص إضافي">
+        </div>
+
+        <!-- حجم القلم والممحاة -->
+        <div class="wb-tool-group">
+          <div class="wb-size-slider-wrapper">
+            <i class="fa-solid fa-paintbrush" style="color:var(--gold-orange);"></i>
+            <span id="wbStrokeSizeLabel">4px</span>
+            <input type="range" id="wbStrokeSizeSlider" min="1" max="45" value="4" oninput="LiveWhiteboard.setStrokeWidth(this.value)">
+          </div>
+        </div>
+
+        <!-- خلفية السبورة (أبيض / أسود / أخضر / كحلي / مخصص) -->
+        <div class="wb-tool-group">
+          <span style="font-size:0.7rem; color:#94A3B8;"><i class="fa-solid fa-fill-drip"></i> الخلفية:</span>
+          <button class="wb-tool-btn" onclick="LiveWhiteboard.setBackgroundColor('#070D18')" title="سبورة سوداء">● أسود</button>
+          <button class="wb-tool-btn" onclick="LiveWhiteboard.setBackgroundColor('#FFFFFF')" title="سبورة بيضاء">● أبيض</button>
+          <button class="wb-tool-btn" onclick="LiveWhiteboard.setBackgroundColor('#0B2518')" title="سبورة خضراء">● أخضر</button>
+          <button class="wb-tool-btn" onclick="LiveWhiteboard.setBackgroundColor('#0A192F')" title="سبورة كحلية">● كحلي</button>
+          <input type="color" id="wbBgColorPicker" value="#070D18" onchange="LiveWhiteboard.setBackgroundColor(this.value)" style="width:22px; height:22px; border:none; border-radius:50%; cursor:pointer; background:transparent;" title="لون خلفية مخصص">
+          <button class="wb-tool-btn" id="wbGridToggleBtn" onclick="LiveWhiteboard.toggleGrid()" title="إظهار / إخفاء الشبكة البيانية"><i class="fa-solid fa-border-all"></i> شبكة</button>
+        </div>
+
+        <!-- إرفاق ملفات: صور، بي دي اف، باوربوينت، أو فتح متصفح -->
+        <div class="wb-tool-group">
+          <button class="wb-tool-btn" onclick="document.getElementById('wbImageInput').click()" title="إرفاق صورة مسألة أو سبورة"><i class="fa-solid fa-image" style="color:#F59E0B;"></i> صورة</button>
+          <button class="wb-tool-btn" onclick="document.getElementById('wbDocumentInput').click()" title="إرفاق ملف PDF أو شرائح باوربوينت"><i class="fa-solid fa-file-pdf" style="color:#EF4444;"></i> PDF/شرائح</button>
+          <button class="wb-tool-btn" onclick="LiveWhiteboard.promptBrowserUrl()" title="فتح متصفح أو تطبيق ويب ومحاكاة"><i class="fa-solid fa-globe" style="color:#38BDF8;"></i> متصفح ويب</button>
+          
+          <input type="file" id="wbImageInput" accept="image/*" style="display:none;" onchange="LiveWhiteboard.handleImageUpload(event)">
+          <input type="file" id="wbDocumentInput" accept=".pdf,application/pdf" style="display:none;" onchange="LiveWhiteboard.handleDocumentUpload(event)">
+        </div>
       </div>
+    </div>
+  </div>
+
+  <!-- نافذة المتصفح المدمج داخل جلسة الشرح والسبورة -->
+  <div class="modal-overlay" id="wbBrowserModal" style="z-index: 2800;">
+    <div class="modal-card" style="max-width: 980px; width: 94vw; height: 86vh; padding: 0; display:flex; flex-direction:column; background:#0B1424;">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:var(--navy-gradient); color:#FFF; border-bottom:2px solid var(--gold-orange); gap:8px;">
+        <div style="display:flex; align-items:center; gap:8px; flex:1;">
+          <i class="fa-solid fa-globe" style="color:var(--gold-orange);"></i>
+          <span style="font-size:0.88rem; font-weight:800;" id="wbBrowserTitle">متصفح الشرح التفاعلي</span>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.openCurrentBrowserInNewTab()"><i class="fa-solid fa-arrow-up-right-from-square"></i> نافذة خارجية</button>
+          <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="document.getElementById('wbBrowserModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i> إغلاق</button>
+        </div>
+      </div>
+      <div id="wbBrowserFrameContainer" style="flex:1; width:100%; height:100%; position:relative; background:#FFFFFF;"></div>
     </div>
   </div>
 
@@ -1648,10 +1788,31 @@
       { id: 'SUD_12_LIT', name: 'الثالث ثانوي (أدبي)', system: 'سوداني', full: 'الصف الثالث ثانوي (المساق الأدبي) – الشهادة السودانية' }
     ];
 
-    /* السبورة التفاعلية الذكية مع مضخة بكسلات تفاعلية تضمن تدفق الإطارات بسلاسة */
+    /* السبورة التفاعلية الذكية الاحترافية المطورة بالكامل */
     const LiveWhiteboard = {
-      canvas: null, ctx: null, isDrawing: false, currentColor: '#FFFFFF', currentLineWidth: 4, isEraser: false, showGrid: false,
-      heartbeatTimer: null, isStreaming: false, pixelToggle: false,
+      canvas: null,
+      ctx: null,
+      isDrawing: false,
+      currentTool: 'pen', // 'pen', 'highlighter', 'eraser', 'line', 'rect', 'circle'
+      currentColor: '#FFFFFF',
+      currentStrokeWidth: 4,
+      backgroundColor: '#070D18',
+      showGrid: false,
+      isFullscreen: false,
+      heartbeatTimer: null,
+      isStreaming: false,
+      pixelToggle: false,
+      startX: 0,
+      startY: 0,
+      snapshotBeforeShape: null,
+      historyStack: [],
+      historyIndex: -1,
+      maxHistory: 20,
+      activePdfDoc: null,
+      activePdfPage: 1,
+      totalPdfPages: 1,
+      lastBrowserUrl: '',
+
       init() {
         this.canvas = document.getElementById('interactiveWhiteboardCanvas');
         if (!this.canvas) return;
@@ -1659,23 +1820,53 @@
         this.resize();
         window.addEventListener('resize', () => this.resize());
 
+        // الاستماع لأحداث الفأرة واللمس بدقة
         const start = (e) => {
           this.isDrawing = true;
           const pos = this.getPos(e);
-          this.ctx.beginPath();
-          this.ctx.moveTo(pos.x, pos.y);
+          this.startX = pos.x;
+          this.startY = pos.y;
+          this.snapshotBeforeShape = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+
+          if (this.currentTool === 'pen' || this.currentTool === 'highlighter' || this.currentTool === 'eraser') {
+            this.ctx.beginPath();
+            this.ctx.moveTo(pos.x, pos.y);
+            this.applyContextStyles();
+          }
         };
+
         const move = (e) => {
           if (!this.isDrawing) return;
           const pos = this.getPos(e);
-          this.ctx.lineTo(pos.x, pos.y);
-          this.ctx.strokeStyle = this.isEraser ? '#070D18' : this.currentColor;
-          this.ctx.lineWidth = this.isEraser ? 24 : this.currentLineWidth;
-          this.ctx.lineCap = 'round';
-          this.ctx.lineJoin = 'round';
-          this.ctx.stroke();
+
+          if (this.currentTool === 'pen' || this.currentTool === 'highlighter' || this.currentTool === 'eraser') {
+            this.ctx.lineTo(pos.x, pos.y);
+            this.applyContextStyles();
+            this.ctx.stroke();
+          } else if (this.snapshotBeforeShape) {
+            // رسم الأشكال الهندسية بمعاينة فورية
+            this.ctx.putImageData(this.snapshotBeforeShape, 0, 0);
+            this.applyContextStyles();
+            this.ctx.beginPath();
+            if (this.currentTool === 'line') {
+              this.ctx.moveTo(this.startX, this.startY);
+              this.ctx.lineTo(pos.x, pos.y);
+            } else if (this.currentTool === 'rect') {
+              this.ctx.strokeRect(this.startX, this.startY, pos.x - this.startX, pos.y - this.startY);
+            } else if (this.currentTool === 'circle') {
+              const radius = Math.sqrt(Math.pow(pos.x - this.startX, 2) + Math.pow(pos.y - this.startY, 2));
+              this.ctx.arc(this.startX, this.startY, radius, 0, 2 * Math.PI);
+            }
+            this.ctx.stroke();
+          }
         };
-        const end = () => { this.isDrawing = false; };
+
+        const end = () => {
+          if (this.isDrawing) {
+            this.isDrawing = false;
+            this.saveStateToHistory();
+          }
+        };
 
         this.canvas.addEventListener('mousedown', start);
         this.canvas.addEventListener('mousemove', move);
@@ -1683,21 +1874,77 @@
 
         this.canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e.touches[0]); }, { passive: false });
         this.canvas.addEventListener('touchmove', (e) => { e.preventDefault(); move(e.touches[0]); }, { passive: false });
-        this.canvas.addEventListener('touchend', end);
-        
+        window.addEventListener('touchend', end);
+
         this.startHeartbeat();
       },
-      /* مضخة الإطارات المحدثة: تغير بكسلاً دقيقاً باستمرار لمنع تجمد بث WebRTC */
+
+      applyContextStyles() {
+        if (!this.ctx) return;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
+
+        if (this.currentTool === 'eraser') {
+          this.ctx.strokeStyle = this.backgroundColor;
+          this.ctx.lineWidth = Math.max(16, this.currentStrokeWidth * 3);
+        } else if (this.currentTool === 'highlighter') {
+          this.ctx.strokeStyle = this.hexToRgba(this.currentColor, 0.35);
+          this.ctx.lineWidth = Math.max(18, this.currentStrokeWidth * 2.2);
+        } else {
+          this.ctx.strokeStyle = this.currentColor;
+          this.ctx.lineWidth = this.currentStrokeWidth;
+        }
+      },
+
+      hexToRgba(hex, alpha = 1) {
+        let c = hex.replace('#', '');
+        if (c.length === 3) c = c.split('').map(x => x + x).join('');
+        const num = parseInt(c, 16);
+        return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${alpha})`;
+      },
+
+      saveStateToHistory() {
+        if (!this.canvas || !this.ctx) return;
+        if (this.historyIndex < this.historyStack.length - 1) {
+          this.historyStack = this.historyStack.slice(0, this.historyIndex + 1);
+        }
+        this.historyStack.push(this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height));
+        if (this.historyStack.length > this.maxHistory) {
+          this.historyStack.shift();
+        } else {
+          this.historyIndex++;
+        }
+      },
+
+      undo() {
+        if (this.historyIndex > 0) {
+          this.historyIndex--;
+          this.ctx.putImageData(this.historyStack[this.historyIndex], 0, 0);
+        }
+      },
+
+      redo() {
+        if (this.historyIndex < this.historyStack.length - 1) {
+          this.historyIndex++;
+          this.ctx.putImageData(this.historyStack[this.historyIndex], 0, 0);
+        }
+      },
+
       startHeartbeat() {
         this.stopHeartbeat();
         this.isStreaming = true;
         this.heartbeatTimer = setInterval(() => {
           if (!this.canvas || !this.ctx || !this.isStreaming) return;
           this.pixelToggle = !this.pixelToggle;
-          this.ctx.fillStyle = this.pixelToggle ? '#070D18' : '#070D1A';
+          this.ctx.fillStyle = this.pixelToggle ? this.backgroundColor : this.tweakColor(this.backgroundColor);
           this.ctx.fillRect(0, 0, 2, 2);
-        }, 100);
+        }, 120);
       },
+
+      tweakColor(hex) {
+        return hex === '#FFFFFF' ? '#FAFAFA' : '#070D1A';
+      },
+
       stopHeartbeat() {
         if (this.heartbeatTimer) {
           clearInterval(this.heartbeatTimer);
@@ -1705,12 +1952,29 @@
         }
         this.isStreaming = false;
       },
+
       resize() {
         if (!this.canvas) return;
-        this.canvas.width = this.canvas.parentElement.clientWidth || 800;
-        this.canvas.height = this.canvas.parentElement.clientHeight || 500;
-        this.clear();
+        const parent = this.canvas.parentElement;
+        const w = parent.clientWidth || 900;
+        const h = parent.clientHeight || 550;
+
+        let oldData = null;
+        if (this.canvas.width > 0 && this.canvas.height > 0 && this.ctx) {
+          try { oldData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height); } catch(e){}
+        }
+
+        this.canvas.width = w;
+        this.canvas.height = h;
+
+        if (oldData) {
+          this.clear(false);
+          this.ctx.putImageData(oldData, 0, 0);
+        } else {
+          this.clear(false);
+        }
       },
+
       getPos(e) {
         const rect = this.canvas.getBoundingClientRect();
         return {
@@ -1718,22 +1982,65 @@
           y: (e.clientY - rect.top) * (this.canvas.height / rect.height)
         };
       },
-      setColor(c) { this.isEraser = false; this.currentColor = c; },
-      setLineWidth(w) { this.currentLineWidth = w; },
-      setEraser() { this.isEraser = true; },
+
+      setTool(tool) {
+        this.currentTool = tool;
+        document.querySelectorAll('.wb-tool-btn[id^="wbTool"]').forEach(b => b.classList.remove('active'));
+        const activeBtn = document.getElementById('wbTool' + tool.charAt(0).toUpperCase() + tool.slice(1));
+        if (activeBtn) activeBtn.classList.add('active');
+      },
+
+      setColor(colorHex, element) {
+        this.currentColor = colorHex;
+        if (this.currentTool === 'eraser') {
+          this.setTool('pen');
+        }
+        document.querySelectorAll('.wb-color-circle').forEach(c => c.classList.remove('active'));
+        if (element) element.classList.add('active');
+      },
+
+      setStrokeWidth(w) {
+        this.currentStrokeWidth = parseInt(w);
+        const label = document.getElementById('wbStrokeSizeLabel');
+        if (label) label.innerText = w + 'px';
+      },
+
+      setBackgroundColor(colorHex) {
+        this.backgroundColor = colorHex;
+        const picker = document.getElementById('wbBgColorPicker');
+        if (picker) picker.value = colorHex;
+
+        // تبديل تلقائي للون القلم إذا تعارض مع الخلفية الجديدة
+        if (colorHex.toUpperCase() === '#FFFFFF' && this.currentColor.toUpperCase() === '#FFFFFF') {
+          this.setColor('#0F172A', null);
+        } else if (colorHex === '#070D18' && this.currentColor === '#0F172A') {
+          this.setColor('#FFFFFF', null);
+        }
+
+        this.drawBackground();
+        this.saveStateToHistory();
+        App.showSecurityAlert("تم تحديث لون خلفية السبورة.");
+      },
+
       toggleGrid() {
         this.showGrid = !this.showGrid;
+        const btn = document.getElementById('wbGridToggleBtn');
+        if (btn) btn.classList.toggle('active', this.showGrid);
         this.drawBackground();
+        this.saveStateToHistory();
       },
+
       drawBackground() {
         if (!this.ctx) return;
-        this.ctx.fillStyle = '#070D18';
+        this.ctx.fillStyle = this.backgroundColor;
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
         if (this.showGrid) {
           this.ctx.save();
-          this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+          const isLight = (this.backgroundColor.toUpperCase() === '#FFFFFF');
+          this.ctx.strokeStyle = isLight ? 'rgba(15, 23, 42, 0.08)' : 'rgba(255, 255, 255, 0.09)';
           this.ctx.lineWidth = 1;
-          const step = 28;
+          const step = 30;
           for (let x = 0; x < this.canvas.width; x += step) {
             this.ctx.beginPath(); this.ctx.moveTo(x, 0); this.ctx.lineTo(x, this.canvas.height); this.ctx.stroke();
           }
@@ -1743,9 +2050,153 @@
           this.ctx.restore();
         }
       },
-      clear() {
+
+      async clear(confirmAction = false) {
+        if (confirmAction) {
+          const yes = await NotificationEngine.confirm("هل أنت متأكد من مسح كافة الرسومات على السبورة؟", "مسح السبورة");
+          if (!yes) return;
+        }
         this.drawBackground();
+        this.historyStack = [];
+        this.historyIndex = -1;
+        this.saveStateToHistory();
       },
+
+      toggleFullscreen() {
+        const modal = document.getElementById('whiteboardModalCard');
+        const btn = document.getElementById('btnWbFullscreen');
+        this.isFullscreen = !this.isFullscreen;
+
+        if (this.isFullscreen) {
+          modal.classList.add('whiteboard-fullscreen-mode');
+          btn.innerHTML = '<i class="fa-solid fa-compress"></i> تصغير';
+          btn.classList.replace('btn-purple', 'btn-gold');
+        } else {
+          modal.classList.remove('whiteboard-fullscreen-mode');
+          btn.innerHTML = '<i class="fa-solid fa-expand"></i> تكبير الشاشة';
+          btn.classList.replace('btn-gold', 'btn-purple');
+        }
+        setTimeout(() => this.resize(), 100);
+      },
+
+      handleImageUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = new Image();
+          img.onload = () => {
+            const hRatio = this.canvas.width / img.width;
+            const vRatio = this.canvas.height / img.height;
+            const ratio = Math.min(hRatio, vRatio, 1);
+            const w = img.width * ratio;
+            const h = img.height * ratio;
+            const x = (this.canvas.width - w) / 2;
+            const y = (this.canvas.height - h) / 2;
+
+            this.ctx.drawImage(img, x, y, w, h);
+            this.saveStateToHistory();
+            App.showSecurityAlert("📷 تم إرفاق الصورة على السبورة وعرضها للطلاب.");
+          };
+          img.src = event.target.result;
+        };
+        reader.readAsDataURL(file);
+      },
+
+      async handleDocumentUpload(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        App.showSecurityAlert("جاري استيراد وتجهيز المستند / الشرائح...");
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+          this.activePdfDoc = await loadingTask.promise;
+          this.totalPdfPages = this.activePdfDoc.numPages;
+          this.activePdfPage = 1;
+
+          document.getElementById('wbTotalPagesCount').innerText = this.totalPdfPages;
+          document.getElementById('wbPageNavStrip').style.display = 'flex';
+          this.renderPdfPageOnCanvas(this.activePdfPage);
+          App.showSecurityAlert("📄 تم تحميل ملف الشرائح والـ PDF على السبورة بنجاح!");
+        } catch(err) {
+          NotificationEngine.alert("تعذر قراءة المستند. تأكد من صحة ملف الـ PDF أو الشرائح.", "خطأ بالملف");
+        }
+      },
+
+      async renderPdfPageOnCanvas(pageNum) {
+        if (!this.activePdfDoc) return;
+        const page = await this.activePdfDoc.getPage(pageNum);
+        const tempViewport = page.getViewport({ scale: 1 });
+        const scale = Math.min(this.canvas.width / tempViewport.width, this.canvas.height / tempViewport.height);
+        const viewport = page.getViewport({ scale });
+
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = viewport.width;
+        offCanvas.height = viewport.height;
+        const offCtx = offCanvas.getContext('2d');
+
+        await page.render({ canvasContext: offCtx, viewport: viewport }).promise;
+
+        this.drawBackground();
+        const x = (this.canvas.width - viewport.width) / 2;
+        const y = (this.canvas.height - viewport.height) / 2;
+        this.ctx.drawImage(offCanvas, x, y);
+        this.saveStateToHistory();
+        document.getElementById('wbCurrentPageNum').innerText = pageNum;
+      },
+
+      nextPage() {
+        if (!this.activePdfDoc || this.activePdfPage >= this.totalPdfPages) return;
+        this.activePdfPage++;
+        this.renderPdfPageOnCanvas(this.activePdfPage);
+      },
+
+      prevPage() {
+        if (!this.activePdfDoc || this.activePdfPage <= 1) return;
+        this.activePdfPage--;
+        this.renderPdfPageOnCanvas(this.activePdfPage);
+      },
+
+      closeDocument() {
+        this.activePdfDoc = null;
+        document.getElementById('wbPageNavStrip').style.display = 'none';
+        this.clear(false);
+      },
+
+      async promptBrowserUrl() {
+        const url = await NotificationEngine.prompt(
+          "أدخل رابط الموقع، المحاكاة التفاعلية، أو التطبيق (مثل GeoGebra أو Desmos أو محاكاة رياضية):",
+          "https://www.geogebra.org/calculator",
+          "متصفح ومحاكاة الشرح"
+        );
+        if (url && url.trim()) {
+          this.openBrowser(url.trim());
+        }
+      },
+
+      openBrowser(url) {
+        this.lastBrowserUrl = url;
+        const container = document.getElementById('wbBrowserFrameContainer');
+        document.getElementById('wbBrowserTitle').innerText = `متصفح: ${url}`;
+        SmartHtmlLoader.renderInContainer(url, container);
+        document.getElementById('wbBrowserModal').classList.add('active');
+        App.showSecurityAlert("🌐 تم تشغيل المتصفح التفاعلي داخل جلسة الشرح.");
+      },
+
+      openCurrentBrowserInNewTab() {
+        if (this.lastBrowserUrl) window.open(this.lastBrowserUrl, '_blank');
+      },
+
+      downloadSnapshot() {
+        if (!this.canvas) return;
+        const link = document.createElement('a');
+        link.download = `Omer_Gasim_Whiteboard_${Date.now()}.png`;
+        link.href = this.canvas.toDataURL('image/png');
+        link.click();
+        App.showSecurityAlert("تم تنزيل لقطة السبورة كصورة PNG.");
+      },
+
       getStream() {
         if (!this.canvas) return null;
         try {
@@ -1754,8 +2205,10 @@
           return null;
         }
       },
+
       close() {
         this.stopHeartbeat();
+        if (this.isFullscreen) this.toggleFullscreen();
         document.getElementById('whiteboardModal').classList.remove('active');
         LiveAudio.stopScreenShare();
       }
@@ -1812,7 +2265,6 @@
 
         if (State.currentUser && State.currentUser.role === 'STUDENT') {
           if (!session) {
-            // المعلم أنهى البث كلياً
             if (this.listenerPeer || this.listenerScreenPeer) {
               this.leaveStudentSession();
               App.showSecurityAlert("تم إنهاء جلسة البث المباشر من قبل الأستاذ عمر.");
@@ -1891,7 +2343,6 @@
             this.activeStudentCalls.add(call);
             call.answer(this.broadcasterStream);
 
-            // تمكين المعلم من سماع صوت الطالب عندما يشارك
             call.on('stream', incomingStream => {
               LiveAudio.playIncomingStudentAudio(call.peer, incomingStream);
             });
@@ -1940,7 +2391,6 @@
         this.broadcasterAnalyser = this.broadcasterAudioCtx.createAnalyser();
         this.broadcasterAnalyser.fftSize = 64;
         source.connect(this.broadcasterAnalyser);
-        // لا نربط المصدر بالمخرج المحلي destination لمنع ارتداد الصدى للأستاذ نفسه
         this.renderCanvasLoop(this.broadcasterAnalyser, 'broadcasterVisualizerCanvas', '#FEF08A');
       },
       renderCanvasLoop(analyser, canvasId, color) {
@@ -2035,7 +2485,6 @@
         if (this.screenPeer && !this.screenPeer.destroyed) this.screenPeer.destroy();
         this.screenPeer = new Peer(dynamicScreenPeerId, { config: this.STUN_SERVERS });
         
-        // لا نحدث السحابة إلا بعد جهوزية قناة PeerJS تماماً
         this.screenPeer.on('open', async () => {
           if (db) {
             await db.collection("live_sessions").doc("active_broadcast").update({ 
@@ -2055,7 +2504,7 @@
           console.warn("Screen peer err:", err);
         });
 
-        App.showSecurityAlert("📺 تم إطلاق بث الشاشة بنجاح.");
+        App.showSecurityAlert("📺 تم إطلاق بث الشاشة والسبورة بنجاح.");
       },
       async stopScreenShare() {
         if (!this.isScreenSharing) return;
@@ -2219,7 +2668,6 @@
         if (notice) notice.style.display = 'flex';
         this.requestScreenStream();
       },
-      /* إنشاء تيار فيديو آمن نشط لتفادي مشاكل تفاوض SDP في كافة الأجهزة */
       createSafeDummyStream() {
         if (this.dummyVideoInterval) clearInterval(this.dummyVideoInterval);
         const c = document.createElement('canvas');
@@ -2455,7 +2903,6 @@
         return dst.stream;
       },
       setupStudentAudioPipeline(remoteStream) {
-        // مشغل الصوت المادي النقي: بدون خروج مكرر لمنع الصدى
         if (!this.listenerAudioEl) {
           this.listenerAudioEl = new Audio();
           this.listenerAudioEl.autoplay = true;
@@ -2466,7 +2913,6 @@
         this.listenerAudioEl.volume = parseFloat(document.getElementById('studentLiveVolumeSlider')?.value || 1);
         this.listenerAudioEl.play().catch(()=>{});
 
-        // ربط المرئيات فقط دون تمرير الصوت مجدداً إلى destination
         try {
           const source = this.listenerAudioCtx.createMediaStreamSource(remoteStream);
           this.listenerAnalyser = this.listenerAudioCtx.createAnalyser();
@@ -2569,7 +3015,6 @@
         let clean = expr.replace(/Ans/g, `(${this.lastAnswer})`).replace(/pi/g, Math.PI).replace(/\be\b/g, Math.E);
         let tokens = clean.replace(/\^/g, '**').replace(/fact\(([^)]+)\)/g, 'SciCalc.factorial($1)');
         
-        // دعم الدوال المثلثية بالدرجات أو الراديان بشكل دقيق
         tokens = tokens.replace(/\basin\(/g, this.isDeg ? '(180/Math.PI)*Math.asin(' : 'Math.asin(')
                        .replace(/\bacos\(/g, this.isDeg ? '(180/Math.PI)*Math.acos(' : 'Math.acos(')
                        .replace(/\batan\(/g, this.isDeg ? '(180/Math.PI)*Math.atan(' : 'Math.atan(');
@@ -4009,7 +4454,6 @@
                   <div class="form-group"><label>عنوان الكويز</label><input type="text" id="quizTitle" required placeholder="مثال: كويز مراجعة التفاضل وحساب المثلثات"></div>
                 </div>
 
-                <!-- إدراج صورة السؤال المباشرة أو عبر الرابط -->
                 <div class="form-group" style="background:var(--gold-light); padding:14px; border-radius:var(--radius-sm); border:1.5px dashed var(--gold-orange);">
                   <label style="color:var(--navy-dark); font-weight:800; font-size:0.9rem; margin-bottom:8px; display:block;">
                     <i class="fa-solid fa-image" style="color:var(--gold-deep);"></i> إضافة صورة السؤال / المسألة الهندسية (اختياري):
@@ -4206,7 +4650,6 @@
         });
       },
 
-      /* ضغط وتصغير الصور أوتوماتيكياً لحماية سعة التخزين من الانهيار */
       handleQuizImageFile(input) {
         if (!input.files || !input.files[0]) return;
         const file = input.files[0];
@@ -4577,7 +5020,6 @@
         }
       },
 
-      /* فتح الموارد بواسطة المعرفات لمنع أخطاء علامات التنصيص والرموز الرياضية */
       openResourceById(lessonId, resId) {
         const lesson = State.lessons.find(l => l.id === lessonId);
         if (!lesson) return;

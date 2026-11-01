@@ -577,7 +577,7 @@
           <i class="fa-solid fa-pen-ruler" style="font-size: 1.3rem; color: #FCD34D;"></i>
           <div>
             <strong style="display:block; font-size:0.92rem;">السبورة التفاعلية الذكية الاحترافية</strong>
-            <span style="font-size:0.75rem; color:#DDD6FE;">تغيير الخلفية (أبيض/أسود)، تكبير وتحديد أجزاء المسائل من PDF وصور، ومتصفح</span>
+            <span style="font-size:0.75rem; color:#DDD6FE;">تغيير الخلفية (أبيض/أسود)، تكبير وتحديد أجزاء المسائل من PDF وصور، وعرض باوربوينت PPTX</span>
           </div>
         </button>
 
@@ -632,7 +632,7 @@
     </div>
   </div>
 
-  <!-- سبورة المعلم التفاعلية الذكية الاحترافية المطورة بالكامل مع ميزة التكبير وتحديد المسائل -->
+  <!-- سبورة المعلم التفاعلية الذكية الاحترافية المطورة بالكامل مع ميزة التكبير وتحديد المسائل وعرض الباوربوينت -->
   <div class="modal-overlay" id="whiteboardModal" style="z-index: 2700;">
     <div class="modal-card" id="whiteboardModalCard" style="max-width: 1150px; width: 96vw; height: 92vh; padding: 0; background: #0A1424; display: flex; flex-direction: column; overflow: hidden; border-color: var(--gold-orange);">
       
@@ -725,11 +725,11 @@
           <button class="wb-tool-btn" id="wbGridToggleBtn" onclick="LiveWhiteboard.toggleGrid()" title="إظهار / إخفاء الشبكة البيانية"><i class="fa-solid fa-border-all"></i> شبكة</button>
         </div>
 
-        <!-- إرفاق ملفات: صور، بي دي اف، باوربوينت، أو فتح متصفح -->
+        <!-- إرفاق ملفات: صور، بي دي اف، وعرض بوربوينت PPTX/PPT -->
         <div class="wb-tool-group">
           <button class="wb-tool-btn" onclick="document.getElementById('wbImageInput').click()" title="إرفاق صورة مسألة أو سبورة"><i class="fa-solid fa-image" style="color:#F59E0B;"></i> صورة</button>
           <button class="wb-tool-btn" onclick="document.getElementById('wbDocumentInput').click()" title="إرفاق ملف PDF أو أوراق عمل"><i class="fa-solid fa-file-pdf" style="color:#EF4444;"></i> PDF/أوراق عمل</button>
-          <button class="wb-tool-btn" onclick="LiveWhiteboard.promptBrowserUrl()" title="فتح متصفح أو تطبيق ويب ومحاكاة"><i class="fa-solid fa-globe" style="color:#38BDF8;"></i> متصفح ويب</button>
+          <button class="wb-tool-btn" onclick="LiveWhiteboard.openPptPresentationModal()" title="عرض وشرح ملف باوربوينت (PPT / PPTX) بالصيغة الأصلية"><i class="fa-solid fa-file-powerpoint" style="color:#EA580C;"></i> عرض بوربوينت PPTX</button>
           
           <input type="file" id="wbImageInput" accept="image/*" style="display:none;" onchange="LiveWhiteboard.handleImageUpload(event)">
           <input type="file" id="wbDocumentInput" accept=".pdf,application/pdf" style="display:none;" onchange="LiveWhiteboard.handleDocumentUpload(event)">
@@ -738,20 +738,25 @@
     </div>
   </div>
 
-  <!-- نافذة المتصفح المدمج داخل جلسة الشرح والسبورة -->
-  <div class="modal-overlay" id="wbBrowserModal" style="z-index: 2800;">
-    <div class="modal-card" style="max-width: 980px; width: 94vw; height: 86vh; padding: 0; display:flex; flex-direction:column; background:#0B1424;">
-      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:var(--navy-gradient); color:#FFF; border-bottom:2px solid var(--gold-orange); gap:8px;">
-        <div style="display:flex; align-items:center; gap:8px; flex:1;">
-          <i class="fa-solid fa-globe" style="color:var(--gold-orange);"></i>
-          <span style="font-size:0.88rem; font-weight:800;" id="wbBrowserTitle">متصفح الشرح التفاعلي</span>
+  <!-- نافذة عرض وشرح ملفات الباوربوينت التفاعلية الاحترافية (PPTX / PPT) -->
+  <div class="modal-overlay" id="wbPptViewerModal" style="z-index: 2800;">
+    <div class="modal-card" style="max-width: 1060px; width: 95vw; height: 88vh; padding: 0; display:flex; flex-direction:column; background:#0B1424; border-color:var(--gold-orange);">
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:var(--navy-gradient); color:#FFF; border-bottom:2px solid var(--gold-orange); gap:8px; flex-wrap:wrap;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <i class="fa-solid fa-file-powerpoint" style="color:#EA580C; font-size:1.3rem;"></i>
+          <div>
+            <strong style="font-size:0.92rem; color:#FEF08A;" id="wbPptTitle">عرض وشرح ملف باوربوينت PPTX</strong>
+            <span style="font-size:0.72rem; color:#CBD5E1; display:block;">يعمل بالصيغة الأصلية مع كامل الحركات والتنقل بين الشرائح</span>
+          </div>
         </div>
-        <div style="display:flex; gap:6px;">
-          <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.openCurrentBrowserInNewTab()"><i class="fa-solid fa-arrow-up-right-from-square"></i> نافذة خارجية</button>
-          <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="document.getElementById('wbBrowserModal').classList.remove('active')"><i class="fa-solid fa-xmark"></i> إغلاق</button>
+
+        <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
+          <button class="btn btn-gold" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.promptPptUrl()"><i class="fa-solid fa-link"></i> فتح رابط PPTX</button>
+          <button class="btn btn-purple" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.openPptInNewTab()"><i class="fa-solid fa-arrow-up-right-from-square"></i> نافذة كاملة</button>
+          <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.closePptViewer()"><i class="fa-solid fa-xmark"></i> إغلاق</button>
         </div>
       </div>
-      <div id="wbBrowserFrameContainer" style="flex:1; width:100%; height:100%; position:relative; background:#FFFFFF;"></div>
+      <div id="wbPptFrameContainer" style="flex:1; width:100%; height:100%; position:relative; background:#FFFFFF;"></div>
     </div>
   </div>
 
@@ -1091,7 +1096,7 @@
         </div>
       </div>
 
-      <button class="btn btn-navy" style="width:100%; margin-top:14px;" onclick="App.closeFormulaSheetModal()">إغلاق اللوحة</button>
+      <button class="btn btn-navy" style="width:100%; margin-top:14px;" onclick="App.closeFormulaSheetModal()">إلغاء وإغلاق</button>
     </div>
   </div>
 
@@ -1390,14 +1395,14 @@
     </div>
   </div>
 
-  <!-- إعادة تعيين حساب الطالب -->
+  <!-- إعادة تعيين وتفعيل اشتراك حساب الطالب (شهر / 3 أشهر / تجربة) -->
   <div class="modal-overlay" id="studentResetModal">
-    <div class="modal-card" style="max-width: 500px;">
+    <div class="modal-card" style="max-width: 520px;">
       <div style="text-align: center; margin-bottom: 16px;">
-        <div style="width: 56px; height: 56px; border-radius: 50%; background: #FEF2F2; color: var(--danger); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px;">
-          <i class="fa-solid fa-arrows-rotate"></i>
+        <div style="width: 56px; height: 56px; border-radius: 50%; background: #FEF3C7; color: var(--gold-deep); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px;">
+          <i class="fa-solid fa-id-card-clip"></i>
         </div>
-        <h3 style="color: var(--navy-dark); font-weight: 800;">إعادة تعيين حساب الطالب</h3>
+        <h3 style="color: var(--navy-dark); font-weight: 800;">إدارة اشتراك وحساب الطالب</h3>
         <p style="font-size: 0.8rem; color: var(--text-muted);" id="resetStudentNameDisplay"></p>
       </div>
 
@@ -1410,12 +1415,32 @@
         </div>
 
         <div class="form-group">
-          <label>إجراءات التعيين المتاحة:</label>
-          <div style="display:flex; flex-direction:column; gap:8px; background:var(--bg-light); padding:12px; border-radius:var(--radius-sm); font-size:0.85rem;">
+          <label style="color:var(--navy-dark); font-weight:800; margin-bottom:6px; display:block;">
+            <i class="fa-solid fa-calendar-check" style="color:var(--gold-orange);"></i> تحديد حالة وخطة الاشتراك:
+          </label>
+          <div style="display:flex; flex-direction:column; gap:10px; background:var(--bg-light); padding:14px; border-radius:var(--radius-sm); font-size:0.86rem; border:1px solid #CBD5E1;">
             <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-              <input type="checkbox" id="chkResetTrial"> تمديد / إعادة تفعيل الفترة التجريبية (3 أيام جديدة)
+              <input type="radio" name="subscriptionAction" id="subActionNone" value="NONE" checked>
+              <span>الإبقاء على الخطة الحالية للطالب دون تغيير</span>
             </label>
-            <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#B45309; font-weight:700;">
+              <input type="radio" name="subscriptionAction" id="subActionTrial" value="TRIAL">
+              <span>⏳ تمديد / إعادة تفعيل الفترة التجريبية (3 أيام جديدة)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#047857; font-weight:800;">
+              <input type="radio" name="subscriptionAction" id="subAction1Month" value="1_MONTH">
+              <span>🟢 تفعيل اشتراك شهر واحد (30 يوماً - وصول كامل لكافة المزايا)</span>
+            </label>
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; color:#1D4ED8; font-weight:800;">
+              <input type="radio" name="subscriptionAction" id="subAction3Months" value="3_MONTHS">
+              <span>💎 تفعيل اشتراك ثلاثة أشهر (فصل دراسي كامل - وصول كامل لكافة المزايا)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="background:#FFF; padding:10px; border-radius:var(--radius-sm); border:1px dashed #CBD5E1;">
+            <label style="display:flex; align-items:center; gap:8px; cursor:pointer; font-size:0.82rem; color:var(--text-muted);">
               <input type="checkbox" id="chkResetProgress"> إعادة تصفير نقاط الخبرة (XP) ومسح نتائج الكويزات
             </label>
           </div>
@@ -1810,7 +1835,7 @@
       { id: 'SUD_12_LIT', name: 'الثالث ثانوي (أدبي)', system: 'سوداني', full: 'الصف الثالث ثانوي (المساق الأدبي) – الشهادة السودانية' }
     ];
 
-    /* السبورة التفاعلية الذكية الاحترافية المطورة مع دعم التكبير، التحريك، واقتصاص وتحديد جزء معين للشرح */
+    /* السبورة التفاعلية الذكية الاحترافية المطورة مع دعم التكبير، التحريك، واقتصاص وتحديد جزء معين للشرح وعرض الباوربوينت */
     const LiveWhiteboard = {
       canvas: null,
       ctx: null,
@@ -1833,10 +1858,10 @@
       activePdfDoc: null,
       activePdfPage: 1,
       totalPdfPages: 1,
-      lastBrowserUrl: '',
+      currentPptUrl: '',
 
       // إدارة المرفقات (صور، PDF، أوراق عمل) مع دعم التكبير والتركيز
-      attachedMedia: null, // { source, type, naturalWidth, naturalHeight, cropX, cropY, cropW, cropH, scale, panX, panY, isCropped, destX, destY, destW, destH }
+      attachedMedia: null,
       isSelectingFocus: false,
       selectionSnapshot: null,
       lastPanPoint: null,
@@ -1848,7 +1873,6 @@
         this.resize();
         window.addEventListener('resize', () => this.resize());
 
-        // الاستماع لأحداث الفأرة واللمس بدقة
         const start = (e) => {
           const pos = this.getPos(e);
 
@@ -1881,7 +1905,6 @@
           const pos = this.getPos(e);
 
           if (this.isSelectingFocus && this.selectionSnapshot) {
-            // رسم مستطيل التحديد لاقتصاص وتكبير مسألة معينة
             this.ctx.putImageData(this.selectionSnapshot, 0, 0);
             this.ctx.save();
             this.ctx.strokeStyle = '#F59E0B';
@@ -1915,7 +1938,6 @@
             this.applyContextStyles();
             this.ctx.stroke();
           } else if (this.snapshotBeforeShape) {
-            // رسم الأشكال الهندسية بمعاينة فورية
             this.ctx.putImageData(this.snapshotBeforeShape, 0, 0);
             this.applyContextStyles();
             this.ctx.beginPath();
@@ -2155,7 +2177,6 @@
         }
 
         if (this.attachedMedia) {
-          // مسح الرسومات وإعادة رسم المرفق نظيفاً للشرح مجدداً
           this.renderAttachedMediaToCanvas();
         } else {
           this.drawBackground();
@@ -2247,7 +2268,6 @@
       async renderPdfPageOnCanvas(pageNum) {
         if (!this.activePdfDoc) return;
         const page = await this.activePdfDoc.getPage(pageNum);
-        // تصيير بدقة عالية جداً (High DPI 2x) حتى تظل الخطوط والأرقام واضحة تماماً عند التكبير والتركيز
         const viewport = page.getViewport({ scale: 2.0 });
 
         const offCanvas = document.createElement('canvas');
@@ -2312,7 +2332,6 @@
         );
       },
 
-      // تكبير أو تصغير المرفق
       zoomMedia(multiplier) {
         if (!this.attachedMedia) {
           NotificationEngine.alert("يرجى إرفاق صورة أو ورقة عمل أولاً لتكبيرها وتصغيرها.", "تنبيه");
@@ -2324,7 +2343,6 @@
         App.showSecurityAlert(`🔍 نسبة التكبير: ${Math.round(this.attachedMedia.scale * 100)}%`);
       },
 
-      // إعادة ضبط حجم وموضع المرفق
       resetMediaZoom() {
         if (!this.attachedMedia) return;
         this.attachedMedia.scale = 1.0;
@@ -2335,7 +2353,6 @@
         App.showSecurityAlert("تمت إعادة ضبط المرفق للوضع الافتراضي.");
       },
 
-      // تفعيل وضع تحديد مسألة أو جزء معين من الورقة للتركيز عليه وتكبيره للشرح
       activateFocusSelect() {
         if (!this.attachedMedia) {
           NotificationEngine.alert("يرجى إرفاق صورة أو ملف PDF أولاً لتحديد مسألة للشرح.", "تنبيه");
@@ -2348,7 +2365,6 @@
         App.showSecurityAlert("🎯 اسحب بالمؤشر فوق المسألة أو الجزئية التي تريد تكبيرها والتركيز عليها.");
       },
 
-      // تنفيذ الاقتصاص والتركيز والتكبير الفوري للجزء المحدد
       finalizeFocusCrop(x1, y1, x2, y2) {
         this.isSelectingFocus = false;
         const focusBtn = document.getElementById('wbBtnFocusSelect');
@@ -2392,7 +2408,6 @@
         App.showSecurityAlert("🔍 تم تكبير المسألة بنجاح والتركيز عليها. يمكنك الشرح والحل عليها مباشرة الآن!");
       },
 
-      // إلغاء التركيز والعودة لعرض الصفحة كاملة
       resetFocusCrop() {
         if (!this.attachedMedia) return;
         this.attachedMedia.cropX = 0;
@@ -2412,7 +2427,6 @@
         App.showSecurityAlert("تمت استعادة الصفحة كاملة.");
       },
 
-      // إزالة المرفق من السبورة
       async removeAttachedMedia() {
         const confirmRem = await NotificationEngine.confirm("هل أنت متأكد من إزالة المرفق والعودة للسبورة الخالية؟", "إزالة المرفق");
         if (!confirmRem) return;
@@ -2441,28 +2455,73 @@
         this.removeAttachedMedia();
       },
 
-      async promptBrowserUrl() {
+      /* تشغيل وعرض ملفات الباوربوينت التفاعلية بالصيغة الأصلية للشرح */
+      openPptPresentationModal(pptUrl = "") {
+        const container = document.getElementById('wbPptFrameContainer');
+        const defaultSample = pptUrl || "https://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent("https://raw.githubusercontent.com/OmerGasim/Math/main/sample_math_presentation.pptx");
+        this.currentPptUrl = pptUrl;
+        
+        if (pptUrl) {
+          this.loadPptFrame(pptUrl);
+        } else {
+          container.innerHTML = `
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; padding:24px; text-align:center; background:#070D18; color:#FFF; gap:16px;">
+              <div style="width:70px; height:70px; border-radius:50%; background:#FFF7ED; color:#EA580C; display:flex; align-items:center; justify-content:center; font-size:32px;">
+                <i class="fa-solid fa-file-powerpoint"></i>
+              </div>
+              <h3 style="color:#FEF08A; font-weight:800; font-size:1.15rem;">استعراض وشرح ملف باوربوينت (PPT / PPTX)</h3>
+              <p style="font-size:0.85rem; color:#CBD5E1; max-width:520px; line-height:1.7;">
+                يمكنك إدخال رابط ملف العرض التقديمي (OneDrive, Google Drive, SharePoint أو أي رابط مباشر) لفتحه بصيغته الأصلية مع دعم كافة الحركات والشرائح.
+              </p>
+              <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
+                <button class="btn btn-gold" onclick="LiveWhiteboard.promptPptUrl()"><i class="fa-solid fa-link"></i> إدخال رابط العرض التقديمي</button>
+              </div>
+            </div>
+          `;
+        }
+        document.getElementById('wbPptViewerModal').classList.add('active');
+      },
+
+      loadPptFrame(url) {
+        this.currentPptUrl = url.trim();
+        const container = document.getElementById('wbPptFrameContainer');
+        document.getElementById('wbPptTitle').innerText = `عرض بوربوينت: ${url.split('/').pop().split('?')[0] || 'عرض تقديمي'}`;
+
+        let embedUrl = url.trim();
+        if (embedUrl.includes('drive.google.com/file/d/')) {
+          embedUrl = embedUrl.replace(/\/view(\?.*)?$/, '/preview');
+        } else if (!embedUrl.includes('officeapps.live.com') && !embedUrl.includes('google.com/viewer')) {
+          embedUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(embedUrl)} [1]`;
+        }
+
+        container.innerHTML = `
+          <iframe id="wbPptIframe" style="width:100%; height:100%; border:none; background:#FFF;" src="${embedUrl}" allowfullscreen></iframe>
+        `;
+        App.showSecurityAlert("📊 تم فتح عرض الباوربوينت بالصيغة الأصلية بنجاح.");
+      },
+
+      async promptPptUrl() {
         const url = await NotificationEngine.prompt(
-          "أدخل رابط الموقع، المحاكاة التفاعلية، أو التطبيق (مثل GeoGebra أو Desmos أو محاكاة رياضية):",
-          "https://www.geogebra.org/calculator",
-          "متصفح ومحاكاة الشرح"
+          "ألصق رابط ملف الباوربوينت (PPT / PPTX) هنا:",
+          this.currentPptUrl || "",
+          "فتح ملف باوربوينت للشرح"
         );
         if (url && url.trim()) {
-          this.openBrowser(url.trim());
+          this.loadPptFrame(url.trim());
         }
       },
 
-      openBrowser(url) {
-        this.lastBrowserUrl = url;
-        const container = document.getElementById('wbBrowserFrameContainer');
-        document.getElementById('wbBrowserTitle').innerText = `متصفح: ${url}`;
-        SmartHtmlLoader.renderInContainer(url, container);
-        document.getElementById('wbBrowserModal').classList.add('active');
-        App.showSecurityAlert("🌐 تم تشغيل المتصفح التفاعلي داخل جلسة الشرح.");
+      openPptInNewTab() {
+        if (this.currentPptUrl) {
+          window.open(this.currentPptUrl, '_blank');
+        } else {
+          NotificationEngine.alert("يرجى فتح رابط ملف الباوربوينت أولاً.", "تنبيه");
+        }
       },
 
-      openCurrentBrowserInNewTab() {
-        if (this.lastBrowserUrl) window.open(this.lastBrowserUrl, '_blank');
+      closePptViewer() {
+        document.getElementById('wbPptViewerModal').classList.remove('active');
+        document.getElementById('wbPptFrameContainer').innerHTML = '';
       },
 
       downloadSnapshot() {
@@ -3061,18 +3120,15 @@
         const confirmStop = await NotificationEngine.confirm("هل أنت متأكد من إنهاء جلسة البث الصوتي ومشاركة الشاشة لكافة الطلاب؟", "إنهاء البث بالكامل");
         if (!confirmStop) return;
 
-        // إيقاف مشاركة الشاشة أولاً
         if (this.isScreenSharing) {
           await this.stopScreenShare();
         }
 
-        // إيقاف مايك المعلم
         if (this.broadcasterStream) { 
           this.broadcasterStream.getTracks().forEach(t => t.stop()); 
           this.broadcasterStream = null; 
         }
 
-        // مسح أصوات الطلاب المتصلين
         Object.keys(this.incomingStudentAudios).forEach(id => {
           this.removeIncomingStudentAudio(id);
         });
@@ -3087,7 +3143,6 @@
           this.broadcasterAudioCtx = null;
         }
 
-        // تحديث السحابة لإنهاء البث عند كافة الطلاب في اللحظة نفسها
         if (db) {
           await db.collection("live_sessions").doc("active_broadcast").set({ 
             isActive: false, 
@@ -4094,13 +4149,15 @@
           const user = State.currentUser;
           const now = Date.now();
           const trialExpired = user.status === "TRIAL" && user.trialEndTimestamp && now > user.trialEndTimestamp;
-          const isExpired = user.status === "EXPIRED" || trialExpired;
+          const subExpired = user.status === "ACTIVE" && user.subscriptionEndTimestamp && now > user.subscriptionEndTimestamp;
+          const isExpired = user.status === "EXPIRED" || trialExpired || subExpired;
+
           if (isExpired) {
             return `
               <div class="card" style="text-align: center; padding: 36px 16px; max-width: 580px; margin: 20px auto; border-color: var(--danger);">
                 <i class="fa-solid fa-lock" style="font-size: 48px; color: var(--danger); margin-bottom: 14px;"></i>
-                <h2 style="color: var(--navy-dark); font-weight: 800;">🔒 انتهت الفترة التجريبية (3 أيام)</h2>
-                <p style="color: var(--text-muted); font-size: 0.88rem; margin: 12px 0 20px;">يرجى تفعيل اشتراكك مع الأستاذ عمر للاستمرار في متابعة الدروس.</p>
+                <h2 style="color: var(--navy-dark); font-weight: 800;">🔒 انتهت فترة الاشتراك أو التجربة</h2>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin: 12px 0 20px;">يرجى تجديد أو تفعيل اشتراكك مع الأستاذ عمر للاستمرار في متابعة كافة المزايا والشروحات.</p>
                 <button class="btn btn-whatsapp" onclick="App.sendWhatsAppOrder('EXP_RENEW')"><i class="fa-brands fa-whatsapp"></i> تفعيل الاشتراك الآن عبر واتساب</button>
               </div>
             `;
@@ -4136,7 +4193,7 @@
                 <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap;">
                   <button class="btn btn-purple" style="padding:6px 12px; font-size:0.78rem; min-height:34px;" onclick="App.openArenaView()"><i class="fa-solid fa-trophy"></i> حلبة فرسان الرياضيات</button>
                   ${user.certificateApproved ? `<button class="btn btn-gold" style="padding:6px 12px; font-size:0.78rem; min-height:34px;" onclick="App.openGeneralCertificate()"><i class="fa-solid fa-award"></i> طباعة شهادة التفوق A4 ✓</button>` : `<button class="btn btn-disabled" style="padding:6px 12px; font-size:0.78rem; min-height:34px;" onclick="NotificationEngine.alert('الشهادة تمنح بعد إكمال المنهج.')"><i class="fa-solid fa-lock"></i> الشهادة (قيد الاعتماد)</button>`}
-                  <span class="badge ${isTrial ? 'badge-trial' : 'badge-active'}">${isTrial ? '🟡 تجربة 3 أيام' : '🟢 اشتراك نشط'}</span>
+                  <span class="badge ${isTrial ? 'badge-trial' : 'badge-active'}">${isTrial ? '🟡 تجربة 3 أيام' : (user.plan === '3_MONTHS' ? '💎 اشتراك فصلي (3 أشهر)' : '🟢 اشتراك نشط (شهر)')}</span>
                 </div>
               </div>
             </div>
@@ -4794,14 +4851,28 @@
           const filtered = State.adminTargetFilter === "ALL" ? State.students : State.students.filter(s => s.target === State.adminTargetFilter);
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
-              <div><h2 style="color: var(--navy-dark); font-weight: 800;">سجل الطلاب</h2></div>
+              <div><h2 style="color: var(--navy-dark); font-weight: 800;">سجل الطلاب وإدارة الاشتراكات</h2></div>
               <div style="display:flex; gap:6px;"><button class="btn btn-gold" style="padding:4px 10px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_CREATE_STUDENT')"><i class="fa-solid fa-user-plus"></i> إضافة طالب</button><button class="btn btn-navy" style="padding:4px 10px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">الرئيسية</button></div>
             </div>
             <div class="card">
               <div class="table-container">
                 <table>
-                  <thead><tr><th>الطالب</th><th>Username</th><th>المنهاج والصف</th><th>الحالة</th><th>تقييم وواتساب</th><th>إجراءات</th></tr></thead>
-                  <tbody>${filtered.length === 0 ? `<tr><td colspan="6" style="text-align:center; padding:25px;">لا يوجد طلاب.</td></tr>` : filtered.map(st => `<tr><td><strong>${escapeHTML(st.name)}</strong></td><td><code>${escapeHTML(st.username)}</code></td><td><span class="badge badge-curriculum">${UI.getTargetLabel(st.target)}</span></td><td><span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : 'badge-trial'}">${escapeHTML(st.status)}</span></td><td><button class="btn btn-whatsapp" style="padding:4px 8px; font-size:0.7rem;" onclick="App.openEvaluationModal('${st.uid}')">تقييم</button></td><td><div style="display:flex; gap:3px;"><button class="btn btn-purple" style="padding:3px 6px; font-size:0.7rem;" onclick="App.openStudentResetModal('${st.uid}')">تعيين</button><button class="btn btn-danger" style="padding:3px 6px; font-size:0.7rem;" onclick="App.promptDeleteStudent('${st.uid}')">حذف</button></div></td></tr>`).join('')}</tbody>
+                  <thead><tr><th>الطالب</th><th>Username</th><th>المنهاج والصف</th><th>الحالة والخطة</th><th>تقييم وواتساب</th><th>إدارة وتفعيل الاشتراك</th></tr></thead>
+                  <tbody>${filtered.length === 0 ? `<tr><td colspan="6" style="text-align:center; padding:25px;">لا يوجد طلاب.</td></tr>` : filtered.map(st => `<tr>
+                    <td><strong>${escapeHTML(st.name)}</strong></td>
+                    <td><code>${escapeHTML(st.username)}</code></td>
+                    <td><span class="badge badge-curriculum">${UI.getTargetLabel(st.target)}</span></td>
+                    <td><span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : 'badge-trial'}">${escapeHTML(st.status === 'ACTIVE' ? (st.plan === '3_MONTHS' ? '💎 فصلي (3 أشهر)' : '🟢 شهر') : '⏳ تجربة')}</span></td>
+                    <td><button class="btn btn-whatsapp" style="padding:4px 8px; font-size:0.7rem;" onclick="App.openEvaluationModal('${st.uid}')">تقييم</button></td>
+                    <td>
+                      <div style="display:flex; gap:4px; flex-wrap:wrap;">
+                        <button class="btn btn-gold" style="padding:3px 7px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 1)" title="تفعيل اشتراك شهر">شهر</button>
+                        <button class="btn btn-purple" style="padding:3px 7px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 3)" title="تفعيل اشتراك 3 أشهر">3 أشهر</button>
+                        <button class="btn btn-secondary" style="padding:3px 7px; font-size:0.7rem;" onclick="App.openStudentResetModal('${st.uid}')">تعيين/تمديد</button>
+                        <button class="btn btn-danger" style="padding:3px 7px; font-size:0.7rem;" onclick="App.promptDeleteStudent('${st.uid}')">حذف</button>
+                      </div>
+                    </td>
+                  </tr>`).join('')}</tbody>
                 </table>
               </div>
             </div>
@@ -5608,7 +5679,8 @@
         const student = State.students.find(s => s.uid === studentUid);
         if (!student) return;
         document.getElementById('resetStudentUid').value = student.uid;
-        document.getElementById('resetStudentNameDisplay').innerText = `الطالب: ${student.name} (${student.username})`;
+        document.getElementById('resetStudentNameDisplay').innerText = `الطالب: ${student.name} (${student.username}) | الحالة الحالية: ${student.status === 'ACTIVE' ? 'نشط' : 'تجريبي'}`;
+        document.getElementById('subActionNone').checked = true;
         document.getElementById('studentResetModal').classList.add('active');
       },
       closeStudentResetModal() { document.getElementById('studentResetModal').classList.remove('active'); },
@@ -5617,22 +5689,42 @@
         e.preventDefault();
         const uid = document.getElementById('resetStudentUid').value;
         const newPass = normalizeInput(document.getElementById('resetNewPass').value);
-        const resetTrial = document.getElementById('chkResetTrial').checked;
+        const subAction = document.querySelector('input[name="subscriptionAction"]:checked')?.value || 'NONE';
         const resetProgress = document.getElementById('chkResetProgress').checked;
 
         const student = State.students.find(s => s.uid === uid);
         if (!student) return;
 
         if (newPass) student.passwordHash = CryptoSecurity.hashPassword(newPass);
-        if (resetTrial) {
+
+        if (subAction === 'TRIAL') {
           student.status = 'TRIAL';
+          student.plan = '3_DAYS_TRIAL';
           student.trialEndTimestamp = Date.now() + (3 * 24 * 60 * 60 * 1000);
+          student.expiresAt = 'تجربة (3 أيام)';
+          delete student.subscriptionEndTimestamp;
+        } else if (subAction === '1_MONTH') {
+          student.status = 'ACTIVE';
+          student.plan = '1_MONTH';
+          student.expiresAt = 'ساري لمدة شهر';
+          student.subscriptionEndTimestamp = Date.now() + (30 * 24 * 60 * 60 * 1000);
+          delete student.trialEndTimestamp;
+        } else if (subAction === '3_MONTHS') {
+          student.status = 'ACTIVE';
+          student.plan = '3_MONTHS';
+          student.expiresAt = 'ساري لمدة 3 أشهر (فصل كامل)';
+          student.subscriptionEndTimestamp = Date.now() + (90 * 24 * 60 * 60 * 1000);
+          delete student.trialEndTimestamp;
         }
-        if (resetProgress) { student.xp = 100; student.trophies = 1; }
+
+        if (resetProgress) { 
+          student.xp = 100; 
+          student.trophies = 1; 
+        }
 
         DataStore.save('students', State.students);
         App.closeStudentResetModal();
-        NotificationEngine.alert(`تم تحديث بيانات الطالب (${student.name}) بنجاح.`, 'تم الحفظ');
+        NotificationEngine.alert(`تم تحديث بيانات وخطة اشتراك الطالب (${student.name}) بنجاح وبإمكانه التمتع بكافة المزايا.`, 'تم الحفظ والتفعيل');
         UI.render();
       },
 
@@ -6073,12 +6165,17 @@
 
       async promptActivateStudent(uid, months) {
         const student = State.students.find(s => s.uid === uid);
-        const confirmAct = await NotificationEngine.confirm(`هل تريد تفعيل اشتراك الطالب (${student.name}) لمدة ${months} أشهر؟`, 'تفعيل الاشتراك');
+        if (!student) return;
+        const days = months === 1 ? 30 : 90;
+        const confirmAct = await NotificationEngine.confirm(`هل تريد تفعيل اشتراك الطالب (${student.name}) لمدة ${months} أشهر (${days} يوماً) مع فتح كافة المزايا؟`, 'تفعيل الاشتراك');
         if (confirmAct) {
           student.status = "ACTIVE";
           student.plan = months === 1 ? "1_MONTH" : "3_MONTHS";
-          student.expiresAt = months === 1 ? "ساري لمدة شهر" : "ساري لمدة 3 أشهر (فصل كامل)";
+          student.expiresAt = months === 1 ? "ساري لمدة شهر (30 يوماً)" : "ساري لمدة 3 أشهر (فصل دراسي كامل)";
+          student.subscriptionEndTimestamp = Date.now() + (days * 24 * 60 * 60 * 1000);
+          delete student.trialEndTimestamp;
           DataStore.save("students", State.students);
+          App.showSecurityAlert(`تم تفعيل اشتراك الطالب (${student.name}) بنجاح وبإمكانه التمتع بكافة المزايا.`);
           UI.render();
         }
       },

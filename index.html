@@ -365,7 +365,7 @@
       min-height: 70vh; line-height: 1.8; font-size: 0.95rem; user-select: text;
     }
 
-    /* أنماط السبورة الاحترافية المحدثة */
+    /* أنماط السبورة الاحترافية المحدثة مع دعم التكبير والتركيز */
     .whiteboard-container {
       width: 100%; flex: 1; min-height: 480px; position: relative;
       touch-action: none; display: flex; flex-direction: column; background: #070D18; overflow: hidden;
@@ -404,10 +404,18 @@
     }
 
     .wb-page-navigation-strip {
-      position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 100;
+      position: absolute; top: 12px; left: 16px; z-index: 100;
       background: rgba(10, 20, 36, 0.92); border: 1.5px solid var(--gold-orange); border-radius: 50px;
       padding: 5px 16px; display: none; align-items: center; gap: 10px; color: #FFF; font-size: 0.8rem;
       box-shadow: 0 6px 20px rgba(0,0,0,0.5); backdrop-filter: blur(6px);
+    }
+
+    /* شريط التحكم بالمرفق الذكي (تكبير وتصغير وتحديد جزء معين للشرح) */
+    .wb-media-navigation-strip {
+      position: absolute; top: 12px; right: 16px; z-index: 101;
+      background: rgba(10, 20, 36, 0.94); border: 1.5px solid var(--gold-orange); border-radius: 50px;
+      padding: 5px 14px; display: none; align-items: center; gap: 8px; color: #FFF; font-size: 0.8rem;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.5); backdrop-filter: blur(6px); flex-wrap: wrap;
     }
 
     .whiteboard-fullscreen-mode {
@@ -447,6 +455,8 @@
       .pro-floating-return-btn { top: 12px; right: 12px; padding: 8px 14px; font-size: 0.8rem; }
       .wb-controls-bar { padding: 6px; gap: 6px; }
       .wb-tool-group { padding: 3px 6px; }
+      .wb-media-navigation-strip { top: 48px; right: 8px; left: 8px; justify-content: center; border-radius: var(--radius-sm); }
+      .wb-page-navigation-strip { left: 8px; right: 8px; top: 8px; justify-content: center; }
     }
     
     footer.app-footer { background: var(--navy-gradient); color: var(--white); padding: 18px 20px; margin-top: auto; text-align: center; border-top: 2px solid var(--gold-orange); }
@@ -567,7 +577,7 @@
           <i class="fa-solid fa-pen-ruler" style="font-size: 1.3rem; color: #FCD34D;"></i>
           <div>
             <strong style="display:block; font-size:0.92rem;">السبورة التفاعلية الذكية الاحترافية</strong>
-            <span style="font-size:0.75rem; color:#DDD6FE;">تغيير الخلفية (أبيض/أسود)، إرفاق PDF، باوربوينت، صور، ومتصفح مع البث المباشر</span>
+            <span style="font-size:0.75rem; color:#DDD6FE;">تغيير الخلفية (أبيض/أسود)، تكبير وتحديد أجزاء المسائل من PDF وصور، ومتصفح</span>
           </div>
         </button>
 
@@ -622,7 +632,7 @@
     </div>
   </div>
 
-  <!-- سبورة المعلم التفاعلية الذكية الاحترافية المطورة بالكامل -->
+  <!-- سبورة المعلم التفاعلية الذكية الاحترافية المطورة بالكامل مع ميزة التكبير وتحديد المسائل -->
   <div class="modal-overlay" id="whiteboardModal" style="z-index: 2700;">
     <div class="modal-card" id="whiteboardModalCard" style="max-width: 1150px; width: 96vw; height: 92vh; padding: 0; background: #0A1424; display: flex; flex-direction: column; overflow: hidden; border-color: var(--gold-orange);">
       
@@ -640,19 +650,30 @@
           <button class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.redo()" title="إعادة"><i class="fa-solid fa-rotate-right"></i> إعادة</button>
           <button class="btn btn-gold" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.downloadSnapshot()" title="حفظ السبورة كصورة"><i class="fa-solid fa-download"></i> لقطة</button>
           <button class="btn btn-purple" id="btnWbFullscreen" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.toggleFullscreen()"><i class="fa-solid fa-expand"></i> تكبير الشاشة</button>
-          <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.clear(true)"><i class="fa-solid fa-trash"></i> مسح الكل</button>
+          <button class="btn btn-danger" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.clear(true)"><i class="fa-solid fa-trash"></i> مسح الرسومات</button>
           <button class="btn btn-danger" style="padding:4px 12px; font-size:0.75rem; min-height:30px;" onclick="LiveWhiteboard.close()"><i class="fa-solid fa-xmark"></i> إنهاء</button>
         </div>
       </div>
 
-      <!-- مساحة الرسم والكانفاس مع شريط تقليب صفحات الـ PDF / الشرائح المعروضة -->
+      <!-- مساحة الرسم والكانفاس مع أشرطة التحكم بالتكبير والتنقل بين الصفحات -->
       <div class="whiteboard-container" id="whiteboardContainer">
+        
         <!-- شريط التنقل بين صفحات الـ PDF والشرائح المرفقة -->
         <div class="wb-page-navigation-strip" id="wbPageNavStrip">
           <button class="btn btn-secondary" style="padding:2px 8px; min-height:24px; font-size:0.75rem;" onclick="LiveWhiteboard.prevPage()"><i class="fa-solid fa-chevron-right"></i> السابق</button>
           <span>صفحة: <strong id="wbCurrentPageNum" style="color:var(--gold-orange);">1</strong> من <strong id="wbTotalPagesCount">1</strong></span>
           <button class="btn btn-secondary" style="padding:2px 8px; min-height:24px; font-size:0.75rem;" onclick="LiveWhiteboard.nextPage()">التالي <i class="fa-solid fa-chevron-left"></i></button>
-          <button class="btn btn-danger" style="padding:2px 6px; min-height:24px; font-size:0.7rem;" onclick="LiveWhiteboard.closeDocument()"><i class="fa-solid fa-xmark"></i> إغلاق الملف</button>
+        </div>
+
+        <!-- شريط التحكم الذكي بالمرفق (تكبير، تصغير، تحديد جزء للشرح، وإعادة الضبط) -->
+        <div class="wb-media-navigation-strip" id="wbMediaControlStrip">
+          <span style="font-size:0.75rem; font-weight:800; color:var(--gold-orange);"><i class="fa-solid fa-file-image"></i> تحكم المرفق:</span>
+          <button class="btn btn-secondary" style="padding:2px 8px; min-height:24px; font-size:0.75rem;" onclick="LiveWhiteboard.zoomMedia(1.2)" title="تكبير المرفق"><i class="fa-solid fa-magnifying-glass-plus"></i> تكبير</button>
+          <button class="btn btn-secondary" style="padding:2px 8px; min-height:24px; font-size:0.75rem;" onclick="LiveWhiteboard.zoomMedia(0.8)" title="تصغير المرفق"><i class="fa-solid fa-magnifying-glass-minus"></i> تصغير</button>
+          <button class="btn btn-gold" id="wbBtnFocusSelect" style="padding:2px 10px; min-height:24px; font-size:0.75rem;" onclick="LiveWhiteboard.activateFocusSelect()" title="تحديد مسألة أو جزء معين والتركيز عليه للشرح"><i class="fa-solid fa-crop-simple"></i> تحديد جزء للشرح</button>
+          <button class="btn btn-secondary" id="wbBtnResetFocus" style="display:none; padding:2px 8px; min-height:24px; font-size:0.75rem;" onclick="LiveWhiteboard.resetFocusCrop()" title="إعادة عرض الصفحة كاملة"><i class="fa-solid fa-expand"></i> عرض الصفحة كاملة</button>
+          <button class="btn btn-secondary" style="padding:2px 8px; min-height:24px; font-size:0.75rem;" onclick="LiveWhiteboard.resetMediaZoom()" title="إعادة للوضع الطبيعي"><i class="fa-solid fa-arrows-rotate"></i> ضبط الحجم</button>
+          <button class="btn btn-danger" style="padding:2px 6px; min-height:24px; font-size:0.7rem;" onclick="LiveWhiteboard.removeAttachedMedia()" title="حذف المرفق من السبورة"><i class="fa-solid fa-trash-can"></i> إزالة المرفق</button>
         </div>
 
         <canvas id="interactiveWhiteboardCanvas"></canvas>
@@ -660,11 +681,12 @@
 
       <!-- شريط الأدوات المتقدم والسفلي للسبورة -->
       <div class="wb-controls-bar">
-        <!-- خيارات نمط الأداة (قلم، تظليل، ممحاة، أشكال) -->
+        <!-- خيارات نمط الأداة (قلم، تظليل، ممحاة، أشكال، تحريك) -->
         <div class="wb-tool-group">
           <button class="wb-tool-btn active" id="wbToolPen" onclick="LiveWhiteboard.setTool('pen')" title="قلم كتابة وحل المسائل"><i class="fa-solid fa-pen"></i> قلم</button>
           <button class="wb-tool-btn" id="wbToolHighlighter" onclick="LiveWhiteboard.setTool('highlighter')" title="قلم تظليل شفاف"><i class="fa-solid fa-highlighter"></i> تحديد</button>
           <button class="wb-tool-btn" id="wbToolEraser" onclick="LiveWhiteboard.setTool('eraser')" title="ممحاة احترافية"><i class="fa-solid fa-eraser"></i> ممحاة</button>
+          <button class="wb-tool-btn" id="wbToolPan" onclick="LiveWhiteboard.setTool('pan')" title="تحريك وسحب المرفق والمسائل"><i class="fa-solid fa-hand"></i> تحريك</button>
           <button class="wb-tool-btn" id="wbToolLine" onclick="LiveWhiteboard.setTool('line')" title="رسم خط مستقيم"><i class="fa-solid fa-slash"></i> خط</button>
           <button class="wb-tool-btn" id="wbToolRect" onclick="LiveWhiteboard.setTool('rect')" title="رسم مستطيل/مربع"><i class="fa-regular fa-square"></i> مستطيل</button>
           <button class="wb-tool-btn" id="wbToolCircle" onclick="LiveWhiteboard.setTool('circle')" title="رسم دائرة هندسية"><i class="fa-regular fa-circle"></i> دائرة</button>
@@ -706,7 +728,7 @@
         <!-- إرفاق ملفات: صور، بي دي اف، باوربوينت، أو فتح متصفح -->
         <div class="wb-tool-group">
           <button class="wb-tool-btn" onclick="document.getElementById('wbImageInput').click()" title="إرفاق صورة مسألة أو سبورة"><i class="fa-solid fa-image" style="color:#F59E0B;"></i> صورة</button>
-          <button class="wb-tool-btn" onclick="document.getElementById('wbDocumentInput').click()" title="إرفاق ملف PDF أو شرائح باوربوينت"><i class="fa-solid fa-file-pdf" style="color:#EF4444;"></i> PDF/شرائح</button>
+          <button class="wb-tool-btn" onclick="document.getElementById('wbDocumentInput').click()" title="إرفاق ملف PDF أو أوراق عمل"><i class="fa-solid fa-file-pdf" style="color:#EF4444;"></i> PDF/أوراق عمل</button>
           <button class="wb-tool-btn" onclick="LiveWhiteboard.promptBrowserUrl()" title="فتح متصفح أو تطبيق ويب ومحاكاة"><i class="fa-solid fa-globe" style="color:#38BDF8;"></i> متصفح ويب</button>
           
           <input type="file" id="wbImageInput" accept="image/*" style="display:none;" onchange="LiveWhiteboard.handleImageUpload(event)">
@@ -1788,12 +1810,12 @@
       { id: 'SUD_12_LIT', name: 'الثالث ثانوي (أدبي)', system: 'سوداني', full: 'الصف الثالث ثانوي (المساق الأدبي) – الشهادة السودانية' }
     ];
 
-    /* السبورة التفاعلية الذكية الاحترافية المطورة بالكامل */
+    /* السبورة التفاعلية الذكية الاحترافية المطورة مع دعم التكبير، التحريك، واقتصاص وتحديد جزء معين للشرح */
     const LiveWhiteboard = {
       canvas: null,
       ctx: null,
       isDrawing: false,
-      currentTool: 'pen', // 'pen', 'highlighter', 'eraser', 'line', 'rect', 'circle'
+      currentTool: 'pen', // 'pen', 'highlighter', 'eraser', 'line', 'rect', 'circle', 'pan'
       currentColor: '#FFFFFF',
       currentStrokeWidth: 4,
       backgroundColor: '#070D18',
@@ -1813,6 +1835,12 @@
       totalPdfPages: 1,
       lastBrowserUrl: '',
 
+      // إدارة المرفقات (صور، PDF، أوراق عمل) مع دعم التكبير والتركيز
+      attachedMedia: null, // { source, type, naturalWidth, naturalHeight, cropX, cropY, cropW, cropH, scale, panX, panY, isCropped, destX, destY, destW, destH }
+      isSelectingFocus: false,
+      selectionSnapshot: null,
+      lastPanPoint: null,
+
       init() {
         this.canvas = document.getElementById('interactiveWhiteboardCanvas');
         if (!this.canvas) return;
@@ -1822,8 +1850,22 @@
 
         // الاستماع لأحداث الفأرة واللمس بدقة
         const start = (e) => {
-          this.isDrawing = true;
           const pos = this.getPos(e);
+
+          if (this.isSelectingFocus) {
+            this.startX = pos.x;
+            this.startY = pos.y;
+            this.selectionSnapshot = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
+            return;
+          }
+
+          if (this.currentTool === 'pan') {
+            this.isDrawing = true;
+            this.lastPanPoint = pos;
+            return;
+          }
+
+          this.isDrawing = true;
           this.startX = pos.x;
           this.startY = pos.y;
           this.snapshotBeforeShape = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
@@ -1836,8 +1878,37 @@
         };
 
         const move = (e) => {
-          if (!this.isDrawing) return;
           const pos = this.getPos(e);
+
+          if (this.isSelectingFocus && this.selectionSnapshot) {
+            // رسم مستطيل التحديد لاقتصاص وتكبير مسألة معينة
+            this.ctx.putImageData(this.selectionSnapshot, 0, 0);
+            this.ctx.save();
+            this.ctx.strokeStyle = '#F59E0B';
+            this.ctx.lineWidth = 2.5;
+            this.ctx.setLineDash([6, 4]);
+            const rectW = pos.x - this.startX;
+            const rectH = pos.y - this.startY;
+            this.ctx.strokeRect(this.startX, this.startY, rectW, rectH);
+            this.ctx.fillStyle = 'rgba(245, 158, 11, 0.2)';
+            this.ctx.fillRect(this.startX, this.startY, rectW, rectH);
+            this.ctx.restore();
+            return;
+          }
+
+          if (!this.isDrawing) return;
+
+          if (this.currentTool === 'pan') {
+            if (this.attachedMedia && this.lastPanPoint) {
+              const dx = pos.x - this.lastPanPoint.x;
+              const dy = pos.y - this.lastPanPoint.y;
+              this.attachedMedia.panX += dx;
+              this.attachedMedia.panY += dy;
+              this.lastPanPoint = pos;
+              this.renderAttachedMediaToCanvas();
+            }
+            return;
+          }
 
           if (this.currentTool === 'pen' || this.currentTool === 'highlighter' || this.currentTool === 'eraser') {
             this.ctx.lineTo(pos.x, pos.y);
@@ -1861,9 +1932,16 @@
           }
         };
 
-        const end = () => {
+        const end = (e) => {
+          if (this.isSelectingFocus && this.selectionSnapshot) {
+            const endPos = (e && e.clientX) ? this.getPos(e) : { x: this.startX, y: this.startY };
+            this.finalizeFocusCrop(this.startX, this.startY, endPos.x, endPos.y);
+            return;
+          }
+
           if (this.isDrawing) {
             this.isDrawing = false;
+            this.lastPanPoint = null;
             this.saveStateToHistory();
           }
         };
@@ -1874,7 +1952,7 @@
 
         this.canvas.addEventListener('touchstart', (e) => { e.preventDefault(); start(e.touches[0]); }, { passive: false });
         this.canvas.addEventListener('touchmove', (e) => { e.preventDefault(); move(e.touches[0]); }, { passive: false });
-        window.addEventListener('touchend', end);
+        window.addEventListener('touchend', (e) => { end(e.changedTouches ? e.changedTouches[0] : null); });
 
         this.startHeartbeat();
       },
@@ -1967,7 +2045,9 @@
         this.canvas.width = w;
         this.canvas.height = h;
 
-        if (oldData) {
+        if (this.attachedMedia) {
+          this.renderAttachedMediaToCanvas();
+        } else if (oldData) {
           this.clear(false);
           this.ctx.putImageData(oldData, 0, 0);
         } else {
@@ -1984,15 +2064,25 @@
       },
 
       setTool(tool) {
+        if (this.isSelectingFocus) {
+          this.isSelectingFocus = false;
+          const focusBtn = document.getElementById('wbBtnFocusSelect');
+          if (focusBtn) focusBtn.classList.remove('active');
+        }
+
         this.currentTool = tool;
         document.querySelectorAll('.wb-tool-btn[id^="wbTool"]').forEach(b => b.classList.remove('active'));
         const activeBtn = document.getElementById('wbTool' + tool.charAt(0).toUpperCase() + tool.slice(1));
         if (activeBtn) activeBtn.classList.add('active');
+
+        if (this.canvas) {
+          this.canvas.style.cursor = (tool === 'pan') ? 'grab' : 'crosshair';
+        }
       },
 
       setColor(colorHex, element) {
         this.currentColor = colorHex;
-        if (this.currentTool === 'eraser') {
+        if (this.currentTool === 'eraser' || this.currentTool === 'pan') {
           this.setTool('pen');
         }
         document.querySelectorAll('.wb-color-circle').forEach(c => c.classList.remove('active'));
@@ -2010,14 +2100,17 @@
         const picker = document.getElementById('wbBgColorPicker');
         if (picker) picker.value = colorHex;
 
-        // تبديل تلقائي للون القلم إذا تعارض مع الخلفية الجديدة
         if (colorHex.toUpperCase() === '#FFFFFF' && this.currentColor.toUpperCase() === '#FFFFFF') {
           this.setColor('#0F172A', null);
         } else if (colorHex === '#070D18' && this.currentColor === '#0F172A') {
           this.setColor('#FFFFFF', null);
         }
 
-        this.drawBackground();
+        if (this.attachedMedia) {
+          this.renderAttachedMediaToCanvas();
+        } else {
+          this.drawBackground();
+        }
         this.saveStateToHistory();
         App.showSecurityAlert("تم تحديث لون خلفية السبورة.");
       },
@@ -2026,7 +2119,11 @@
         this.showGrid = !this.showGrid;
         const btn = document.getElementById('wbGridToggleBtn');
         if (btn) btn.classList.toggle('active', this.showGrid);
-        this.drawBackground();
+        if (this.attachedMedia) {
+          this.renderAttachedMediaToCanvas();
+        } else {
+          this.drawBackground();
+        }
         this.saveStateToHistory();
       },
 
@@ -2053,10 +2150,16 @@
 
       async clear(confirmAction = false) {
         if (confirmAction) {
-          const yes = await NotificationEngine.confirm("هل أنت متأكد من مسح كافة الرسومات على السبورة؟", "مسح السبورة");
+          const yes = await NotificationEngine.confirm("هل أنت متأكد من مسح الرسومات على السبورة؟", "مسح السبورة");
           if (!yes) return;
         }
-        this.drawBackground();
+
+        if (this.attachedMedia) {
+          // مسح الرسومات وإعادة رسم المرفق نظيفاً للشرح مجدداً
+          this.renderAttachedMediaToCanvas();
+        } else {
+          this.drawBackground();
+        }
         this.historyStack = [];
         this.historyIndex = -1;
         this.saveStateToHistory();
@@ -2079,6 +2182,11 @@
         setTimeout(() => this.resize(), 100);
       },
 
+      showMediaToolbar(show = true) {
+        const bar = document.getElementById('wbMediaControlStrip');
+        if (bar) bar.style.display = show ? 'flex' : 'none';
+      },
+
       handleImageUpload(e) {
         const file = e.target.files[0];
         if (!file) return;
@@ -2086,17 +2194,29 @@
         reader.onload = (event) => {
           const img = new Image();
           img.onload = () => {
-            const hRatio = this.canvas.width / img.width;
-            const vRatio = this.canvas.height / img.height;
-            const ratio = Math.min(hRatio, vRatio, 1);
-            const w = img.width * ratio;
-            const h = img.height * ratio;
-            const x = (this.canvas.width - w) / 2;
-            const y = (this.canvas.height - h) / 2;
+            const w = img.naturalWidth || img.width;
+            const h = img.naturalHeight || img.height;
+            this.attachedMedia = {
+              source: img,
+              type: 'image',
+              naturalWidth: w,
+              naturalHeight: h,
+              cropX: 0,
+              cropY: 0,
+              cropW: w,
+              cropH: h,
+              scale: 1.0,
+              panX: 0,
+              panY: 0,
+              isCropped: false
+            };
+            this.showMediaToolbar(true);
+            const resetBtn = document.getElementById('wbBtnResetFocus');
+            if (resetBtn) resetBtn.style.display = 'none';
 
-            this.ctx.drawImage(img, x, y, w, h);
+            this.renderAttachedMediaToCanvas();
             this.saveStateToHistory();
-            App.showSecurityAlert("📷 تم إرفاق الصورة على السبورة وعرضها للطلاب.");
+            App.showSecurityAlert("📷 تم إرفاق الصورة. يمكنك تكبيرها، تصغيرها، أو تحديد أي مسألة للشرح عليها!");
           };
           img.src = event.target.result;
         };
@@ -2117,8 +2237,8 @@
 
           document.getElementById('wbTotalPagesCount').innerText = this.totalPdfPages;
           document.getElementById('wbPageNavStrip').style.display = 'flex';
-          this.renderPdfPageOnCanvas(this.activePdfPage);
-          App.showSecurityAlert("📄 تم تحميل ملف الشرائح والـ PDF على السبورة بنجاح!");
+          await this.renderPdfPageOnCanvas(this.activePdfPage);
+          App.showSecurityAlert("📄 تم تحميل ملف الـ PDF وأوراق العمل على السبورة بنجاح!");
         } catch(err) {
           NotificationEngine.alert("تعذر قراءة المستند. تأكد من صحة ملف الـ PDF أو الشرائح.", "خطأ بالملف");
         }
@@ -2127,9 +2247,8 @@
       async renderPdfPageOnCanvas(pageNum) {
         if (!this.activePdfDoc) return;
         const page = await this.activePdfDoc.getPage(pageNum);
-        const tempViewport = page.getViewport({ scale: 1 });
-        const scale = Math.min(this.canvas.width / tempViewport.width, this.canvas.height / tempViewport.height);
-        const viewport = page.getViewport({ scale });
+        // تصيير بدقة عالية جداً (High DPI 2x) حتى تظل الخطوط والأرقام واضحة تماماً عند التكبير والتركيز
+        const viewport = page.getViewport({ scale: 2.0 });
 
         const offCanvas = document.createElement('canvas');
         offCanvas.width = viewport.width;
@@ -2138,12 +2257,172 @@
 
         await page.render({ canvasContext: offCtx, viewport: viewport }).promise;
 
-        this.drawBackground();
-        const x = (this.canvas.width - viewport.width) / 2;
-        const y = (this.canvas.height - viewport.height) / 2;
-        this.ctx.drawImage(offCanvas, x, y);
+        this.attachedMedia = {
+          source: offCanvas,
+          type: 'pdf',
+          naturalWidth: offCanvas.width,
+          naturalHeight: offCanvas.height,
+          cropX: 0,
+          cropY: 0,
+          cropW: offCanvas.width,
+          cropH: offCanvas.height,
+          scale: 1.0,
+          panX: 0,
+          panY: 0,
+          isCropped: false
+        };
+
+        this.showMediaToolbar(true);
+        const resetBtn = document.getElementById('wbBtnResetFocus');
+        if (resetBtn) resetBtn.style.display = 'none';
+
+        this.renderAttachedMediaToCanvas();
         this.saveStateToHistory();
         document.getElementById('wbCurrentPageNum').innerText = pageNum;
+      },
+
+      renderAttachedMediaToCanvas() {
+        if (!this.ctx || !this.canvas) return;
+        this.drawBackground();
+
+        if (!this.attachedMedia || !this.attachedMedia.source) return;
+
+        const cw = this.canvas.width;
+        const ch = this.canvas.height;
+        const srcW = this.attachedMedia.cropW;
+        const srcH = this.attachedMedia.cropH;
+
+        const baseScale = Math.min((cw * 0.95) / srcW, (ch * 0.95) / srcH);
+        const finalScale = baseScale * (this.attachedMedia.scale || 1.0);
+
+        const dw = srcW * finalScale;
+        const dh = srcH * finalScale;
+        const dx = (cw - dw) / 2 + (this.attachedMedia.panX || 0);
+        const dy = (ch - dh) / 2 + (this.attachedMedia.panY || 0);
+
+        this.attachedMedia.destX = dx;
+        this.attachedMedia.destY = dy;
+        this.attachedMedia.destW = dw;
+        this.attachedMedia.destH = dh;
+
+        this.ctx.drawImage(
+          this.attachedMedia.source,
+          this.attachedMedia.cropX, this.attachedMedia.cropY, this.attachedMedia.cropW, this.attachedMedia.cropH,
+          dx, dy, dw, dh
+        );
+      },
+
+      // تكبير أو تصغير المرفق
+      zoomMedia(multiplier) {
+        if (!this.attachedMedia) {
+          NotificationEngine.alert("يرجى إرفاق صورة أو ورقة عمل أولاً لتكبيرها وتصغيرها.", "تنبيه");
+          return;
+        }
+        this.attachedMedia.scale = Math.max(0.4, Math.min(6.0, this.attachedMedia.scale * multiplier));
+        this.renderAttachedMediaToCanvas();
+        this.saveStateToHistory();
+        App.showSecurityAlert(`🔍 نسبة التكبير: ${Math.round(this.attachedMedia.scale * 100)}%`);
+      },
+
+      // إعادة ضبط حجم وموضع المرفق
+      resetMediaZoom() {
+        if (!this.attachedMedia) return;
+        this.attachedMedia.scale = 1.0;
+        this.attachedMedia.panX = 0;
+        this.attachedMedia.panY = 0;
+        this.renderAttachedMediaToCanvas();
+        this.saveStateToHistory();
+        App.showSecurityAlert("تمت إعادة ضبط المرفق للوضع الافتراضي.");
+      },
+
+      // تفعيل وضع تحديد مسألة أو جزء معين من الورقة للتركيز عليه وتكبيره للشرح
+      activateFocusSelect() {
+        if (!this.attachedMedia) {
+          NotificationEngine.alert("يرجى إرفاق صورة أو ملف PDF أولاً لتحديد مسألة للشرح.", "تنبيه");
+          return;
+        }
+        this.isSelectingFocus = true;
+        if (this.canvas) this.canvas.style.cursor = 'crosshair';
+        const focusBtn = document.getElementById('wbBtnFocusSelect');
+        if (focusBtn) focusBtn.classList.add('active');
+        App.showSecurityAlert("🎯 اسحب بالمؤشر فوق المسألة أو الجزئية التي تريد تكبيرها والتركيز عليها.");
+      },
+
+      // تنفيذ الاقتصاص والتركيز والتكبير الفوري للجزء المحدد
+      finalizeFocusCrop(x1, y1, x2, y2) {
+        this.isSelectingFocus = false;
+        const focusBtn = document.getElementById('wbBtnFocusSelect');
+        if (focusBtn) focusBtn.classList.remove('active');
+        this.setTool(this.currentTool === 'pan' ? 'pan' : 'pen');
+
+        const selX = Math.min(x1, x2);
+        const selY = Math.min(y1, y2);
+        const selW = Math.abs(x2 - x1);
+        const selH = Math.abs(y2 - y1);
+
+        if (selW < 20 || selH < 20 || !this.attachedMedia) {
+          this.renderAttachedMediaToCanvas();
+          return;
+        }
+
+        const med = this.attachedMedia;
+        const scaleX = med.cropW / med.destW;
+        const scaleY = med.cropH / med.destH;
+
+        const newCropX = med.cropX + (selX - med.destX) * scaleX;
+        const newCropY = med.cropY + (selY - med.destY) * scaleY;
+        const newCropW = selW * scaleX;
+        const newCropH = selH * scaleY;
+
+        med.cropX = Math.max(0, Math.min(med.naturalWidth - 10, newCropX));
+        med.cropY = Math.max(0, Math.min(med.naturalHeight - 10, newCropY));
+        med.cropW = Math.max(20, Math.min(med.naturalWidth - med.cropX, newCropW));
+        med.cropH = Math.max(20, Math.min(med.naturalHeight - med.cropY, newCropH));
+        med.scale = 1.0;
+        med.panX = 0;
+        med.panY = 0;
+        med.isCropped = true;
+
+        const resetBtn = document.getElementById('wbBtnResetFocus');
+        if (resetBtn) resetBtn.style.display = 'inline-flex';
+
+        this.renderAttachedMediaToCanvas();
+        this.saveStateToHistory();
+        AudioFX.correct();
+        App.showSecurityAlert("🔍 تم تكبير المسألة بنجاح والتركيز عليها. يمكنك الشرح والحل عليها مباشرة الآن!");
+      },
+
+      // إلغاء التركيز والعودة لعرض الصفحة كاملة
+      resetFocusCrop() {
+        if (!this.attachedMedia) return;
+        this.attachedMedia.cropX = 0;
+        this.attachedMedia.cropY = 0;
+        this.attachedMedia.cropW = this.attachedMedia.naturalWidth;
+        this.attachedMedia.cropH = this.attachedMedia.naturalHeight;
+        this.attachedMedia.scale = 1.0;
+        this.attachedMedia.panX = 0;
+        this.attachedMedia.panY = 0;
+        this.attachedMedia.isCropped = false;
+
+        const resetBtn = document.getElementById('wbBtnResetFocus');
+        if (resetBtn) resetBtn.style.display = 'none';
+
+        this.renderAttachedMediaToCanvas();
+        this.saveStateToHistory();
+        App.showSecurityAlert("تمت استعادة الصفحة كاملة.");
+      },
+
+      // إزالة المرفق من السبورة
+      async removeAttachedMedia() {
+        const confirmRem = await NotificationEngine.confirm("هل أنت متأكد من إزالة المرفق والعودة للسبورة الخالية؟", "إزالة المرفق");
+        if (!confirmRem) return;
+
+        this.attachedMedia = null;
+        this.activePdfDoc = null;
+        this.showMediaToolbar(false);
+        document.getElementById('wbPageNavStrip').style.display = 'none';
+        this.clear(false);
+        App.showSecurityAlert("تمت إزالة المرفق من السبورة.");
       },
 
       nextPage() {
@@ -2159,9 +2438,7 @@
       },
 
       closeDocument() {
-        this.activePdfDoc = null;
-        document.getElementById('wbPageNavStrip').style.display = 'none';
-        this.clear(false);
+        this.removeAttachedMedia();
       },
 
       async promptBrowserUrl() {
@@ -3306,7 +3583,7 @@
       currentQIndex: 0, score: 0,
       startSpeedBattle() { this.currentQIndex = 0; this.score = 0; App.setRoute('SPEED_BATTLE_VIEW'); },
       answerSpeed(optIdx) {
-        const q = this.dailyQuestions[this.currentQIndex];
+        const q = MathArena.dailyQuestions[MathArena.currentQIndex];
         if (optIdx === q.correct) { this.score += 50; AudioFX.correct(); } else { AudioFX.wrong(); }
         this.currentQIndex++;
         if (this.currentQIndex < this.dailyQuestions.length) {
@@ -5851,3 +6128,4 @@
   </script>
 </body>
 </html>
+

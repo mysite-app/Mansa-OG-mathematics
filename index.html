@@ -71,7 +71,6 @@
     #securityPrivacyShield { position: fixed; inset: 0; background: rgba(10, 20, 36, 0.98); z-index: 99999; display: none; flex-direction: column; align-items: center; justify-content: center; color: var(--white); text-align: center; padding: 24px; }
     #confettiCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3000; }
     
-    /* هيدر متجاوب ومرن لمنع التداخل */
     header.app-header {
       background: var(--navy-gradient);
       color: var(--white);
@@ -129,7 +128,6 @@
     .badge-custom-assigned { background: #FEF3C7; color: #B45309; border: 1.5px dashed var(--gold-orange); font-weight: 800; }
     .badge-locked { background: #FEF2F2; color: #991B1B; border: 1.5px solid #F87171; font-weight: 800; }
 
-    /* لوحة تحكم الطالب العصرية */
     .student-hero-banner {
       background: linear-gradient(135deg, #0A1424 0%, #162642 70%, #1E3A8A 100%);
       color: #FFF; border-radius: var(--radius-lg); padding: 22px 20px;
@@ -156,7 +154,6 @@
       font-size: 1.1rem;
     }
 
-    /* قسم المسابقات التلقائية في لوحة الطالب */
     .active-competitions-section {
       background: linear-gradient(135deg, #FAF5FF 0%, #FFFFFF 100%);
       border: 2px solid #8B5CF6; border-radius: var(--radius-lg);
@@ -173,7 +170,6 @@
     }
     .comp-student-card:hover { border-color: #8B5CF6; transform: translateY(-2px); box-shadow: var(--shadow-md); }
 
-    /* شريط المعاينة للأدمن */
     .admin-preview-top-bar {
       background: linear-gradient(90deg, #1E1B4B 0%, #4338CA 100%);
       color: #FFF; padding: 10px 18px; display: flex; justify-content: space-between;
@@ -271,7 +267,6 @@
     @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
     .visualizer-canvas { width: 100%; height: 40px; background: rgba(0,0,0,0.4); border-radius: 6px; border: 1px solid rgba(255,255,255,0.08); }
-
     .hand-raised-pulse { animation: pulseHand 1.5s infinite; background: #F59E0B !important; color: #0A1424 !important; font-weight: 800; }
     @keyframes pulseHand { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); } 100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); } }
 
@@ -283,7 +278,6 @@
 
     .participant-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 12px; background: var(--bg-light); border: 1px solid #E2E8F0; border-radius: var(--radius-sm); margin-bottom: 6px; }
 
-    /* تصميم الوحدات وعرض الدروس بنظام الشبكة العصرية للطلاب */
     .unit-container-block { margin-bottom: 18px; border-radius: var(--radius-md); border: 1.5px solid #CBD5E1; background: var(--white); overflow: hidden; box-shadow: var(--shadow-sm); transition: var(--transition); }
     .unit-container-block.is-locked { border-color: #FCA5A5; opacity: 0.96; }
     .unit-header-bar { background: linear-gradient(90deg, #0A1424 0%, #162642 100%); color: #FFF; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-right: 5px solid var(--gold-orange); user-select: none; transition: var(--transition); }
@@ -297,7 +291,6 @@
       padding: 16px; text-align: center; color: #991B1B;
     }
     
-    /* شبكة بطاقات الدروس الاحترافية بدلاً من السرد الطولي */
     .student-lessons-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -339,15 +332,11 @@
     .lesson-actions-tray {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
       padding-top: 10px;
       border-top: 1px dashed #E2E8F0;
     }
 
-    .lesson-item-wrapper { background: #FFFFFF; border: 1.5px solid #E2E8F0; border-radius: var(--radius-sm); padding: 14px; transition: var(--transition); }
-    .lesson-item-wrapper:hover { border-color: var(--gold-orange); box-shadow: var(--shadow-sm); }
-    .lesson-title-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 6px; }
-    
     .grid-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px; }
     .search-box-wrapper { position: relative; margin-bottom: 16px; }
     .search-box-wrapper input { width: 100%; padding: 12px 42px 12px 16px; border: 1.5px solid var(--border-color); border-radius: var(--radius-md); background: var(--white); font-size: 0.9rem; outline: none; }
@@ -357,7 +346,7 @@
     .plan-card { border: 1.5px solid rgba(245, 158, 11, 0.3); border-radius: var(--radius-lg); padding: 24px 18px; text-align: center; background: var(--white); position: relative; }
     .plan-card.featured { border-color: var(--gold-orange); background: linear-gradient(180deg, var(--white) 0%, var(--gold-light) 100%); }
     .plan-badge-top { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--navy-dark); color: var(--gold-orange); padding: 3px 14px; border-radius: 50px; font-size: 0.72rem; font-weight: 800; border: 1px solid var(--gold-orange); }
-    .plan-price { font-size: 2rem; font-weight: 900; color: var(--navy-dark); margin: 12px 0; }
+    .plan-price { font-size: 1.25rem; font-weight: 900; color: var(--gold-deep); margin: 14px 0; }
     
     .player-modal-content { position: relative; background: var(--navy-dark); border-radius: var(--radius-md); overflow: hidden; display: flex; flex-direction: column; color: #FFF; width: 100%; height: 100%; }
     .player-toolbar { display: flex; justify-content: space-between; align-items: center; background: var(--navy-dark); padding: 10px 16px; border-bottom: 1px solid rgba(245, 158, 11, 0.2); font-size: 0.82rem; }
@@ -406,7 +395,7 @@
     .cert-logo-img { width: 100%; height: 100%; object-fit: contain; border-radius: 50%; }
     
     .table-container { overflow-x: auto; border: 1px solid #E2E8F0; border-radius: var(--radius-md); background: var(--white); -webkit-overflow-scrolling: touch; width: 100%; }
-    table { width: 100%; border-collapse: collapse; text-align: right; min-width: 580px; }
+    table { width: 100%; border-collapse: collapse; text-align: right; min-width: 620px; }
     th, td { padding: 10px 12px; border-bottom: 1px solid #F1F5F9; font-size: 0.82rem; }
     th { background-color: var(--gold-light); color: var(--navy-dark); font-weight: 800; }
     
@@ -425,7 +414,6 @@
     .modal-card { background: var(--white); border-radius: var(--radius-lg); border: 2px solid var(--gold-orange); max-width: 720px; width: 100%; padding: 22px; position: relative; max-height: 90vh; overflow-y: auto; }
     
     .security-toast { position: fixed; top: 16px; left: 50%; transform: translateX(-50%); background: var(--danger); color: #FFF; padding: 10px 22px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; display: none; align-items: center; gap: 8px; z-index: 99999; box-shadow: var(--shadow-lg); }
-    
     .resource-field-box { background: var(--bg-light); border: 1px solid #CBD5E1; border-radius: var(--radius-sm); padding: 10px; margin-bottom: 8px; }
 
     .word-doc-sheet {
@@ -434,7 +422,6 @@
       min-height: 70vh; line-height: 1.8; font-size: 0.95rem; user-select: text;
     }
 
-    /* أنماط السبورة الاحترافية */
     .whiteboard-container { width: 100%; flex: 1; min-height: 480px; position: relative; touch-action: none; display: flex; flex-direction: column; background: #070D18; overflow: hidden; }
     #interactiveWhiteboardCanvas { width: 100%; height: 100%; cursor: crosshair; touch-action: none; display: block; }
     .wb-controls-bar { display: flex; gap: 10px; align-items: center; justify-content: center; padding: 10px 14px; background: #0C182C; border-top: 1.5px solid #1E2E4A; flex-wrap: wrap; user-select: none; }
@@ -457,41 +444,16 @@
     }
     .whiteboard-fullscreen-mode .whiteboard-container { height: calc(100vh - 120px) !important; min-height: 0 !important; }
 
-    /* ميديا كويري الهاتف المطور لحل مشكلة الهيدر وتداخل الأزرار */
     @media (max-width: 860px) {
-      header.app-header {
-        padding: 8px 10px;
-        gap: 6px;
-      }
-      .brand-container {
-        max-width: calc(100% - 90px);
-      }
-      .brand-text span {
-        display: none !important; /* إخفاء السطر الفرعي الطويل على الهواتف لمنع تداخل العناصر */
-      }
-      .brand-text h1 {
-        font-size: 0.96rem;
-      }
-      .brand-logo-img {
-        width: 36px;
-        height: 36px;
-      }
-      .nav-actions-wrapper {
-        gap: 4px;
-      }
-      .nav-actions-wrapper .btn {
-        padding: 4px 8px;
-        font-size: 0.72rem;
-        min-height: 30px;
-        gap: 4px;
-      }
-      .user-pill-tag {
-        max-width: 85px;
-        font-size: 0.72rem;
-      }
-      .student-lessons-grid {
-        grid-template-columns: 1fr;
-      }
+      header.app-header { padding: 8px 10px; gap: 6px; }
+      .brand-container { max-width: calc(100% - 90px); }
+      .brand-text span { display: none !important; }
+      .brand-text h1 { font-size: 0.96rem; }
+      .brand-logo-img { width: 36px; height: 36px; }
+      .nav-actions-wrapper { gap: 4px; }
+      .nav-actions-wrapper .btn { padding: 4px 8px; font-size: 0.72rem; min-height: 30px; gap: 4px; }
+      .user-pill-tag { max-width: 85px; font-size: 0.72rem; }
+      .student-lessons-grid { grid-template-columns: 1fr; }
       .broadcaster-live-bar { left: 8px; right: 8px; top: 60px; padding: 8px 10px; }
       .student-live-widget { left: 8px; right: 8px; width: auto; bottom: 70px; }
       .modal-card { padding: 14px; max-height: 94vh; width: 100%; }
@@ -544,13 +506,11 @@
     <span id="securityToastText">تنبيه أمني: محتويات منصة الأستاذ عمر محمية.</span>
   </div>
 
-  <!-- زر الرجوع والإنهاء العائم الاحترافي الشامل عند وضع ملء الشاشة أو التدوير -->
   <button class="pro-floating-return-btn" id="proFloatingReturnBtn" onclick="App.exitPlayerFullscreen()">
     <i class="fa-solid fa-arrow-right"></i>
     <span>الرجوع للوضع الطبيعي</span>
   </button>
 
-  <!-- النافذة التفاعلية العامة للرسائل والتأكيدات -->
   <div class="modal-overlay" id="customDialogOverlay" style="z-index: 100000;">
     <div class="modal-card" style="max-width: 440px; text-align: center; border-width: 2px;">
       <div id="customDialogIcon" style="font-size: 40px; margin-bottom: 12px; color: var(--gold-orange);">
@@ -570,7 +530,6 @@
     </div>
   </div>
 
-  <!-- شريط المعلم المطور أثناء البث الصوتي ومشاركة الشاشة -->
   <div class="broadcaster-live-bar" id="broadcasterLiveBar">
     <div style="display:flex; align-items:center; gap:8px;">
       <span class="live-indicator-dot"></span>
@@ -604,7 +563,6 @@
     </div>
   </div>
 
-  <!-- نافذة اختيار نمط مشاركة الشاشة والشرح المباشر -->
   <div class="modal-overlay" id="screenShareSelectModal" style="z-index: 2600;">
     <div class="modal-card" style="max-width: 520px; text-align: center;">
       <div style="width: 56px; height: 56px; border-radius: 50%; background: #FEF3C7; color: var(--gold-deep); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 26px;">
@@ -645,7 +603,6 @@
     </div>
   </div>
 
-  <!-- نافذة المعلم للتحكم بالمشاركين والمداخلات -->
   <div class="modal-overlay" id="moderationModal">
     <div class="modal-card" style="max-width: 580px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -683,7 +640,6 @@
     </div>
   </div>
 
-  <!-- سبورة المعلم التفاعلية الذكية -->
   <div class="modal-overlay" id="whiteboardModal" style="z-index: 2700;">
     <div class="modal-card" id="whiteboardModalCard" style="max-width: 1150px; width: 96vw; height: 92vh; padding: 0; background: #0A1424; display: flex; flex-direction: column; overflow: hidden; border-color: var(--gold-orange);">
       <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:#0F1E36; color:#FFF; border-bottom:1.5px solid var(--gold-orange); flex-wrap:wrap; gap:8px;">
@@ -777,7 +733,6 @@
     </div>
   </div>
 
-  <!-- نافذة عرض وشرح ملفات الباوربوينت -->
   <div class="modal-overlay" id="wbPptViewerModal" style="z-index: 2800;">
     <div class="modal-card" style="max-width: 1060px; width: 95vw; height: 88vh; padding: 0; display:flex; flex-direction:column; background:#0B1424; border-color:var(--gold-orange);">
       <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:var(--navy-gradient); color:#FFF; border-bottom:2px solid var(--gold-orange); gap:8px; flex-wrap:wrap;">
@@ -799,7 +754,6 @@
     </div>
   </div>
 
-  <!-- شريط استماع ومشاركة الطالب للبث المباشر مع ميزة كتم صوت المعلم -->
   <div class="student-live-widget" id="studentLiveWidget">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E293B; padding-bottom:6px;">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -816,7 +770,6 @@
       <button class="btn btn-danger" style="padding:2px 8px; font-size:0.7rem; min-height:24px;" onclick="LiveAudio.stopStudentSpeaking()">إنهاء المداخلة</button>
     </div>
 
-    <!-- التحكم بمستوى الصوت وكتم صوت المعلم -->
     <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; font-size:0.78rem;">
       <div style="display:flex; align-items:center; gap:6px; flex:1;">
         <i class="fa-solid fa-volume-high" style="color:var(--gold-orange);"></i>
@@ -840,7 +793,6 @@
     </div>
   </div>
 
-  <!-- دعوة الطالب لمشاهدة شاشة الشرح فوراً -->
   <div class="modal-overlay" id="screenInvitationPromptModal" style="z-index: 3000;">
     <div class="modal-card" style="max-width: 440px; text-align: center; border-color: var(--gold-orange);">
       <div style="width: 56px; height: 56px; border-radius: 50%; background: #FEF3C7; color: var(--gold-deep); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 26px;">
@@ -855,7 +807,6 @@
     </div>
   </div>
 
-  <!-- عرض شاشة الأستاذ للطلاب -->
   <div class="modal-overlay" id="studentScreenShareModal">
     <div class="modal-card" style="max-width: 1040px; padding: 0; background: #000; border-color: var(--gold-orange);">
       <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:var(--navy-dark); border-bottom:1px solid #1E293B; flex-wrap:wrap; gap:8px;">
@@ -903,7 +854,6 @@
 
   <main class="main-wrapper" id="appContainer"></main>
 
-  <!-- أدوات الطلاب العائمة -->
   <div class="floating-tools-container">
     <div class="floating-tool-btn arena" onclick="App.openArenaView()" title="حلبة فرسان الرياضيات والمسابقات">
       <i class="fa-solid fa-trophy"></i>
@@ -922,7 +872,6 @@
     </div>
   </div>
 
-  <!-- مؤقت التركيز Pomodoro -->
   <div class="timer-widget" id="timerWidget">
     <div style="display:flex; justify-content:space-between; width:100%; align-items:center; border-bottom:1px solid #334155; padding-bottom:6px;">
       <span style="font-weight:700; font-size:0.82rem; color:#F472B6;"><i class="fa-solid fa-stopwatch"></i> جلسة تركيز الرياضيات</span>
@@ -939,7 +888,6 @@
     </div>
   </div>
 
-  <!-- الحاسبة العلمية المتقدمة -->
   <div class="calculator-widget" id="calcWidget">
     <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #1E293B; padding-bottom:6px;">
       <span style="font-weight:700; font-size:0.82rem; color:var(--gold-orange);"><i class="fa-solid fa-calculator"></i> الحاسبة العلمية الآمنة</span>
@@ -1000,7 +948,6 @@
     </div>
   </div>
 
-  <!-- المساعد الذكي AI المدمج -->
   <div class="ai-chat-window" id="aiChatWindow">
     <div class="ai-chat-header">
       <div style="display:flex; align-items:center; gap:8px;">
@@ -1022,7 +969,6 @@
     </div>
   </div>
 
-  <!-- المشغل المدمج الشامل والمحمي داخلياً -->
   <div class="modal-overlay" id="mediaPlayerModal">
     <div class="modal-card" id="mediaPlayerModalCard" style="max-width: 1040px; padding: 0; background: #0A1424; border-color: var(--gold-orange); position: relative;">
       <div class="player-watermark-overlay" id="playerWatermarkLayer"></div>
@@ -1061,7 +1007,6 @@
     </div>
   </div>
 
-  <!-- استوديو البث المباشر للمعلم -->
   <div class="modal-overlay" id="broadcastStudioModal">
     <div class="modal-card" style="max-width: 620px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -1109,7 +1054,6 @@
     </div>
   </div>
 
-  <!-- بنك القوانين والمتطابقات -->
   <div class="modal-overlay" id="formulaSheetModal">
     <div class="modal-card" style="max-width: 800px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:2px solid var(--gold-subtle); padding-bottom:8px;">
@@ -1139,7 +1083,6 @@
     </div>
   </div>
 
-  <!-- إضافة وحدة تعليمية جديدة مع ميزة خيار القفل -->
   <div class="modal-overlay" id="addUnitModal">
     <div class="modal-card" style="max-width: 520px;">
       <h3 style="color: var(--navy-dark); margin-bottom: 14px;"><i class="fa-solid fa-folder-plus"></i> إضافة وحدة تعليمية جديدة</h3>
@@ -1168,7 +1111,6 @@
     </div>
   </div>
 
-  <!-- نافذة المعاينة كطالب للأدمن -->
   <div class="modal-overlay" id="adminPreviewModal">
     <div class="modal-card" style="max-width: 480px; text-align: center;">
       <div style="width: 56px; height: 56px; border-radius: 50%; background: #FEF3C7; color: var(--gold-deep); display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; font-size: 26px;">
@@ -1191,7 +1133,6 @@
     </div>
   </div>
 
-  <!-- نافذة معاينة الدرس للأدمن مع خيارات التشغيل والتعديل والحذف -->
   <div class="modal-overlay" id="adminLessonPreviewModal">
     <div class="modal-card" style="max-width: 720px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1.5px solid #E2E8F0; padding-bottom:10px;">
@@ -1206,7 +1147,6 @@
     </div>
   </div>
 
-  <!-- إدارة الدرس والموارد -->
   <div class="modal-overlay" id="unifiedLessonModal">
     <div class="modal-card" style="max-width: 780px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -1264,7 +1204,7 @@
         <div style="display:flex; flex-direction:column; gap:8px;">
           <div class="resource-field-box" style="border:1.5px solid #0284C7; background:#F0F9FF;">
             <label style="font-size:0.84rem; font-weight:800; color:#0369A1; display:block; margin-bottom:4px;">
-              <i class="fa-solid fa-code"></i> رابط تطبيق أو محاكاة HTML تفاعلية (GeoGebra / Desmos):
+              <i class="fa-solid fa-code"></i> رابط درس أو محاكاة تفاعلية (GeoGebra / Desmos):
             </label>
             <div class="input-with-paste">
               <input type="text" id="linkHtml" placeholder="https://... رابط التطبيق التفاعلي">
@@ -1323,12 +1263,11 @@
     </div>
   </div>
 
-  <!-- إنشاء مسابقة تفاعلية HTML جديدة -->
   <div class="modal-overlay" id="addCompetitionModal">
     <div class="modal-card" style="max-width: 680px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
         <h3 style="color:var(--navy-dark); font-weight:900;">
-          <i class="fa-solid fa-trophy" style="color:var(--gold-orange);"></i> إنشاء مسابقة رياضية تفاعلية (HTML)
+          <i class="fa-solid fa-trophy" style="color:var(--gold-orange);"></i> إنشاء مسابقة رياضية تفاعلية
         </h3>
         <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="App.closeAddCompetitionModal()"></i>
       </div>
@@ -1377,7 +1316,6 @@
     </div>
   </div>
 
-  <!-- تشغيل مسابقة الطالب التفاعلية داخل المنصة -->
   <div class="modal-overlay" id="competitionPlayerModal">
     <div class="modal-card" style="max-width: 1040px; height: 90vh; padding: 0; display:flex; flex-direction:column; background:#0B1424;">
       <div style="display:flex; justify-content:space-between; align-items:center; padding:10px 16px; background:var(--navy-gradient); color:#FFF; border-bottom:2px solid var(--gold-orange); flex-wrap:wrap; gap:8px;">
@@ -1395,7 +1333,6 @@
     </div>
   </div>
 
-  <!-- تقرير التقييم وواتساب لولي الأمر -->
   <div class="modal-overlay" id="evaluationModal">
     <div class="modal-card" style="max-width: 620px;">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -1456,19 +1393,25 @@
     </div>
   </div>
 
-  <!-- إعادة تعيين وتفعيل اشتراك حساب الطالب -->
+  <!-- نافذة تعديل بيانات واشتراك ومكان إقامة الطالب -->
   <div class="modal-overlay" id="studentResetModal">
     <div class="modal-card" style="max-width: 520px;">
       <div style="text-align: center; margin-bottom: 16px;">
         <div style="width: 56px; height: 56px; border-radius: 50%; background: #FEF3C7; color: var(--gold-deep); display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px;">
           <i class="fa-solid fa-id-card-clip"></i>
         </div>
-        <h3 style="color: var(--navy-dark); font-weight: 800;">إدارة اشتراك وحساب الطالب</h3>
+        <h3 style="color: var(--navy-dark); font-weight: 800;">إدارة بيانات واشتراك الطالب</h3>
         <p style="font-size: 0.8rem; color: var(--text-muted);" id="resetStudentNameDisplay"></p>
       </div>
 
       <form onsubmit="App.handleExecuteStudentReset(event)">
         <input type="hidden" id="resetStudentUid">
+
+        <!-- حقل مكان الإقامة للتعديل -->
+        <div class="form-group">
+          <label><i class="fa-solid fa-location-dot" style="color:var(--gold-orange);"></i> مكان إقامة الطالب (الدولة / المدينة)</label>
+          <input type="text" id="resetStudentResidence" placeholder="مثال: الإمارات - الشارقة أو السودان - أم درمان...">
+        </div>
 
         <div class="form-group">
           <label>تعيين كلمة مرور جديدة (اتركها فارغة إذا لم ترد التغيير)</label>
@@ -1515,7 +1458,6 @@
     </div>
   </div>
 
-  <!-- إعدادات المنصة والأمان -->
   <div class="modal-overlay" id="settingsModal">
     <div class="modal-card" style="max-width: 540px;">
       <h3 style="color: var(--navy-dark); margin-bottom: 14px;">
@@ -1570,7 +1512,6 @@
     </div>
   </div>
 
-  <!-- الشهادة المعتمدة A4 -->
   <div class="modal-overlay" id="certificateModal">
     <div class="modal-card" style="max-width: 800px;">
       <div id="printableCert" class="certificate-card">
@@ -1607,7 +1548,6 @@
     </div>
   </div>
 
-  <!-- نافذة المطور -->
   <div class="modal-overlay" id="engineerModal" onclick="App.closeEngineerModal(event)">
     <div class="modal-card" onclick="event.stopPropagation()">
       <div style="text-align: center; margin-bottom: 18px;">
@@ -1669,6 +1609,21 @@
         .replace(/[\u200B-\u200D\uFEFF]/g, '');
     }
 
+    // دالة تنظيف عنوان الدرس وحذف عبارة "محاكاة تفاعلية html" من كل الدروس
+    function cleanLessonTitle(title) {
+      if (!title) return '';
+      return title
+        .replace(/محاكاة\s*تفاعلية\s*html/gi, '')
+        .replace(/محاكاة\s*تفاعلية\s*HTML/gi, '')
+        .replace(/تطبيق\s*HTML\s*تفاعلي/gi, '')
+        .replace(/محاكاة\s*تفاعلية/gi, '')
+        .replace(/تفاعلية\s*HTML/gi, '')
+        .replace(/HTML\s*تفاعلي/gi, '')
+        .replace(/HTML\s*تفاعلية/gi, '')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+    }
+
     function cleanWhatsAppPhone(phone) {
       if (!phone) return "971505144695";
       let clean = normalizeInput(phone).replace(/[^0-9]/g, '');
@@ -1704,7 +1659,6 @@
       return formatted;
     }
 
-    /* مشغل ملفات وتطبيقات الـ HTML التفاعلية */
     const SmartHtmlLoader = {
       async renderInContainer(url, containerEl) {
         if (!containerEl) return;
@@ -1834,7 +1788,6 @@
 
     const OFFICIAL_LOGO_URL = "https://videotourl.com/images/1792673507558-0d8ff32e-d7a0-49bd-a008-2ea9fbcbf1b4.jpg";
 
-    /* تعريف المناهج والصفوف */
     const CURRICULUM_DEFINITIONS = [
       { id: 'UAE_07', name: 'الصف السابع', system: 'إماراتي', full: 'الصف السابع – المنهاج الإماراتي' },
       { id: 'UAE_08', name: 'الصف الثامن', system: 'إماراتي', full: 'الصف الثامن – المنهاج الإماراتي' },
@@ -1855,7 +1808,6 @@
       { id: 'SUD_12_LIT', name: 'الثالث ثانوي (أدبي)', system: 'سوداني', full: 'الصف الثالث ثانوي (المساق الأدبي) – الشهادة السودانية' }
     ];
 
-    /* السبورة التفاعلية الذكية */
     const LiveWhiteboard = {
       canvas: null, ctx: null, isDrawing: false, currentTool: 'pen',
       currentColor: '#FFFFFF', currentStrokeWidth: 4, backgroundColor: '#070D18',
@@ -2361,7 +2313,7 @@
                 <i class="fa-solid fa-file-powerpoint"></i>
               </div>
               <h3 style="color:#FEF08A; font-weight:800; font-size:1.15rem;">استعراض وشرح ملف باوربوينت (PPT / PPTX)</h3>
-              <p style="font-size:0.85rem; color:#CBD5E1; max-width:520px; line-height:1.7;">
+              <p style="font-size:0.85rem; color:#CBD5E1; max-width:520px; lineheight:1.7;">
                 يمكنك إدخال رابط ملف العرض التقديمي لفتحه بصيغته الأصلية مع دعم كافة الحركات والشرائح.
               </p>
               <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center;">
@@ -2571,7 +2523,7 @@
               LiveAudio.removeIncomingStudentAudio(call.peer);
             });
           });
-} catch (err) {
+        } catch (err) {
           NotificationEngine.alert("تعذر الوصول إلى المايكروفون. يرجى منح الإذن.", "خطأ");
         }
       },
@@ -2642,7 +2594,6 @@
         btn.innerHTML = this.isMuted ? '<i class="fa-solid fa-microphone-slash"></i> تم الكتم' : '<i class="fa-solid fa-microphone"></i> كتم مايكي';
       },
 
-      /* ميزة كتم صوت المعلم من قبل الطالب أثناء الاستماع والمداخلة */
       toggleTeacherAudioForStudent() {
         if (!this.listenerAudioEl) {
           NotificationEngine.alert("أنت لست متصلاً بالبث المباشر حالياً.", "تنبيه");
@@ -3332,7 +3283,7 @@
         const isUAE = target.startsWith('UAE');
         if (isUAE) {
           if (q.includes('مشتق') || q.includes('تفاضل')) {
-            return `<strong>📐 قواعد التفاضل (منهاج دولة الإمارات):</strong><br>• مشتقة القوة: \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>• مشتقة الضرب: \\( (u \\cdot v)' = u'v + u v' \\)<br>• قاعدة السلسلة: \\( \\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x) \\)`;
+            return `<strong>📐 قواعد التفاضل (منهاج دولة الإمارات):</strong><br>• مشتقة القوة: \\( \\frac{d}{dx}[x^n] = n x^{n-1} \\)<br>• مشتقة الضرب: \\( (u \\cdot v)' =u'v + u v' \\)<br>• قاعدة السلسلة: \\( \\frac{d}{dx}[f(g(x))] = f'(g(x)) \\cdot g'(x) \\)`;
           } else if (q.includes('تكامل')) {
             return `<strong>∫ قواعد التكامل الأساسية:</strong><br>• تكامل القوة: \\( \\int x^n dx = \\frac{x^{n+1}}{n+1} + C \\)<br>• الدالة الأسية: \\( \\int e^{kx} dx = \\frac{1}{k} e^{kx} + C \\)`;
           } else {
@@ -3748,13 +3699,13 @@
               id: "les_1",
               unitId: "unit_1",
               title: "الدرس الأول: قاعدة السلسلة وتفاضل الدوال المركبة",
-              description: "شرح مفصل وتطبيق قاعدة السلسلة مع تطبيق HTML تفاعلي",
+              description: "شرح مفصل وتطبيق قاعدة السلسلة وتطبيقاتها الرياضية",
               target: "UAE_12_ADV",
               assignType: "ALL",
               assignedStudentUid: null,
               htmlUrl: "https://www.geogebra.org/material/iframe/id/c8kydx2s",
               resources: [
-                { id: "res_1_1", type: "HTML_EMBED", title: "محاكاة GeoGebra التفاعلية لقاعدة السلسلة", fileUrl: "https://www.geogebra.org/material/iframe/id/c8kydx2s" },
+                { id: "res_1_1", type: "HTML_EMBED", title: "ابدأ الدرس", fileUrl: "https://www.geogebra.org/material/iframe/id/c8kydx2s" },
                 { id: "res_1_2", type: "VIDEOS", title: "فيديو شرح قاعدة السلسلة وتطبيقاتها", fileUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" },
                 { id: "res_1_3", type: "WORKSHEETS", title: "مذكرة التمارين والمسائل الوزارية PDF", fileUrl: "https://raw.githubusercontent.com/mozilla/pdf.js/ba2edeae/examples/learning/helloworld.pdf" }
               ]
@@ -3766,7 +3717,7 @@
         if (State.competitions.length === 0) {
           State.competitions = [{
             id: "comp_1",
-            title: "تحدي فرسان التفاضل السريع (GeoGebra Interactive)",
+            title: "تحدي فرسان التفاضل السريع",
             target: "UAE_12_ADV",
             targetStudentUids: [],
             htmlUrl: "https://www.geogebra.org/material/iframe/id/c8kydx2s",
@@ -3787,7 +3738,7 @@
                 id: "q1",
                 text: "ما هي مشتقة الدالة \\( f(x) = (3x^2 + 1)^4 \\)؟",
                 imageUrl: "",
-                htmlUrl: "https://www.geogebra.org/material/iframe/id/c8kydx2s",
+                htmlUrl: "",
                 option1: "\\( 24x(3x^2+1)^3 \\)",
                 option2: "\\( 12x(3x^2+1)^3 \\)",
                 option3: "\\( 4(3x^2+1)^3 \\)",
@@ -3820,6 +3771,7 @@
             username: "student",
             passwordHash: "123456",
             target: "UAE_12_ADV",
+            residence: "الإمارات - دبي",
             phone: "0500000000",
             parentPhone: "0500000000",
             status: "TRIAL",
@@ -3844,6 +3796,16 @@
         State.surveys = JSON.parse(localStorage.getItem("og_surveys") || "[]");
         State.surveyResponses = JSON.parse(localStorage.getItem("og_survey_responses") || "[]");
         State.students = JSON.parse(localStorage.getItem("og_students") || "[]");
+
+        // تنظيف عناوين الدروس المسجلة مسبقاً من عبارة محاكاة تفاعلية html
+        State.lessons.forEach(l => {
+          if (l.title) l.title = cleanLessonTitle(l.title);
+        });
+
+        // التأكد من وجود مكان إقامة كقيمة افتراضية فارغة إذا لم تكن موجودة
+        State.students.forEach(st => {
+          if (st.residence === undefined) st.residence = "";
+        });
 
         this.seedInitialSampleData();
 
@@ -3884,7 +3846,10 @@
           });
           db.collection("omer_lessons").onSnapshot(snapshot => {
             if (!snapshot.empty) {
-              State.lessons = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+              State.lessons = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return { id: doc.id, ...data, title: cleanLessonTitle(data.title) };
+              });
               localStorage.setItem("og_lessons", JSON.stringify(State.lessons));
               if (["STUDENT_DASHBOARD", "ADMIN_CONTENT_MANAGER"].includes(State.currentRoute)) UI.render();
             }
@@ -3909,7 +3874,10 @@
         if (db && State.currentUser?.role === "ADMIN") {
           db.collection("omer_students").onSnapshot(snapshot => {
             if (!snapshot.empty) {
-              State.students = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+              State.students = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return { id: doc.id, ...data, residence: data.residence || "" };
+              });
               localStorage.setItem("og_students", JSON.stringify(State.students));
               if (["ADMIN_STUDENTS", "ADMIN_DASHBOARD", "ARENA_VIEW", "ADMIN_CONTENT_MANAGER"].includes(State.currentRoute)) UI.render();
             }
@@ -3981,7 +3949,7 @@
         switch(type) {
           case 'VIDEOS': return `<span class="badge badge-curriculum"><i class="fa-solid fa-circle-play"></i> فيديو مسجل</span>`;
           case 'WORKSHEETS': return `<span class="badge badge-curriculum"><i class="fa-solid fa-file-pdf"></i> مذكرة PDF</span>`;
-          case 'HTML_EMBED': return `<span class="badge badge-html"><i class="fa-solid fa-code"></i> تفاعلي ومحاكاة HTML</span>`;
+          case 'HTML_EMBED': return `<span class="badge badge-html"><i class="fa-solid fa-play"></i> درس تفاعلي</span>`;
           case 'PODCASTS': return `<span class="badge badge-podcast"><i class="fa-solid fa-podcast"></i> بودكاست صوتي</span>`;
           case 'POWERPOINTS': return `<span class="badge badge-ppt"><i class="fa-solid fa-file-powerpoint"></i> عرض PPT</span>`;
           case 'WORD_DOCS': return `<span class="badge badge-word"><i class="fa-solid fa-file-word"></i> مستند Word</span>`;
@@ -4011,7 +3979,6 @@
           `;
         }
 
-        /* تحسين استجابة الهيدر وحل تداخل الأزرار على الهواتف */
         if (State.currentUser) {
           nav.innerHTML = `
             <div class="nav-actions-wrapper">
@@ -4125,8 +4092,8 @@
                 </form>
                 <div style="margin-top: 18px; border-top: 1px solid var(--border-color); padding-top: 16px;">
                   <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 10px;">طالب جديد وتريد تفعيل حسابك؟</p>
-                  <a href="https://wa.me/${cleanWhatsAppPhone(State.settings.adminPhoneWhatsApp)}?text=${encodeURIComponent('السلام عليكم أستاذ عمر، أود طلب الاشتراك في منصة الرياضيات.')}" target="_blank" class="btn btn-whatsapp" style="width: 100%; font-size: 0.85rem;">
-                    <i class="fa-brands fa-whatsapp"></i> تفعيل حساب جديد فوري عبر واتساب
+                  <a href="https://wa.me/${cleanWhatsAppPhone(State.settings.adminPhoneWhatsApp)}?text=${encodeURIComponent('السلام عليكم أستاذ عمر، أود الاستفسار عن الاشتراك وتفعيل حساب في منصة الرياضيات.')}" target="_blank" class="btn btn-whatsapp" style="width: 100%; font-size: 0.85rem;">
+                    <i class="fa-brands fa-whatsapp"></i> تواصل مع الأستاذ عمر للاشتراك وتفعيل الحساب
                   </a>
                 </div>
               </div>
@@ -4134,7 +4101,6 @@
           `;
         },
 
-        /* واجهة تحكم الطالب العصرية مع عرض احترافي مقسم كشبكة بطاقات وعدم فتح الدروس إلا عند ضغط الوحدة */
         studentDashboard() {
           const user = State.currentUser;
           const now = Date.now();
@@ -4147,8 +4113,8 @@
               <div class="card" style="text-align: center; padding: 36px 16px; max-width: 580px; margin: 20px auto; border-color: var(--danger);">
                 <i class="fa-solid fa-lock" style="font-size: 48px; color: var(--danger); margin-bottom: 14px;"></i>
                 <h2 style="color: var(--navy-dark); font-weight: 800;">🔒 انتهت فترة الاشتراك أو التجربة</h2>
-                <p style="color: var(--text-muted); font-size: 0.88rem; margin: 12px 0 20px;">يرجى تجديد أو تفعيل اشتراكك مع الأستاذ عمر للاستمرار في متابعة كافة المزايا والشروحات.</p>
-                <button class="btn btn-whatsapp" onclick="App.sendWhatsAppOrder('EXP_RENEW')"><i class="fa-brands fa-whatsapp"></i> تفعيل الاشتراك الآن عبر واتساب</button>
+                <p style="color: var(--text-muted); font-size: 0.88rem; margin: 12px 0 20px;">يرجى التواصل مع الأستاذ عمر لتفعيل أو تجديد اشتراكك للاستمرار في متابعة كافة المزايا والشروحات.</p>
+                <button class="btn btn-whatsapp" onclick="App.sendWhatsAppOrder('EXP_RENEW')"><i class="fa-brands fa-whatsapp"></i> تواصل مع الأستاذ عمر لتفعيل الاشتراك</button>
               </div>
             `;
           }
@@ -4177,11 +4143,10 @@
             ${isTrial && !State.isPreviewMode ? `
               <div class="countdown-widget">
                 <div><i class="fa-solid fa-hourglass-half"></i> فترة تجريبية: متبقي <strong>${daysLeft} أيام</strong> للاشتراك الدائم.</div>
-                <button class="btn btn-whatsapp" style="padding:6px 12px; font-size:0.78rem; min-height:34px;" onclick="App.sendWhatsAppOrder('TRIAL_CONVERT')"><i class="fa-brands fa-whatsapp"></i> تثبيت الاشتراك</button>
+                <button class="btn btn-whatsapp" style="padding:6px 12px; font-size:0.78rem; min-height:34px;" onclick="App.sendWhatsAppOrder('TRIAL_CONVERT')"><i class="fa-brands fa-whatsapp"></i> تواصل لتثبيت الاشتراك</button>
               </div>
             ` : ''}
 
-            <!-- بانر الطالب التفاعلي الحديث -->
             <div class="student-hero-banner">
               <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px;">
                 <div>
@@ -4208,7 +4173,6 @@
                 </div>
               </div>
 
-              <!-- بطاقات إحصائيات الطالب الذكية -->
               <div class="student-stats-row">
                 <div class="student-stat-pill">
                   <div class="student-stat-icon" style="background:rgba(245, 158, 11, 0.2); color:var(--gold-orange);">
@@ -4252,13 +4216,12 @@
               </div>
             </div>
 
-            <!-- قسم المسابقات والتحديات التفاعلية -->
             ${activeCompetitions.length > 0 ? `
               <div class="active-competitions-section">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                   <div style="display:flex; align-items:center; gap:8px;">
                     <i class="fa-solid fa-trophy" style="color:#8B5CF6; font-size:1.3rem;"></i>
-                    <strong style="color:var(--navy-dark); font-size:1rem;">المسابقات والتحديات الرياضية التفاعلية النشطة 🎮</strong>
+                    <strong style="color:var(--navy-dark); font-size:1rem;">المسابقات والتحديات الرياضية النشطة 🎮</strong>
                   </div>
                   <span class="badge badge-podcast">${activeCompetitions.length} مسابقة منشورة</span>
                 </div>
@@ -4270,10 +4233,10 @@
                       <div class="comp-student-card">
                         <div>
                           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                            <span class="badge badge-html" style="font-size:0.68rem;"><i class="fa-solid fa-gamepad"></i> تفاعلي HTML</span>
+                            <span class="badge badge-html" style="font-size:0.68rem;"><i class="fa-solid fa-gamepad"></i> تفاعلي</span>
                             <span style="font-size:0.75rem; font-weight:800; color:var(--gold-deep);">${comp.maxScore} درجة</span>
                           </div>
-                          <strong style="color:var(--navy-dark); font-size:0.92rem; display:block; margin-bottom:4px;">${escapeHTML(comp.title)}</strong>
+                          <strong style="color:var(--navy-dark); font-size:0.92rem; display:block; margin-bottom:4px;">${escapeHTML(cleanLessonTitle(comp.title))}</strong>
                           <span style="font-size:0.74rem; color:var(--text-muted);"><i class="fa-regular fa-calendar"></i> ${comp.createdAt || 'حديثاً'}</span>
                           ${myResult ? `
                             <div style="margin-top:6px; background:#ECFDF5; padding:4px 8px; border-radius:4px; font-size:0.72rem; color:#047857; font-weight:700;">
@@ -4297,7 +4260,7 @@
                   <i class="fa-solid fa-border-all"></i> كافة الموارد
                 </div>
                 <div class="filter-pill ${activeType === 'HTML_EMBED' ? 'active' : ''}" onclick="App.setContentFilterTab('HTML_EMBED')">
-                  <i class="fa-solid fa-code" style="color:#0284C7;"></i> محاكاة وتطبيقات HTML
+                  <i class="fa-solid fa-play" style="color:#0284C7;"></i> الدروس التفاعلية
                 </div>
                 <div class="filter-pill ${activeType === 'VIDEOS' ? 'active' : ''}" onclick="App.setContentFilterTab('VIDEOS')">
                   <i class="fa-solid fa-circle-play" style="color:red;"></i> فيديوهات الشرح
@@ -4355,7 +4318,6 @@
 
                 if (unitLessons.length === 0 && (q || activeType !== 'ALL_TYPES')) return '';
 
-                /* التعديل: الوحدات مغلقة افتراضياً ولا تفتح إلا عند ضغط الطالب أو وجود بحث */
                 const isOpenByDefault = (q && unitLessons.length > 0 && !isUnitLocked);
 
                 return `
@@ -4363,7 +4325,7 @@
                     <div class="unit-header-bar ${isUnitLocked ? 'locked' : ''}" onclick="App.handleStudentUnitClick('student_unit_acc_${unit.id}', ${isUnitLocked})">
                       <div style="display:flex; align-items:center; gap:10px; font-size:1.02rem; font-weight:800;">
                         <i class="fa-solid ${isUnitLocked ? 'fa-lock' : 'fa-folder'}" style="color:${isUnitLocked ? '#EF4444' : 'var(--gold-orange)'};"></i>
-                        <span>${escapeHTML(unit.title)}</span>
+                        <span>${escapeHTML(cleanLessonTitle(unit.title))}</span>
                       </div>
                       <div style="display:flex; align-items:center; gap:8px;">
                         ${isUnitLocked ? `
@@ -4383,14 +4345,13 @@
                           <p style="font-size:0.82rem; color:var(--text-muted); max-width:480px; margin:0 auto 12px;">
                             تحتاج هذه الوحدة لموافقة الأستاذ عمر لفتح محتواها لك. اضغط الزر أدناه لإرسال طلب فتح الوحدة فوراً.
                           </p>
-                          <a href="https://wa.me/${cleanWhatsAppPhone(State.settings.adminPhoneWhatsApp)}?text=${encodeURIComponent(`السلام عليكم أستاذ عمر، أرجو فتح وتفعيل (${unit.title}) لحسابي للطالب: ${user.name}`)}" target="_blank" class="btn btn-whatsapp" style="font-size:0.8rem; padding:6px 14px;">
+                          <a href="https://wa.me/${cleanWhatsAppPhone(State.settings.adminPhoneWhatsApp)}?text=${encodeURIComponent(`السلام عليكم أستاذ عمر، أرجو فتح وتفعيل (${cleanLessonTitle(unit.title)}) لحسابي للطالب: ${user.name}`)}" target="_blank" class="btn btn-whatsapp" style="font-size:0.8rem; padding:6px 14px;">
                             <i class="fa-brands fa-whatsapp"></i> طلب فتح الوحدة من الأستاذ عبر واتساب
                           </a>
                         </div>
                       ` : unitLessons.length === 0 ? `
                         <p style="color:var(--text-muted); font-size:0.82rem; padding:10px;">لا توجد دروس متطابقة مع التصنيف المختار في هذه الوحدة.</p>
                       ` : `
-                        <!-- شبكة بطاقات الدروس الاحترافية العصرية -->
                         <div class="student-lessons-grid">
                           ${unitLessons.map(lesson => {
                             let resList = [...(lesson.resources || [])];
@@ -4399,7 +4360,7 @@
                               resList.unshift({
                                 id: "res_html_" + lesson.id,
                                 type: "HTML_EMBED",
-                                title: "تطبيق ومحاكاة HTML تفاعلية",
+                                title: "ابدأ الدرس",
                                 fileUrl: lesson.htmlUrl
                               });
                             }
@@ -4419,7 +4380,7 @@
                                     ${isPrivateToMe ? `<span class="badge badge-custom-assigned" style="font-size:0.68rem;"><i class="fa-solid fa-star"></i> مخصص لك</span>` : ''}
                                   </div>
                                   <strong style="color:var(--navy-dark); font-size:1.02rem; line-height:1.4;">
-                                    ${escapeHTML(lesson.title)}
+                                    ${escapeHTML(cleanLessonTitle(lesson.title))}
                                   </strong>
                                   <p style="font-size:0.82rem; color:var(--text-muted); line-height:1.6; margin:0;">
                                     ${escapeHTML(lesson.description || 'شرح وتدريبات الدرس مع الأستاذ عمر قاسم.')}
@@ -4432,15 +4393,21 @@
                                   </div>
 
                                   <div class="lesson-actions-tray">
-                                    ${resList.map(res => `
-                                      <button class="btn ${res.type === 'HTML_EMBED' ? 'btn-purple' : 'btn-navy'}" style="width:100%; font-size:0.78rem; padding:6px 10px; min-height:34px; justify-content:space-between;" onclick="App.openResourceById('${lesson.id}', '${res.id}')">
-                                        <span style="display:inline-flex; align-items:center; gap:6px;">
-                                          <i class="fa-solid ${res.type === 'HTML_EMBED' ? 'fa-gamepad' : (res.type === 'VIDEOS' ? 'fa-circle-play' : 'fa-file-pdf')}"></i>
-                                          <span>${escapeHTML(res.title)}</span>
-                                        </span>
-                                        <i class="fa-solid fa-arrow-left" style="font-size:0.7rem;"></i>
-                                      </button>
-                                    `).join('')}
+                                    ${resList.map(res => {
+                                      const isHtml = res.type === 'HTML_EMBED';
+                                      const btnText = isHtml ? 'ابدأ الدرس' : escapeHTML(res.title);
+                                      return `
+                                        <button class="btn ${isHtml ? 'btn-gold' : 'btn-navy'}" 
+                                          style="width:100%; font-size:0.84rem; padding:8px 14px; min-height:36px; justify-content:${isHtml ? 'center' : 'space-between'}; text-align:center; font-weight:800;" 
+                                          onclick="App.openResourceById('${lesson.id}', '${res.id}')">
+                                          <span style="display:inline-flex; align-items:center; gap:8px;">
+                                            <i class="fa-solid ${isHtml ? 'fa-play' : (res.type === 'VIDEOS' ? 'fa-circle-play' : 'fa-file-pdf')}"></i>
+                                            <span>${btnText}</span>
+                                          </span>
+                                          ${!isHtml ? '<i class="fa-solid fa-arrow-left" style="font-size:0.7rem;"></i>' : ''}
+                                        </button>
+                                      `;
+                                    }).join('')}
                                   </div>
                                 </div>
                               </div>
@@ -4461,7 +4428,7 @@
                   ${filteredQuizzes.map(qz => `
                     <div style="display:flex; justify-content:space-between; align-items:center; padding:14px; background:var(--gold-light); border:1.5px solid var(--gold-subtle); border-radius:var(--radius-md); flex-wrap:wrap; gap:8px;">
                       <div>
-                        <strong style="font-size:0.95rem; display:block; color:var(--navy-dark);">${escapeHTML(qz.title)}</strong>
+                        <strong style="font-size:0.95rem; display:block; color:var(--navy-dark);">${escapeHTML(cleanLessonTitle(qz.title))}</strong>
                         <span style="font-size:0.78rem; color:var(--text-muted);">${qz.questions ? qz.questions.length : 0} أسئلة</span>
                       </div>
                       <button class="btn btn-gold" style="padding:6px 14px; font-size:0.8rem; min-height:36px;" onclick="App.startInteractiveQuiz('${qz.id}')">
@@ -4501,7 +4468,7 @@
                         <div class="rank-badge ${idx === 0 ? 'rank-1' : (idx === 1 ? 'rank-2' : (idx === 2 ? 'rank-3' : ''))}">${idx + 1}</div>
                         <div>
                           <strong style="color:var(--navy-dark); font-size:0.95rem; display:block;">${escapeHTML(st.name)}</strong>
-                          <span style="font-size:0.75rem; color:var(--text-muted);">${UI.getTargetLabel(st.target)}</span>
+                          <span style="font-size:0.75rem; color:var(--text-muted);">${UI.getTargetLabel(st.target)} ${st.residence ? `• <i class="fa-solid fa-location-dot"></i> ${escapeHTML(st.residence)}` : ''}</span>
                         </div>
                       </div>
                       <div style="display:flex; align-items:center; gap:8px;">
@@ -4542,10 +4509,12 @@
           const quiz = State.activeQuiz;
           const q = quiz.questions[State.activeQuestionIndex];
           const totalQ = quiz.questions.length;
+          const hasInteractiveHtml = !!q.htmlUrl;
+
           return `
             <div class="quiz-gamified-box">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <span style="font-weight:800; color:var(--navy-dark); font-size:1rem;">${escapeHTML(quiz.title)}</span>
+                <span style="font-weight:800; color:var(--navy-dark); font-size:1rem;">${escapeHTML(cleanLessonTitle(quiz.title))}</span>
                 <span class="badge badge-curriculum">السؤال ${State.activeQuestionIndex + 1} من ${totalQ}</span>
               </div>
               <div class="quiz-progress-bar"><div class="quiz-progress-fill" style="width: ${((State.activeQuestionIndex) / totalQ) * 100}%;"></div></div>
@@ -4560,30 +4529,38 @@
                   </div>
                 ` : ''}
 
-                ${q.htmlUrl ? `
+                ${hasInteractiveHtml ? `
                   <div style="margin-bottom:18px; border:2px solid #0284C7; border-radius:var(--radius-sm); overflow:hidden; background:#070D18;">
                     <div style="background:#0F1E36; color:#38BDF8; padding:6px 12px; font-size:0.78rem; font-weight:800; display:flex; justify-content:space-between; align-items:center;">
-                      <span><i class="fa-solid fa-code"></i> محاكاة تفاعلية للمسألة (GeoGebra / Desmos / HTML)</span>
-                      <span class="badge badge-html" style="font-size:0.68rem;">تحكم مباشر</span>
+                      <span><i class="fa-solid fa-code"></i> تدريب رياضي تفاعلي مباشر (حل المسألة داخل التطبيق مباشرة)</span>
+                      <span class="badge badge-html" style="font-size:0.68rem;">تفاعل مباشر</span>
                     </div>
-                    <div id="quizHtmlFrameBox" style="width:100%; height:320px; position:relative;"></div>
+                    <div id="quizHtmlFrameBox" style="width:100%; height:380px; position:relative;"></div>
                   </div>
                 ` : ''}
 
-                <h3 style="font-size:1.05rem; color:var(--navy-dark); margin-bottom:14px; font-weight:800;">${State.activeQuestionIndex + 1}. ${escapeHTML(q.text || 'أجب على السؤال بناءً على الشكل / المحاكاة التفاعلية أعلاه:')}</h3>
-                
-                <div class="interactive-option" id="opt_1" onclick="App.chooseOption(1)"><span>${escapeHTML(q.option1)}</span><div class="option-letter">أ</div></div>
-                <div class="interactive-option" id="opt_2" onclick="App.chooseOption(2)"><span>${escapeHTML(q.option2)}</span><div class="option-letter">ب</div></div>
-                <div class="interactive-option" id="opt_3" onclick="App.chooseOption(3)"><span>${escapeHTML(q.option3)}</span><div class="option-letter">ج</div></div>
-                
-                <div id="aiExplanationBox" style="display:none; margin-top:14px; padding:12px; background:var(--gold-light); border-right:3px solid var(--gold-orange); border-radius:var(--radius-sm); font-size:0.85rem;">
-                  <strong>طريقة الحل الرياضية:</strong>
-                  <div id="aiExplanationText" style="margin-top:4px; color:var(--navy-dark); line-height:1.6;"></div>
-                </div>
+                ${!hasInteractiveHtml ? `
+                  <h3 style="font-size:1.05rem; color:var(--navy-dark); margin-bottom:14px; font-weight:800;">${State.activeQuestionIndex + 1}. ${escapeHTML(q.text || 'اختر الإجابة الصحيحة:')}</h3>
+                  
+                  <div class="interactive-option" id="opt_1" onclick="App.chooseOption(1)"><span>${escapeHTML(q.option1)}</span><div class="option-letter">أ</div></div>
+                  <div class="interactive-option" id="opt_2" onclick="App.chooseOption(2)"><span>${escapeHTML(q.option2)}</span><div class="option-letter">ب</div></div>
+                  <div class="interactive-option" id="opt_3" onclick="App.chooseOption(3)"><span>${escapeHTML(q.option3)}</span><div class="option-letter">ج</div></div>
+                  
+                  <div id="aiExplanationBox" style="display:none; margin-top:14px; padding:12px; background:var(--gold-light); border-right:3px solid var(--gold-orange); border-radius:var(--radius-sm); font-size:0.85rem;">
+                    <strong>طريقة الحل الرياضية:</strong>
+                    <div id="aiExplanationText" style="margin-top:4px; color:var(--navy-dark); line-height:1.6;"></div>
+                  </div>
+                ` : `
+                  <div style="background:var(--gold-light); padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--gold-orange); font-size:0.86rem; color:var(--navy-dark); margin-bottom:10px;">
+                    <i class="fa-solid fa-circle-check" style="color:var(--success);"></i> هذا السؤال تفاعلي بالكامل عبر التطبيق أعلاه. بعد الانتهاء من التفاعل، اضغط الزر للمتابعة.
+                  </div>
+                `}
                 
                 <div style="display:flex; justify-content:space-between; margin-top:20px; border-top:1px solid #E2E8F0; padding-top:14px;">
                   <button class="btn btn-secondary" onclick="App.setRoute('STUDENT_DASHBOARD')">خروج</button>
-                  <button class="btn btn-gold" id="nextQuestionBtn" style="display:none;" onclick="App.nextQuizQuestion()">السؤال التالي <i class="fa-solid fa-arrow-left"></i></button>
+                  <button class="btn btn-gold" id="nextQuestionBtn" style="display:${hasInteractiveHtml ? 'inline-flex' : 'none'};" onclick="App.nextQuizQuestion()">
+                    ${State.activeQuestionIndex + 1 >= totalQ ? 'إنهاء الكويز <i class="fa-solid fa-flag-checkered"></i>' : 'السؤال التالي <i class="fa-solid fa-arrow-left"></i>'}
+                  </button>
                 </div>
               </div>
             </div>
@@ -4660,19 +4637,20 @@
           return `
             <div style="max-width: 760px; margin: 0 auto;">
               <div style="text-align: center; margin-bottom: 22px;">
-                <h2 style="color: var(--navy-dark); font-weight: 900;">باقات الاشتراك – منصة الأستاذ عمر</h2>
+                <h2 style="color: var(--navy-dark); font-weight: 900;">باقات الاشتراك والتفعيل – منصة الأستاذ عمر</h2>
+                <p style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">تواصل مباشرة مع الأستاذ عمر لمعرفة تفاصيل ورسوم الاشتراك وطرق التفعيل المعتمدة</p>
               </div>
               <div class="plans-container">
                 <div class="plan-card">
                   <h3 style="color: var(--navy-dark); font-weight: 700;">🥉 الباقة الشهرية</h3>
-                  <div class="plan-price">120 <span>درهم</span></div>
-                  <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('MONTHLY')"><i class="fa-brands fa-whatsapp"></i> تفعيل عبر واتساب</button>
+                  <div class="plan-price">اشتراك شهري ومتابعة مستمرة</div>
+                  <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('MONTHLY')"><i class="fa-brands fa-whatsapp"></i> تواصل مع الأستاذ للاشتراك</button>
                 </div>
                 <div class="plan-card featured">
                   <div class="plan-badge-top">🥇 الأكثر طلباً</div>
-                  <h3 style="color: var(--navy-dark); font-weight: 800;">باقة الفصل الدراسي (3 أشهر)</h3>
-                  <div class="plan-price">300 <span>درهم</span></div>
-                  <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('SEMESTER')"><i class="fa-brands fa-whatsapp"></i> تفعيل باقة الـ 3 أشهر</button>
+                  <h3 style="color: var(--navy-dark); font-weight: 800;">باقة الفصل الدراسي</h3>
+                  <div class="plan-price">اشتراك فصلي متكامل مع حلول وبث مباشر</div>
+                  <button class="btn btn-whatsapp" style="width: 100%;" onclick="App.sendWhatsAppOrder('SEMESTER')"><i class="fa-brands fa-whatsapp"></i> تواصل مع الأستاذ للاشتراك</button>
                 </div>
               </div>
             </div>
@@ -4715,7 +4693,6 @@
           `;
         },
 
-        /* إدارة المناهج والدروس مع زر معاينة وتعديل وحذف كل درس وزر قفل/فتح الوحدات */
         adminContentManager() {
           const currFilter = State.adminContentCurriculumFilter || "ALL";
           const query = (State.adminContentSearchQuery || "").toLowerCase().trim();
@@ -4784,7 +4761,7 @@
                     <div class="unit-header-bar ${isLocked ? 'locked' : ''}" onclick="App.toggleAccordion('admin_unit_acc_${unit.id}')">
                       <div style="display:flex; align-items:center; gap:10px; font-size:1.02rem; font-weight:800;">
                         <i class="fa-solid ${isLocked ? 'fa-lock' : 'fa-folder'}" style="color:${isLocked ? '#EF4444' : 'var(--gold-orange)'};"></i>
-                        <span>${escapeHTML(unit.title)}</span>
+                        <span>${escapeHTML(cleanLessonTitle(unit.title))}</span>
                         <span class="badge badge-curriculum" style="font-size:0.7rem; margin-right:6px;">${UI.getTargetLabel(unit.target)}</span>
                         <span class="badge ${isLocked ? 'badge-locked' : 'badge-tag'}" style="font-size:0.7rem;">
                           ${isLocked ? '🔒 مقفلة للطلاب' : '🔓 مفتوحة'}
@@ -4815,7 +4792,7 @@
                           <div style="background:#FFF; border:1.5px solid #E2E8F0; border-radius:var(--radius-sm); padding:12px 14px; box-shadow:0 1px 3px rgba(0,0,0,0.03);">
                             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
                               <div>
-                                <strong style="color:var(--navy-dark); font-size:0.98rem;">${escapeHTML(les.title)}</strong>
+                                <strong style="color:var(--navy-dark); font-size:0.98rem;">${escapeHTML(cleanLessonTitle(les.title))}</strong>
                                 ${isSpecific ? `
                                   <span class="badge badge-custom-assigned" style="margin-right:6px;"><i class="fa-solid fa-user-lock"></i> مخصص لـ: ${escapeHTML(assignedStudentName)}</span>
                                 ` : `
@@ -4824,7 +4801,6 @@
                                 <p style="font-size:0.8rem; color:var(--text-muted); margin-top:3px;">${escapeHTML(les.description || 'لا يوجد شرح مختصر')}</p>
                               </div>
                               
-                              <!-- أزرار المعاينة والتعديل والحذف للأدمن -->
                               <div style="display:flex; gap:5px; flex-wrap:wrap;">
                                 <button class="btn btn-purple" style="padding:4px 10px; font-size:0.75rem; min-height:30px;" onclick="App.openAdminLessonPreview('${les.id}')" title="معاينة محتوى وموارد الدرس">
                                   <i class="fa-solid fa-eye"></i> معاينة
@@ -4840,11 +4816,11 @@
                             
                             <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px;">
                               ${les.htmlUrl ? `
-                                <span class="badge badge-html" style="background:#E0F2FE;"><i class="fa-solid fa-code"></i> محاكاة HTML تفاعلية</span>
+                                <span class="badge badge-html" style="background:#E0F2FE;"><i class="fa-solid fa-play"></i> ابدأ الدرس (تفاعلي)</span>
                               ` : ''}
                               ${(les.resources || []).map(r => `
                                 <span class="badge badge-tag" style="background:#F8FAFC;">
-                                  ${UI.getResourceBadge(r.type)} ${escapeHTML(r.title)}
+                                  ${UI.getResourceBadge(r.type)} ${r.type === 'HTML_EMBED' ? 'ابدأ الدرس' : escapeHTML(r.title)}
                                 </span>
                               `).join('')}
                             </div>
@@ -4863,7 +4839,7 @@
           return `
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
               <div>
-                <h2 style="color:var(--navy-dark); font-weight:800;">إدارة المسابقات الرياضية التفاعلية (HTML)</h2>
+                <h2 style="color:var(--navy-dark); font-weight:800;">إدارة المسابقات الرياضية التفاعلية</h2>
                 <p style="font-size:0.78rem; color:var(--text-muted);">تظهر المسابقات تلقائياً وفوراً في لوحة الطالب بمجرد نشرها</p>
               </div>
               <div style="display:flex; gap:6px;">
@@ -4877,7 +4853,7 @@
                 <div class="card" style="margin:0; border:1.5px solid #8B5CF6;">
                   <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #E2E8F0; padding-bottom:10px; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
                     <div>
-                      <strong style="color:var(--navy-dark); font-size:1.1rem;"><i class="fa-solid fa-trophy" style="color:var(--gold-orange);"></i> ${escapeHTML(comp.title)}</strong>
+                      <strong style="color:var(--navy-dark); font-size:1.1rem;"><i class="fa-solid fa-trophy" style="color:var(--gold-orange);"></i> ${escapeHTML(cleanLessonTitle(comp.title))}</strong>
                       <span class="badge badge-curriculum" style="margin-right:8px;">${UI.getTargetLabel(comp.target)}</span>
                       <span class="badge badge-xp">درجة المسابقة: ${comp.maxScore}</span>
                     </div>
@@ -4927,7 +4903,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
               <div>
                 <h2 style="color: var(--navy-dark); font-weight: 800;">منشئ كويزات ومسائل الرياضيات التفاعلية</h2>
-                <p style="font-size:0.78rem; color:var(--text-muted);">إمكانية إدراج السؤال كنص أو صورة أو تطبيق HTML تفاعلي (GeoGebra / Desmos)</p>
+                <p style="font-size:0.78rem; color:var(--text-muted);">إمكانية إدراج السؤال كنص أو صورة أو تطبيق تفاعلي مع إخفاء الخيارات تلقائياً عند إضافة الرابط التفاعلي</p>
               </div>
               <button class="btn btn-gold" style="padding:4px 12px; font-size:0.78rem;" onclick="App.setRoute('ADMIN_DASHBOARD')">العودة للرئيسية</button>
             </div>
@@ -4941,67 +4917,76 @@
 
                 <div class="form-group" style="background:#F0F9FF; padding:12px; border-radius:var(--radius-sm); border:1.5px solid #0284C7;">
                   <label style="color:#0369A1; font-weight:800; font-size:0.88rem; margin-bottom:6px; display:block;">
-                    <i class="fa-solid fa-code"></i> رابط تطبيق أو محاكاة HTML تفاعلية للمسألة (GeoGebra / Desmos / لعبة رياضية - اختياري):
+                    <i class="fa-solid fa-code"></i> رابط تطبيق أو محاكاة تفاعلية للمسألة (GeoGebra / Desmos / لعبة رياضية - اختياري):
                   </label>
                   <div class="input-with-paste">
-                    <input type="url" id="quizHtmlUrl" placeholder="https://www.geogebra.org/m/... أو رابط HTML تفاعلي">
-                    <button type="button" class="btn btn-gold" onclick="App.pasteToInput('quizHtmlUrl')"><i class="fa-solid fa-paste"></i> لصق</button>
+                    <input type="url" id="quizHtmlUrl" placeholder="https://www.geogebra.org/m/... أو رابط تفاعلي" oninput="App.handleQuizHtmlUrlChange(this.value)">
+                    <button type="button" class="btn btn-gold" onclick="App.pasteToInput('quizHtmlUrl'); setTimeout(() => App.handleQuizHtmlUrlChange(document.getElementById('quizHtmlUrl').value), 50);"><i class="fa-solid fa-paste"></i> لصق</button>
                   </div>
                   <span style="font-size:0.72rem; color:var(--text-muted); display:block; margin-top:4px;">
-                    سيتم تشغيل التطبيق التفاعلي داخل السؤال ليتفاعل معه الطالب ويحسب الحل مباشرة!
+                    عند وضع رابط تفاعلي، يتم إخفاء أزرار الخيارات والحل الصحيح حيث يتم التفاعل والحل بالكامل داخل الرابط.
                   </span>
                 </div>
 
-                <div class="form-group" style="background:var(--gold-light); padding:14px; border-radius:var(--radius-sm); border:1.5px dashed var(--gold-orange);">
-                  <label style="color:var(--navy-dark); font-weight:800; font-size:0.9rem; margin-bottom:8px; display:block;">
-                    <i class="fa-solid fa-image" style="color:var(--gold-deep);"></i> إضافة صورة السؤال / المسألة الهندسية (اختياري):
-                  </label>
-                  
-                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:8px;">
-                    <div>
-                      <span style="font-size:0.78rem; font-weight:700; color:var(--navy-dark); display:block; margin-bottom:4px;">1. رفع ملف صورة من الجهاز/التابلت/الكاميرا:</span>
-                      <input type="file" id="quizImgFileInput" accept="image/*" onchange="App.handleQuizImageFile(this)" style="font-size:0.8rem; background:#FFF; padding:6px;">
+                <div id="quizHtmlModeNotice" style="display:none; background:#ECFDF5; border:1.5px solid #10B981; padding:12px; border-radius:var(--radius-sm); margin-bottom:14px;">
+                  <strong style="color:#065F46; font-size:0.88rem;"><i class="fa-solid fa-circle-check"></i> نمط السؤال التفاعلي نشط:</strong>
+                  <p style="font-size:0.8rem; color:#047857; margin-top:3px;">
+                    تم إخفاء أزرار الاختيارات (أ، ب، ج) والإجابة الصحيحة والتوضيح تلقائياً لأن الطالب سيقوم بحل السؤال والتفاعل معه مباشرة داخل التطبيق!
+                  </p>
+                </div>
+
+                <div id="quizStandardFieldsContainer">
+                  <div class="form-group" style="background:var(--gold-light); padding:14px; border-radius:var(--radius-sm); border:1.5px dashed var(--gold-orange);">
+                    <label style="color:var(--navy-dark); font-weight:800; font-size:0.9rem; margin-bottom:8px; display:block;">
+                      <i class="fa-solid fa-image" style="color:var(--gold-deep);"></i> إضافة صورة السؤال / المسألة الهندسية (اختياري):
+                    </label>
+                    
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:10px; margin-bottom:8px;">
+                      <div>
+                        <span style="font-size:0.78rem; font-weight:700; color:var(--navy-dark); display:block; margin-bottom:4px;">1. رفع ملف صورة من الجهاز/التابلت/الكاميرا:</span>
+                        <input type="file" id="quizImgFileInput" accept="image/*" onchange="App.handleQuizImageFile(this)" style="font-size:0.8rem; background:#FFF; padding:6px;">
+                      </div>
+                      <div>
+                        <span style="font-size:0.78rem; font-weight:700; color:var(--navy-dark); display:block; margin-bottom:4px;">2. أو لصق رابط صورة مباشر (URL):</span>
+                        <div class="input-with-paste">
+                          <input type="url" id="quizImgUrlInput" placeholder="https://... رابط الصورة" oninput="App.handleQuizImageUrlInput(this.value)">
+                          <button type="button" class="btn btn-gold" onclick="App.pasteToInput('quizImgUrlInput'); App.handleQuizImageUrlInput(document.getElementById('quizImgUrlInput').value);"><i class="fa-solid fa-paste"></i> لصق</button>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <span style="font-size:0.78rem; font-weight:700; color:var(--navy-dark); display:block; margin-bottom:4px;">2. أو لصق رابط صورة مباشر (URL):</span>
-                      <div class="input-with-paste">
-                        <input type="url" id="quizImgUrlInput" placeholder="https://... رابط الصورة" oninput="App.handleQuizImageUrlInput(this.value)">
-                        <button type="button" class="btn btn-gold" onclick="App.pasteToInput('quizImgUrlInput'); App.handleQuizImageUrlInput(document.getElementById('quizImgUrlInput').value);"><i class="fa-solid fa-paste"></i> لصق</button>
+
+                    <div id="quizImgPreviewContainer" style="display:none; text-align:center; padding:10px; background:#0B1424; border-radius:6px; margin-top:8px;">
+                      <img id="quizImgPreviewEl" src="" style="max-height:220px; max-width:100%; border-radius:4px; object-fit:contain;">
+                      <div style="margin-top:6px;">
+                        <button type="button" class="btn btn-danger" style="padding:2px 10px; font-size:0.72rem; min-height:26px;" onclick="App.clearQuizImage()"><i class="fa-solid fa-trash"></i> إزالة الصورة</button>
                       </div>
                     </div>
                   </div>
 
-                  <div id="quizImgPreviewContainer" style="display:none; text-align:center; padding:10px; background:#0B1424; border-radius:6px; margin-top:8px;">
-                    <img id="quizImgPreviewEl" src="" style="max-height:220px; max-width:100%; border-radius:4px; object-fit:contain;">
-                    <div style="margin-top:6px;">
-                      <button type="button" class="btn btn-danger" style="padding:2px 10px; font-size:0.72rem; min-height:26px;" onclick="App.clearQuizImage()"><i class="fa-solid fa-trash"></i> إزالة الصورة</button>
+                  <div class="form-group">
+                    <label>نص المسألة الرياضية (يمكنك كتابة صيغ LaTeX مثل \( \int x^2 dx \)):</label>
+                    <textarea id="questionText" rows="2" placeholder="اكتب نص المسألة أو التوجيهات هنا..."></textarea>
+                  </div>
+
+                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+                    <div class="form-group"><label>خيار (أ)</label><input type="text" id="opt1" placeholder="الخيار الأول"></div>
+                    <div class="form-group"><label>خيار (ب)</label><input type="text" id="opt2" placeholder="الخيار الثاني"></div>
+                    <div class="form-group"><label>خيار (ج)</label><input type="text" id="opt3" placeholder="الخيار الثالث"></div>
+                  </div>
+
+                  <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
+                    <div class="form-group">
+                      <label>الإجابة الصحيحة</label>
+                      <select id="correctOptionSelect">
+                        <option value="1">خيار (أ)</option>
+                        <option value="2">خيار (ب)</option>
+                        <option value="3">خيار (ج)</option>
+                      </select>
                     </div>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label>نص المسألة الرياضية (يمكنك كتابة صيغ LaTeX مثل \( \int x^2 dx \) أو تركه فارغاً إذا كان السؤال بالصورة أو التطبيق أعلاه):</label>
-                  <textarea id="questionText" rows="2" placeholder="اكتب نص المسألة أو التوجيهات هنا..."></textarea>
-                </div>
-
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
-                  <div class="form-group"><label>خيار (أ)</label><input type="text" id="opt1" required placeholder="الخيار الأول"></div>
-                  <div class="form-group"><label>خيار (ب)</label><input type="text" id="opt2" required placeholder="الخيار الثاني"></div>
-                  <div class="form-group"><label>خيار (ج)</label><input type="text" id="opt3" required placeholder="الخيار الثالث"></div>
-                </div>
-
-                <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:10px;">
-                  <div class="form-group">
-                    <label>الإجابة الصحيحة</label>
-                    <select id="correctOptionSelect">
-                      <option value="1">خيار (أ)</option>
-                      <option value="2">خيار (ب)</option>
-                      <option value="3">خيار (ج)</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>توضيح الحل الرياضي (AI Explanation)</label>
-                    <input type="text" id="aiExplanation" placeholder="خطوة الحل النموذجية التي ستظهر للطالب بعد الإجابة...">
+                    <div class="form-group">
+                      <label>توضيح الحل الرياضي (AI Explanation)</label>
+                      <input type="text" id="aiExplanation" placeholder="خطوة الحل النموذجية التي ستظهر للطالب بعد الإجابة...">
+                    </div>
                   </div>
                 </div>
 
@@ -5021,18 +5006,19 @@
             <div class="card">
               <div class="table-container">
                 <table>
-                  <thead><tr><th>الطالب</th><th>Username</th><th>المنهاج والصف</th><th>الحالة والخطة</th><th>تقييم وواتساب</th><th>إدارة وتفعيل الاشتراك</th></tr></thead>
-                  <tbody>${filtered.length === 0 ? `<tr><td colspan="6" style="text-align:center; padding:25px;">لا يوجد طلاب.</td></tr>` : filtered.map(st => `<tr>
+                  <thead><tr><th>الطالب</th><th>مكان الإقامة</th><th>Username</th><th>المنهاج والصف</th><th>الحالة والخطة</th><th>تقييم وواتساب</th><th>إدارة وتفعيل الاشتراك</th></tr></thead>
+                  <tbody>${filtered.length === 0 ? `<tr><td colspan="7" style="text-align:center; padding:25px;">لا يوجد طلاب.</td></tr>` : filtered.map(st => `<tr>
                     <td><strong>${escapeHTML(st.name)}</strong></td>
+                    <td><span style="font-size:0.78rem; color:var(--text-dark);"><i class="fa-solid fa-location-dot" style="color:var(--gold-orange);"></i> ${escapeHTML(st.residence || '—')}</span></td>
                     <td><code>${escapeHTML(st.username)}</code></td>
                     <td><span class="badge badge-curriculum">${UI.getTargetLabel(st.target)}</span></td>
-                    <td><span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : 'badge-trial'}">${escapeHTML(st.status === 'ACTIVE' ? (st.plan === '3_MONTHS' ? '💎 فصلي (3 أشهر)' : '🟢 شهر') : '⏳ تجربة')}</span></td>
+                    <td><span class="badge ${st.status === 'ACTIVE' ? 'badge-active' : 'badge-trial'}">${escapeHTML(st.status === 'ACTIVE' ? (st.plan === '3_MONTHS' ? '💎 فصلي' : '🟢 شهر') : '⏳ تجربة')}</span></td>
                     <td><button class="btn btn-whatsapp" style="padding:4px 8px; font-size:0.7rem;" onclick="App.openEvaluationModal('${st.uid}')">تقييم</button></td>
                     <td>
                       <div style="display:flex; gap:4px; flex-wrap:wrap;">
                         <button class="btn btn-gold" style="padding:3px 7px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 1)" title="تفعيل اشتراك شهر">شهر</button>
                         <button class="btn btn-purple" style="padding:3px 7px; font-size:0.7rem;" onclick="App.promptActivateStudent('${st.uid}', 3)" title="تفعيل اشتراك 3 أشهر">3 أشهر</button>
-                        <button class="btn btn-secondary" style="padding:3px 7px; font-size:0.7rem;" onclick="App.openStudentResetModal('${st.uid}')">تعيين/تمديد</button>
+                        <button class="btn btn-secondary" style="padding:3px 7px; font-size:0.7rem;" onclick="App.openStudentResetModal('${st.uid}')">تعديل/بيانات</button>
                         <button class="btn btn-danger" style="padding:3px 7px; font-size:0.7rem;" onclick="App.promptDeleteStudent('${st.uid}')">حذف</button>
                       </div>
                     </td>
@@ -5045,15 +5031,21 @@
 
         adminCreateStudent() {
           return `
-            <div style="max-width: 500px; margin: 16px auto;">
+            <div style="max-width: 520px; margin: 16px auto;">
               <div class="card">
                 <h3 style="color: var(--navy-dark); margin-bottom: 14px;"><i class="fa-solid fa-user-plus"></i> إضافة طالب جديد</h3>
                 <form onsubmit="App.handleCreateStudent(event)">
                   <div class="form-group"><label>المنهاج والصف</label><select id="newStudentTarget" required>${CURRICULUM_DEFINITIONS.map(c => `<option value="${c.id}">${c.full}</option>`).join('')}</select></div>
-                  <div class="form-group"><label>الاسم الكامل</label><input type="text" id="newStudentName" required></div>
-                  <div class="form-group"><label>اسم المستخدم</label><input type="text" id="newStudentUsername" required></div>
-                  <div class="form-group"><label>كلمة المرور</label><input type="password" id="newStudentPassword" required></div>
-                  <div class="form-group"><label>رقم هاتف ولي الأمر</label><input type="text" id="newParentPhone"></div>
+                  <div class="form-group"><label>الاسم الكامل</label><input type="text" id="newStudentName" required placeholder="أدخل اسم الطالب الرباعي"></div>
+                  
+                  <div class="form-group">
+                    <label><i class="fa-solid fa-location-dot" style="color:var(--gold-orange);"></i> مكان إقامة الطالب (الدولة / المدينة)</label>
+                    <input type="text" id="newStudentResidence" placeholder="مثال: الإمارات - الشارقة أو السودان - أم درمان">
+                  </div>
+
+                  <div class="form-group"><label>اسم المستخدم</label><input type="text" id="newStudentUsername" required placeholder="اسم المستخدم بالإنجليزية"></div>
+                  <div class="form-group"><label>كلمة المرور</label><input type="password" id="newStudentPassword" required placeholder="كلمة المرور"></div>
+                  <div class="form-group"><label>رقم هاتف ولي الأمر</label><input type="text" id="newParentPhone" placeholder="رقم الهاتف للتواصل"></div>
                   <div style="display:flex; gap:8px; margin-top:16px;"><button type="submit" class="btn btn-gold" style="flex:1;">إنشاء الحساب</button><button type="button" class="btn btn-navy" onclick="App.setRoute('ADMIN_STUDENTS')">إلغاء</button></div>
                 </form>
               </div>
@@ -5124,7 +5116,29 @@
       setAdminTargetFilter(target) { State.adminTargetFilter = target; UI.render(); },
       setAdminContentCurriculumFilter(curr) { State.adminContentCurriculumFilter = curr; UI.render(); },
 
-      /* خاصية معاينة الأدمن كطالب */
+      // التعامل مع تغيير رابط الـ HTML في الكويز لإخفاء/إظهار الخيارات
+      handleQuizHtmlUrlChange(url) {
+        const noticeEl = document.getElementById('quizHtmlModeNotice');
+        const standardFields = document.getElementById('quizStandardFieldsContainer');
+        const opt1 = document.getElementById('opt1');
+        const opt2 = document.getElementById('opt2');
+        const opt3 = document.getElementById('opt3');
+
+        if (url && url.trim().length > 0) {
+          if (noticeEl) noticeEl.style.display = 'block';
+          if (standardFields) standardFields.style.display = 'none';
+          if (opt1) opt1.required = false;
+          if (opt2) opt2.required = false;
+          if (opt3) opt3.required = false;
+        } else {
+          if (noticeEl) noticeEl.style.display = 'none';
+          if (standardFields) standardFields.style.display = 'block';
+          if (opt1) opt1.required = true;
+          if (opt2) opt2.required = true;
+          if (opt3) opt3.required = true;
+        }
+      },
+
       openAdminPreviewModal() {
         const sel = document.getElementById('adminPreviewTargetSelect');
         if (sel) {
@@ -5150,6 +5164,7 @@
           target: target,
           status: "ACTIVE",
           plan: "3_MONTHS",
+          residence: "الإمارات",
           certificateApproved: true,
           xp: 850,
           trophies: 5
@@ -5172,7 +5187,6 @@
         UI.render();
       },
 
-      /* خاصية معاينة الدرس للأدمن مع إمكانية التعديل والحذف */
       openAdminLessonPreview(lessonId) {
         const lesson = State.lessons.find(l => l.id === lessonId);
         if (!lesson) return;
@@ -5185,7 +5199,7 @@
           resList.unshift({
             id: "res_html_" + lesson.id,
             type: "HTML_EMBED",
-            title: "تطبيق ومحاكاة HTML تفاعلية",
+            title: "ابدأ الدرس",
             fileUrl: lesson.htmlUrl
           });
         }
@@ -5207,8 +5221,8 @@
                 <i class="fa-solid ${isSpecific ? 'fa-user-lock' : 'fa-users'}"></i> ${isSpecific ? 'مخصص لطالب' : 'متاح للجميع'}
               </span>
             </div>
-            <h3 style="color:var(--navy-dark); font-weight:900; margin:8px 0 4px; font-size:1.15rem;">${escapeHTML(lesson.title)}</h3>
-            <span style="font-size:0.8rem; color:var(--text-muted); display:block;"><i class="fa-solid fa-folder"></i> تتبع لوحدة: <strong>${escapeHTML(unitTitle)}</strong></span>
+            <h3 style="color:var(--navy-dark); font-weight:900; margin:8px 0 4px; font-size:1.15rem;">${escapeHTML(cleanLessonTitle(lesson.title))}</h3>
+            <span style="font-size:0.8rem; color:var(--text-muted); display:block;"><i class="fa-solid fa-folder"></i> تتبع لوحدة: <strong>${escapeHTML(cleanLessonTitle(unitTitle))}</strong></span>
             ${isSpecific ? `<span style="font-size:0.8rem; color:var(--gold-deep); display:block; margin-top:2px;"><i class="fa-solid fa-user-tag"></i> الطالب المخصص له: <strong>${escapeHTML(assignedStudentName)}</strong></span>` : ''}
           </div>
 
@@ -5229,9 +5243,9 @@
                   <div class="resource-sub-card" style="border:1.5px solid #CBD5E1; padding:10px; border-radius:8px;">
                     <div>
                       ${UI.getResourceBadge(res.type)}
-                      <strong style="font-size:0.85rem; color:var(--navy-dark); display:block; margin-top:6px; line-height:1.4;">${escapeHTML(res.title)}</strong>
+                      <strong style="font-size:0.85rem; color:var(--navy-dark); display:block; margin-top:6px; line-height:1.4;">${res.type === 'HTML_EMBED' ? 'ابدأ الدرس' : escapeHTML(res.title)}</strong>
                     </div>
-                    <button class="btn btn-navy" style="width:100%; font-size:0.75rem; padding:4px 8px; min-height:30px; margin-top:6px;" onclick="App.openDirectResource('${escapeHTML(lesson.title)} – ${escapeHTML(res.title)}', '${res.type}', '${res.fileUrl}')">
+                    <button class="btn btn-navy" style="width:100%; font-size:0.75rem; padding:4px 8px; min-height:30px; margin-top:6px;" onclick="App.openDirectResource('${escapeHTML(cleanLessonTitle(lesson.title))} – ${res.type === 'HTML_EMBED' ? 'ابدأ الدرس' : escapeHTML(res.title)}', '${res.type}', '${res.fileUrl}')">
                       <i class="fa-solid fa-play"></i> تشغيل / معاينة المورد
                     </button>
                   </div>
@@ -5262,7 +5276,6 @@
         document.getElementById('adminLessonPreviewContent').innerHTML = '';
       },
 
-      /* نظام قفل الوحدات */
       async toggleUnitLock(unitId) {
         const unit = State.units.find(u => u.id === unitId);
         if (!unit) return;
@@ -5270,7 +5283,7 @@
         unit.isLocked = !unit.isLocked;
         DataStore.save("units", State.units);
 
-        const statusMsg = unit.isLocked ? `تم قفل (${unit.title}) عن الطلاب بنجاح.` : `تم فتح (${unit.title}) لكافة الطلاب.`;
+        const statusMsg = unit.isLocked ? `تم قفل (${cleanLessonTitle(unit.title)}) عن الطلاب بنجاح.` : `تم فتح (${cleanLessonTitle(unit.title)}) لكافة الطلاب.`;
         App.showSecurityAlert(statusMsg);
         UI.render();
       },
@@ -5515,7 +5528,8 @@
       handleSaveUnit(e) {
         e.preventDefault();
         const target = document.getElementById('newUnitTarget').value;
-        const title = document.getElementById('newUnitTitle').value.trim();
+        const rawTitle = document.getElementById('newUnitTitle').value.trim();
+        const title = cleanLessonTitle(rawTitle);
         const isLocked = document.getElementById('newUnitIsLocked').checked;
 
         const newUnit = { id: "unit_" + Date.now(), title, target, isLocked, order: State.units.length + 1 };
@@ -5563,7 +5577,7 @@
       openUnifiedLessonModal(lessonId = "", defaultUnitId = "") {
         document.getElementById('editLessonId').value = lessonId || "";
         const uSel = document.getElementById('unifiedLessonUnitSelect');
-        uSel.innerHTML = State.units.map(u => `<option value="${u.id}">${escapeHTML(u.title)} (${UI.getTargetLabel(u.target)})</option>`).join('');
+        uSel.innerHTML = State.units.map(u => `<option value="${u.id}">${escapeHTML(cleanLessonTitle(u.title))} (${UI.getTargetLabel(u.target)})</option>`).join('');
         if (defaultUnitId) uSel.value = defaultUnitId;
 
         this.onLessonUnitSelectChanged();
@@ -5585,7 +5599,7 @@
             document.getElementById('unifiedLessonModalHeading').innerHTML = `<i class="fa-solid fa-pen-to-square"></i> تعديل الدرس ونطاق الوصول`;
             uSel.value = l.unitId;
             this.onLessonUnitSelectChanged();
-            document.getElementById('unifiedLessonTitle').value = l.title;
+            document.getElementById('unifiedLessonTitle').value = cleanLessonTitle(l.title);
             document.getElementById('unifiedLessonDesc').value = l.description || "";
             if (l.htmlUrl) document.getElementById('linkHtml').value = l.htmlUrl;
 
@@ -5620,7 +5634,8 @@
         e.preventDefault();
         const editId = document.getElementById('editLessonId').value;
         const unitId = document.getElementById('unifiedLessonUnitSelect').value;
-        const title = document.getElementById('unifiedLessonTitle').value.trim();
+        const rawTitle = document.getElementById('unifiedLessonTitle').value.trim();
+        const title = cleanLessonTitle(rawTitle);
         const desc = document.getElementById('unifiedLessonDesc').value.trim();
 
         const scopeType = document.querySelector('input[name="lessonScopeRadio"]:checked').value;
@@ -5635,7 +5650,7 @@
         const unit = State.units.find(u => u.id === unitId);
         const resources = [];
 
-        if (html) resources.push({ id: "res_" + Date.now() + "_0", type: "HTML_EMBED", title: "تطبيق ومحاكاة HTML تفاعلية", fileUrl: html });
+        if (html) resources.push({ id: "res_" + Date.now() + "_0", type: "HTML_EMBED", title: "ابدأ الدرس", fileUrl: html });
         if (video) resources.push({ id: "res_" + Date.now() + "_1", type: "VIDEOS", title: "فيديو شرح الدرس", fileUrl: video });
         if (pdf) resources.push({ id: "res_" + Date.now() + "_2", type: "WORKSHEETS", title: "مذكرة التمارين PDF", fileUrl: pdf });
         if (ppt) resources.push({ id: "res_" + Date.now() + "_5", type: "POWERPOINTS", title: "عرض باوربوينت PPT", fileUrl: ppt });
@@ -5691,10 +5706,10 @@
         if (!lesson) return;
         let res = (lesson.resources || []).find(r => r.id === resId);
         if (!res && resId.startsWith('res_html_')) {
-          res = { title: "تطبيق ومحاكاة HTML تفاعلية", type: "HTML_EMBED", fileUrl: lesson.htmlUrl };
+          res = { title: "ابدأ الدرس", type: "HTML_EMBED", fileUrl: lesson.htmlUrl };
         }
         if (res) {
-          this.openDirectResource(`${lesson.title} – ${res.title}`, res.type, res.fileUrl);
+          this.openDirectResource(`${cleanLessonTitle(lesson.title)} – ${res.title}`, res.type, res.fileUrl);
         }
       },
 
@@ -5842,7 +5857,8 @@
 
       handleSaveCompetition(e) {
         e.preventDefault();
-        const title = document.getElementById('compTitle').value.trim();
+        const rawTitle = document.getElementById('compTitle').value.trim();
+        const title = cleanLessonTitle(rawTitle);
         const rawHtmlUrl = document.getElementById('compHtmlUrl').value.trim();
         const htmlUrl = formatHtmlInteractiveUrl(rawHtmlUrl);
         const maxScore = parseInt(document.getElementById('compMaxScore').value) || 100;
@@ -5871,7 +5887,7 @@
         if (!comp) return;
 
         State.activeCompetition = comp;
-        document.getElementById('compPlayerTitle').innerText = comp.title;
+        document.getElementById('compPlayerTitle').innerText = cleanLessonTitle(comp.title);
         const box = document.getElementById('compPlayerContainer');
         SmartHtmlLoader.renderInContainer(comp.htmlUrl, box);
         document.getElementById('competitionPlayerModal').classList.add('active');
@@ -5985,12 +6001,16 @@
         UI.render();
       },
 
+      // فتح نافذة تعديل بيانات واشتراك ومكان إقامة الطالب
       openStudentResetModal(studentUid) {
         const student = State.students.find(s => s.uid === studentUid);
         if (!student) return;
         document.getElementById('resetStudentUid').value = student.uid;
-        document.getElementById('resetStudentNameDisplay').innerText = `الطالب: ${student.name} (${student.username}) | الحالة الحالية: ${student.status === 'ACTIVE' ? 'نشط' : 'تجريبي'}`;
+        document.getElementById('resetStudentNameDisplay').innerText = `الطالب: ${student.name} (${student.username}) | الحالة: ${student.status === 'ACTIVE' ? 'نشط' : 'تجريبي'}`;
+        document.getElementById('resetStudentResidence').value = student.residence || "";
+        document.getElementById('resetNewPass').value = "";
         document.getElementById('subActionNone').checked = true;
+        document.getElementById('chkResetProgress').checked = false;
         document.getElementById('studentResetModal').classList.add('active');
       },
       closeStudentResetModal() { document.getElementById('studentResetModal').classList.remove('active'); },
@@ -5998,12 +6018,15 @@
       handleExecuteStudentReset(e) {
         e.preventDefault();
         const uid = document.getElementById('resetStudentUid').value;
+        const newResidence = normalizeInput(document.getElementById('resetStudentResidence').value);
         const newPass = normalizeInput(document.getElementById('resetNewPass').value);
         const subAction = document.querySelector('input[name="subscriptionAction"]:checked')?.value || 'NONE';
         const resetProgress = document.getElementById('chkResetProgress').checked;
 
         const student = State.students.find(s => s.uid === uid);
         if (!student) return;
+
+        student.residence = newResidence;
 
         if (newPass) student.passwordHash = CryptoSecurity.hashPassword(newPass);
 
@@ -6034,7 +6057,7 @@
 
         DataStore.save('students', State.students);
         App.closeStudentResetModal();
-        NotificationEngine.alert(`تم تحديث بيانات وخطة اشتراك الطالب (${student.name}) بنجاح.`, 'تم الحفظ والتفعيل');
+        NotificationEngine.alert(`تم تحديث بيانات ومكان إقامة واشتراك الطالب (${student.name}) بنجاح.`, 'تم الحفظ والتفعيل');
         UI.render();
       },
 
@@ -6229,14 +6252,8 @@
       handleCreateQuizQuestion(e) {
         e.preventDefault();
         const target = document.getElementById("quizTarget").value;
-        const quizTitle = document.getElementById("quizTitle").value.trim();
-        const questionText = document.getElementById("questionText").value.trim();
-        const opt1 = document.getElementById("opt1").value.trim();
-        const opt2 = document.getElementById("opt2").value.trim();
-        const opt3 = document.getElementById("opt3").value.trim();
-        const correctOption = parseInt(document.getElementById("correctOptionSelect").value);
-        const aiExplanation = document.getElementById("aiExplanation").value.trim();
-        const imageUrl = State.tempQuizImageData || "";
+        const rawQuizTitle = document.getElementById("quizTitle").value.trim();
+        const quizTitle = cleanLessonTitle(rawQuizTitle);
         const htmlUrl = formatHtmlInteractiveUrl(document.getElementById("quizHtmlUrl")?.value || "");
 
         let targetQuiz = State.quizzes.find(q => q.target === target && q.title === quizTitle);
@@ -6245,17 +6262,41 @@
           State.quizzes.push(targetQuiz);
         }
 
-        targetQuiz.questions.push({
-          id: "q_" + Date.now(),
-          text: questionText,
-          imageUrl: imageUrl,
-          htmlUrl: htmlUrl,
-          option1: opt1,
-          option2: opt2,
-          option3: opt3,
-          correctOption: correctOption,
-          aiExplanation: aiExplanation || "خطوة رياضية صحيحة وفقاً للمفاهيم النموذجية للمنهاج."
-        });
+        if (htmlUrl) {
+          // في حال وجود رابط تفاعلي HTML: يتم إخفاء وحفظ السؤال كنمط تفاعلي مباشر دون الحاجة لخيارات
+          targetQuiz.questions.push({
+            id: "q_" + Date.now(),
+            text: "مسألة رياضية تفاعلية مباشرة",
+            imageUrl: "",
+            htmlUrl: htmlUrl,
+            option1: "",
+            option2: "",
+            option3: "",
+            correctOption: 1,
+            aiExplanation: ""
+          });
+        } else {
+          // في حال عدم وجود رابط تفاعلي: قراءة الحقول العادية والصورة
+          const questionText = document.getElementById("questionText").value.trim();
+          const opt1 = document.getElementById("opt1").value.trim();
+          const opt2 = document.getElementById("opt2").value.trim();
+          const opt3 = document.getElementById("opt3").value.trim();
+          const correctOption = parseInt(document.getElementById("correctOptionSelect").value);
+          const aiExplanation = document.getElementById("aiExplanation").value.trim();
+          const imageUrl = State.tempQuizImageData || "";
+
+          targetQuiz.questions.push({
+            id: "q_" + Date.now(),
+            text: questionText,
+            imageUrl: imageUrl,
+            htmlUrl: "",
+            option1: opt1,
+            option2: opt2,
+            option3: opt3,
+            correctOption: correctOption,
+            aiExplanation: aiExplanation || "خطوة رياضية صحيحة وفقاً للمفاهيم النموذجية للمنهاج."
+          });
+        }
 
         DataStore.save("quizzes", State.quizzes);
         App.clearQuizImage();
@@ -6459,10 +6500,12 @@
         UI.render();
       },
 
+      // إنشاء حساب طالب مع إضافة حقل مكان الإقامة وحفظه
       handleCreateStudent(e) {
         e.preventDefault();
         const target = document.getElementById("newStudentTarget").value;
         const name = document.getElementById("newStudentName").value.trim();
+        const residence = normalizeInput(document.getElementById("newStudentResidence")?.value || "");
         const username = normalizeInput(document.getElementById("newStudentUsername").value).toLowerCase();
         const plainPassword = normalizeInput(document.getElementById("newStudentPassword").value);
         const parentPhone = normalizeInput(document.getElementById("newParentPhone")?.value || "");
@@ -6474,6 +6517,7 @@
         const newStudent = {
           uid: "st_" + Date.now(),
           name, username, passwordHash, target,
+          residence: residence || "",
           phone: parentPhone || "0500000000",
           parentPhone: parentPhone || "0500000000",
           status: "TRIAL", plan: "3_DAYS_TRIAL",
@@ -6518,17 +6562,21 @@
         }
       },
 
+      // إلغاء الرسوم نهائياً في رسالة الواتساب وجعل الرسالة بدون رسوم والتواصل لمعرفة طريقة الاشتراك
       sendWhatsAppOrder(planType) {
         const user = State.currentUser || { name: "طالب جديد", username: "غير مسجل", target: "UAE_12_ADV" };
         const phone = cleanWhatsAppPhone(State.settings.adminPhoneWhatsApp);
-        let planDesc = "اشتراك شهري (120 درهم)";
-        if (planType === 'SEMESTER' || planType === 'TRIAL_CONVERT') {
-          planDesc = "باقة الفصل الدراسي 3 أشهر (300 درهم)";
+        
+        let planDesc = "طلب تفعيل اشتراك دراسي ومتابعة للمنصة";
+        if (planType === 'SEMESTER') {
+          planDesc = "طلب الاشتراك الفصلي ومتابعة الدروس";
+        } else if (planType === 'TRIAL_CONVERT') {
+          planDesc = "طلب تثبيت وتفعيل الاشتراك بعد التجربة";
         } else if (planType === 'EXP_RENEW') {
-          planDesc = "تجديد وتفعيل الاشتراك بعد انتهاء فترة التجربة";
+          planDesc = "طلب تجديد وتفعيل الاشتراك في المنصة";
         }
 
-        const message = `السلام عليكم أستاذ عمر (Omer Gasim)، أرغب في الاشتراك في منصة الرياضيات.\n\nالاسم: ${user.name}\nاسم المستخدم: ${user.username}\nالصف والمنهاج: ${UI.getTargetLabel(user.target)}\nالطلب: ${planDesc}\n\nيرجى إرسال تفاصيل التفعيل والدفع. شكراً جزيلاً.`;
+        const message = `السلام عليكم أستاذ عمر (Omer Gasim)،\nأود الاستفسار عن الاشتراك في المنصة ومعرفة طريقة وتفاصيل الاشتراك وتفعيل الحساب لمتابعة مقرر الرياضيات.\n\nالاسم: ${user.name}\nاسم المستخدم: ${user.username}\nالصف والمنهاج: ${UI.getTargetLabel(user.target)}\nنوع الطلب: ${planDesc}\n\nيرجى إرسال تفاصيل وطريقة الاشتراك والتفعيل. شكراً جزيلاً لك أستاذنا الفاضل.`;
 
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
       },
@@ -6550,7 +6598,6 @@
       }
     };
 
-    // تنظيف وإنهاء اتصالات البث عند إغلاق أو تحديث الصفحة
     window.addEventListener("beforeunload", () => {
       if (State.currentUser && State.currentUser.role === 'ADMIN' && State.activeLiveSession && State.activeLiveSession.isActive) {
         LiveAudio.stopBroadcast();
@@ -6559,7 +6606,6 @@
       }
     });
 
-    // تشغيل وتهيئة المنصة فور اكتمال تحميل DOM
     document.addEventListener("DOMContentLoaded", () => {
       App.init();
     });
